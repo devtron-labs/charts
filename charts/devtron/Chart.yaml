@@ -13,7 +13,7 @@ sources:
   - https://github.com/devtron-labs/charts
 maintainers:
 - email: prakarsh@devtron.ai
-  name: Prakarsh
+  name: Prakarsh 
 icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
 home: https://devtron.ai
 
