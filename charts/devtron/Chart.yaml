@@ -1,8 +1,19 @@
 name: devtron-operator
 appVersion: 0.1.0
-description: Chart to configure and install Devtron 
+description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration system.
+keywords:
+  - Devtron
+  - Kubernetes
+  - Orchestration
+  - K8s
+  - Deployment
 engine: gotpl
 version: 0.10.1
+sources:
+  - https://github.com/devtron-labs/charts
 maintainers:
 - email: prakarsh@devtron.ai
-  name: Prakarsh 
+  name: Prakarsh
+icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+home: https://devtron.ai
+
