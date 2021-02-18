@@ -1,0 +1,8 @@
+name: devtron-generic-helm
+appVersion: 0.1.0
+description: Chart to deploy any YAML file
+engine: gotpl
+version: 0.10.0
+maintainers:
+- email: prashant@devtron.ai
+  name: Prashant
