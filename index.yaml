@@ -36,6 +36,30 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-generic-helm-0.10.0/devtron-generic-helm-0.10.0.tgz
     version: 0.10.0
+  devtron-operator:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-02-18T14:13:27.490828603Z"
+    description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
+      system.
+    digest: d88078caa6201392b44497e9d48ca5b44f1eeb7e11fefe4a04978c8f2d1928d2
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-operator
+    sources:
+    - https://github.com/devtron-labs/charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.10.1/devtron-operator-0.10.1.tgz
+    version: 0.10.1
   dt-secrets:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -62,4 +86,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-02-18T12:36:58.121236277Z"
+generated: "2021-02-18T14:13:27.490834203Z"
