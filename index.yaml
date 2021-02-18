@@ -23,6 +23,19 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/coralogix-fluentd-1.0.3/coralogix-fluentd-1.0.3.tgz
     version: 1.0.3
+  devtron-generic-helm:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-02-18T12:36:24.327919838Z"
+    description: Chart to deploy any YAML file
+    digest: 8aaf248878607072c87faf52958d50feaa3c4ffebf2b4103a8a7473095609c31
+    maintainers:
+    - email: prashant@devtron.ai
+      name: Prashant
+    name: devtron-generic-helm
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-generic-helm-0.10.0/devtron-generic-helm-0.10.0.tgz
+    version: 0.10.0
   devtron-operator:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -49,4 +62,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/dt-secrets-0.10.1/dt-secrets-0.10.1.tgz
     version: 0.10.1
-generated: "2021-02-18T12:32:37.655881254Z"
+generated: "2021-02-18T12:36:24.327932239Z"
