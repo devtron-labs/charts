@@ -36,19 +36,6 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-generic-helm-0.10.0/devtron-generic-helm-0.10.0.tgz
     version: 0.10.0
-  devtron-operator:
-  - apiVersion: v1
-    appVersion: 0.1.0
-    created: "2021-02-18T11:46:34.397870462Z"
-    description: Chart to configure and install Devtron
-    digest: d47ae28af937f0592613d7929051e0cb644249578252b8af3d983ea6bc12b40c
-    maintainers:
-    - email: prakarsh@devtron.ai
-      name: Prakarsh
-    name: devtron-operator
-    urls:
-    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.10.1/devtron-operator-0.10.1.tgz
-    version: 0.10.1
   dt-secrets:
   - apiVersion: v1
     appVersion: 0.1.0
