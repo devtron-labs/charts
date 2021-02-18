@@ -1,6 +1,6 @@
 installer:
   url: "https://raw.githubusercontent.com/devtron-labs/devtron-installation-script/main/installation-script123"
-#Use secrets in plaintext, they'll be encoded to base64 automatically.
+#Use secrets in plaintext, they'll be encoded to base64 automatically test.
 secrets:
   data:
   - key: POSTGRESQL_PASSWORD
