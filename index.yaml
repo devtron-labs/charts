@@ -36,4 +36,17 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.10.1/devtron-operator-0.10.1.tgz
     version: 0.10.1
-generated: "2021-02-18T12:28:54.738037662Z"
+  dt-secrets:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-02-18T12:32:37.655874054Z"
+    description: Chart to create Secrets
+    digest: f0df19d6f774d38089c8a8bf1a6cb403279e9d4c67c4464cbc0efcb8917be98a
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: dt-secrets
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dt-secrets-0.10.1/dt-secrets-0.10.1.tgz
+    version: 0.10.1
+generated: "2021-02-18T12:32:37.655881254Z"
