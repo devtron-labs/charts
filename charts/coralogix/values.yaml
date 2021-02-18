@@ -1,0 +1,73 @@
+##  Coralogix Account secrets
+PRIVATE_KEY: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+APP_NAME: $kubernetes.namespace_name
+SUB_SYSTEM: $kubernetes.container_name
+CORALOGIX_LOG_URL: https://api.app.coralogix.in/api/v1/logs
+CORALOGIX_TIME_DELTA_URL: https://api.app.coralogix.in/sdk/v1/time
+
+#Daemonset apiversion for K8s < v1.16
+daemonsetapiversion: extensions/v1beta1
+# For K8s v1.16+
+#daemonsetapiversion: apps/v1
+
+
+## Coralogix output settings
+coralogix:
+  # log_key_name: ""
+  # timestamp_key_name: ""
+  is_json: true
+  force_compression: false
+  debug: false
+  proxy: {}
+  #  host: localhost
+  #  port: 3128
+  #  user: root
+  #  password: strong_pass
+
+## Pod settings
+container:
+  image:
+    repository: docker.io/coralogixrepo/fluentd-coralogix-image
+    tag: 1.1.6
+    pullPolicy: Always
+  resources:
+    limits:
+      cpu: 100m
+      memory: 400Mi
+    requests:
+      cpu: 100m
+      memory: 400Mi
+
+## Security settings
+rbac:
+  create: false
+#rbac api version
+rbacapiversion: rbac.authorization.k8s.io/v1
+
+## Node settings
+tolerations:
+  - key: node-role.kubernetes.io/master
+    effect: NoSchedule
+
+## FluentD service settings
+service:
+  fluentd:
+    enabled: true
+    port: 24224
+  http:
+    enabled: true
+    port: 9880
+  syslog:
+    enabled: true
+    port: 5140
+  graylog:
+    enabled: true
+    port: 12201
+  clusterIP: None
+customfilters: |
+#  <filter {app-1,app-2}.containers.**>
+#    @type concat
+#    key log
+#    @type concat
+#    flush_interval 30
+#  </filter>

@@ -1,0 +1,40 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "coralogix-fluentd.name" . }}-service
+  namespace: kube-system
+  labels:
+    k8s-app: {{ template "coralogix-fluentd.fullname" . }}
+    k8s-app-version: {{ .Chart.AppVersion }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  selector:
+    k8s-app: {{ template "coralogix-fluentd.fullname" . }}
+  ports:
+  {{- if .Values.service.fluentd.enabled }}
+    - port: {{ .Values.service.fluentd.port }}
+      targetPort: 24224
+      protocol: TCP
+      name: fluentd
+  {{- end }}
+  {{- if .Values.service.http.enabled }}
+    - port: {{ .Values.service.http.port }}
+      targetPort: 9880
+      protocol: TCP
+      name: http
+  {{- end }}
+  {{- if .Values.service.syslog.enabled }}
+    - port: {{ .Values.service.syslog.port }}
+      targetPort: 5140
+      protocol: UDP
+      name: syslog
+  {{- end }}
+  {{- if .Values.service.graylog.enabled }}
+    - port: {{ .Values.service.graylog.port }}
+      targetPort: 12201
+      protocol: UDP
+      name: graylog
+  {{- end }}
+  clusterIP: {{ .Values.service.clusterIP }}

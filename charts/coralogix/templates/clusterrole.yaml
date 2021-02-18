@@ -1,0 +1,28 @@
+{{- if .Values.rbac.create }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "coralogix-fluentd.name" . }}-service-account-role
+  namespace: kube-system
+  labels:
+    k8s-app: {{ template "coralogix-fluentd.fullname" . }}
+    k8s-app-version: {{ .Chart.AppVersion }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+rules:
+  # Allow FluentD-Coralogix-Logger to get 'fluentd-coralogix-account-secrets' secret.
+- apiGroups: [""]
+  resources: ["secrets"]
+  resourceNames: ["{{ template "coralogix-fluentd.name" . }}-account-secrets"]
+  verbs: ["get"]
+  # Allow FluentD-Coralogix-Logger to get 'fluentd-coralogix-configs' config map.
+- apiGroups: [""]
+  resources: ["configmaps"]
+  resourceNames: ["{{ template "coralogix-fluentd.name" . }}-configs"]
+  verbs: ["get"]
+  # Allow FluentD-Coralogix-Logger to get cluster info.
+- apiGroups: [""]
+  resources: ["namespaces", "pods"]
+  verbs: ["get", "list", "watch"]
+{{- end }}

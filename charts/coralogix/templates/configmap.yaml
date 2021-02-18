@@ -1,0 +1,297 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ template "coralogix-fluentd.name" . }}-configs
+  namespace: kube-system
+  labels:
+    k8s-app: {{ template "coralogix-fluentd.fullname" . }}
+    k8s-app-version: {{ .Chart.AppVersion }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  fluent.conf: |
+    @include conf/*.conf
+  kubernetes.conf: |
+    <source>
+      @id minion
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/salt/minion
+      pos_file /var/log/salt.pos
+      <parse>
+        @type regexp
+        expression /^(?<time>[^ ]* [^ ,]*)[^\[]*\[[^\]]*\]\[(?<severity>[^ \]]*) *\] (?<message>.*)$/
+        time_format %Y-%m-%d %H:%M:%S
+        keep_time_key true
+      </parse>
+      tag salt
+    </source>
+    <source>
+      @id startupscript.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/startupscript.log
+      pos_file /var/log/startupscript.log.pos
+      <parse>
+        @type syslog
+        message_format auto
+      </parse>
+      tag startupscript
+    </source>
+    <source>
+      @id docker.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/docker.log
+      pos_file /var/log/docker.log.pos
+      <parse>
+        @type regexp
+        expression /^time="(?<time>[^)]*)" level=(?<severity>[^ ]*) msg="(?<message>[^"]*)"( err="(?<error>[^"]*)")?( statusCode=($<status_code>\d+))?/
+        keep_time_key true
+      </parse>
+      tag docker
+    </source>
+    <source>
+      @id etcd.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/etcd.log
+      pos_file /var/log/etcd.log.pos
+      <parse>
+        @type none
+      </parse>
+      tag etcd
+    </source>
+    <source>
+      @id kubelet.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/kubelet.log
+      pos_file /var/log/kubelet.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag kubelet
+    </source>
+    <source>
+      @id kube-proxy.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/kube-proxy.log
+      pos_file /var/log/kube-proxy.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag kube-proxy
+    </source>
+    <source>
+      @id kube-apiserver.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/kube-apiserver.log
+      pos_file /var/log/kube-apiserver.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag kube-apiserver
+    </source>
+    <source>
+      @id kube-controller-manager.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/kube-controller-manager.log
+      pos_file /var/log/kube-controller-manager.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag kube-controller-manager
+    </source>
+    <source>
+      @id kube-scheduler.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/kube-scheduler.log
+      pos_file /var/log/kube-scheduler.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag kube-scheduler
+    </source>
+    <source>
+      @id rescheduler.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/rescheduler.log
+      pos_file /var/log/rescheduler.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag rescheduler
+    </source>
+    <source>
+      @id glbc.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/glbc.log
+      pos_file /var/log/glbc.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag glbc
+    </source>
+    <source>
+      @id cluster-autoscaler.log
+      @type tail
+      @label @KUBERNETES_CLUSTER_COMPONENTS
+      path /var/log/cluster-autoscaler.log
+      pos_file /var/log/cluster-autoscaler.log.pos
+      <parse>
+        @type kubernetes
+      </parse>
+      multiline_flush_interval 5s
+      tag cluster-autoscaler
+    </source>
+    <label @KUBERNETES_CLUSTER_COMPONENTS>
+      <filter **>
+        @type record_transformer
+        enable_ruby
+        <record>
+          component ${tag}
+        </record>
+      </filter>
+      <match **>
+        @type coralogix
+        privatekey "#{ENV['PRIVATE_KEY']}"
+        appname "#{ENV['APP_NAME']}-k8s-component"
+        subsystemname "$component"
+        timestamp_key_name time
+        is_json true
+        {{- if and .Values.coralogix.proxy.host .Values.coralogix.proxy.port }}
+        <proxy>
+          host "{{ .Values.coralogix.proxy.host }}"
+          port {{ .Values.coralogix.proxy.port }}
+          {{- if and .Values.coralogix.proxy.user .Values.coralogix.proxy.password }}
+          user "{{ .Values.coralogix.proxy.user }}"
+          password "{{ .Values.coralogix.proxy.password }}"
+          {{- end }}
+        </proxy>
+        {{- end }}
+      </match>
+    </label>
+    <source>
+      @id fluentd-containers.log
+      @type tail
+      @label @KUBERNETES_CONTAINERS
+      path /var/log/containers/*.log
+      pos_file /var/log/containers.log.pos
+      tag raw.containers.*
+      read_from_head true
+      <parse>
+        @type multi_format
+        <pattern>
+          format json
+          time_key time
+          time_format %Y-%m-%dT%H:%M:%S.%NZ
+          keep_time_key true
+        </pattern>
+        <pattern>
+          format /^(?<time>.+) (?<stream>stdout|stderr) [^ ]* (?<log>.*)$/
+          time_format %Y-%m-%dT%H:%M:%S.%N%:z
+          keep_time_key true
+        </pattern>
+      </parse>
+    </source>
+    <label @KUBERNETES_CONTAINERS>
+      <match raw.containers.**>
+        @id raw.containers
+        @type detect_exceptions
+        remove_tag_prefix raw
+        message log
+        stream stream
+        multiline_flush_interval 5
+        max_bytes 500000
+        max_lines 1000
+      </match>
+      <filter containers.**>
+        @type kubernetes_metadata
+      </filter>
+      <filter **>
+        @type record_transformer
+        enable_ruby
+        <record>
+          container_id ${record['docker']['container_id']}
+        </record>
+      </filter>
+      <filter **>
+        @type concat
+        key log
+        stream_identity_key container_id
+        multiline_end_regexp /\n$/
+        separator " "
+        flush_interval 30
+      </filter>
+      <filter **>
+        @type record_transformer
+        remove_keys container_id
+      </filter>
+      <match containers.**>
+         @type rewrite_tag_filter
+         <rule>
+           key $.kubernetes.container_name
+           pattern ^(.+)$
+           tag $1.${tag}
+         </rule>
+      </match>
+{{- if .Values.customfilters }}
+{{ .Values.customfilters | nindent 6 }}
+{{- end }}
+      <match {heapster,influxdb,grafana,fluentd-coralogix}.containers.**>
+        @type null
+      </match>
+      <filter *.containers.**>
+        @type parser
+        key_name log
+        reserve_time true
+        reserve_data true
+        remove_key_name_field true
+        replace_invalid_sequence true
+        emit_invalid_record_to_error false
+        <parse>
+          @type json
+          keep_time_key true
+        </parse>
+      </filter>
+      <match *.containers.**>
+        @type coralogix
+        privatekey "#{ENV['PRIVATE_KEY']}"
+        appname "#{ENV['APP_NAME']}"
+        subsystemname "#{ENV['SUB_SYSTEM']}"
+        {{- if .Values.coralogix.log_key_name }}
+        log_key_name {{ .Values.coralogix.log_key_name }}
+        {{- end }}
+        {{- if .Values.coralogix.timestamp_key_name }}
+        timestamp_key_name {{ .Values.coralogix.timestamp_key_name }}
+        {{- end }}
+        is_json {{ .Values.coralogix.is_json }}
+        force_compression {{ .Values.coralogix.force_compression }}
+        debug {{ .Values.coralogix.debug }}
+        {{- if and .Values.coralogix.proxy.host .Values.coralogix.proxy.port }}
+        <proxy>
+          host "{{ .Values.coralogix.proxy.host }}"
+          port {{ .Values.coralogix.proxy.port }}
+          {{- if and .Values.coralogix.proxy.user .Values.coralogix.proxy.password }}
+          user "{{ .Values.coralogix.proxy.user }}"
+          password "{{ .Values.coralogix.proxy.password }}"
+          {{- end }}
+        </proxy>
+        {{- end }}
+      </match>
+    </label>

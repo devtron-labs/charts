@@ -1,0 +1,17 @@
+apiVersion: v1
+name: coralogix-fluentd
+version: 1.0.3
+description: Modificated version of official FluentD image with support of integration with Coralogix service.
+keywords:
+  - FluentD
+  - logging
+  - Coralogix
+home: https://coralogix.com/
+sources:
+  - https://github.com/coralogix/fluentd-coralogix-image/examples/helm
+maintainers:
+  - name: Eldar Aliiev
+    email: eldar@coralogix.com
+    url: https://www.facebook.com/e.aliiev
+icon: https://coralogix.com/wp-content/uploads/2016/12/logos_yjmwij-2.png
+appVersion: 1.1.6

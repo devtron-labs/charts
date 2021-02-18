@@ -1,0 +1,7 @@
+Thanks for installing Coralogix FluentD logger.
+Please visit {{ .Chart.Home }} for more information.
+
+Usage manual you can find here:
+https://github.com/coralogix/fluentd-coralogix-image/blob/master/examples/helm/README.md
+
+Version: {{ .Chart.Version }}
