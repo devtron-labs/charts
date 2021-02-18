@@ -1,0 +1,11 @@
+name: test-secret
+labels:
+  test: chart
+annotations:
+  app: devtron-generic  
+secrets:
+  data:
+  - key: db-username
+    value: "root"
+  - key: db-pass
+    value: "1234567"

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $.Values.name }}
+  labels:
+    release: {{ $.Release.Name }}
+     {{- if .Values.labels }}
+{{ toYaml $.Values.labels | indent 4 }}
+    {{- end }}
+  annotations:
+{{ toYaml $.Values.annotations | indent 4}}  
+type: Opaque
+data:
+  {{- range $.Values.secrets.data }}
+  {{ .key | quote }}: {{ .value | b64enc | quote }}
+  {{- end }}
