@@ -1,5 +1,28 @@
 apiVersion: v1
 entries:
+  coralogix-fluentd:
+  - apiVersion: v1
+    appVersion: 1.1.6
+    created: "2021-02-18T12:28:54.738012862Z"
+    description: Modificated version of official FluentD image with support of integration
+      with Coralogix service.
+    digest: 63b08be5be930b336432ed616b91cfd82a6eb3c855f26e6dcd5147776a6509c3
+    home: https://coralogix.com/
+    icon: https://coralogix.com/wp-content/uploads/2016/12/logos_yjmwij-2.png
+    keywords:
+    - FluentD
+    - logging
+    - Coralogix
+    maintainers:
+    - email: eldar@coralogix.com
+      name: Eldar Aliiev
+      url: https://www.facebook.com/e.aliiev
+    name: coralogix-fluentd
+    sources:
+    - https://github.com/coralogix/fluentd-coralogix-image/examples/helm
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/coralogix-fluentd-1.0.3/coralogix-fluentd-1.0.3.tgz
+    version: 1.0.3
   devtron-operator:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -13,4 +36,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.10.1/devtron-operator-0.10.1.tgz
     version: 0.10.1
-generated: "2021-02-18T11:46:34.397879362Z"
+generated: "2021-02-18T12:28:54.738037662Z"
