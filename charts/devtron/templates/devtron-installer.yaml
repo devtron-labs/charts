@@ -4,4 +4,4 @@ metadata:
   name: installer-devtron
   namespace: devtroncd
 spec:
-  url: {{ .Values.installer.url }}
+  url: https://raw.githubusercontent.com/{{ .Values.installer.repo }}/{{ .Values.installer.release }}/installation-script
