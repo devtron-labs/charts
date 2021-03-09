@@ -5,3 +5,4 @@ metadata:
   namespace: devtroncd
 spec:
   url: https://raw.githubusercontent.com/{{ .Values.installer.repo }}/{{ .Values.installer.release }}/installation-script
+  reSync: true
