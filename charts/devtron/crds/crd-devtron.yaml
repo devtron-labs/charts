@@ -32,6 +32,8 @@ spec:
         spec:
           description: InstallerSpec defines the desired state of Installer
           properties:
+            reSync:
+              type: boolean
             url:
               description: URL of the BOM version to be installed
               type: string
@@ -131,6 +133,8 @@ spec:
                             type: string
                         type: object
                       kind:
+                        type: string
+                      message:
                         type: string
                       name:
                         type: string

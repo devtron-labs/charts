@@ -14,6 +14,11 @@ secrets:
 
 configs:
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|AWS|MINIO
+  DEFAULT_CACHE_BUCKET: "devtron-ci-cache"
+  DEFAULT_CACHE_BUCKET_REGION: "change-me"
+  DEFAULT_BUILD_LOGS_BUCKET: "devtron-ci-log"
+  EXTERNAL_SECRET_AMAZON_REGION: ""
+  PROMETHEUS_URL: "http://change-me/prometheus"
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "us-east-1"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "change-me"
