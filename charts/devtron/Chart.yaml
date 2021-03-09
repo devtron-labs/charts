@@ -8,7 +8,7 @@ keywords:
   - K8s
   - Deployment
 engine: gotpl
-version: 0.10.2
+version: 0.10.3
 sources:
   - https://github.com/devtron-labs/charts
 maintainers:
