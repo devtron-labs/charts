@@ -4,5 +4,5 @@ metadata:
   name: installer-devtron
   namespace: devtroncd
 spec:
-  url: https://raw.githubusercontent.com/{{ .Values.installer.repo }}/{{ .Values.installer.release }}/installation-script
+  url: https://raw.githubusercontent.com/{{ .Values.installer.repo }}/{{ .Values.installer.release }}/manifests/installation-script
   reSync: true

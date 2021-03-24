@@ -1,24 +1,20 @@
 installer:
-  repo: "devtron-labs/devtron-installation-script"
-  release: "main"
+  repo: "devtron-labs/devtron"
+  release: "main"   #You can use a branch name or a release tag name as a release
+
 #Use secrets in plaintext, they'll be encoded to base64 automatically.
 secrets:
-  data:
-  - key: POSTGRESQL_PASSWORD
-    value: "change-me"
+  data: []
+#  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secrets
+#  - key: POSTGRESQL_PASSWORD
+#    value: "change-me"
 
-#  Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE ,optional, if not
-#  provided pod identity will be used for authentication
+#  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  - key: AZURE_ACCOUNT_KEY
-#    value: "#########"
+#    value: "xxxxxxxxxx"
 
 configs:
-  BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|AWS|MINIO
-  DEFAULT_CACHE_BUCKET: "devtron-ci-cache"
-  DEFAULT_CACHE_BUCKET_REGION: "change-me"
-  DEFAULT_BUILD_LOGS_BUCKET: "devtron-ci-log"
-  EXTERNAL_SECRET_AMAZON_REGION: ""
-  PROMETHEUS_URL: "http://change-me/prometheus"
+  BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "us-east-1"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "change-me"
