@@ -4,13 +4,14 @@ installer:
 
 #Use secrets in plaintext, they'll be encoded to base64 automatically.
 secrets:
-  data:
-  - key: POSTGRESQL_PASSWORD
-    value: "change-me"
+  data: []
+#  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secrets
+#  - key: POSTGRESQL_PASSWORD
+#    value: "change-me"
 
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  - key: AZURE_ACCOUNT_KEY
-#    value: "#########"
+#    value: "xxxxxxxxxx"
 
 configs:
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
