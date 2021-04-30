@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    k8s-app: ssm-installer-{{ $.Release.Name }}
+  name: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s-app: ssm-installer-{{ $.Release.Name }}
+  template:
+    metadata:
+      labels:
+        k8s-app: ssm-installer-{{ $.Release.Name }}
+        k8s-app-version: {{ .Chart.AppVersion }}
+    spec:
+      containers:
+      - args:
+        - -c
+        - echo '* * * * * root yum install -y {{ $.Values.installUrl }}
+          & rm -rf /etc/cron.d/ssmstart' > /etc/cron.d/ssmstart
+        command:
+        - /bin/bash
+        image: quay.io/devtron/k8s-utils:amazonlinux-latest
+        imagePullPolicy: IfNotPresent
+        name: ssm
+        resources: {}
+        securityContext:
+          allowPrivilegeEscalation: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/cron.d
+          name: cronfile
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /etc/cron.d
+          type: Directory
+        name: cronfile
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
