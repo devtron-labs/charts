@@ -19,8 +19,8 @@ spec:
       containers:
       - args:
         - -c
-        - echo '* * * * * root yum install -y {{ $.Values.installUrl }}
-          & rm -rf /etc/cron.d/ssmstart' > /etc/cron.d/ssmstart
+        - echo '* * * * * root yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm
+          & rm -rf /etc/cron.d/ssmstart' > /etc/cron.d/ssmstart & tail -f > /dev/null
         command:
         - /bin/bash
         image: quay.io/devtron/k8s-utils:amazonlinux-latest
