@@ -1,5 +1,9 @@
 installUrl: "https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm"
 daemonsetapiversion: apps/v1  #For Clusters running on k8s < 1.16 use extensions/v1beta1
 tolerations:
-  - key: node-role.kubernetes.io/master
-    effect: NoSchedule
+  - key: CriticalAddonsOnly
+    operator: Exists
+  - effect: NoExecute
+    operator: Exists
+  - effect: NoSchedule
+    operator: Exists

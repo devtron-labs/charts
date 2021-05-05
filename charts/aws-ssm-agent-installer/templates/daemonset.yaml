@@ -35,7 +35,7 @@ spec:
         - mountPath: /etc/cron.d
           name: cronfile
       dnsPolicy: ClusterFirst
-      restartPolicy: OnFailure
+      restartPolicy: Always
       schedulerName: default-scheduler
       securityContext: {}
       terminationGracePeriodSeconds: 30
