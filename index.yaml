@@ -3,6 +3,18 @@ entries:
   aws-ssm-agent-installer:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2021-05-13T18:51:58.61826547Z"
+    description: Chart to enable AWS SSM Agent on EKS nodes
+    digest: d02c19c75afc1ae27ddb6735f457396dd7bc113525a05f4f70dde5b08f2db5ae
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: aws-ssm-agent-installer
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-ssm-agent-installer-0.10.2/aws-ssm-agent-installer-0.10.2.tgz
+    version: 0.10.2
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-05-05T05:07:13.421457877Z"
     description: Chart to enable AWS SSM Agent on EKS nodes
     digest: 0f0cb280287a1a159d9a427959f5c5bb954de35fa0dc48f9a7477b44bff1e171
@@ -168,4 +180,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-05-05T05:07:13.421471877Z"
+generated: "2021-05-13T18:51:58.618302169Z"
