@@ -3,16 +3,12 @@ installer:
   release: "main"   #You can use a branch name or a release tag name as a release
 
 #Use secrets in plaintext, they'll be encoded to base64 automatically.
-secrets:
-  data: []
-#  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secrets
-#  - key: POSTGRESQL_PASSWORD
-#    value: "change-me"
+secrets: {}
+#  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secret
+#  POSTGRESQL_PASSWORD: "change-me"
 
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
-#  - key: AZURE_ACCOUNT_KEY
-#    value: "xxxxxxxxxx"
-
+#  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
