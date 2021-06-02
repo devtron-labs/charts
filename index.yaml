@@ -51,6 +51,18 @@ entries:
   devtron-generic-helm:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2021-06-02T18:45:07.491716593Z"
+    description: Chart to deploy any YAML file
+    digest: d7ccbf00fb7bc529724f6ea7b41a8fe053cdc0573ef27eaa886c5d8f07251691
+    maintainers:
+    - email: prashant@devtron.ai
+      name: Prashant
+    name: devtron-generic-helm
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-generic-helm-0.10.1/devtron-generic-helm-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-02-18T12:36:24.327919838Z"
     description: Chart to deploy any YAML file
     digest: 8aaf248878607072c87faf52958d50feaa3c4ffebf2b4103a8a7473095609c31
@@ -203,4 +215,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-05-19T10:35:04.729928614Z"
+generated: "2021-06-02T18:45:07.491734694Z"
