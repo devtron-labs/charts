@@ -18,6 +18,7 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: argocd-server
+  type: {{ .Values.argocdserver.service.type }}
 ---
 apiVersion: v1
 kind: Service
