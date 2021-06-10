@@ -1,0 +1,142 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-cm
+data:
+  url: {{ .Values.argocdserver.url }}
+  dex.config: |
+    connectors:
+      - type: {{ .Values.argocdserver.connectors.type }}
+        id: {{ .Values.argocdserver.connectors.id }}
+        name: {{ .Values.argocdserver.connectors.name }}
+        config:
+          issuer: {{ .Values.argocdserver.connectors.config.issuer }}
+          clientID: {{ .Values.argocdserver.connectors.config.clientID }}
+          clientSecret: {{ .Values.argocdserver.connectors.config.clientSecret }}
+          redirectURI: {{ .Values.argocdserver.connectors.config.redirectURI }}
+          hostedDomains:
+{{ toYaml .Values.argocdserver.connectors.config.hostedDomains | indent 10 }}
+  repositories: |
+{{ toYaml .Values.argocdserver.helm_repositories | indent 4 }}
+  resource.customizations: "kubernetes-client.io/ExternalSecret:\n  health.lua: |\n
+    \   hs = {}\n    if obj.status ~= nil then\n      if obj.status.status ~= nil
+    then\n          hs.status = \"Degraded\"\n          hs.message = obj.status.status\n
+    \     else\n        hs.status = \"Healthy\"\n      end\n    else\n      hs.status
+    = \"Healthy\"\n    end\n    return hs\nargoproj.io/Rollout:\n  health.lua: |\n
+    \   function checkReplicasStatus(obj)\n      hs = {}\n      replicasCount = getNumberValueOrDefault(obj.spec.replicas)\n
+    \     replicasStatus = getNumberValueOrDefault(obj.status.replicas)\n      updatedReplicas
+    = getNumberValueOrDefault(obj.status.updatedReplicas)\n      availableReplicas
+    = getNumberValueOrDefault(obj.status.availableReplicas)\n\n      if updatedReplicas
+    < replicasCount then\n        hs.status = \"Progressing\"\n        hs.message
+    = \"Waiting for roll out to finish: More replicas need to be updated\"\n        return
+    hs\n      end\n      -- Since the scale down delay can be very high, BlueGreen
+    does not wait for all the old replicas to scale\n      -- down before marking
+    itself healthy. As a result, only evaluate this condition if the strategy is canary.\n
+    \     if obj.spec.strategy.canary ~= nil and replicasStatus > updatedReplicas
+    then\n        hs.status = \"Progressing\"\n        hs.message = \"Waiting for
+    roll out to finish: old replicas are pending termination\"\n        return hs\n
+    \     end\n      if availableReplicas < updatedReplicas then\n        hs.status
+    = \"Progressing\"\n        hs.message = \"Waiting for roll out to finish: updated
+    replicas are still becoming available\"\n        return hs\n      end\n      return
+    nil\n    end\n\n    function getNumberValueOrDefault(field)\n      if field ~=
+    nil then\n        return field\n      end\n      return 0\n    end\n\n    function
+    checkPaused(obj)\n      hs = {}\n      local paused = false\n      if obj.status.verifyingPreview
+    ~= nil then\n        paused = obj.status.verifyingPreview\n      elseif obj.spec.paused
+    ~= nil then\n        paused = obj.spec.paused\n      end\n\n      if paused then\n
+    \       hs.status = \"Suspended\"\n        hs.message = \"Rollout is paused\"\n
+    \       return hs\n      end\n      return nil\n    end\n\n    hs = {}\n    if
+    obj.status ~= nil then\n      if obj.status.conditions ~= nil then\n        for
+    _, condition in ipairs(obj.status.conditions) do\n          if condition.type
+    == \"InvalidSpec\" then\n            hs.status = \"Degraded\"\n            hs.message
+    = condition.message\n            return hs\n          end\n          if condition.type
+    == \"Progressing\" and condition.reason == \"RolloutAborted\" then\n            hs.status
+    = \"Degraded\"\n            hs.message = condition.message\n            return
+    hs\n          end\n          if condition.type == \"Progressing\" and condition.reason
+    == \"ProgressDeadlineExceeded\" then\n            hs.status = \"Degraded\"\n            hs.message
+    = condition.message\n            return hs\n          end\n        end\n      end\n
+    \     if obj.status.currentPodHash ~= nil then\n        if obj.spec.strategy.blueGreen
+    ~= nil then\n          isPaused = checkPaused(obj)\n          if isPaused ~= nil
+    then\n            return isPaused\n          end\n          replicasHS = checkReplicasStatus(obj)\n
+    \         if replicasHS ~= nil then\n            return replicasHS\n          end\n
+    \         if obj.status.blueGreen ~= nil and obj.status.blueGreen.activeSelector
+    ~= nil and obj.status.blueGreen.activeSelector == obj.status.currentPodHash then\n
+    \           hs.status = \"Healthy\"\n            hs.message = \"The active Service
+    is serving traffic to the current pod spec\"\n            return hs\n          end\n
+    \         hs.status = \"Progressing\"\n          hs.message = \"The current pod
+    spec is not receiving traffic from the active service\"\n          return hs\n
+    \       end\n        if obj.spec.strategy.recreate ~= nil then\n          isPaused
+    = checkPaused(obj)\n          if isPaused ~= nil then\n            return isPaused\n
+    \         end\n          replicasHS = checkReplicasStatus(obj)\n          if replicasHS
+    ~= nil then\n            return replicasHS\n          end\n          if obj.status.recreate
+    ~= nil and obj.status.recreate.currentRS ~= nil and obj.status.recreate.currentRS
+    == obj.status.currentPodHash then\n            hs.status = \"Healthy\"\n            hs.message
+    = \"Rollout is successful\"\n            return hs\n          end\n          hs.status
+    = \"Progressing\"\n          hs.message = \"Rollout is in progress\"\n          return
+    hs\n        end\n        if obj.spec.strategy.canary ~= nil then\n          currentRSIsStable
+    = obj.status.canary.stableRS == obj.status.currentPodHash\n          if obj.spec.strategy.canary.steps
+    ~= nil and table.getn(obj.spec.strategy.canary.steps) > 0 then\n            stepCount
+    = table.getn(obj.spec.strategy.canary.steps)\n            if obj.status.currentStepIndex
+    ~= nil then\n              currentStepIndex = obj.status.currentStepIndex\n              isPaused
+    = checkPaused(obj)\n              if isPaused ~= nil then\n                return
+    isPaused\n              end\n          \n              if paused then\n                hs.status
+    = \"Suspended\"\n                hs.message = \"Rollout is paused\"\n                return
+    hs\n              end\n              if currentRSIsStable and stepCount == currentStepIndex
+    then\n                replicasHS = checkReplicasStatus(obj)\n                if
+    replicasHS ~= nil then\n                  return replicasHS\n                end\n
+    \               hs.status = \"Healthy\"\n                hs.message = \"The rollout
+    has completed all steps\"\n                return hs\n              end\n            end\n
+    \           hs.status = \"Progressing\"\n            hs.message = \"Waiting for
+    rollout to finish steps\"\n            return hs\n          end\n\n          --
+    The detecting the health of the Canary deployment when there are no steps\n          replicasHS
+    = checkReplicasStatus(obj)\n          if replicasHS ~= nil then\n            return
+    replicasHS\n          end\n          if currentRSIsStable then\n            hs.status
+    = \"Healthy\"\n            hs.message = \"The rollout has completed canary deployment\"\n
+    \           return hs\n          end\n          hs.status = \"Progressing\"\n
+    \         hs.message = \"Waiting for rollout to finish canary deployment\"\n        end\n
+    \     end\n    end\n    hs.status = \"Progressing\"\n    hs.message = \"Waiting
+    for rollout to finish: status has not been reconciled.\"\n    return hs\n"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-gpg-keys-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-gpg-keys-cm
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-rbac-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-rbac-cm
+---
+apiVersion: v1
+data:
+  ssh_known_hosts: |
+    bitbucket.org ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAubiN81eDcafrgMeLzaFPsw2kNvEcqTKl/VqLat/MaB33pZy0y3rJZtnqwR2qOOvbwKZYKiEO1O6VqNEBxKvJJelCq0dTXWT5pbO2gDXC6h6QDXCaHo6pOHGPUy+YBaGQRGuSusMEASYiWunYN0vCAI8QaXnWMXNMdFP3jHAJH0eDsoiGnLPBlBp4TNm6rYI74nMzgz3B9IikW4WVK+dc8KZJZWYjAuORU3jc1c/NPskD2ASinf8v3xnfXeukU0sJ5N6m5E8VLjObPEO+mN2t/FZTMZLiFqPWc/ALSqnMnnhwrNi2rbfg/rd/IpL8Le3pSBne8+seeFVBoGqzHM9yXw==
+    github.com ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==
+    gitlab.com ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFSMqzJeV9rUzU4kWitGjeR4PWSa29SPqJ1fVkhtj3Hw9xjLVXVYrU9QlYWrOLXBpQ6KWjbjTDTdDkoohFzgbEY=
+    gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
+    gitlab.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCsj2bNKTBSpIYDEGk9KxsGh3mySTRgMtXL583qmBpzeQ+jqCMRgBqB98u3z++J1sKlXHWfM9dyhSevkMwSbhoR8XIq/U0tCNyokEi/ueaBMCvbcTHhO7FcwzY92WK4Yt0aGROY5qX2UKSeOvuP4D6TPqKF1onrSzH9bx9XUf2lEdWT/ia1NEKjunUqu1xOB/StKDHMoX4/OKyIzuS0q/T1zOATthvasJFoPrAjkohTyaDUz2LN5JoH839hViyEG82yB+MjcFV5MU3N1l1QL3cVUCh93xSaua1N85qivl+siMkPGbO5xR/En4iEY6K2XPASUEMaieWVNTRCtJ4S8H+9
+    ssh.dev.azure.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+    vs-ssh.visualstudio.com ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC7Hr1oTWqNqOlzGJOfGJ4NakVyIzf1rXYd4d7wo6jBlkLvCA4odBlL0mDUyZ0/QUfTTqeu+tm22gOsv+VrVTMk6vwRU75gY/y9ut5Mb3bR5BV58dKXyq9A9UeB5Cakehn5Zgm6x1mKoVyf+FFn26iYqXJRgzIZZcZ5V6hrE0Qg39kZm4az48o0AUbf6Sp4SLdvnuMa2sVNwHBboS7EJkm57XQPVU3/QpyNLHbWDdzwtrlS+ez30S3AdYhLKEOxAG8weOnyrtLJAUen9mTkol8oII1edf7mWWbWVf0nBmly21+nZcmCTISQBtdcyPaEno7fFQMDD26/s0lfKob4Kw8H
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-ssh-known-hosts-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-ssh-known-hosts-cm
+---
+apiVersion: v1
+data: null
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: argocd-tls-certs-cm
+    app.kubernetes.io/part-of: argocd
+  name: argocd-tls-certs-cm
