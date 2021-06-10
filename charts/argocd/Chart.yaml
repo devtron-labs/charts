@@ -1,8 +1,8 @@
 name: argocd
-appVersion: 0.1.0
+appVersion: 1.8.1
 description: Chart to deploy ACD
 engine: gotpl
-version: 0.10.0
+version: 1.8.1
 maintainers:
 - email: prakarsh@devtron.ai
   name: Prakarsh
