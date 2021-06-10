@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   argocd:
   - apiVersion: v1
+    appVersion: 1.8.1
+    created: "2021-06-10T10:27:25.848730254Z"
+    description: Chart to deploy ACD
+    digest: f1eb864c450f86ca6fda0d067f4d1a56b2a052657a358dfd83b553b7142a7995
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: argocd
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argocd-1.8.1/argocd-1.8.1.tgz
+    version: 1.8.1
+  - apiVersion: v1
     appVersion: 0.1.0
     created: "2021-06-10T09:27:50.737983506Z"
     description: Chart to deploy ACD
@@ -228,4 +240,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-06-10T09:27:50.738030607Z"
+generated: "2021-06-10T10:27:25.848752155Z"
