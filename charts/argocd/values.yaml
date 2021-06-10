@@ -14,7 +14,7 @@ argocdserver:
     resources:
       requests:
         memory: 1000Mi
-        cpu: 5000m
+        cpu: 500m
       limits:
         memory: 1000Mi
         cpu: 500m
