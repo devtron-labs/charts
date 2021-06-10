@@ -1,5 +1,18 @@
 apiVersion: v1
 entries:
+  argocd:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-06-10T09:27:50.737983506Z"
+    description: Chart to deploy ACD
+    digest: d80374cc2932add636521adb0a97b23893b705df18ab99f9ef43c43e2ec5ede8
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: argocd
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argocd-0.10.0/argocd-0.10.0.tgz
+    version: 0.10.0
   aws-ssm-agent-installer:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -215,4 +228,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-06-02T18:45:07.491734694Z"
+generated: "2021-06-10T09:27:50.738030607Z"
