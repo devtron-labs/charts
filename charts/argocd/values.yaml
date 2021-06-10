@@ -1,0 +1,51 @@
+argocdserver:
+  image: "argoproj/argocd:v1.8.1"
+  service:
+    type: ClusterIP
+  argocdredis:
+    resources:
+      requests:
+        memory: 300Mi
+        cpu: 100m
+      limits:
+        memory: 500Mi
+        cpu: 200m
+  argocd:
+    resources:
+      requests:
+        memory: 1000Mi
+        cpu: 5000m
+      limits:
+        memory: 1000Mi
+        cpu: 500m
+  applicationcontroller:
+    resources:
+      requests:
+        memory: 1600Mi
+        cpu: 1000m
+      limits:
+        memory: 1500Mi
+        cpu: 1000m
+  url: http://staging.devtron.ai:32080
+  connectors:
+    type: oidc
+    id: google
+    name: Google
+    config:
+      issuer: https://accounts.google.com
+      clientID: 767341395723-m6roib9sesbts0neop3ad28iao75h2um.apps.googleusercontent.com
+      clientSecret: f375OkKRyGuLgci5sKR2DTkB
+      redirectURI: http://staging.devtron.ai:32080/api/dex/callback
+      hostedDomains:
+      - devtron.ai
+      - devtron.com
+  helm_repositories:
+  - name: incubator
+    type: helm
+    url: https://charts.helm.sh/incubator
+  - name: devtron-charts
+    type: helm
+    url: https://devtron-charts.s3.us-east-2.amazonaws.com/charts
+  - name: stable
+    type: helm
+    url: https://charts.helm.sh/stable
