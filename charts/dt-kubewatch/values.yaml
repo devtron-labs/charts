@@ -1,0 +1,9 @@
+kubewatch:
+  acdNamespace: devtroncd
+  resources:
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 128Mi
+      cpu: 100m
