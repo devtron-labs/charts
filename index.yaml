@@ -237,6 +237,19 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.10.1/devtron-operator-0.10.1.tgz
     version: 0.10.1
+  dt-kubewatch:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-06-14T13:20:18.272861394Z"
+    description: Chart to deploy Devtron Kubewatch
+    digest: 5d73f4b3d8eba61f69394b86fdee73a515d5f7e498e22267c23292f23e0cdc92
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: dt-kubewatch
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dt-kubewatch-0.12.0/dt-kubewatch-0.12.0.tgz
+    version: 0.12.0
   dt-secrets:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -273,4 +286,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-06-14T05:45:35.086621435Z"
+generated: "2021-06-14T13:20:18.272887695Z"
