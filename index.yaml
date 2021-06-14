@@ -250,6 +250,16 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/dt-secrets-0.10.1/dt-secrets-0.10.1.tgz
     version: 0.10.1
+  knative-installer:
+  - apiVersion: v2
+    created: "2021-06-14T05:45:35.085899302Z"
+    description: Chart to install Knative on the cluster
+    digest: 42773acf42e084f116061b43f788dd2f0a21569a2090808e0c035a01815d1987
+    name: knative-installer
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/knative-installer-0.1.0/knative-installer-0.1.0.tgz
+    version: 0.1.0
   rollout:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -263,4 +273,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-06-11T12:04:49.154707599Z"
+generated: "2021-06-14T05:45:35.086621435Z"
