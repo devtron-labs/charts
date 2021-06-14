@@ -1,0 +1,5 @@
+apiVersion: v2
+name: knative-installer
+description: Chart to install Knative on the cluster
+type: application
+version: 0.1.0
