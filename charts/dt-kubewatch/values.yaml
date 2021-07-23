@@ -7,3 +7,6 @@ kubewatch:
     limits:
       memory: 128Mi
       cpu: 100m
+  image:
+    repo: quay.io/devtron/kubewatch
+    tag: v0.1.0
