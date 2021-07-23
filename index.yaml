@@ -332,6 +332,18 @@ entries:
   dt-kubewatch:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2021-07-23T11:25:24.130218157Z"
+    description: Chart to deploy Devtron Kubewatch
+    digest: 07c363d009ce6e75b6b58e2b996a81feba64bed2e20d96651fe5b6be846b9681
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: dt-kubewatch
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dt-kubewatch-0.13.0/dt-kubewatch-0.13.0.tgz
+    version: 0.13.0
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-06-14T13:20:18.272861394Z"
     description: Chart to deploy Devtron Kubewatch
     digest: 5d73f4b3d8eba61f69394b86fdee73a515d5f7e498e22267c23292f23e0cdc92
@@ -378,4 +390,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-07-21T16:47:33.502190175Z"
+generated: "2021-07-23T11:25:24.130262857Z"
