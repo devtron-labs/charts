@@ -9,4 +9,4 @@ kubewatch:
       cpu: 100m
   image:
     repo: quay.io/devtron/kubewatch
-    tag: 8aef551d-128-2196
+    tag: v0.1.0
