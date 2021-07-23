@@ -8,5 +8,5 @@ kubewatch:
       memory: 128Mi
       cpu: 100m
   image:
-    name: quay.io/devtron/kubewatch
+    repo: quay.io/devtron/kubewatch
     tag: 8aef551d-128-2196

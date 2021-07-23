@@ -160,7 +160,7 @@ spec:
     spec:
       containers:
       - name: kubewatch
-        image: {{ .Values.kubewatch.image.name }}:{{ .Values.kubewatch.image.tag }}
+        image: {{ .Values.kubewatch.image.repo }}:{{ .Values.kubewatch.image.tag }}
         env:
         - name: DEFAULT_NAMESPACE
           value: "devtron-ci"
