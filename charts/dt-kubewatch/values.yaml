@@ -10,3 +10,5 @@ kubewatch:
   image:
     repo: quay.io/devtron/kubewatch
     tag: v0.1.0
+  podLabels:
+    component: kubewatch
