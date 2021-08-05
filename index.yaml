@@ -50,6 +50,24 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/aws-ssm-agent-installer-0.10.1/aws-ssm-agent-installer-0.10.1.tgz
     version: 0.10.1
+  clair:
+  - apiVersion: v1
+    appVersion: 3.0.0-pre
+    created: "2021-08-05T15:10:50.446689161Z"
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: 0ff5e661c563bea98d22e9a05466ff6fc1353365809afd9e09ea6e8dc6d1fe28
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    maintainers:
+    - email: jimmy.zelinskie@coreos.com
+      name: Jimmy Zelinskie
+    name: clair
+    sources:
+    - https://github.com/coreos/clair
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/clair-0.1.3/clair-0.1.3.tgz
+    version: 0.1.3
   coralogix-fluentd:
   - apiVersion: v1
     appVersion: 1.1.6
@@ -379,6 +397,19 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/dt-secrets-0.10.1/dt-secrets-0.10.1.tgz
     version: 0.10.1
+  gitsensor:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-08-05T15:10:50.57208695Z"
+    description: Chart to deploy Devtron Gitsensor
+    digest: 3fc7a13bf4df21d5e3fa00c351c2ef736acd113327a3e2066982aff5801234f7
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: gitsensor
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/gitsensor-0.11.1/gitsensor-0.11.1.tgz
+    version: 0.11.1
   knative-installer:
   - apiVersion: v2
     created: "2021-06-14T05:45:35.085899302Z"
@@ -389,6 +420,38 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/knative-installer-0.1.0/knative-installer-0.1.0.tgz
     version: 0.1.0
+  nats-server:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2021-08-05T15:10:50.698323938Z"
+    description: Chart to deploy NATS Server
+    digest: 416b10242b34e221cdf258c62379ab13a589661ce1c4e6781b17dfec1fa7d2a1
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: nats-server
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/nats-server-0.10.1/nats-server-0.10.1.tgz
+    version: 0.10.1
+  nats-streaming:
+  - apiVersion: v1
+    appVersion: 0.6.0
+    created: "2021-08-05T15:10:50.829103782Z"
+    description: A NATS Streaming cluster setup
+    digest: 0beffd8dfd043cf3a15e94d8487c5434ed2f31ed516833105f45cfe46b326836
+    home: https://nats.io/
+    keywords:
+    - NATS
+    - Messaging
+    - publish
+    - subscribe
+    - streaming
+    - cluster
+    - persistence
+    name: nats-streaming
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/nats-streaming-0.3.1/nats-streaming-0.3.1.tgz
+    version: 0.3.1
   rollout:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -402,4 +465,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-08-05T05:39:41.92028866Z"
+generated: "2021-08-05T15:10:50.829180873Z"
