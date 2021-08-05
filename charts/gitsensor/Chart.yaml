@@ -1,0 +1,8 @@
+apiVersion: v1
+appVersion: 0.1.0
+description: Chart to deploy Devtron Gitsensor
+maintainers:
+- email: prakarsh@devtron.ai
+  name: Prakarsh
+name: gitsensor
+version: 0.11.0

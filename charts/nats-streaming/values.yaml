@@ -1,0 +1,84 @@
+antiAffinity: soft
+auth:
+  enabled: false
+cluster_raft_logging: false
+clusterID: devtron-stan
+debug: false
+hbFailCount: 330
+hbInterval: 30s
+hbTimeout: 10s
+image:
+  pullPolicy: IfNotPresent
+  registry: docker.io
+  repository: nats-streaming
+  tag: 0.11.2
+livenessProbe:
+  enabled: true
+  failureThreshold: 6
+  initialDelaySeconds: 30
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+maxAge: 604800s
+maxBytes: "0"
+maxChannels: 0
+maxMsgs: "0"
+maxSubs: 0
+metrics:
+  args: null
+  enabled: false
+  image:
+    pullPolicy: IfNotPresent
+    registry: docker.io
+    repository: synadia/prometheus-nats-exporter
+    tag: 0.1.0
+  podAnnotations:
+    prometheus.io/port: "7777"
+    prometheus.io/scrape: "true"
+  port: 7777
+monitoring:
+  service:
+    annotations: {}
+    loadBalancerIP: null
+    port: 8222
+    type: ClusterIP
+natsSvc: nats://devtron-nats.devtroncd:4222
+networkPolicy:
+  enabled: false
+persistence:
+  file:
+    bufferSize: "2097152"
+    compactEnabled: true
+    compactFrag: 50
+    compactInterval: 300
+    compactMinSize: "1048576"
+    crc: true
+    crcPoly: "3988292384"
+    fdsLimit: 0
+    parallelRecovery: 1
+    sliceArchiveScript: ""
+    sliceMaxAge: 0
+    sliceMaxBytes: "67108931"
+    sliceMaxMsgs: 0
+    sync: true
+  volume:
+    enabled: false
+podAnnotations: {}
+podLabels:
+readinessProbe:
+  enabled: true
+  failureThreshold: 6
+  initialDelaySeconds: 5
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 5
+replicaCount: 3
+resources: {}
+securityContext:
+  enabled: false
+  fsGroup: 1001
+  runAsUser: 1001
+sidecars: null
+statefulset:
+  updateStrategy: RollingUpdate
+trace: false

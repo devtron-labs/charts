@@ -1,0 +1,14 @@
+apiVersion: v1
+appVersion: 0.6.0
+description: A NATS Streaming cluster setup
+home: https://nats.io/
+keywords:
+- NATS
+- Messaging
+- publish
+- subscribe
+- streaming
+- cluster
+- persistence
+name: nats-streaming
+version: 0.3.0

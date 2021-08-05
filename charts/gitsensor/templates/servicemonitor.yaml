@@ -1,0 +1,42 @@
+{{- if .Values.servicemonitor.enabled}}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template ".Chart.Name .fullname" . }}-sm
+  labels:
+    chart: {{ template ".Chart.Name .chart" . }}
+    {{- if .Values.servicemonitor.labels }}
+{{ toYaml .Values.servicemonitor.labels | indent 4 }}
+    {{- end }}
+spec:
+  endpoints:
+
+      {{- if  .Values.servicemonitor }}
+        {{- if .Values.servicemonitor.enabled}}
+    - port: {{ .Values.servicemonitor.port }}
+      {{- if .Values.servicemonitor.path }}
+      path: {{ .Values.servicemonitor.path}}
+      {{- end }}
+      {{- if .Values.servicemonitor.scheme }}
+      scheme: {{ .Values.servicemonitor.scheme}}
+      {{- end }}
+      {{- if .Values.servicemonitor.interval }}
+      interval: {{ .Values.servicemonitor.interval}}
+      {{- end }}
+      {{- if .Values.servicemonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.servicemonitor.scrapeTimeout}}
+      {{- end }}
+      {{- if .Values.servicemonitor.metricRelabelings}}
+      metricRelabelings:
+{{toYaml .Values.servicemonitor.metricRelabelings | indent 8 }}
+      {{- end }}
+          {{- end }}
+      {{- end }}
+
+  selector:
+    matchLabels:
+    {{- if .Values.servicemonitor.selectors }}
+{{ toYaml .Values.servicemonitor.selectors | indent 6 }}
+    {{- end }}
+{{- end }}

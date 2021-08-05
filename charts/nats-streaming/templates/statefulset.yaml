@@ -1,0 +1,248 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ template "nats-streaming.fullname" . }}
+  labels:
+    app: "{{ template "nats-streaming.name" . }}"
+    chart: "{{ template "nats-streaming.chart" . }}"
+    release: {{ .Release.Name | quote }}
+    heritage: {{ .Release.Service | quote }}
+spec:
+  serviceName: devtron-nats
+  replicas: {{ .Values.replicaCount }}
+  updateStrategy:
+    type: {{ .Values.statefulset.updateStrategy }}
+    {{- if .Values.statefulset.rollingUpdatePartition }}
+    rollingUpdate:
+      partition: {{ .Values.statefulset.rollingUpdatePartition }}
+    {{- end }}
+  selector:
+    matchLabels:
+      app: {{ template "nats-streaming.name" . }}
+      release: {{ .Release.Name | quote }}
+  template:
+    metadata:
+      labels:
+        app: "{{ template "nats-streaming.name" . }}"
+        chart: "{{ template "nats-streaming.chart" . }}"
+        release: {{ .Release.Name }}
+        {{- if .Values.podLabels }}
+{{ toYaml .Values.podLabels | indent 8 }}
+        {{- end }}
+      annotations:
+{{- if .Values.podAnnotations }}
+{{ toYaml .Values.podAnnotations | indent 8 }}
+{{- end }}
+{{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+{{ toYaml .Values.metrics.podAnnotations | indent 8 }}
+{{- end }}
+    spec:
+      {{- if .Values.image.pullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.image.pullSecrets | indent 8 }}
+      {{- end }}
+      {{- if .Values.securityContext.enabled }}
+      securityContext:
+        fsGroup: {{ .Values.securityContext.fsGroup }}
+        runAsUser: {{ .Values.securityContext.runAsUser }}
+      {{- end }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.nodeSelector | indent 8 }}
+      {{- end }}
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName | quote }}
+      {{- end }}
+      {{- if eq .Values.antiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "nats-streaming.name" . }}"
+                  release: {{ .Release.Name | quote }}
+      {{- else if eq .Values.antiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  app: "{{ template "nats-streaming.name" . }}"
+                  release: {{ .Release.Name | quote }}
+      {{- end }}
+      containers:
+      - name: {{ template "nats-streaming.name" . }}
+        image: {{ template "nats-streaming.image" . }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        {{- if .Values.auth.enabled }}
+        - name: USER
+          value: {{ .Values.auth.user }}
+        {{- if .Values.auth.token }}
+        - name: AUTH
+          value: {{ .Values.auth.token }}
+        {{- else }}
+        - name: PASSWORD
+          {{- if .Values.auth.secretName }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ tpl (.Values.auth.secretName) . }}
+              key: {{ .Values.auth.secretKey }}
+          {{- else }}
+          value: {{ .Values.auth.password }}
+          {{- end }}
+        {{- end }}
+        {{- end }}
+        args: [
+          "-clustered",
+          "-cid", "{{ tpl (.Values.clusterID) . }}",
+          "-m",   "{{ .Values.monitoring.service.port }}",
+          "-ns",  "{{ tpl (.Values.natsSvc) . }}",
+          "-mc",  "{{ .Values.maxChannels }}",
+          "-msu", "{{ .Values.maxSubs }}",
+          "-mm",  "{{ .Values.maxMsgs }}",
+          "-mb",  "{{ .Values.maxBytes }}",
+          "-ma",  "{{ .Values.maxAge }}",
+          "-hbi", "{{ .Values.hbInterval }}",
+          "-hbt", "{{ .Values.hbTimeout }}",
+          "-hbf", "{{ .Values.hbFailCount }}",
+
+          "--cluster_node_id", "$(POD_NAME)",
+          "--cluster_peers", "{{ template "nats-streaming.peers" . }}",
+          "--store", "file",
+          "--dir", "/nats/{{ tpl (.Values.clusterID) . }}/$(POD_NAME)/data",
+          "--cluster_log_path", "/nats/{{ tpl (.Values.clusterID) . }}/$(POD_NAME)/raft",
+        {{- if .Values.cluster_raft_logging }}
+          "--cluster_raft_logging",
+        {{- end }}
+        {{- if .Values.persistence.file.compactEnabled }}
+          "--file_compact_enabled",
+          "--file_compact_frag", "{{ .Values.persistence.file.compactFrag }}",
+          "--file_compact_interval", "{{ .Values.persistence.file.compactInterval }}",
+          "--file_compact_min_size", "{{ .Values.persistence.file.compactMinSize }}",
+        {{- end }}
+          "--file_buffer_size", "{{ .Values.persistence.file.bufferSize }}",
+        {{- if .Values.persistence.file.crc }}
+          "--file_crc",
+          "--file_crc_poly", "{{ .Values.persistence.file.crcPoly }}",
+        {{- end }}
+        {{- if .Values.persistence.file.sync }}
+          "--file_sync",
+        {{- end }}
+          "--file_slice_max_msgs", "{{ .Values.persistence.file.sliceMaxMsgs }}",
+          "--file_slice_max_bytes", "{{ .Values.persistence.file.sliceMaxBytes }}",
+          "--file_slice_max_age", "{{ .Values.persistence.file.sliceMaxAge }}",
+        {{- if ne .Values.persistence.file.sliceArchiveScript "" }}
+          "--file_slice_archive_script", "{{ .Values.persistence.file.sliceArchiveScript }}",
+        {{- end }}
+          "--file_fds_limit", "{{ .Values.persistence.file.fdsLimit }}",
+          "--file_parallel_recovery", "{{ .Values.persistence.file.parallelRecovery }}",
+
+        {{- if .Values.auth.enabled }}
+          "--user", "$(USER)",
+        {{- if .Values.auth.token }}
+          "--auth", "$(AUTH)",
+        {{- else }}
+          "--pass", "$(PASSWORD)",
+        {{- end }}
+        {{- end }}
+
+        {{- if .Values.debug }}
+          "-SD",
+        {{- end }}
+        {{- if .Values.trace }}
+          "-SV",
+        {{- end }}
+        ]
+        ports:
+        - name: monitoring
+          containerPort: {{ .Values.monitoring.service.port }}
+        volumeMounts:
+        - name: datadir
+          mountPath: /nats
+        {{- if .Values.livenessProbe.enabled }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: monitoring
+          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+        {{- end }}
+        {{- if .Values.readinessProbe.enabled }}
+        readinessProbe:
+          httpGet:
+            path: /
+            port: monitoring
+          initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.readinessProbe.successThreshold }}
+          failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+        {{- end }}
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+        {{- if .Values.sidecars }}
+{{ toYaml .Values.sidecars | indent 6 }}
+        {{- end }}
+{{- if .Values.metrics.enabled }}
+      - name: metrics
+        image: {{ template "metrics.image" . }}
+        imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+        args:
+{{ toYaml .Values.metrics.args | indent 10 -}}
+          - "http://localhost:{{ .Values.monitoring.service.port }}"
+        ports:
+        - name: metrics
+          containerPort: {{ .Values.metrics.port }}
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 15
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: metrics
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        resources:
+{{ toYaml .Values.metrics.resources | indent 10 }}
+{{- end }}
+      volumes:
+    {{ if not .Values.persistence.volume.enabled }}
+      - name: datadir
+        emptyDir: {}
+    {{- end }}
+  {{- if .Values.persistence.volume.enabled }}
+  volumeClaimTemplates:
+  - metadata:
+      name: datadir
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: "{{ .Values.persistence.volume.size }}"
+      {{- if .Values.persistence.volume.storageClass }}
+      {{- if (eq "-" .Values.persistence.volume.storageClass) }}
+      storageClassName: ""
+      {{- else }}
+      storageClassName: "{{ .Values.persistence.volume.storageClass }}"
+      {{- end }}
+      {{- end }}
+  {{- end }}

@@ -1,0 +1,43 @@
+gitsensor:
+  envVariables:
+    data:
+      PG_ADDR: postgresql-postgresql.devtroncd
+      PG_PASS: password
+  image:
+    pullPolicy: Always
+    repository: 686244538589.dkr.ecr.us-east-2.amazonaws.com/release/git-sensor
+    tag: 81173eda-17-223
+  service:
+    metadata:
+      labels:
+        app: git-sensor
+      name: git-sensor-service
+    spec:
+      port: 80
+      selector:
+        app: git-sensor
+      targetPort: 8080
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: git-sensor
+    serviceName: git-sensor
+    template:
+      metadata:
+        labels:
+          app: git-sensor
+          component: git-sensor
+  storage:
+    class: gp2
+    requests: 2Gi
+servicemonitor:
+  enabled: false
+  labels:
+    app: git-sensor
+    kind: Prometheus
+    release: monitoring
+  path: /metrics
+  port: sensor
+  selectors:
+    app: git-sensor
