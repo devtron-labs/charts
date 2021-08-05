@@ -141,6 +141,7 @@ metadata:
     chart: kubewatch-0.6.1
     heritage: "Tiller"
     release: "kubewatch"
+    {{ toYaml .Values.kubewatch.podLabels }}
   name: kubewatch
   namespace: {{ .Release.Namespace }}
 spec:
@@ -157,6 +158,7 @@ spec:
         app: kubewatch
         release: "kubewatch"
         chart: kubewatch-0.6.1
+{{ toYaml .Values.kubewatch.podLabels | indent 8 }}
     spec:
       containers:
       - name: kubewatch
