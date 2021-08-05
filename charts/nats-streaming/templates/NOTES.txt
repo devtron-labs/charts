@@ -1,0 +1,25 @@
+NATS Streaming server has been installed.
+
+Externally monitor the NATS streaming server by running these commands.
+
+{{- if contains "NodePort" .Values.monitoring.service.type }}
+
+export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "nats-streaming.fullname" . }})
+export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+
+echo http://$NODE_IP:$NODE_PORT/streaming
+
+{{- else if contains "LoadBalancer" .Values.monitoring.service.type }}
+
+NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+  You can watch the status of by running 'kubectl get svc -w {{ template "nats-streaming.fullname" . }}'
+export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ template "nats-streaming.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+echo http://$SERVICE_IP:{{ .Values.monitoring.service.port }}/streaming
+
+{{- else if contains "ClusterIP" .Values.monitoring.service.type }}
+
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app={{ template "nats-streaming.name" . }},release={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+kubectl port-forward $POD_NAME 8222:{{ .Values.monitoring.service.port }}
+echo "Visit http://127.0.0.1:8222/streaming to monitor the NATS streaming server"
+
+{{- end }}
