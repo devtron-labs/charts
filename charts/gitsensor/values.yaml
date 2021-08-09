@@ -5,8 +5,8 @@ gitsensor:
       PG_PASS: password
   image:
     pullPolicy: Always
-    repository: 686244538589.dkr.ecr.us-east-2.amazonaws.com/release/git-sensor
-    tag: 81173eda-17-223
+    repository: quay.io/devtron/git-sensor
+    tag: 5d527335-200-4349
   service:
     metadata:
       labels:
