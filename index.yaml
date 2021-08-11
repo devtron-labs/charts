@@ -400,6 +400,18 @@ entries:
   gitsensor:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2021-08-11T07:31:43.422506559Z"
+    description: Chart to deploy Devtron Gitsensor
+    digest: 6b5f787ed99b8cc7777ccc3172e194cccaa2a8252c9540f4ee3a0a3685dfdaca
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: gitsensor
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/gitsensor-0.11.2/gitsensor-0.11.2.tgz
+    version: 0.11.2
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-08-05T15:10:50.57208695Z"
     description: Chart to deploy Devtron Gitsensor
     digest: 3fc7a13bf4df21d5e3fa00c351c2ef736acd113327a3e2066982aff5801234f7
@@ -465,4 +477,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-08-05T15:10:50.829180873Z"
+generated: "2021-08-11T07:31:43.42255776Z"
