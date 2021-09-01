@@ -5,6 +5,8 @@ installer:
   image: quay.io/devtron/inception
   tag: dee0d9a4-185-4689
 
+  source: "github"
+
 #Use secrets in plaintext, they'll be encoded to base64 automatically.
 secrets: {}
 #  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secret
