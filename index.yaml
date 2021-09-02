@@ -52,6 +52,14 @@ entries:
     version: 0.10.1
   calico:
   - apiVersion: v1
+    created: "2021-09-02T12:15:58.21954746Z"
+    description: Chart to deploy calico networking
+    digest: 3b06c9a646ae10132a07af83dde5957157f0cfbec649eb83d7326574bf70acc0
+    name: calico
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/calico-0.1.1/calico-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v1
     created: "2021-09-02T11:10:08.016899492Z"
     description: Chart to deploy calico networking
     digest: 5a4183fa3447ab46aef56d1e46a414199d8ad732fff1f37061673d1110371ec8
@@ -486,4 +494,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-09-02T11:10:08.017071708Z"
+generated: "2021-09-02T12:15:58.219653761Z"
