@@ -136,6 +136,29 @@ entries:
   devtron-operator:
   - apiVersion: v1
     appVersion: 0.0.1
+    created: "2021-09-15T04:33:28.08829387Z"
+    description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
+      system.
+    digest: 285a30337c7a37c20e6cd0fa2379c8af9d7434ad34063a5cccd9e4a67e9702a0
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-operator
+    sources:
+    - https://github.com/devtron-labs/charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.11.0/devtron-operator-0.11.0.tgz
+    version: 0.11.0
+  - apiVersion: v1
+    appVersion: 0.0.1
     created: "2021-07-21T16:47:33.502054075Z"
     description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
       system.
@@ -494,4 +517,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-09-02T12:15:58.219653761Z"
+generated: "2021-09-15T04:33:28.088412672Z"
