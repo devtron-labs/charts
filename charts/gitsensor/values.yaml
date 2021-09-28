@@ -28,9 +28,11 @@ gitsensor:
         labels:
           app: git-sensor
           component: git-sensor
+    affinity: {}
   storage:
     class: gp2
     requests: 2Gi
+    nodeAffinity: {}
 servicemonitor:
   enabled: false
   labels:

@@ -48,6 +48,10 @@ spec:
             - name: {{ $key }}
               value: {{ $val | quote }}
           {{- end }}
+{{ if .Values.gitsensor.spec.affinity }}
+      affinity:
+{{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
+{{- end }}
   volumeClaimTemplates:
     - metadata:
         name: git-volume
@@ -57,3 +61,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.gitsensor.storage.requests }}
+{{ if .Values.gitsensor.storage.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml .Values.gitsensor.storage.nodeAffinity | indent 10 }}
+{{- end }}
