@@ -29,10 +29,33 @@ gitsensor:
           app: git-sensor
           component: git-sensor
     affinity: {}
+      # nodeAffinity:
+      #   required:
+      #     nodeSelectorTerms:
+      #     - matchExpressions:
+      #       - key: topology.kubernetes.io/zone
+      #         operator: In
+      #         values:
+      #         - us-east-2a
+      #       - key: topology.kubernetes.io/region
+      #         operator: In
+      #         values:
+      #         - us-east-2
   storage:
     class: gp2
     requests: 2Gi
     nodeAffinity: {}
+      # required:
+      #   nodeSelectorTerms:
+      #   - matchExpressions:
+      #     - key: topology.kubernetes.io/zone
+      #       operator: In
+      #       values:
+      #       - us-east-2a
+      #     - key: topology.kubernetes.io/region
+      #       operator: In
+      #       values:
+      #       - us-east-2
 servicemonitor:
   enabled: false
   labels:
