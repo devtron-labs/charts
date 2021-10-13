@@ -655,11 +655,11 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .spec.host
+      - jsonPath: .spec.host
         description: The name of a service from the service registry
         name: Host
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -1722,11 +1722,11 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .spec.host
+      - jsonPath: .spec.host
         description: The name of a service from the service registry
         name: Host
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -3334,15 +3334,15 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .spec.revision
+      - jsonPath: .spec.revision
         description: Istio control plane revision
         name: Revision
         type: string
-      - JSONPath: .status.status
+      - jsonPath: .status.status
         description: IOP current state
         type: string
         name: Status
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -3395,11 +3395,11 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .spec.mtls.mode
+      - jsonPath: .spec.mtls.mode
         description: Defines the mTLS mode used for peer authentication.
         name: Mode
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -3588,19 +3588,19 @@ spec:
       subresources:
         status: {}  
       additionalPrinterColumns:
-      - JSONPath: .spec.hosts
+      - jsonPath: .spec.hosts
         description: The hosts associated with the ServiceEntry
         name: Hosts
         type: string
-      - JSONPath: .spec.location
+      - jsonPath: .spec.location
         description: Whether the service is external to the mesh or part of the mesh (MESH_EXTERNAL or MESH_INTERNAL)
         name: Location
         type: string
-      - JSONPath: .spec.resolution
+      - jsonPath: .spec.resolution
         description: Service discovery mode for the hosts (NONE, STATIC, or DNS)
         name: Resolution
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -3718,19 +3718,19 @@ spec:
       subresources:
         status: {}  
       additionalPrinterColumns:
-      - JSONPath: .spec.hosts
+      - jsonPath: .spec.hosts
         description: The hosts associated with the ServiceEntry
         name: Hosts
         type: string
-      - JSONPath: .spec.location
+      - jsonPath: .spec.location
         description: Whether the service is external to the mesh or part of the mesh (MESH_EXTERNAL or MESH_INTERNAL)
         name: Location
         type: string
-      - JSONPath: .spec.resolution
+      - jsonPath: .spec.resolution
         description: Service discovery mode for the hosts (NONE, STATIC, or DNS)
         name: Resolution
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -4144,15 +4144,15 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .spec.gateways
+      - jsonPath: .spec.gateways
         description: The names of gateways and sidecars that should apply these routes
         name: Gateways
         type: string
-      - JSONPath: .spec.hosts
+      - jsonPath: .spec.hosts
         description: The destination hosts to which traffic is being sent
         name: Hosts
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -4890,15 +4890,15 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .spec.gateways
+      - jsonPath: .spec.gateways
         description: The names of gateways and sidecars that should apply these routes
         name: Gateways
         type: string
-      - JSONPath: .spec.hosts
+      - jsonPath: .spec.hosts
         description: The destination hosts to which traffic is being sent
         name: Hosts
         type: string
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
@@ -5663,11 +5663,11 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
-      - JSONPath: .spec.address
+      - jsonPath: .spec.address
         description: Address associated with the network endpoint.
         name: Address
         type: string
@@ -5715,11 +5715,11 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
-      - JSONPath: .spec.address
+      - jsonPath: .spec.address
         description: Address associated with the network endpoint.
         name: Address
         type: string
@@ -5793,7 +5793,7 @@ spec:
       subresources:
         status: {}
       additionalPrinterColumns:
-      - JSONPath: .metadata.creationTimestamp
+      - jsonPath: .metadata.creationTimestamp
         description: "CreationTimestamp is a timestamp representing the server time when this object was created. It is not guaranteed to be set in happens-before order across separate operations. Clients may not set this value. It is represented in RFC3339 form and is in UTC. Populated by the system. Read-only. Null for lists. More info: https://git.k8s.io/community/contributors/devel/api-conventions.md#metadata"
         name: Age
         type: date
