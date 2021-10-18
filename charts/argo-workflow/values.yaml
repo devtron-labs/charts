@@ -1,0 +1,14 @@
+argoWorkflow:
+  s3:
+    bucket: devtron-pro-ci-logs
+    keyFormat: demo-v1/{{workflow.name}}
+    region: us-east-2
+  workflowController:
+    image: argoproj/workflow-controller:v3.0.7
+    resources:
+      limits:
+        cpu: "0.3"
+        memory: 300Mi
+      requests:
+        cpu: "0.03"
+        memory: 50Mi
