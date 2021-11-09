@@ -1,0 +1,180 @@
+# Default values for umbrella-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates
+
+clusterautoscaler: 
+  affinity: {}
+  autoDiscovery:
+    clusterName:  # cluster.local
+
+    # awsAccessKeyID -- AWS access key ID ([if AWS user keys used](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#using-aws-credentials))
+  awsAccessKeyID: ""
+
+  # awsRegion -- AWS region (required if `cloudProvider=aws`)
+  awsRegion: ""
+
+  # awsSecretAccessKey -- AWS access secret key ([if AWS user keys used](https://github.com/kubernetes/autoscaler/blob/master/cluster-autoscaler/cloudprovider/aws/README.md#using-aws-credentials))
+  awsSecretAccessKey: ""
+
+  serviceMonitor:
+    enabled: false
+
+  expanderPriorities: |-
+    20:
+    - spot-nodes.*
+    10:
+    - .*
+
+aws-node-termination-handler: 
+  image:
+  repository: public.ecr.aws/aws-ec2/aws-node-termination-handler
+  tag: v1.14.0
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+  fullnameOverride: ""
+
+  extraEnv: []
+
+  priorityClassName: system-node-critical
+
+  podAnnotations: {}
+  linuxPodAnnotations: {}
+  windowsPodAnnotations: {}
+
+  podLabels: {}
+  linuxPodLabels: {}
+  windowsPodLabels: {}
+
+  # liveness probe settings.
+  probes:
+    httpGet:
+      path: /healthz
+      port: 8080
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+  resources:
+    requests:
+      memory: "64Mi"
+      cpu: "50m"
+    limits:
+      memory: "128Mi"
+      cpu: "100m"
+
+  # enableSqsTerminationDraining If true, this turns on queue-processor mode which drains nodes when an SQS termination event is received
+  enableSqsTerminationDraining: false
+
+  # queueURL Listens for messages on the specified SQS queue URL
+  queueURL: ""
+
+  # checkASGTagBeforeDraining  If true, check that the instance is tagged with "aws-node-termination-handler/managed" as the key before draining the node
+  checkASGTagBeforeDraining: true
+
+  # managedAsgTag  The tag to ensure is on a node if checkASGTagBeforeDraining is true
+  managedAsgTag: "aws-node-termination-handler/managed"
+
+  # awsRegion If specified, use the AWS region for AWS API calls
+  awsRegion: ""
+
+  # awsEndpoint If specified, use the AWS endpoint to make API calls.
+  awsEndpoint: ""
+
+  # These should only be used for testing w/ localstack!
+  awsSecretAccessKey:
+  awsAccessKeyID:
+
+  # enableSpotInterruptionDraining If false, do not drain nodes when the spot interruption termination notice is received
+  enableSpotInterruptionDraining: ""
+
+  # enableScheduledEventDraining [EXPERIMENTAL] If true, drain nodes before the maintenance window starts for an EC2 instance scheduled event
+  enableScheduledEventDraining: ""
+
+  # Taint node upon spot interruption termination notice.
+  taintNode: false
+
+  # gracePeriod (DEPRECATED - use podTerminationGracePeriod instead) is time in seconds given to each pod to terminate gracefully.
+  # If negative, the default value specified in the pod will be used.
+  gracePeriod: ""
+  podTerminationGracePeriod: ""
+
+  # nodeTerminationGracePeriod specifies the period of time in seconds given to each NODE to terminate gracefully. Node draining will be scheduled based on this value to optimize the amount of compute time, but still safely drain the node before an event.
+  nodeTerminationGracePeriod: ""
+
+  # The maximal amount of parallel event processors to handle concurrent events
+  workers: 10
+
+  # The number of replicas in the NTH deployment when using queue-processor mode (NOTE: increasing this may cause duplicate webhooks since NTH pods are stateless)
+  replicas: 1
+
+  # podDisruptionBudget specifies the disruption budget for the controller pods.
+  # Disruption budget will be configured only when the replicaCount is greater than 1
+  podDisruptionBudget: {}
+  #  maxUnavailable: 1
+
+
+cluster-overprovisioner: 
+  fullnameOverride: "over-provisioner"
+  deployments:
+  - name: spot
+    replicaCount: 1
+    resources:
+      requests:
+        cpu: 2
+        memory: 4Gi
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: lifecycle
+              operator: In
+              values:
+              - "spot"
+    
+
+cluster-proportional-autoscaler:
+  config: 
+    linear:
+      coresPerReplica: 50
+  affinity: {}
+  image:
+    repository: k8s.gcr.io/cpa/cluster-proportional-autoscaler
+    pullPolicy: IfNotPresent
+    tag:
+  fullnameOverride:
+  nodeSelector: {}
+  options:
+    maxSyncFailures:
+    namespace: ""
+    nodeLabels: {}
+      #    label1: value1
+      #    label2: value2
+    pollPeriodSeconds:
+    stdErrThreshold:
+    target: deployment/
+    vmodule:
+  podAnnotations: {}
+  podSecurityContext: {}
+  # fsGroup: 2000
+  replicaCount: 1
+  resources: {}
+      # We usually recommend not to specify default resources and to leave this as a conscious
+      # choice for the user. This also increases chances charts run on environments with little
+      # resources, such as Minikube. If you do want to specify resources, uncomment the following
+      # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+      # limits:
+      #   cpu: 100m
+      #   memory: 128Mi
+      # requests:
+      #   cpu: 100m
+    #   memory: 128Mi
+  serviceAccount:
+    create: true
+    annotations: {}
+      # The name of the service account to use.
+      # If not set and create is true, a name is generated using the fullname template
+      # If set and create is false, no service account will be created and the expectation is that the provided service account already exists or it will use the "default" service account
+    name:
+  tolerations: []
+
