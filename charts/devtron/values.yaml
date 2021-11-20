@@ -1,7 +1,10 @@
 installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
-  release: "main"   #You can use a branch name or a release tag name as a release. Using main will deploy latest available version of Devtron
+  release: "main" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
+  image: quay.io/devtron/inception
+  tag: dee0d9a4-185-4689
+  source: "github" # Available options are github and gitee
 
 #Use secrets in plaintext, they'll be encoded to base64 automatically.
 secrets: {}
@@ -13,8 +16,8 @@ secrets: {}
 configs:
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
-  #DEFAULT_CACHE_BUCKET: "us-east-1"   #Do not include s3://
-  #DEFAULT_CACHE_BUCKET_REGION: "change-me"
+  #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
+  #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
 # Amazon AWS S3 bucket and region for storing Build-logs. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_BUILD_LOGS_BUCKET: "change-me"   #Do not include s3://
   #DEFAULT_CD_LOGS_BUCKET_REGION: "us-east-1"

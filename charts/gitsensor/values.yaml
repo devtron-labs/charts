@@ -1,0 +1,68 @@
+gitsensor:
+  envVariables:
+    data:
+      PG_ADDR: postgresql-postgresql.devtroncd
+      PG_PASS: password
+  image:
+    pullPolicy: Always
+    repository: quay.io/devtron/git-sensor
+    tag: 5d527335-200-4349
+  service:
+    metadata:
+      labels:
+        app: git-sensor
+      name: git-sensor-service
+    spec:
+      port: 80
+      selector:
+        app: git-sensor
+      targetPort: 8080
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: git-sensor
+    serviceName: git-sensor
+    template:
+      metadata:
+        labels:
+          app: git-sensor
+          component: git-sensor
+    affinity: {}
+      # nodeAffinity:
+      #   required:
+      #     nodeSelectorTerms:
+      #     - matchExpressions:
+      #       - key: topology.kubernetes.io/zone
+      #         operator: In
+      #         values:
+      #         - us-east-2a
+      #       - key: topology.kubernetes.io/region
+      #         operator: In
+      #         values:
+      #         - us-east-2
+  storage:
+    class: gp2
+    requests: 2Gi
+    nodeAffinity: {}
+      # required:
+      #   nodeSelectorTerms:
+      #   - matchExpressions:
+      #     - key: topology.kubernetes.io/zone
+      #       operator: In
+      #       values:
+      #       - us-east-2a
+      #     - key: topology.kubernetes.io/region
+      #       operator: In
+      #       values:
+      #       - us-east-2
+servicemonitor:
+  enabled: false
+  labels:
+    app: git-sensor
+    kind: Prometheus
+    release: monitoring
+  path: /metrics
+  port: sensor
+  selectors:
+    app: git-sensor

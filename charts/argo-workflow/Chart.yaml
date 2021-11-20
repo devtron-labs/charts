@@ -1,0 +1,6 @@
+name: argo-workflow
+description: Chart to deploy argo-workflow
+version: 0.1.0
+maintainers:
+- email: pawan@devtron.ai
+  name: Pawan

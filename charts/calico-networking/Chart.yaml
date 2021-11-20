@@ -1,0 +1,3 @@
+name: calico
+description: Chart to deploy calico networking
+version: 0.1.1

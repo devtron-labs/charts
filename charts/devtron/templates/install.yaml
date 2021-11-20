@@ -79,7 +79,7 @@ spec:
     spec:
       containers:
         -
-          image: quay.io/devtron/inception:7c91bebf-185-4609
+          image: {{ .Values.installer.image }}:{{ .Values.installer.tag }}
           imagePullPolicy: IfNotPresent
           name: inception
           ports:

@@ -1,0 +1,53 @@
+config:
+  enabledFeatureListers:
+  - apk
+  - dpkg
+  - rpm
+  enabledNamespaceDetectors:
+  - os-release
+  - lsb-release
+  - apt-sources
+  - alpine-release
+  - redhat-release
+  enabledUpdaters:
+  - debian
+  - ubuntu
+  - redhat
+  - oracle
+  - alpine
+  - redhat
+  notificationWebhookEndpoint: https://example.com/notify/me
+  paginationKey: XxoPtCUzrUv4JV5dS+yQ+MdW7yLEJnRMwigVY/bpgtQ=
+  postgresServiceName: clair-pg-postgresql
+  postgresURI: postgres://clair:clair@clair-pg-postgresql:5432/clair?sslmode=disable
+  updateInterval: 2h
+image:
+  pullPolicy: Never
+  repository: clair-local
+  tag: latest
+ingress:
+  annotations: null
+  enabled: false
+  hosts:
+  - chart-example.local
+  tls: null
+insecureTls: false
+logLevel: info
+nodeSelector: {}
+replicaCount: 1
+podLabels:
+  component: clair
+resources:
+  limits:
+    cpu: 200m
+    memory: 1500Mi
+  requests:
+    cpu: 100m
+    memory: 500Mi
+service:
+  externalApiPort: 6060
+  externalHealthPort: 6061
+  internalApiPort: 6060
+  internalHealthPort: 6061
+  type: ClusterIP
+tolerations: []

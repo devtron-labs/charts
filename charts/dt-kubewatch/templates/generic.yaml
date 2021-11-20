@@ -13,13 +13,13 @@ data:
   .kubewatch.yaml: |
     handler:
       webhook:
-        enabled: true
+        enabled: false
         url: http://devtroncd-event-handler-service-prod.devtroncd/event
 
     resource:
       daemonset: false
       deployment: false
-      events: true
+      events: false
       job: false
       persistentvolume: false
       pod: false
@@ -141,6 +141,7 @@ metadata:
     chart: kubewatch-0.6.1
     heritage: "Tiller"
     release: "kubewatch"
+{{ toYaml .Values.kubewatch.podLabels | indent 4 }}
   name: kubewatch
   namespace: {{ .Release.Namespace }}
 spec:
@@ -157,10 +158,11 @@ spec:
         app: kubewatch
         release: "kubewatch"
         chart: kubewatch-0.6.1
+{{ toYaml .Values.kubewatch.podLabels | indent 8 }}
     spec:
       containers:
       - name: kubewatch
-        image: quay.io/devtron/kubewatch:8aef551d-128-2196
+        image: {{ .Values.kubewatch.image.repo }}:{{ .Values.kubewatch.image.tag }}
         env:
         - name: DEFAULT_NAMESPACE
           value: "devtron-ci"

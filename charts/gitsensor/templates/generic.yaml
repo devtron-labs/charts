@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: git-sensor-service
+  labels:
+    {{- if .Values.gitsensor.service.metadata.labels }}
+{{ toYaml .Values.gitsensor.service.metadata.labels | indent 4 }}
+    {{- end }}
+spec:
+  ports:
+    - port: {{ .Values.gitsensor.service.spec.port }}
+      name: sensor
+      targetPort: {{ .Values.gitsensor.service.spec.targetPort }}
+  selector:
+    {{- if .Values.gitsensor.service.spec.selector }}
+{{ toYaml .Values.gitsensor.service.spec.selector | indent 4 }}
+    {{- end }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: git-sensor
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.gitsensor.spec.selector.matchLabels.app }} # has to match .spec.template.metadata.labels
+  serviceName: {{ .Values.gitsensor.spec.serviceName }}
+  replicas: {{ .Values.gitsensor.spec.replicas }} # by default is 1
+  template:
+    metadata:
+      labels:
+    {{- if .Values.gitsensor.spec.template.metadata.labels }}
+{{ toYaml .Values.gitsensor.spec.template.metadata.labels | indent 8 }}
+    {{- end }}
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: git-sensor
+          image: {{ .Values.gitsensor.image.repository }}:{{ .Values.gitsensor.image.tag }}
+          ports:
+            - containerPort: 8080
+              name: sensor
+          volumeMounts:
+            - name: git-volume
+              mountPath: /git-base/
+          env:
+          {{- range $key, $val := .Values.gitsensor.envVariables.data }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+          {{- end }}
+{{ if .Values.gitsensor.spec.affinity }}
+      affinity:
+{{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
+{{- end }}
+  volumeClaimTemplates:
+    - metadata:
+        name: git-volume
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: {{ .Values.gitsensor.storage.class }}
+        resources:
+          requests:
+            storage: {{ .Values.gitsensor.storage.requests }}
+{{ if .Values.gitsensor.storage.nodeAffinity }}
+        nodeAffinity:
+{{ toYaml .Values.gitsensor.storage.nodeAffinity | indent 10 }}
+{{- end }}
