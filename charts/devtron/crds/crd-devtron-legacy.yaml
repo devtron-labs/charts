@@ -169,4 +169,4 @@ status:
     plural: ""
   conditions: []
   storedVersions: []
-{{- end }}
+{{ end }}
