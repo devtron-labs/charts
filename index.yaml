@@ -544,6 +544,20 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/knative-installer-0.1.0/knative-installer-0.1.0.tgz
     version: 0.1.0
+  mautic:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-12-01T10:43:19.624512277Z"
+    dependencies:
+    - name: mysql
+      repository: https://helm.wso2.com
+      version: 1.6.9
+    description: A Helm chart for Mautic
+    digest: 780aff26fd807164443ddc80b14394494c9836a10b6988ce448bd2521a3c1017
+    name: mautic
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/mautic-0.1.2/mautic-0.1.2.tgz
+    version: 0.1.2
   nats-server:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -589,4 +603,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-11-21T03:54:09.119422099Z"
+generated: "2021-12-01T10:43:19.624596977Z"
