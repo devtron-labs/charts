@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  mautic:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2021-11-27T00:39:48.072657+05:30"
+    dependencies:
+    - name: mysql
+      repository: https://helm.wso2.com
+      version: 1.6.9
+    description: A Helm chart for Kubernetes
+    digest: 0f388a92cf14d04b42096b46b5053ae4cb308e5017273ba1c1d0e91221d73115
+    name: mautic
+    urls:
+    - mautic-0.1.2.tgz
+    version: 0.1.2
+generated: "2021-11-27T00:39:48.069121+05:30"
