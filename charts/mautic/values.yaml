@@ -1,0 +1,103 @@
+# Default values for mautic.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: mautic/mautic
+  tag: 2.13-apache
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+volume:
+  size: "1Gi"
+  storageClass: ""
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  annotations:
+    # kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: mautic.example.com
+      paths:
+        - "/"
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+mysql:
+  mysqlRootPassword: test123
+  image: "mysql"
+  imageTag: "5.6" 
+  imagePullPolicy: "IfNotPresent"
+
+  busybox:
+    image: "busybox"
+    tag: "1.29.3"
+  
+  service:
+    annotations: {}
+    ## Specify a service type
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
+    type: ClusterIP
+    port: 3306
+    # nodePort: 32000
+    # loadBalancerIP:
+
+  persistence:
+    enabled: false
+    ## database data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    # storageClass: "-"
+    accessMode: ReadWriteOnce
+    size: 8Gi
+    annotations: {}
+
+  securityContext:
+    enabled: false
+    runAsUser: 999
+    fsGroup: 999
+  
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+
+  initContainer:
+    resources:
+      requests:
+        memory: 10Mi
+        cpu: 10m
+
