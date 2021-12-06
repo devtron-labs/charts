@@ -97,6 +97,56 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/clair-0.1.3/clair-0.1.3.tgz
     version: 0.1.3
+  cluster-essentials:
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2021-12-06T15:56:41.915768611Z"
+    dependencies:
+    - condition: metrics-server.enabled
+      name: metrics-server
+      repository: https://kubernetes-sigs.github.io/metrics-server/
+      version: 3.x.x
+    - condition: cluster-autoscaler.enabled
+      name: cluster-autoscaler
+      repository: https://kubernetes.github.io/autoscaler
+      version: 9.x.x
+    - condition: rollout.enabled
+      name: rollout
+      repository: https://helm.devtron.ai
+      version: 0.13.*
+    - condition: keda.enabled
+      name: keda
+      repository: https://kedacore.github.io/charts
+      version: 2.5.*
+    - condition: kube-prometheus-stack.enabled
+      name: kube-prometheus-stack
+      repository: https://helm.devtron.ai
+      version: 19.x.x
+    - condition: kubernetes-event-exporter.enabled
+      name: kubernetes-event-exporter
+      repository: https://charts.bitnami.com/bitnami
+      version: 1.2.*
+    - condition: aws-load-balancer-controller.enabled
+      name: aws-load-balancer-controller
+      repository: https://aws.github.io/eks-charts
+      version: 1.3.*
+    description: A Helm chart for Kubernetes which deploys most of the cluster essentials
+      needed by any cluster
+    digest: 089c7c4673b56c9da0254e3f582283639dbdfcee00d20092569527c54a4f16ac
+    icon: https://raw.githubusercontent.com/dheeth/helm-charts/master/assets/cluster-essentials.jpeg
+    name: cluster-essentials
+    sources:
+    - https://github.com/prometheus-community/helm-charts
+    - https://github.com/kubernetes-sigs/metrics-server
+    - https://github.com/kubernetes/autoscaler
+    - https://github.com/devtron-labs/charts
+    - https://github.com/kedacore/charts
+    - https://github.com/aws/eks-charts
+    - https://github.com/bitnami/charts/tree/master/bitnami
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/cluster-essentials-0.1.1/cluster-essentials-0.1.1.tgz
+    version: 0.1.1
   coralogix-fluentd:
   - apiVersion: v1
     appVersion: 1.1.6
@@ -682,4 +732,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-12-06T15:44:13.596422607Z"
+generated: "2021-12-06T15:56:41.915894912Z"
