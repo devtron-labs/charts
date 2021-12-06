@@ -544,6 +544,30 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/knative-installer-0.1.0/knative-installer-0.1.0.tgz
     version: 0.1.0
+  kube-state-metrics:
+  - apiVersion: v2
+    appVersion: 2.2.4
+    created: "2021-12-06T15:40:43.961433919Z"
+    description: Install kube-state-metrics to generate and expose cluster-level metrics
+    digest: 1e13c80930bc1085413a17c2dbb792ddad410dfc41e5e23b0474c01bcbdc053a
+    home: https://github.com/kubernetes/kube-state-metrics/
+    keywords:
+    - metric
+    - monitoring
+    - prometheus
+    - kubernetes
+    maintainers:
+    - email: tariq.ibrahim@mulesoft.com
+      name: tariq1890
+    - email: manuel@rueg.eu
+      name: mrueg
+    name: kube-state-metrics
+    sources:
+    - https://github.com/kubernetes/kube-state-metrics/
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/kube-state-metrics-3.5.2/kube-state-metrics-3.5.2.tgz
+    version: 3.5.2
   mautic:
   - apiVersion: v1
     appVersion: "1.0"
@@ -603,4 +627,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-12-01T10:43:19.624596977Z"
+generated: "2021-12-06T15:40:43.961809223Z"
