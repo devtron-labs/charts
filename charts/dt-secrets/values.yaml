@@ -9,7 +9,7 @@ annotations:
 secrets:
   # When you are creating secret for docker hub please use below syntax keep values in single quote only
   #key: .dockerconfigjson
-  #vlaue: '{"auths":{"https://index.docker.io/v1/":{"username":"user_name","password":"password","email":"email"}}}'
+  #vlaue: '{"auths":{"https://index.docker.io/v1/":{"username":"user_name","password":"password"}}}'
   data:
   - key: db-username
     value: "root"
