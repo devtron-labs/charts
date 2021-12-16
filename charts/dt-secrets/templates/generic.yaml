@@ -9,7 +9,7 @@ metadata:
     {{- end }}
   annotations:
 {{ toYaml $.Values.annotations | indent 4}}  
-type: Opaque
+type: {{ $.Values.type }}
 data:
   {{- range $.Values.secrets.data }}
   {{ .key | quote }}: {{ .value | b64enc | quote }}
