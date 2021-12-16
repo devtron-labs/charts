@@ -537,6 +537,18 @@ entries:
   dt-secrets:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2021-12-16T13:40:57.049578654Z"
+    description: Chart to create Secrets
+    digest: 6ae1612294970370c7d5ce2d78db9a8d7cf032e89741c16cde4418c9f0d6c5a3
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: dt-secrets
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dt-secrets-0.10.2/dt-secrets-0.10.2.tgz
+    version: 0.10.2
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-02-18T12:32:37.655874054Z"
     description: Chart to create Secrets
     digest: f0df19d6f774d38089c8a8bf1a6cb403279e9d4c67c4464cbc0efcb8917be98a
@@ -732,4 +744,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2021-12-06T15:56:41.915894912Z"
+generated: "2021-12-16T13:40:57.049710462Z"
