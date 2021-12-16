@@ -1,4 +1,5 @@
 name: test-secret
+type: kubernetes.io/dockerconfigjson
 labels:
   test: chart
 annotations:
