@@ -51,6 +51,7 @@ resources: {}
   #   memory: 128Mi
 
 externalDB:
+  enabled: false
   host: ""
   port: ""
 

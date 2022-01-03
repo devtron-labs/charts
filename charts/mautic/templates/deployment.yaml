@@ -34,7 +34,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: MAUTIC_DB_HOST
-            {{- if .Values.externalDB.host }}
+            {{- if .Values.externalDB.enabled }}
             value: {{ .Values.externalDB.host }}:{{ .Values.externalDB.port }}
             {{- else }}
             value: {{ include "mautic.fullname" . }}-mysql:{{ .Values.mysql.service.port }}
