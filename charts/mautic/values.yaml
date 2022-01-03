@@ -12,8 +12,12 @@ image:
 imagePullSecrets: []
 
 volume:
+  enabled: true
   size: "1Gi"
   storageClass: ""
+
+persistence:
+  existingClaim: ""
 
 service:
   type: ClusterIP
@@ -46,6 +50,9 @@ resources: {}
   #   cpu: 100m
   #   memory: 128Mi
 
+externalDB:
+  host: ""
+
 nodeSelector: {}
 
 tolerations: []
@@ -53,6 +60,7 @@ tolerations: []
 affinity: {}
 
 mysql:
+  enabled: true
   mysqlRootPassword: test123
   image: "mysql"
   imageTag: "5.6" 
