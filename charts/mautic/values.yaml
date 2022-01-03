@@ -53,7 +53,8 @@ resources: {}
 externalDB:
   enabled: false
   host: ""
-  port: ""
+  port: "3306"
+  rootPassword: ""
 
 nodeSelector: {}
 
