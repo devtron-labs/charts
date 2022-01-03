@@ -35,7 +35,7 @@ spec:
           env:
           - name: MAUTIC_DB_HOST
             {{- if .Values.externalDB.host }}
-            value: {{ .Values.externalDB.host }}
+            value: {{ .Values.externalDB.host }}:{{ .Values.externalDB.port }}
             {{- else }}
             value: {{ include "mautic.fullname" . }}-mysql:{{ .Values.mysql.service.port }}
             {{- end }}
