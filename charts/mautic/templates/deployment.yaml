@@ -19,7 +19,11 @@ spec:
       volumes:
         - name: var-www-html
           persistentVolumeClaim:
+            {{- if .Values.persistence.existingClaim }}
+            claimName: {{ .Values.persistence.existingClaim }}
+            {{- else }}
             claimName: {{ include "mautic.name" .}}-var-www-html
+            {{- end }}
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
@@ -30,7 +34,11 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: MAUTIC_DB_HOST
+            {{- if .Values.externalDB.host }}
+            value: {{ .Values.externalDB.host }}
+            {{- else }}
             value: {{ include "mautic.fullname" . }}-mysql:{{ .Values.mysql.service.port }}
+            {{- end }}
           - name: MAUTIC_DB_PASSWORD
             value: {{ .Values.mysql.mysqlRootPassword }}
           - name: MAUTIC_URL
