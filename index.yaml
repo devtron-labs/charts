@@ -748,6 +748,18 @@ entries:
   rollout:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-01-08T09:44:01.069331113Z"
+    description: Chart to deploy Rollout
+    digest: 4d6f74fc62716a174b0321022d8e41015a9086556d6880e7f8a999dcbb5ab09b
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: rollout
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/rollout-0.14.0/rollout-0.14.0.tgz
+    version: 0.14.0
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-02-18T12:36:58.121207377Z"
     description: Chart to deploy Rollout
     digest: 0f5ff82bd6fea266ca3b7906fd85c9133f9943034169d3d57db8905689b2bbf2
@@ -758,4 +770,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2022-01-06T04:54:25.019123351Z"
+generated: "2022-01-08T09:44:01.069470212Z"
