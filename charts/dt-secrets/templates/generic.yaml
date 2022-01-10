@@ -4,7 +4,7 @@ metadata:
   name: {{ $.Values.name }}
   labels:
     release: {{ $.Release.Name }}
-     {{- if .Values.labels }}
+     {{- if $.Values.labels }}
 {{ toYaml $.Values.labels | indent 4 }}
     {{- end }}
   annotations:
