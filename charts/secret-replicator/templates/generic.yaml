@@ -1,0 +1,20 @@
+{{- range .Values.namespaces }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ $.Values.name }}
+  namespace: {{ toYaml . }}
+  labels:
+    release: {{ $.Release.Name }}
+    {{- if $.Values.labels }}
+{{ toYaml $.Values.labels | indent 4 }}
+    {{- end }}
+  annotations:
+{{ toYaml $.Values.annotations | indent 4}}
+type: {{ $.Values.type }}
+data:
+  {{- range $.Values.secrets.data }}
+  {{ .key | quote }}: {{ .value | b64enc | quote }}
+  {{- end }}
+---
+{{- end }}
