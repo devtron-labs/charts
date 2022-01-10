@@ -782,4 +782,17 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/rollout-0.13.0/rollout-0.13.0.tgz
     version: 0.13.0
-generated: "2022-01-10T18:33:13.393382537Z"
+  secret-replicator:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-01-10T18:59:09.890030823Z"
+    description: Chart to create Secrets in multiple namespce
+    digest: d54407697d2deaa2a79049e98b9a571be289712b7adc723e579144b53d4cff01
+    maintainers:
+    - email: pawan@devtron.ai
+      name: Pawan
+    name: secret-replicator
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-01-10T18:59:09.890129921Z"
