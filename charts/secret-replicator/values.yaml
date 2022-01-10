@@ -2,7 +2,7 @@ name: test-secret
 type: Opaque
 ## for docker hub secret
 #type: kubernetes.io/dockerconfigjson
-namespaces: ["test", "hello", "test1", "test2"]
+namespaces: []
 labels:
   test: chart
 annotations:
