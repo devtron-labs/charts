@@ -1,0 +1,19 @@
+name: test-secret
+type: Opaque
+## for docker hub secret
+#type: kubernetes.io/dockerconfigjson
+namespaces: ["test", "hello", "test1", "test2"]
+labels:
+  test: chart
+annotations:
+  app: devtron-generic  
+secrets:
+  data:
+  ## When you are creating secret for docker hub please use below syntax keep values in single quote only
+  #   - key: .dockerconfigjson
+  #     value: '{"auths":{"https://index.docker.io/v1/":{"username":"example_user","password":"XXXXXXXXX"}}}'
+      - key: db-username
+        value: "root"
+      - key: db-pass
+        value: "1234567"
+  
