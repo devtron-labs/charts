@@ -497,6 +497,31 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.10.1/devtron-operator-0.10.1.tgz
     version: 0.10.1
+  dgraph:
+  - apiVersion: v1
+    appVersion: v21.12.0
+    created: "2022-01-31T17:22:33.188704619Z"
+    description: Dgraph is a horizontally scalable and distributed graph database,
+      providing ACID transactions, consistent replication and linearizable reads.
+    digest: 33fd091a13f218484edc3abc94c2e0f8aaf46c5d499d9b13e665a1e867ec5393
+    home: https://dgraph.io/
+    icon: https://dgraph.io/assets/images/logo.png
+    keywords:
+    - dgraph
+    - database
+    - Graph
+    - GraphQL
+    - nosql
+    maintainers:
+    - email: contact@dgraph.io
+      name: dgraph
+    name: dgraph
+    sources:
+    - https://github.com/dgraph-io/charts/
+    - https://github.com/dgraph-io/dgraph
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dgraph-0.0.19/dgraph-0.0.19.tgz
+    version: 0.0.19
   dt-kubewatch:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -795,4 +820,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-10T18:59:09.890129921Z"
+generated: "2022-01-31T17:22:33.18880112Z"
