@@ -1,0 +1,29 @@
+## some default configurations consistent with dgraph v20.11.x
+alpha:
+  configFile:
+    config.hcl: |
+      "abort_older_than" = "5m"
+      "alsologtostderr" = true
+      "badger.compression_level" = snappy
+      "badger.vlog" = "mmap"
+      "bindall" = true
+      "enable_sentry" = true
+      "export" = "export"
+      "graphql_introspection" = true
+      "log_backtrace_at" = ":0"
+      "logtostderr" = true
+      "ludicrous_mode" = false
+      "postings" = "/dgraph/p"
+      "wal" = "/dgraph/w"
+zero:
+  configFile:
+    config.hcl: |
+      "alsologtostderr" = true
+      "bindall" = true
+      "enable_sentry" = true
+      "log_backtrace_at" = ":0"
+      "logtostderr" = true
+      "rebalance_interval" = "8m0s"
+      "telemetry" = true
+      "trace" = 0.01
+      "wal" = "/dgraph/zw"
