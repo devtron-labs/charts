@@ -19,7 +19,7 @@ hyperion:
     imagePullPolicy: IfNotPresent
 
   devtron:
-    image: "quay.io/devtron/test:7a1fa23c-280-6631"
+    image: "quay.io/devtron/hyperion:7a1fa23c-280-6634"
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
@@ -28,7 +28,7 @@ hyperion:
     image: quay.io/dexidp/dex:v2.25.0
     imagePullPolicy: IfNotPresent
 
-  helmClient:
+  symbiote:
     image: "quay.io/devtron/symbiote:7851d6f8-283-6546"
     imagePullPolicy: IfNotPresent
 
