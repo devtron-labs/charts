@@ -39,7 +39,7 @@ spec:
   selector:
     app: devtron
   sessionAffinity: None
-  type: LoadBalancer
+  type: {{ .service.type }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -75,10 +75,6 @@ spec:
               containerPort: 8080
               protocol: TCP
           env:
-            - name: CONFIG_HASH
-              value: 5525423a62b342ee763eb2e88dd40cfefd83f00e187a4ea2ff85dd39c00b6e01
-            - name: SECRET_HASH
-              value: fe216c236a95cf38868e5a08ef90f94e015e8842d79893e5214aa2cbccc27da4
             - name: DEVTRON_APP_NAME
               value: devtron
             - name: POD_NAME

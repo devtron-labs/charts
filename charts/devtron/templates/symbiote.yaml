@@ -57,10 +57,6 @@ spec:
               containerPort: 50051
               protocol: TCP
           env:
-            - name: CONFIG_HASH
-              value: d79e473c6352af87345c540cbbe1307c4cdc5a014f3393d3d46ff194442179e0
-            - name: SECRET_HASH
-              value: 552efd3342e616f7ff4a7d2fffd4879809af5efabeda4c1a8597aeafefcb017d
             - name: DEVTRON_APP_NAME
               value: symbiote
             - name: POD_NAME
