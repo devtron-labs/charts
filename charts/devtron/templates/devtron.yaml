@@ -39,7 +39,7 @@ spec:
   selector:
     app: devtron
   sessionAffinity: None
-  type: {{ .service.type }}
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment
