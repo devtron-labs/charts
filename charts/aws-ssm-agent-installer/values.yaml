@@ -10,5 +10,5 @@ tolerations:
     operator: Exists
   - effect: NoSchedule
     operator: Exists
-imagePullSecrets:
+imagePullSecrets: []
 #  - cred
