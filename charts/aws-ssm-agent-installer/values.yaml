@@ -11,4 +11,4 @@ tolerations:
   - effect: NoSchedule
     operator: Exists
 imagePullSecrets:
-  - cred
+#  - cred
