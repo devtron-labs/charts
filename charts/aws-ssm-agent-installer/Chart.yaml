@@ -2,7 +2,7 @@ name: aws-ssm-agent-installer
 appVersion: 0.1.0
 description: Chart to enable AWS SSM Agent on EKS nodes
 engine: gotpl
-version: 0.10.2
+version: 0.10.3
 maintainers:
 - email: prakarsh@devtron.ai
   name: Prakarsh

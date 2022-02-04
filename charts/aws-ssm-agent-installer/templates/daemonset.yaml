@@ -25,6 +25,12 @@ spec:
         - /bin/bash
         image: quay.io/devtron/k8s-utils:amazonlinux-latest
         imagePullPolicy: IfNotPresent
+        {{- if $.Values.imagePullSecrets}}
+        imagePullSecrets:
+        {{- range .Values.imagePullSecrets }}
+          - name: {{ . }}
+        {{- end }}
+        {{- end}}
         name: ssm
         resources: {}
         securityContext:
