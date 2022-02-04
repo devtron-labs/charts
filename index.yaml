@@ -40,6 +40,18 @@ entries:
   aws-ssm-agent-installer:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-02-04T05:39:57.686190177Z"
+    description: Chart to enable AWS SSM Agent on EKS nodes
+    digest: 660ffbc6593071fd1651a6ea97a8b935ee2ce3d89cc8bc23d6ab0e1fcf0222a3
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: aws-ssm-agent-installer
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-ssm-agent-installer-0.10.3/aws-ssm-agent-installer-0.10.3.tgz
+    version: 0.10.3
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-05-13T18:51:58.61826547Z"
     description: Chart to enable AWS SSM Agent on EKS nodes
     digest: d02c19c75afc1ae27ddb6735f457396dd7bc113525a05f4f70dde5b08f2db5ae
@@ -820,4 +832,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-01-31T17:22:33.18880112Z"
+generated: "2022-02-04T05:39:57.686520881Z"
