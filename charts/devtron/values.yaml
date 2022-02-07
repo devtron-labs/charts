@@ -1,29 +1,80 @@
 installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
-  release: "main" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
+  release: "v0.3.14" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
   image: quay.io/devtron/inception
   tag: dee0d9a4-185-4689
   source: "github" # Available options are github and gitee
+  mode: "full" # Available options are hyperion and full
 
-#Use secrets in plaintext, they'll be encoded to base64 automatically.
-secrets: {}
-#  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secret
-#  POSTGRESQL_PASSWORD: "change-me"
+# Change the below values for hyperion mode
+hyperion:
+  dashboard:
+    config:
+      analytics: "false"
+      hotjar: "false"
+      sentry: "false"
+      sentryEnv: "PRODUCTION"
+    image: "quay.io/devtron/dashboard:75485f52-136-6746"
+    imagePullPolicy: IfNotPresent
 
-#  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
-#  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
-configs:
-  BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
-# Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
-  #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
-  #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
-# Amazon AWS S3 bucket and region for storing Build-logs. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
-  #DEFAULT_BUILD_LOGS_BUCKET: "change-me"   #Do not include s3://
-  #DEFAULT_CD_LOGS_BUCKET_REGION: "us-east-1"
-# Amazon AWS Secret Region if you will be using AWS Secret manager for storing secrets.
-  #EXTERNAL_SECRET_AMAZON_REGION: ""
-# Azure Blob storage Info for storing Build Logs and Build cache for faster build process.
-  #AZURE_ACCOUNT_NAME: "test-account"
-  #AZURE_BLOB_CONTAINER_CI_LOG: "ci-log-container"
-  #AZURE_BLOB_CONTAINER_CI_CACHE: "ci-cache-container"
+  devtron:
+    image: "quay.io/devtron/hyperion:7a1fa23c-280-6634"
+    imagePullPolicy: IfNotPresent
+    serviceMonitor:
+      enabled: false
+
+  argocdDexServer:
+    image: quay.io/dexidp/dex:v2.25.0
+    imagePullPolicy: IfNotPresent
+
+  kubelink:
+    image: "quay.io/devtron/kubelink:a34c8f30-283-6744"
+    imagePullPolicy: IfNotPresent
+
+  postgres:
+    image: quay.io/bitnami/postgresql:11.3.0-debian-9-r28
+    imagePullPolicy: "IfNotPresent"
+    persistence:
+      volumeSize: "2Gi"
+
+  migrator:
+    image: quay.io/devtron/migrator:6687f572-133-2208
+    envVars:
+      devtron:
+        GIT_BRANCH: "main"
+        SCRIPT_LOCATION: "scripts/sql/"
+        GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
+        DB_NAME: "orchestrator"
+        GIT_HASH: "a492fd38d01c7f328baf8bb6ad1a858b70cf3234"
+      casbin:
+        GIT_BRANCH: "main"
+        SCRIPT_LOCATION: "scripts/casbin/"
+        GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
+        DB_NAME: "casbin"
+        GIT_HASH: "a492fd38d01c7f328baf8bb6ad1a858b70cf3234"
+
+
+# Change the below values for full mode only
+full:
+  #Use secrets in plaintext, they'll be encoded to base64 automatically.
+  secrets: {}
+  #  If No POSTGRESQL_PASSWORD is provided, a password is automatically generated and saved in secret devtron-secret
+  #  POSTGRESQL_PASSWORD: "change-me"
+
+  #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
+  #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
+  configs:
+    BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
+  # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
+    #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
+    #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
+  # Amazon AWS S3 bucket and region for storing Build-logs. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
+    #DEFAULT_BUILD_LOGS_BUCKET: "change-me"   #Do not include s3://
+    #DEFAULT_CD_LOGS_BUCKET_REGION: "us-east-1"
+  # Amazon AWS Secret Region if you will be using AWS Secret manager for storing secrets.
+    #EXTERNAL_SECRET_AMAZON_REGION: ""
+  # Azure Blob storage Info for storing Build Logs and Build cache for faster build process.
+    #AZURE_ACCOUNT_NAME: "test-account"
+    #AZURE_BLOB_CONTAINER_CI_LOG: "ci-log-container"
+    #AZURE_BLOB_CONTAINER_CI_CACHE: "ci-cache-container"

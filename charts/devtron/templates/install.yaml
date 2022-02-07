@@ -1,4 +1,4 @@
-
+{{- if or (eq .Values.installer.mode "full") (eq .Values.installer.mode "Full") }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -97,3 +97,4 @@ spec:
       restartPolicy: Always
       serviceAccountName: installer
       terminationGracePeriodSeconds: 30
+{{- end }}

@@ -9,7 +9,7 @@ keywords:
   - Deployment
   - argocd
 engine: gotpl
-version: 0.20.1
+version: 0.20.2
 sources:
   - https://github.com/devtron-labs/charts
 maintainers:
