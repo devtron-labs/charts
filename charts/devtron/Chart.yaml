@@ -8,8 +8,9 @@ keywords:
   - K8s
   - Deployment
   - argocd
+  - Hyperion
 engine: gotpl
-version: 0.20.2
+version: 0.21.0
 sources:
   - https://github.com/devtron-labs/charts
 maintainers:
