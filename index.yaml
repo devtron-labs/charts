@@ -210,6 +210,31 @@ entries:
   devtron-operator:
   - apiVersion: v1
     appVersion: 0.3.0
+    created: "2022-02-07T18:52:23.390500372Z"
+    description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
+      system.
+    digest: bc977f5e2a4d7e88d3024d33c4ff71d8ee314cc84c6661ccd54d5890768faaba
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    - argocd
+    - Hyperion
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-operator
+    sources:
+    - https://github.com/devtron-labs/charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.21.0/devtron-operator-0.21.0.tgz
+    version: 0.21.0
+  - apiVersion: v1
+    appVersion: 0.3.0
     created: "2022-02-07T14:52:37.477949428Z"
     description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
       system.
@@ -856,4 +881,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-07T14:52:37.478354125Z"
+generated: "2022-02-07T18:52:23.390769375Z"
