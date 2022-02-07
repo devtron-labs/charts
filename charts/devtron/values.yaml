@@ -28,8 +28,8 @@ hyperion:
     image: quay.io/dexidp/dex:v2.25.0
     imagePullPolicy: IfNotPresent
 
-  symbiote:
-    image: "quay.io/devtron/symbiote:7851d6f8-283-6546"
+  kubelink:
+    image: "quay.io/devtron/kubelink:a34c8f30-283-6744"
     imagePullPolicy: IfNotPresent
 
   postgres:
