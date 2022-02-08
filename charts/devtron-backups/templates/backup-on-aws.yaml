@@ -1,0 +1,115 @@
+{{- if .Values.global.AWS.enabled }}
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: CronJob
+metadata:
+  name: postgres-app-backup-cronjob
+  namespace: devtroncd
+spec:
+  schedule: {{ .Values.global.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: postgres-app-backup-cronjob
+            image: postgres:11.3
+            volumeMounts:
+            - mountPath: /tmp
+              name: psql-volume
+            env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PASSWORD
+                  name: {{ .Values.postgres_backup.secretName }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+          containers:
+          - name: aws-cli-for-s3-download
+            image: quay.io/devtron/k8s-utils:aws-cli-ubuntu
+            volumeMounts:
+            - mountPath: /tmp
+              name: psql-volume
+            env:
+            {{- with .Values.global.AWS }}
+            - name: S3_BUCKET
+              value: "s3://{{ .S3_BUCKET_NAME }}"
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .AWS_ACCESS_KEY }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .AWS_SECRET_KEY }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .AWS_REGION }}
+            {{- end }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; aws s3 cp /tmp/backup-$date1.tar $S3_BUCKET/postgres/;
+          volumes:
+          - name: psql-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: CronJob
+metadata:
+    name: argocd-app-backup-cronjob
+    namespace: devtroncd
+spec:
+  schedule: {{ .Values.global.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: argocd-app-backup-job
+            image: argoproj/argocd:v1.8.1
+            volumeMounts:
+            - mountPath: /cache
+              name: argocd-volume
+            env:
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - argocd-util export --namespace devtroncd > /cache/backup.yaml;
+          containers:
+          - name: aws-cli-for-s3-upload
+            image: quay.io/devtron/k8s-utils:aws-cli-ubuntu
+            volumeMounts:
+            - mountPath: /cache
+              name: argocd-volume
+            env:
+            {{- with .Values.global.AWS }}
+            - name: S3_BUCKET
+              value: "s3://{{ .S3_BUCKET_NAME }}"
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .AWS_ACCESS_KEY }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .AWS_SECRET_KEY }}
+            - name: AWS_DEFAULT_REGION
+              value: {{ .AWS_REGION }}
+            {{- end }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; aws s3 cp /cache/backup-$date1.yaml $S3_BUCKET/argocd/;
+          volumes:
+          - name: argocd-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+          serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}

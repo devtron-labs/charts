@@ -1,0 +1,17 @@
+global:
+  # Twice a day
+  schedule: "0 */12 * * *"
+  # devtron-backups
+  AWS:
+    enabled: true
+    S3_BUCKET_NAME: ""
+    AWS_ACCESS_KEY: ""
+    AWS_SECRET_KEY: ""
+    AWS_REGION: ""
+
+postgres_backup:
+  # Reference to secret which as postgresql password in PG_PASSWORD key
+  secretName: "devtron-secret"
+
+argocd_backup:
+  serviceAccountName: "argocd-backup"
