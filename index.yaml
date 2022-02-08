@@ -182,6 +182,16 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/coralogix-fluentd-1.0.3/coralogix-fluentd-1.0.3.tgz
     version: 1.0.3
+  devtron-backups:
+  - apiVersion: v1
+    appVersion: "1.0"
+    created: "2022-02-08T13:00:53.295332897Z"
+    description: A Helm chart for Devtron Backups
+    digest: 473e949fcf1405db8f98895467935605526e98bef12984c2cfbdf5f464e15cc6
+    name: devtron-backups
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.1.0/devtron-backups-0.1.0.tgz
+    version: 0.1.0
   devtron-generic-helm:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -881,4 +891,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-07T18:52:23.390769375Z"
+generated: "2022-02-08T13:00:53.2954368Z"
