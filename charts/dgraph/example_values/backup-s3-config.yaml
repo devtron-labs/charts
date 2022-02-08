@@ -1,0 +1,36 @@
+## backup-s3-config.yaml
+## * https://dgraph.io/docs/enterprise-features/binary-backups/
+##
+## Demonstrates
+## * Binary Backups to S3
+## * Mutual TLS (see https://dgraph.io/docs/deploy/tls-configuration/)
+## * Auth Token (see https://dgraph.io/docs/deploy/dgraph-administration/#securing-alter-operations)
+backups:
+  full:
+    enabled: true
+    schedule: "0 * * * *"
+  incremental:
+    enabled: true
+    schedule: "0 1-23 * * *"
+  admin:
+    tls_client: backupuser
+  ## Requires AWS S3 Bucket to be provisioned
+  destination: s3://s3.<region>.amazonaws.com/<bucket>
+alpha:
+  acl:
+    enabled: true
+  tls:
+    enabled: true
+  configFile:
+    config.yaml: |
+      acl:
+        secret_file: /dgraph/acl/hmac_secret_file
+      security:
+        whitelist: 10.0.0.0/8,172.0.0.0/8,192.168.0.0/16
+        token: 1234567890AbCdE
+      tls:
+        client_auth_type: REQUIREANDVERIFY
+        use_system_ca: true
+        ca_cert: /dgraph/tls/ca.crt
+        server_cert: /dgraph/tls/node.crt
+        server_key: /dgraph/tls/node.key

@@ -1,0 +1,8 @@
+name: secret-replicator
+appVersion: 0.1.0
+description: Chart to create Secrets in multiple namespce
+engine: gotpl
+version: 0.1.0
+maintainers:
+- email: pawan@devtron.ai
+  name: Pawan

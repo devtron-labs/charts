@@ -1,0 +1,22 @@
+# ingress-nginx with certificate manager
+# --------------------------------------
+# TLS will be terminated by the ingress controller.  The ingress controller
+# should be configured an Layer 4 external load balancer.
+# References:
+# * https://github.com/kubernetes-sigs/external-dns/
+# * https://cert-manager.io/
+# * https://kubernetes.github.io/ingress-nginx/
+global:
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+    tls:
+    - hosts:
+      - ratel.example.com
+      - alpha.example.com
+      secretName: example-tls
+    ratel_hostname: ratel.example.com
+    alpha_hostname: alpha.example.com
