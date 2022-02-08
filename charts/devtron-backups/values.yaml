@@ -1,0 +1,17 @@
+global:
+  # Twice a day
+  schedule: "0 */12 * * *"
+  # devtron-backups
+  AWS:
+    enabled: true
+    S3_BUCKET_NAME: "dheeth-kops"
+    AWS_ACCESS_KEY: ""
+    AWS_SECRET_KEY: ""
+    AWS_REGION: "ap-south-1"
+
+postgres_backup:
+  # You can get it using - kubectl -n devtroncd get secret devtron-secret -o jsonpath='{.data.PG_PASSWORD}' | base64 -d
+  PG_PASSWORD: "devtronpg"
+
+argocd_backup:
+  serviceAccountName: "argocd-backup"
