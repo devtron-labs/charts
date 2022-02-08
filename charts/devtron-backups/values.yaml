@@ -10,8 +10,8 @@ global:
     AWS_REGION: "ap-south-1"
 
 postgres_backup:
-  # You can get it using - kubectl -n devtroncd get secret devtron-secret -o jsonpath='{.data.PG_PASSWORD}' | base64 -d
-  PG_PASSWORD: "devtronpg"
+  # Reference to secret which as postgresql password in PG_PASSWORD key
+  secretName: "devtron-secret"
 
 argocd_backup:
   serviceAccountName: "argocd-backup"

@@ -22,7 +22,10 @@ spec:
               name: psql-volume
             env:
             - name: PGPASSWORD
-              value: {{ .Values.postgres_backup.PG_PASSWORD }}
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PASSWORD
+                  name: {{ .Values.postgres_backup.secretName }}
             imagePullPolicy: Always
             args:
             - /bin/bash
