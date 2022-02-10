@@ -15,7 +15,7 @@ hyperion:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
-    image: "quay.io/devtron/dashboard:c7440255-6-6792"
+    image: "quay.io/devtron/dashboard:27445cfd-136-6798"
     imagePullPolicy: IfNotPresent
 
   devtron:
