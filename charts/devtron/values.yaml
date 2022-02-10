@@ -15,11 +15,11 @@ hyperion:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
-    image: "quay.io/devtron/dashboard:1b6ae931-136-6755"
+    image: "quay.io/devtron/dashboard:c7440255-6-6792"
     imagePullPolicy: IfNotPresent
 
   devtron:
-    image: "quay.io/devtron/hyperion:7a1fa23c-280-6634"
+    image: "quay.io/devtron/hyperion:bf97c320-280-6796"
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
