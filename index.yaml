@@ -931,6 +931,18 @@ entries:
   rollout:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-02-25T10:06:59.090059477Z"
+    description: Chart to deploy Rollout
+    digest: 87079305d7a3f3bacdc74e1beafe64eab25dbd6921b5eeda0ad1e650f38591a4
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: rollout
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/rollout-0.14.2/rollout-0.14.2.tgz
+    version: 0.14.2
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-01-08T09:44:01.069331113Z"
     description: Chart to deploy Rollout
     digest: 4d6f74fc62716a174b0321022d8e41015a9086556d6880e7f8a999dcbb5ab09b
@@ -966,4 +978,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-14T11:19:59.520905365Z"
+generated: "2022-02-25T10:06:59.090377384Z"
