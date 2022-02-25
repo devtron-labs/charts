@@ -39,7 +39,7 @@ hyperion:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
-    image: "quay.io/devtron/dashboard:d6b9b784-136-6829"
+    image: "quay.io/devtron/dashboard:5da0906b-136-7026"
     imagePullPolicy: IfNotPresent
 
   devtron:
@@ -70,10 +70,10 @@ hyperion:
         SCRIPT_LOCATION: "scripts/sql/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "orchestrator"
-        GIT_HASH: "b1b935700ef3dbb3222bdbc1c6bf286d45a4566d"
+        GIT_HASH: "a103317fbf4bdf4c699ddb98feef92ce15e5e95d"
       casbin:
         GIT_BRANCH: "main"
         SCRIPT_LOCATION: "scripts/casbin/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
-        GIT_HASH: "b1b935700ef3dbb3222bdbc1c6bf286d45a4566d"
+        GIT_HASH: "a103317fbf4bdf4c699ddb98feef92ce15e5e95d"
