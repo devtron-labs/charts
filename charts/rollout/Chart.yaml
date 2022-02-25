@@ -2,7 +2,7 @@ name: rollout
 appVersion: 0.1.0
 description: Chart to deploy Rollout
 engine: gotpl
-version: 0.14.0
+version: 0.14.2
 maintainers:
 - email: prakarsh@devtron.ai
   name: Prakarsh
