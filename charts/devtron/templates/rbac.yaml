@@ -12,6 +12,8 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
   labels:
     app.kubernetes.io/instance: devtron
   name: devtron
