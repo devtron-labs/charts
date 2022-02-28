@@ -70,10 +70,10 @@ hyperion:
         SCRIPT_LOCATION: "scripts/sql/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "orchestrator"
-        GIT_HASH: "06d6c052883af151ef82767a14f853b9ea781046"
+        GIT_HASH: "9607307b29c146b16c998b46581c2a098d0a16d0"
       casbin:
         GIT_BRANCH: "main"
         SCRIPT_LOCATION: "scripts/casbin/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
-        GIT_HASH: "06d6c052883af151ef82767a14f853b9ea781046"
+        GIT_HASH: "9607307b29c146b16c998b46581c2a098d0a16d0"
