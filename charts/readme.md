@@ -6,7 +6,7 @@ This Repository contains all the charts used by Devtron for different components
 
 ## Introduction
 
-These chart bootstraps deployment of all required components for installation of [Devtron Platform](https://github.com/devtron-labs) on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+Some charts are used by Devtron for its functionality and other charts are also provided which can be used to add additional features and components in Devtron Cluster.
 
 The Charts with its functionality is listed below:
 
