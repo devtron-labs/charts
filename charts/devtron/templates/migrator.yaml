@@ -91,5 +91,33 @@ spec:
       restartPolicy: OnFailure
   backoffLimit: 20
   activeDeadlineSeconds: 1500
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: app-sync-cronjob
+  annotations:
+    "helm.sh/resource-policy": keep
+spec:
+  schedule: "0 19 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: chart-sync
+            image: quay.io/devtron/chart-sync:1227622d-132-3775
+            env:
+            - name: PG_ADDR
+              value: postgresql-postgresql.devtroncd
+            - name: PG_DATABASE
+              value: orchestrator
+            - name: PG_USER
+              value: postgres
+            envFrom:
+            - secretRef:
+                name: devtron-secret
+          restartPolicy: Never
+      backoffLimit: 4
 {{- end }}
 {{- end }}
