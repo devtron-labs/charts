@@ -1,7 +1,7 @@
 installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
-  release: "v0.3.16" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
+  release: "v0.3.17" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
   image: quay.io/devtron/inception
   tag: dee0d9a4-185-4689
   source: "github" # Available options are github and gitee
@@ -17,6 +17,7 @@ secrets: {}
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
+  SERVICE_TYPE: "LoadBalancer"
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
@@ -33,6 +34,10 @@ configs:
 
 # Change the below values for hyperion only mode (Refer https://docs.devtron.ai/#hyperion )
 hyperion:
+  global:
+    nodeSelector: {}
+    tolerations: []
+
   dashboard:
     config:
       analytics: "false"
@@ -41,24 +46,35 @@ hyperion:
       sentryEnv: "PRODUCTION"
     image: "quay.io/devtron/dashboard:5da0906b-136-7026"
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
 
   devtron:
     image: "quay.io/devtron/hyperion:9607307b-280-7055"
     imagePullPolicy: IfNotPresent
+    serviceType: LoadBalancer
+    nodeSelector: {}
+    tolerations: []
     serviceMonitor:
       enabled: false
 
   argocdDexServer:
     image: quay.io/dexidp/dex:v2.25.0
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
 
   kubelink:
     image: "quay.io/devtron/kubelink:c494c03f-268-6998"
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
 
   postgres:
     image: quay.io/bitnami/postgresql:11.3.0-debian-9-r28
     imagePullPolicy: "IfNotPresent"
+    nodeSelector: {}
+    tolerations: []
     persistence:
       volumeSize: "10Gi"
 
@@ -77,3 +93,5 @@ hyperion:
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
         GIT_HASH: "9607307b29c146b16c998b46581c2a098d0a16d0"
+    nodeSelector: {}
+    tolerations: []
