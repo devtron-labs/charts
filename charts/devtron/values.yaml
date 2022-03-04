@@ -17,7 +17,7 @@ secrets: {}
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
-  SERVICE_TYPE: "LoadBalancer"
+  DEVTRON_SERVICE_TYPE: "LoadBalancer"
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
@@ -52,7 +52,6 @@ hyperion:
   devtron:
     image: "quay.io/devtron/hyperion:9607307b-280-7055"
     imagePullPolicy: IfNotPresent
-    serviceType: LoadBalancer
     nodeSelector: {}
     tolerations: []
     serviceMonitor:

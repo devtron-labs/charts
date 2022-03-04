@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: devtron
+    release: devtron
+  annotations:
+    "helm.sh/resource-policy": keep
+  name: devtron-service
+  namespace: devtroncd
+spec:
+  ports:
+  - name: devtron
+    port: 80
+    protocol: TCP
+    targetPort: devtron
+  selector:
+    app: devtron
+  sessionAffinity: None
+  type: {{ .Values.configs.DEVTRON_SERVICE_TYPE }}
