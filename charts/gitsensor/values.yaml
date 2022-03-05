@@ -23,6 +23,13 @@ gitsensor:
       matchLabels:
         app: git-sensor
     serviceName: git-sensor
+    resources:
+      limits:
+        cpu: 1
+        memory: 200Mi
+      requests:
+        cpu: 0.10
+        memory: 100Mi
     template:
       metadata:
         labels:
