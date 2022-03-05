@@ -795,6 +795,18 @@ entries:
   gitsensor:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-03-05T18:29:45.9328561Z"
+    description: Chart to deploy Devtron Gitsensor
+    digest: 7856b30fbc9aa689782fcb44b46851dbdd7de224cecbfb91d8acd5ae880c85bb
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: gitsensor
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/gitsensor-0.11.4/gitsensor-0.11.4.tgz
+    version: 0.11.4
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-09-28T12:15:25.907535639Z"
     description: Chart to deploy Devtron Gitsensor
     digest: 41e795944858ad7363f3fc6f84e358ad9cf6c3e4900722b0dac8c1c727aef41a
@@ -1028,4 +1040,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-03-04T11:44:01.580528854Z"
+generated: "2022-03-05T18:29:45.933180411Z"
