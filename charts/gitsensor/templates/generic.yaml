@@ -48,6 +48,10 @@ spec:
             - name: {{ $key }}
               value: {{ $val | quote }}
           {{- end }}
+          {{- if $.Values.gitsensor.spec.resources}}
+          resources:
+{{ toYaml .Values.gitsensor.spec.resources | indent 12 -}}
+{{- end}}
 {{ if .Values.gitsensor.spec.affinity }}
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
