@@ -17,7 +17,13 @@ secrets: {}
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
+  DEVTRON_SERVICE_TYPE: "LoadBalancer"
+  ENABLE_INGRESS: False
+  INGRESS_ANNOTATIONS: {}
+  INGRESS_CLASS_NAME: ""
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
+  INSTALLATION_THROUGH_HELM: True # Required if installing devtron using helm
+  ENABLE_LEGACY_API: "false" # Set to true if you are installing Devtron on a kubernetes version < k8s 1.19
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
@@ -33,6 +39,10 @@ configs:
 
 # Change the below values for hyperion only mode (Refer https://docs.devtron.ai/#hyperion )
 hyperion:
+  global:
+    nodeSelector: {}
+    tolerations: []
+
   dashboard:
     config:
       analytics: "false"
@@ -41,24 +51,34 @@ hyperion:
       sentryEnv: "PRODUCTION"
     image: "quay.io/devtron/dashboard:e569e1de-136-7119"
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
 
   devtron:
     image: "quay.io/devtron/hyperion:fed99b26-280-7122"
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
     serviceMonitor:
       enabled: false
 
   argocdDexServer:
     image: quay.io/dexidp/dex:v2.25.0
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
 
   kubelink:
     image: "quay.io/devtron/kubelink:b0f37018-283-7102"
     imagePullPolicy: IfNotPresent
+    nodeSelector: {}
+    tolerations: []
 
   postgres:
     image: quay.io/bitnami/postgresql:11.3.0-debian-9-r28
     imagePullPolicy: "IfNotPresent"
+    nodeSelector: {}
+    tolerations: []
     persistence:
       volumeSize: "10Gi"
 
@@ -77,3 +97,5 @@ hyperion:
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
         GIT_HASH: "fed99b263372746d637cf35b44d95d5c127c5d62"
+    nodeSelector: {}
+    tolerations: []

@@ -1,7 +1,6 @@
 {{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
 {{- with .Values.hyperion.migrator }}
 ---
-# Migrator some things pending
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -40,6 +39,26 @@ spec:
           - secretRef:
               name: postgresql-migrator
       restartPolicy: OnFailure
+      {{- if and $.Values.hyperion.global.nodeSelector .nodeSelector }}
+      nodeSelector:
+        {{- toYaml .nodeSelector | nindent 8 }}
+      {{- else if .nodeSelector }}
+      nodeSelector:
+        {{- toYaml .nodeSelector | nindent 8 }}
+      {{- else if $.Values.hyperion.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml $.Values.hyperion.global.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if and $.Values.hyperion.global.tolerations .tolerations }}
+      tolerations:
+        {{- toYaml .tolerations | nindent 8 }}
+      {{- else if .tolerations }}
+      tolerations:
+        {{- toYaml .tolerations | nindent 8 }}
+      {{- else if $.Values.hyperion.global.tolerations }}
+      tolerations:
+        {{- toYaml $.Values.hyperion.global.tolerations | nindent 8 }}
+      {{- end }}
   backoffLimit: 20
   activeDeadlineSeconds: 1500
 ---
@@ -89,6 +108,26 @@ spec:
             cpu: 0.5
             memory: 500Mi
       restartPolicy: OnFailure
+      {{- if and $.Values.hyperion.global.nodeSelector .nodeSelector }}
+      nodeSelector:
+        {{- toYaml .nodeSelector | nindent 8 }}
+      {{- else if .nodeSelector }}
+      nodeSelector:
+        {{- toYaml .nodeSelector | nindent 8 }}
+      {{- else if $.Values.hyperion.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml $.Values.hyperion.global.nodeSelector | nindent 8 }}
+      {{- end }}
+      {{- if and $.Values.hyperion.global.tolerations .tolerations }}
+      tolerations:
+        {{- toYaml .tolerations | nindent 8 }}
+      {{- else if .tolerations }}
+      tolerations:
+        {{- toYaml .tolerations | nindent 8 }}
+      {{- else if $.Values.hyperion.global.tolerations }}
+      tolerations:
+        {{- toYaml $.Values.hyperion.global.tolerations | nindent 8 }}
+      {{- end }}
   backoffLimit: 20
   activeDeadlineSeconds: 1500
 ---
@@ -118,6 +157,26 @@ spec:
             - secretRef:
                 name: devtron-secret
           restartPolicy: Never
+          {{- if and $.Values.hyperion.global.nodeSelector .nodeSelector }}
+          nodeSelector:
+            {{- toYaml .nodeSelector | nindent 12 }}
+          {{- else if .nodeSelector }}
+          nodeSelector:
+            {{- toYaml .nodeSelector | nindent 12 }}
+          {{- else if $.Values.hyperion.global.nodeSelector }}
+          nodeSelector:
+            {{- toYaml $.Values.hyperion.global.nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if and $.Values.hyperion.global.tolerations .tolerations }}
+          tolerations:
+            {{- toYaml .tolerations | nindent 12 }}
+          {{- else if .tolerations }}
+          tolerations:
+            {{- toYaml .tolerations | nindent 12 }}
+          {{- else if $.Values.hyperion.global.tolerations }}
+          tolerations:
+            {{- toYaml $.Values.hyperion.global.tolerations | nindent 12 }}
+          {{- end }}
       backoffLimit: 4
 {{- end }}
 {{- end }}
