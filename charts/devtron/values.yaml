@@ -49,13 +49,13 @@ hyperion:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
-    image: "quay.io/devtron/dashboard:5da0906b-136-7026"
+    image: "quay.io/devtron/dashboard:e569e1de-136-7119"
     imagePullPolicy: IfNotPresent
     nodeSelector: {}
     tolerations: []
 
   devtron:
-    image: "quay.io/devtron/hyperion:9607307b-280-7055"
+    image: "quay.io/devtron/hyperion:fed99b26-280-7122"
     imagePullPolicy: IfNotPresent
     nodeSelector: {}
     tolerations: []
@@ -69,7 +69,7 @@ hyperion:
     tolerations: []
 
   kubelink:
-    image: "quay.io/devtron/kubelink:c494c03f-268-6998"
+    image: "quay.io/devtron/kubelink:b0f37018-283-7102"
     imagePullPolicy: IfNotPresent
     nodeSelector: {}
     tolerations: []
@@ -90,12 +90,12 @@ hyperion:
         SCRIPT_LOCATION: "scripts/sql/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "orchestrator"
-        GIT_HASH: "9607307b29c146b16c998b46581c2a098d0a16d0"
+        GIT_HASH: "fed99b263372746d637cf35b44d95d5c127c5d62"
       casbin:
         GIT_BRANCH: "main"
         SCRIPT_LOCATION: "scripts/casbin/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
-        GIT_HASH: "9607307b29c146b16c998b46581c2a098d0a16d0"
+        GIT_HASH: "fed99b263372746d637cf35b44d95d5c127c5d62"
     nodeSelector: {}
     tolerations: []
