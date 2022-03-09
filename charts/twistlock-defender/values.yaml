@@ -1,0 +1,49 @@
+COMMUNICATION_PORT: ""
+CONSOLE_CN:
+DATA_FOLDER: 
+DATA_RECOVERY_ENABLED: "true"
+DATA_RECOVERY_VOLUME: 
+DEFENDER_CN: ""
+DEFENDER_LISTENER_TYPE: NONE
+DISABLE_CONSOLE_CGROUP_LIMITS: "false"
+DOCKER_SOCKET: 
+DOCKER_TWISTLOCK_TAG: _22_01_858
+MANAGEMENT_PORT_HTTP: ""
+MANAGEMENT_PORT_HTTPS: ""
+READ_ONLY_FS: "true"
+RUN_CONSOLE_AS_ROOT: "false"
+SELINUX_LABEL: disable
+SYSTEMD_ENABLED: "false"
+access_ca: ""
+admission_cert: 
+admission_key: 
+cluster: ""
+cluster_id: 
+cluster_role_name: 
+collect_pod_labels: false
+cri_data_volume_name: cri-data
+defender_ca_cert: 
+defender_client_cert:
+defender_client_key:
+defender_service_port: 
+defender_type: daemonset
+docker_socket_folder: 
+docker_socket_path: 
+host_custom_compliance: false
+image_name: 
+install_bundle:
+limit_cpu: ''
+limit_memory: ''
+monitor_istio: false
+monitor_service_accounts: true
+namespace: 
+node_selector: ""
+openshift: false
+privileged: "false"
+secrets_name: ""
+selinux_header: ""
+selinux_options: ""
+service_parameter:
+twistlock_data_folder:
+unique_hostname: false
+ws_address:

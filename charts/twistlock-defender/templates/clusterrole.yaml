@@ -1,0 +1,34 @@
+{{- if or .Values.monitor_istio .Values.monitor_service_accounts .Values.collect_pod_labels }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ .Values.cluster_role_name }}
+rules:
+{{- if .Values.monitor_service_accounts}}
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings", "clusterroles", "clusterrolebindings"] # Allow Defenders to list RBAC resources
+  verbs: ["list"]
+{{- end}}
+{{- if .Values.monitor_istio}}
+- apiGroups: ["security.istio.io"]
+  resources: ["authorizationpolicies", "peerauthentications"] # Allow Defenders to list Istio security resources
+  verbs: ["list"]
+- apiGroups: ["networking.istio.io"]
+  resources: ["virtualservices", "destinationrules", "gateways"] # Allow Defenders to list Istio networking resources
+  verbs: ["list"]
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods", "endpoints", "services"] # Allow Defenders to list pods, services and endpoints
+  verbs: ["list"]
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods/proxy"] # Allow Defenders to get pod proxy
+  verbs: ["get"]
+{{- end}}
+{{- if .Values.collect_pod_labels}}
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"] # Allow Defenders to get Deployments and ReplicaSets
+  verbs: ["get"]
+- apiGroups: [""] # Core API
+  resources: ["namespaces", "pods"] # Allow Defenders to get Namespaces and Pods
+  verbs: ["get"]
+{{- end}}
+{{- end}}

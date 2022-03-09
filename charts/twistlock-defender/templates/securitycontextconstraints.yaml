@@ -1,0 +1,38 @@
+{{- if .Values.openshift}}
+apiVersion: security.openshift.io/v1
+kind: SecurityContextConstraints
+metadata:
+  name: twistlock-scc
+users:
+- system:serviceaccount:{{ .Values.namespace }}:twistlock-service
+allowHostDirVolumePlugin: true
+allowHostIPC: false
+allowHostNetwork: true
+allowHostPID: true
+allowHostPorts: true
+allowPrivilegedContainer: false
+allowedCapabilities:
+- NET_ADMIN  # Required for process monitoring
+- NET_RAW    # Required for iptables (CNNF, runtime DNS, WAAS). See: https://bugzilla.redhat.com/show_bug.cgi?id=1895032
+- SYS_ADMIN  # Required for filesystem monitoring
+- SYS_PTRACE # Required for local audit monitoring
+- SYS_CHROOT # Required for changing mount namespace using setns
+- MKNOD      # A capability to create special files using mknod(2), used by docker-less registry scanning
+- SETFCAP    # A capability to set file capabilities, used by docker-less registry scanning
+- IPC_LOCK   # Required for perf events monitoring, allowing to ignore memory lock limits
+fsGroup: # Volumes which support ownership management are modified to be owned and writable by the GID specified in fsGroup
+  type: RunAsAny
+# Value 0 is the same as null from OpenShift docs and is set so validation succeeds
+priority: 0
+readOnlyRootFilesystem: true
+defaultAddCapabilities: []
+requiredDropCapabilities: []
+runAsUser:
+  type: RunAsAny
+seLinuxContext:
+  type: RunAsAny
+supplementalGroups: # Supplemental groups are regular Linux groups. When a process runs in Linux, it has a UID, a GID, and one or more supplemental groups.
+  type: RunAsAny
+volumes:
+- '*' # Types of volumes the pod can mount. * is wildcard. https://docs.openshift.org/latest/architecture/additional_concepts/authorization.html#authorization-controlling-volumes
+{{- end}}

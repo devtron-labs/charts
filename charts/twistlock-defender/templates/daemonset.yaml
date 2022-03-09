@@ -1,0 +1,122 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: twistlock-defender-ds
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: twistlock-defender
+  template:
+    metadata:
+      annotations:
+        container.apparmor.security.beta.kubernetes.io/twistlock-defender: unconfined
+      labels:
+        app: twistlock-defender
+    spec:
+      serviceAccountName: twistlock-service
+{{- if .Values.secrets_name }}
+      imagePullSecrets:
+      - name: {{ .Values.secrets_name }}
+{{- end}}
+      restartPolicy: Always
+{{- if .Values.node_selector }}
+      nodeSelector:
+        {{ .Values.node_selector }}
+{{- end}}
+      containers:
+      - name: twistlock-defender
+        image: {{ .Values.image_name }}
+        volumeMounts:
+        - name: data-folder
+          mountPath: "{{ .Values.twistlock_data_folder }}"
+        - name: certificates # Setting the certificates mount after data-folder since it is nested and was overridden in CRI based GKE cluster
+          mountPath: "/var/lib/twistlock/certificates"
+        - name: docker-sock-folder
+          mountPath: "{{ .Values.docker_socket_folder }}"
+        - name: passwd
+          mountPath: "/etc/passwd"
+          readOnly: true
+        - name: syslog-socket
+          mountPath: "/dev/log"
+{{- if eq .Values.defender_type "cri" }}
+        - name: {{ .Values.cri_data_volume_name }}
+          mountPath: "/var/lib/containers"
+{{- end}}
+        env:
+        - name: WS_ADDRESS
+          value: {{ .Values.ws_address }}
+        - name: DEFENDER_TYPE
+          value: {{ .Values.defender_type }}
+        - name: DEFENDER_LISTENER_TYPE
+          value: "none"
+        - name: LOG_PROD
+          value: "true"
+        - name: SYSTEMD_ENABLED
+          value: "false"
+        - name: DOCKER_CLIENT_ADDRESS
+          value: "{{ .Values.docker_socket_path }}"
+        - name: DEFENDER_CLUSTER_ID
+          value: "{{ .Values.cluster_id }}"
+        - name: DEFENDER_CLUSTER
+          value: "{{ .Values.cluster }}"
+        - name: MONITOR_SERVICE_ACCOUNTS
+          value: "{{ .Values.monitor_service_accounts }}"
+        - name: MONITOR_ISTIO
+          value: "{{ .Values.monitor_istio }}"
+        - name: COLLECT_POD_LABELS
+          value: "{{ .Values.collect_pod_labels }}"
+        - name: INSTALL_BUNDLE
+          value: "{{ .Values.install_bundle }}"
+        - name: HOST_CUSTOM_COMPLIANCE_ENABLED
+          value: "{{ .Values.host_custom_compliance }}"
+        - name: CLOUD_HOSTNAME_ENABLED
+          value: "{{ .Values.unique_hostname }}"
+        securityContext:
+          readOnlyRootFilesystem: true
+          privileged: {{ .Values.privileged }}
+{{- if .Values.selinux_header }}
+          {{ .Values.selinux_header }}
+            {{ .Values.selinux_options }}
+{{- end }}
+          capabilities:
+            add:
+            - NET_ADMIN  # Required for process monitoring
+            - NET_RAW    # Required for iptables (CNNF, runtime DNS, WAAS). See: https://bugzilla.redhat.com/show_bug.cgi?id=1895032
+            - SYS_ADMIN  # Required for filesystem monitoring
+            - SYS_PTRACE # Required for local audit monitoring
+            - SYS_CHROOT # Required for changing mount namespace using setns
+            - MKNOD      # A capability to create special files using mknod(2), used by docker-less registry scanning
+            - SETFCAP    # A capability to set file capabilities, used by docker-less registry scanning
+            - IPC_LOCK   # Required for perf events monitoring, allowing to ignore memory lock limits
+        resources: # See: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/#how-pods-with-resource-requests-are-scheduled
+          limits:
+            memory: {{ .Values.limit_memory }}
+            cpu: {{ .Values.limit_cpu }}
+          requests:
+            cpu: "256m"
+      volumes:
+      - name: certificates
+        secret:
+          secretName: twistlock-secrets
+          defaultMode: 256
+      - name: syslog-socket
+        hostPath:
+          path: "/dev/log"
+      - name: data-folder
+        hostPath:
+          path: "{{ .Values.DATA_FOLDER }}"
+      - name: passwd
+        hostPath:
+          path: "/etc/passwd"
+      - name: docker-sock-folder
+        hostPath:
+          path: "{{ .Values.docker_socket_folder }}"
+{{- if eq .Values.defender_type "cri" }}
+      - name: {{ .Values.cri_data_volume_name }}
+        hostPath:
+          path: "/var/lib/containers"
+{{- end}}
+      hostPID: true
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
