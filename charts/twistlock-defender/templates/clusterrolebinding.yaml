@@ -1,0 +1,15 @@
+{{- if or .Values.monitor_istio .Values.monitor_service_accounts .Values.collect_pod_labels }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: twistlock-view-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ .Values.cluster_role_name }}
+subjects:
+- apiGroup:
+  kind: ServiceAccount
+  name: twistlock-service
+  namespace: {{ .Values.namespace }}
+{{- end}}

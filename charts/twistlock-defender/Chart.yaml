@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Twistlock Defender Daemon Set Helm Chart
+name: twistlock-defender
+version: 22.01.858

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service # Expose the Defender as admission controller. Remark: by default, Defender will not listen on the service port
+metadata:
+  name: defender
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: twistlock-defender
+spec:
+  ports:
+  - port: 443
+    targetPort: {{ .Values.defender_service_port }}
+  selector:
+    app: twistlock-defender
