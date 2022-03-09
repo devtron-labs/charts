@@ -1040,4 +1040,13 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
-generated: "2022-03-05T18:29:45.933180411Z"
+  twistlock-defender:
+  - apiVersion: v1
+    created: "2022-03-09T07:50:07.739766276Z"
+    description: Twistlock Defender Daemon Set Helm Chart
+    digest: 48220668b26f30a1b70569f231e80a7b9537dab3f43be96ccd3c490b525e838d
+    name: twistlock-defender
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
+    version: 22.01.858
+generated: "2022-03-09T07:50:07.739951776Z"
