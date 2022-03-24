@@ -16,7 +16,7 @@ spec:
         - --configmap
         - workflow-controller-configmap
         - --executor-image
-        - argoproj/argoexec:v3.0.7
+        - quay.io/argoproj/argoexec:v3.0.7
         command:
         - workflow-controller
         env:
