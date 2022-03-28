@@ -207,6 +207,7 @@ alpha:
     enabled: true
   
   lru_mb: 6000
+  query_edge: 10000000
 
   ## StatefulSet spec.template.metadata.annotations
   extraAnnotations: {}
