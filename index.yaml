@@ -1140,6 +1140,32 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/nats-streaming-0.3.1/nats-streaming-0.3.1.tgz
     version: 0.3.1
+  openvpn:
+  - apiVersion: v1
+    appVersion: 1.1.0
+    created: "2022-03-30T10:17:00.935511283Z"
+    description: A Helm chart to install an openvpn server inside a kubernetes cluster.  Certificate
+      generation is also part of the deployment, and this chart will generate client
+      keys as needed.
+    digest: cef814ce3e63ebdc6e80a38729c93460a47e4c7f653e9f693b86d13ee11726e0
+    home: https://openvpn.net/index.php/open-source.html
+    icon: https://forums.openvpn.net/styles/openvpn/theme/images/ovpnlogo.png
+    keywords:
+    - openvpn
+    - vpn
+    - tunnel
+    - network
+    - service
+    - connectivity
+    - encryption
+    name: openvpn
+    sources:
+    - https://github.com/jfelten/openvpn-docker
+    - https://github.com/kubernetes/charts/tree/master/stable/openvpn
+    - https://github.com/jfelten/helm-charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/openvpn-4.2.5/openvpn-4.2.5.tgz
+    version: 4.2.5
   rollout:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -1199,4 +1225,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-03-29T18:52:49.607698864Z"
+generated: "2022-03-30T10:17:00.935657086Z"
