@@ -1,0 +1,75 @@
+{{- if .Values.configs.ENABLE_INGRESS }}
+{{- if eq .Values.configs.ENABLE_LEGACY_API "true" }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: devtron
+    release: devtron
+  name: devtron-ingress
+  annotations:
+    kubernetes.io/ingress.class: {{ .Values.configs.INGRESS_CLASS_NAME }}
+    {{- if .Values.configs.INGRESS_ANNOTATIONS }}
+    {{- toYaml .Values.configs.INGRESS_ANNOTATIONS | nindent 4 }}
+    {{- end }}
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: devtron-service
+          servicePort: 80
+        path: /orchestrator
+      - backend:
+          serviceName: devtron-service
+          servicePort: 80
+        path: /dashboard
+      - backend:
+          service:
+            name: devtron-service
+            port:
+              number: 80
+        path: /grafana
+        pathType: ImplementationSpecific
+{{- else }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  labels:
+    app: devtron
+    release: devtron
+  name: devtron-ingress
+  {{- if .Values.configs.INGRESS_ANNOTATIONS }}
+  annotations:
+    {{- toYaml .Values.configs.INGRESS_ANNOTATIONS | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.configs.INGRESS_CLASS_NAME }}
+  ingressClassName: {{ .Values.configs.INGRESS_CLASS_NAME }}
+  {{- end }}
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: devtron-service
+            port:
+              number: 80
+        path: /orchestrator
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: devtron-service
+            port:
+              number: 80
+        path: /dashboard
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: devtron-service
+            port:
+              number: 80
+        path: /grafana
+        pathType: ImplementationSpecific
+{{- end }}
+{{- end }}

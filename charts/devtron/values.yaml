@@ -18,7 +18,13 @@ secrets: {}
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
+#  DEVTRON_SERVICE_TYPE: "LoadBalancer"
+#  ENABLE_INGRESS: False
+#  INGRESS_ANNOTATIONS: {}
+#  INGRESS_CLASS_NAME: ""
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
+#  INSTALLATION_THROUGH_HELM: True # Required if installing devtron using helm
+  ENABLE_LEGACY_API: "false" # Set to true if you are installing Devtron on a kubernetes version < k8s 1.19
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
@@ -48,6 +54,27 @@ components:
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
+    service:
+      type: LoadBalancer
+      port: 80
+      targetPort: 8080
+      # nodePort: 32080
+      labels: {}
+      annotations: {}
+    ingress:
+      enabled: false
+      className: nginx
+      annotations:
+        # kubernetes.io/ingress.class: nginx
+        # kubernetes.io/tls-acme: "true"
+      paths: ["/"]
+      pathType: ImplementationSpecific
+      hosts:
+        - devtron.example.com
+      tls: []
+      #  - secretName: devtron-tls
+      #    hosts:
+      #      - devtron.example.com
 
   argocdDexServer:
     image: quay.io/dexidp/dex:v2.25.0
