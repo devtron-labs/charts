@@ -1,7 +1,7 @@
 installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
-  release: "v0.3.25" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
+  release: "v0.3.26" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
   image: quay.io/devtron/inception
   tag: acb623ff-185-7117
   source: "github" # Available options are github and gitee
@@ -43,7 +43,7 @@ hyperion:
     imagePullPolicy: IfNotPresent
 
   devtron:
-    image: "quay.io/devtron/hyperion:62a26f9a-280-7821"
+    image: "quay.io/devtron/hyperion:a464ba14-280-7975"
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
@@ -70,10 +70,10 @@ hyperion:
         SCRIPT_LOCATION: "scripts/sql/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "orchestrator"
-        GIT_HASH: "62a26f9abd59090e61178c65ee123c6af170170c"
+        GIT_HASH: "a464ba14e7b215bc395efe3171c93cddd081447d"
       casbin:
         GIT_BRANCH: "main"
         SCRIPT_LOCATION: "scripts/casbin/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
-        GIT_HASH: "62a26f9abd59090e61178c65ee123c6af170170c"
+        GIT_HASH: "a464ba14e7b215bc395efe3171c93cddd081447d"
