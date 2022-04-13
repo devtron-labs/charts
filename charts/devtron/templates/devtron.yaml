@@ -1,5 +1,4 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.devtron }}
+{{- with .Values.components.devtron }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -109,6 +108,5 @@ spec:
   selector:
     matchLabels:
       app: devtron
-{{- end }}
 {{- end }}
 {{- end }}

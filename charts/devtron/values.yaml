@@ -5,7 +5,7 @@ installer:
   image: quay.io/devtron/inception
   tag: acb623ff-185-7117
   source: "github" # Available options are github and gitee
-  mode: "full" # Available options are hyperion and full
+  mode: "dashboard" # Available options are dashboard, full and hyperion (deprecated)
 
 # Change the below values for full mode only
 
@@ -32,7 +32,7 @@ configs:
   #AZURE_BLOB_CONTAINER_CI_CACHE: "ci-cache-container"
 
 # Change the below values for hyperion only mode (Refer https://docs.devtron.ai/#hyperion )
-hyperion:
+components:
   dashboard:
     config:
       analytics: "false"
