@@ -1,7 +1,7 @@
 installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
-  release: "v0.3.25" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
+  release: "v0.3.26" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
   image: quay.io/devtron/inception
   tag: acb623ff-185-7117
   source: "github" # Available options are github and gitee
@@ -39,7 +39,7 @@ hyperion:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
-    image: "quay.io/devtron/dashboard:43ae34e6-325-7969"
+    image: "quay.io/devtron/dashboard:57632b6b-325-7998"
     imagePullPolicy: IfNotPresent
 
   devtron:
