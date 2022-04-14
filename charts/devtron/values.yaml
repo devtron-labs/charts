@@ -43,7 +43,7 @@ hyperion:
     imagePullPolicy: IfNotPresent
 
   devtron:
-    image: "quay.io/devtron/hyperion:02842282-280-8000"
+    image: "quay.io/devtron/hyperion:02842282-280-8002"
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
