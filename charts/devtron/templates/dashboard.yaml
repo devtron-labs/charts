@@ -1,5 +1,4 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.dashboard }}
+{{- with .Values.components.dashboard }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -89,5 +88,4 @@ spec:
               name: devtron-dashboard-secret
           volumeMounts: []
   revisionHistoryLimit: 3
-{{- end }}
 {{- end }}

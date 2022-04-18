@@ -1,5 +1,4 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.postgres }}
+{{- with .Values.components.postgres }}
 apiVersion: v1
 kind: Secret
 data:
@@ -301,5 +300,4 @@ spec:
         resources:
           requests:
             storage: {{ .persistence.volumeSize }}
-{{- end }}
 {{- end }}

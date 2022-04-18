@@ -194,7 +194,7 @@ spec:
           {{- /* TODO: Remove awk-gsub once dgraph-io/dgraph#6837 is merged and back-ported. */}}
           - |
             set -ex
-            dgraph alpha --my=$(hostname -f | awk '{gsub(/\.$/,""); print $0}'):7080 --lru_mb={{ .Values.alpha.lru_mb }} --zero {{ template "multi_zeros" . }} {{ .Values.alpha.extraFlags }}
+            dgraph alpha --my=$(hostname -f | awk '{gsub(/\.$/,""); print $0}'):7080 --lru_mb={{ .Values.alpha.lru_mb }} --query_edge_limit={{ .Values.alpha.query_edge }} --zero {{ template "multi_zeros" . }} {{ .Values.alpha.extraFlags }}
         resources:
 {{ toYaml .Values.alpha.resources | indent 10 }}
         {{- if .Values.alpha.startupProbe.enabled }}
