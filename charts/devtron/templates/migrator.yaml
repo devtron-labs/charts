@@ -1,7 +1,5 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.migrator }}
+{{- with .Values.components.migrator }}
 ---
-# Migrator some things pending
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -119,5 +117,4 @@ spec:
                 name: devtron-secret
           restartPolicy: Never
       backoffLimit: 4
-{{- end }}
 {{- end }}

@@ -1,5 +1,4 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.argocdDexServer }}
+{{- with .Values.components.argocdDexServer }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -138,5 +137,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: argocd-dex-server
-{{- end }}
 {{- end }}
