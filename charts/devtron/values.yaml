@@ -57,7 +57,7 @@ hyperion:
     imagePullPolicy: IfNotPresent
 
   postgres:
-    image: quay.io/bitnami/postgresql:11.3.0-debian-9-r28
+    image: quay.io/devtron/postgres:11.3.0-debian-9-r28
     imagePullPolicy: "IfNotPresent"
     persistence:
       volumeSize: "10Gi"
