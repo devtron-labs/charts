@@ -43,7 +43,7 @@ hyperion:
     imagePullPolicy: IfNotPresent
 
   devtron:
-    image: "quay.io/devtron/hyperion:02842282-280-8002"
+    image: "quay.io/devtron/hyperion:d8b33fae-280-8097"
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
@@ -70,10 +70,10 @@ hyperion:
         SCRIPT_LOCATION: "scripts/sql/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "orchestrator"
-        GIT_HASH: "02842282899755e13efb25d51248dadc04739392"
+        GIT_HASH: "d8b33faefa1eedf52b18619998bda559eed54baf"
       casbin:
         GIT_BRANCH: "main"
         SCRIPT_LOCATION: "scripts/casbin/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
-        GIT_HASH: "02842282899755e13efb25d51248dadc04739392"
+        GIT_HASH: "d8b33faefa1eedf52b18619998bda559eed54baf"
