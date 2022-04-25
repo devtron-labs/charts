@@ -1,0 +1,3 @@
+  $arr := {{- template "bcc.values" . }}
+        {{- range $key, $val := $arr }}
+          {{- . | nindent 2 }} {{ end }}
