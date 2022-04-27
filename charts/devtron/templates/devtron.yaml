@@ -1,3 +1,4 @@
+{{- if not .Values.installer.modules }}
 {{- with .Values.components.devtron }}
 ---
 apiVersion: v1
@@ -87,5 +88,6 @@ spec:
   selector:
     matchLabels:
       app: devtron
+{{- end }}
 {{- end }}
 {{- end }}
