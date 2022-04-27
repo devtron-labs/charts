@@ -1,7 +1,7 @@
 installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
-  release: "v0.3.25" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
+  release: "v0.3.26" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
   image: quay.io/devtron/inception
   tag: acb623ff-185-7117
   source: "github" # Available options are github and gitee
@@ -19,13 +19,7 @@ secrets: {}
 #  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
 #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
-#  DEVTRON_SERVICE_TYPE: "LoadBalancer"
-#  ENABLE_INGRESS: False
-#  INGRESS_ANNOTATIONS: {}
-#  INGRESS_CLASS_NAME: ""
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
-#  INSTALLATION_THROUGH_HELM: True # Required if installing devtron using helm
-  ENABLE_LEGACY_API: "false" # Set to true if you are installing Devtron on a kubernetes version < k8s 1.19
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
@@ -47,31 +41,28 @@ components:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
-    image: "quay.io/devtron/dashboard:43ae34e6-325-7969"
+    image: "quay.io/devtron/dashboard:57632b6b-325-7998"
     imagePullPolicy: IfNotPresent
 
   devtron:
-    image: "quay.io/devtron/hyperion:a464ba14-280-7975"
+    image: "quay.io/devtron/hyperion:02842282-280-8002"
     imagePullPolicy: IfNotPresent
     serviceMonitor:
       enabled: false
     service:
       type: LoadBalancer
       port: 80
-      targetPort: 8080
       # nodePort: 32080
       labels: {}
       annotations: {}
     ingress:
       enabled: false
       className: nginx
-      annotations:
-        # kubernetes.io/ingress.class: nginx
+      labels: {}
+      annotations: {}
         # kubernetes.io/tls-acme: "true"
-      paths: ["/"]
       pathType: ImplementationSpecific
-      hosts:
-        - devtron.example.com
+      host: devtron.example.com
       tls: []
       #  - secretName: devtron-tls
       #    hosts:
@@ -99,10 +90,10 @@ components:
         SCRIPT_LOCATION: "scripts/sql/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "orchestrator"
-        GIT_HASH: "a464ba14e7b215bc395efe3171c93cddd081447d"
+        GIT_HASH: "02842282899755e13efb25d51248dadc04739392"
       casbin:
         GIT_BRANCH: "main"
         SCRIPT_LOCATION: "scripts/casbin/"
         GIT_REPO_URL: "https://github.com/devtron-labs/devtron.git"
         DB_NAME: "casbin"
-        GIT_HASH: "a464ba14e7b215bc395efe3171c93cddd081447d"
+        GIT_HASH: "02842282899755e13efb25d51248dadc04739392"
