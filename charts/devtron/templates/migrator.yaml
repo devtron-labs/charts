@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: postgresql-migrate-devtron
+  name: postgresql-migrate-devtron-{{ randAlphaNum 5 | lower }}
   annotations:
     "helm.sh/resource-policy": keep
 spec:
@@ -44,7 +44,7 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: postgresql-migrate-casbin
+  name: postgresql-migrate-casbin-{{ randAlphaNum 5 | lower }}
   annotations:
     "helm.sh/resource-policy": keep
 spec:
