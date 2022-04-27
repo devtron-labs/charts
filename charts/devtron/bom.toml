@@ -1,7 +1,0 @@
-version: "v0.3.26"
-dashboard: "quay.io/devtron/dashboard:57632b6b-325-7998"
-devtron: "quay.io/devtron/hyperion:02842282-280-8002"
-kubelink: "quay.io/devtron/kubelink:1be465ec-318-7966"
-argocdDexServer: "quay.io/dexidp/dex:v2.25.0"
-postgres: "quay.io/bitnami/postgresql:11.3.0-debian-9-r28"
-migrator: "quay.io/devtron/migrator:6687f572-133-2208"

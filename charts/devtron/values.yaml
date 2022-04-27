@@ -19,6 +19,7 @@ secrets: {}
 #  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
 configs:
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
+  ENABLE_LEGACY_API: "false"  # Set to true if you are installing Devtron on a kubernetes version < k8s 1.19
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
@@ -54,6 +55,7 @@ components:
       # nodePort: 32080
       labels: {}
       annotations: {}
+      loadBalancerSourceRanges: []
     ingress:
       enabled: false
       className: nginx
@@ -76,7 +78,7 @@ components:
     imagePullPolicy: IfNotPresent
 
   postgres:
-    image: quay.io/bitnami/postgresql:11.3.0-debian-9-r28
+    image: quay.io/devtron/postgres:11.3.0-debian-9-r28
     imagePullPolicy: "IfNotPresent"
     persistence:
       volumeSize: "10Gi"

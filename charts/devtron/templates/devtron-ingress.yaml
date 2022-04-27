@@ -1,6 +1,6 @@
-{{- if .Values.components.devtron.ingress.enabled }}
-{{- with .Values.components.devtron.ingress }}
-{{- if eq .Values.configs.ENABLE_LEGACY_API "true" }}
+{{- if $.Values.components.devtron.ingress.enabled }}
+{{- with $.Values.components.devtron.ingress }}
+{{- if eq $.Values.configs.ENABLE_LEGACY_API "true" }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
