@@ -1,3 +1,4 @@
+{{- if not .Values.installer.modules }}
 {{- with .Values.components.argocdDexServer }}
 apiVersion: v1
 kind: Service
@@ -137,4 +138,5 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: argocd-dex-server
+{{- end }}
 {{- end }}

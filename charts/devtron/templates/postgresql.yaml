@@ -1,3 +1,4 @@
+{{- if not .Values.installer.modules }}
 {{- with .Values.components.postgres }}
 apiVersion: v1
 kind: Secret
@@ -300,4 +301,5 @@ spec:
         resources:
           requests:
             storage: {{ .persistence.volumeSize }}
+{{- end }}
 {{- end }}
