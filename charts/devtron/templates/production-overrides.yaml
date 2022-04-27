@@ -1,4 +1,4 @@
-{{- if or (eq .Values.installer.mode "full") (eq .Values.installer.mode "Full") }}
+{{- if $.Values.installer.modules }}
 {{- if $.Values.installer.production_overrides }}
 
 {{- end }}
