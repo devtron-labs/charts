@@ -82,7 +82,12 @@ spec:
     spec:
       containers:
         -
+        {{- if $.Values.installer.tag }}
           image: {{ $.Values.installer.image }}:{{ $.Values.installer.tag }}
+        {{- end }}
+        {{- else }}
+          image: {{ $.Values.installer.image }}
+        {{- end }}
           imagePullPolicy: IfNotPresent
           name: inception
           ports:
