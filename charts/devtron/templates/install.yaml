@@ -1,6 +1,6 @@
 {{- if .Values.installer.modules }}
 {{- with .Values.installer.modules }}
-{{ range . }}
+{{- range . }}
 {{- if eq . "cicd" }}
 apiVersion: v1
 kind: ServiceAccount
@@ -84,7 +84,6 @@ spec:
         -
         {{- if $.Values.installer.tag }}
           image: {{ $.Values.installer.image }}:{{ $.Values.installer.tag }}
-        {{- end }}
         {{- else }}
           image: {{ $.Values.installer.image }}
         {{- end }}

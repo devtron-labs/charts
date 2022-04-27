@@ -2,11 +2,10 @@ installer:
   repo: "devtron-labs/devtron"
 #  For Kubernetes version < 1.16, set release: legacy. You won't be able to upgrade Devtron unless you upgrade the K8s version to 1.16 or above.
   release: "v0.3.26" #You can use a branch name or a release tag name as a release, for gitee as source only "main" is supported as of now
-  image: quay.io/devtron/inception
-  tag: acb623ff-185-7117
+  image: "quay.io/devtron/inception:acb623ff-185-7117"
   source: "github" # Available options are github and gitee
 #  mode: "dashboard" # Available options are dashboard, full and hyperion (deprecated) NOT USING THIS
-  modules: ["cicd"] # Available options are cicd
+  modules: [] # Available options are cicd
   production_overrides: "false" # Set true if you want to use this Devtron stack in Production (This will require more resources)
 
 # Change the below values for full mode only
