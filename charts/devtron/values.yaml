@@ -20,6 +20,7 @@ secrets: {}
 configs:
   BLOB_STORAGE_PROVIDER: "MINIO"   #AZURE|S3|MINIO
   ENABLE_LEGACY_API: "false"  # Set to true if you are installing Devtron on a kubernetes version < k8s 1.19
+  UPGRADE_LEGACY: "False" # Set to True if you are upgrading from devtron 0.3.x full stack to 0.4.x with CICD module
 # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
   #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
   #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
@@ -41,6 +42,7 @@ components:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
+      applicationMetrics: "true"
     image: "quay.io/devtron/dashboard:57632b6b-325-7998"
     imagePullPolicy: IfNotPresent
 
