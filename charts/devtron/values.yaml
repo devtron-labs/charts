@@ -41,6 +41,7 @@ components:
       hotjar: "false"
       sentry: "false"
       sentryEnv: "PRODUCTION"
+      applicationMetrics: "true"
     image: "quay.io/devtron/dashboard:57632b6b-325-7998"
     imagePullPolicy: IfNotPresent
 
