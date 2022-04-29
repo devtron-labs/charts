@@ -1,4 +1,3 @@
-{{- if ne "True" $.Values.configs.UPGRADE_LEGACY }}
 {{- with .Values.components.dashboard }}
 apiVersion: v1
 kind: Secret
@@ -90,5 +89,4 @@ spec:
               name: devtron-dashboard-secret
           volumeMounts: []
   revisionHistoryLimit: 3
-{{- end }}
 {{- end }}

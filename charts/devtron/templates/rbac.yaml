@@ -1,4 +1,4 @@
-{{- if ne "True" $.Values.configs.UPGRADE_LEGACY }}
+{{- if not .Values.installer.modules }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
