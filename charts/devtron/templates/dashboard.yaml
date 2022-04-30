@@ -22,6 +22,7 @@ data:
   HOTJAR_ENABLED: {{ .config.hotjar | default "false" | quote }}
   SENTRY_ENABLED: {{ .config.sentry | default "false" | quote }}
   SENTRY_ENV: {{ .config.sentryEnv | default "PRODUCTION" }}
+  APPLICATION_METRICS_ENABLED: {{ .config.applicationMetrics | default "true" }}
 ---
 apiVersion: v1
 kind: Service
