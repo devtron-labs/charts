@@ -1,4 +1,7 @@
-{{- if or (eq .Values.installer.mode "full") (eq .Values.installer.mode "Full") }}
+{{- if .Values.installer.modules }}
+{{- with .Values.installer.modules }}
+{{- range . }}
+{{- if eq . "cicd" }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -79,7 +82,11 @@ spec:
     spec:
       containers:
         -
-          image: {{ .Values.installer.image }}:{{ .Values.installer.tag }}
+        {{- if $.Values.installer.tag }}
+          image: {{ $.Values.installer.image }}:{{ $.Values.installer.tag }}
+        {{- else }}
+          image: {{ $.Values.installer.image }}
+        {{- end }}
           imagePullPolicy: IfNotPresent
           name: inception
           ports:
@@ -97,4 +104,7 @@ spec:
       restartPolicy: Always
       serviceAccountName: installer
       terminationGracePeriodSeconds: 30
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}

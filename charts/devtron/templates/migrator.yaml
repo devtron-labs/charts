@@ -1,13 +1,11 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.migrator }}
+{{- if not .Values.installer.modules }}
+{{- with .Values.components.migrator }}
 ---
-# Migrator some things pending
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: postgresql-migrate-devtron
-  annotations:
-    "helm.sh/resource-policy": keep
+  name: postgresql-migrate-devtron-{{ randAlphaNum 5 | lower }}
+  annotations: {}
 spec:
   ttlSecondsAfterFinished: 1000
   template:
@@ -46,9 +44,8 @@ spec:
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: postgresql-migrate-casbin
-  annotations:
-    "helm.sh/resource-policy": keep
+  name: postgresql-migrate-casbin-{{ randAlphaNum 5 | lower }}
+  annotations: {}
 spec:
   template:
     spec:
@@ -91,33 +88,5 @@ spec:
       restartPolicy: OnFailure
   backoffLimit: 20
   activeDeadlineSeconds: 1500
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: app-sync-cronjob
-  annotations:
-    "helm.sh/resource-policy": keep
-spec:
-  schedule: "0 19 * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: chart-sync
-            image: quay.io/devtron/chart-sync:1227622d-132-3775
-            env:
-            - name: PG_ADDR
-              value: postgresql-postgresql.devtroncd
-            - name: PG_DATABASE
-              value: orchestrator
-            - name: PG_USER
-              value: postgres
-            envFrom:
-            - secretRef:
-                name: devtron-secret
-          restartPolicy: Never
-      backoffLimit: 4
 {{- end }}
 {{- end }}
