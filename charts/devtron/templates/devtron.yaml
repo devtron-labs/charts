@@ -1,5 +1,5 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.devtron }}
+{{- if not .Values.installer.modules }}
+{{- with .Values.components.devtron }}
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -19,27 +19,6 @@ data:
   PG_DATABASE: orchestrator
   DEX_HOST: http://argocd-dex-server.devtroncd
   DEX_PORT: "5556"
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: devtron
-    release: devtron
-  annotations:
-    "helm.sh/resource-policy": keep
-  name: devtron-service
-  namespace: devtroncd
-spec:
-  ports:
-  - name: devtron
-    port: 80
-    protocol: TCP
-    targetPort: devtron
-  selector:
-    app: devtron
-  sessionAffinity: None
-  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: Deployment

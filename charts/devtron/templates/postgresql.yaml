@@ -1,5 +1,5 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.postgres }}
+{{- if not .Values.installer.modules }}
+{{- with .Values.components.postgres }}
 apiVersion: v1
 kind: Secret
 data:

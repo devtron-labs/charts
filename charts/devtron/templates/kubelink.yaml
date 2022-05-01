@@ -1,5 +1,4 @@
-{{- if or (eq .Values.installer.mode "hyperion") (eq .Values.installer.mode "Hyperion") }}
-{{- with .Values.hyperion.kubelink }}
+{{- with .Values.components.kubelink }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -59,5 +58,4 @@ spec:
     app: kubelink
   sessionAffinity: None
   type: ClusterIP
-{{- end }}
 {{- end }}
