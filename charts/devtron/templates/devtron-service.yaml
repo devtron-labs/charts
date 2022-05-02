@@ -1,6 +1,6 @@
 {{- if $.Values.components }}
 {{- if $.Values.components.devtron }}
-{{- if $.Values.components.service }}
+{{- if $.Values.components.devtron.service }}
 {{- with $.Values.components.devtron.service }}
 apiVersion: v1
 kind: Service
