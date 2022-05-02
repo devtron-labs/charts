@@ -1,4 +1,4 @@
-{{- if $.Values.components.devtron }}
+{{- if $.Values.components }}
 {{- if $.Values.components.devtron.ingress.enabled }}
 {{- with $.Values.components.devtron.ingress }}
 {{- if eq $.Values.configs.ENABLE_LEGACY_API "true" }}
