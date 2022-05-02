@@ -1,3 +1,6 @@
+{{- if $.Values.components }}
+{{- if $.Values.components.devtron }}
+{{- if $.Values.components.service }}
 {{- with $.Values.components.devtron.service }}
 apiVersion: v1
 kind: Service
@@ -32,4 +35,7 @@ spec:
     app: devtron
   sessionAffinity: None
   type: {{ .type }}
+{{- end }}
+{{- end }}
+{{- end }}
 {{- end }}
