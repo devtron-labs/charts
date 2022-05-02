@@ -18,11 +18,13 @@ metadata:
   annotations:
     "helm.sh/resource-policy": keep
 data:
+{{- if .config }}
   GA_ENABLED: {{ .config.analytics | default "false" | quote }}
   HOTJAR_ENABLED: {{ .config.hotjar | default "false" | quote }}
   SENTRY_ENABLED: {{ .config.sentry | default "false" | quote }}
   SENTRY_ENV: {{ .config.sentryEnv | default "PRODUCTION" | quote }}
   APPLICATION_METRICS_ENABLED: {{ .config.applicationMetrics | default "true" | quote }}
+{{- end }} 
 ---
 apiVersion: v1
 kind: Service
