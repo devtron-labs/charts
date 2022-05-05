@@ -51,3 +51,4 @@ service:
   internalHealthPort: 6061
   type: ClusterIP
 tolerations: []
+extraEnv: []
