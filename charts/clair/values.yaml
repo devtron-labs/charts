@@ -16,11 +16,36 @@ config:
   - oracle
   - alpine
   - redhat
+  clairUpdaterSets:
+  - alpine
+  - aws
+  - debian
+  - oracle
+  - photon
+  - pyupio
+  - rhel
+  - suse
+  - ubuntu
   notificationWebhookEndpoint: https://example.com/notify/me
   paginationKey: XxoPtCUzrUv4JV5dS+yQ+MdW7yLEJnRMwigVY/bpgtQ=
   postgresServiceName: clair-pg-postgresql
   postgresURI: postgres://clair:clair@clair-pg-postgresql:5432/clair?sslmode=disable
   updateInterval: 2h
+  clairHost: clair-pg-postgresql
+  clairPort: 5432
+  dbname: clairv4
+  user: clair
+  password: clair
+  introspection_addr: :6061
+  http_listen_addr: :6060
+  log_level: debug
+  scanlock_retry: 10
+  layer_scan_concurrency: 5
+  migrations: true
+  max_conn_pool: 100
+  delivery_interval: 1m
+  poll_interval: 5m
+  indexer_addr: :6060
 image:
   pullPolicy: Never
   repository: clair-local
@@ -49,6 +74,8 @@ service:
   externalHealthPort: 6061
   internalApiPort: 6060
   internalHealthPort: 6061
+  path: /healthz
   type: ClusterIP
 tolerations: []
 extraEnv: []
+extraArgs: []
