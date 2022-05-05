@@ -41,6 +41,9 @@ spec:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        {{- if .Values.extraEnv }}
+        env: {{ toYaml .Values.extraEnv | nindent 8 }}
+        {{- end }}
         args:
         - "-log-level={{ .Values.logLevel }}"
         {{ if .Values.insecureTls }}- "--insecure-tls" {{end}}
