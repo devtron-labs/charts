@@ -44,9 +44,17 @@ spec:
         {{- if .Values.extraEnv }}
         env: {{ toYaml .Values.extraEnv | nindent 8 }}
         {{- end }}
+{{- if and $.Values.extraArgs $.Values.insecureTls }}
         args:
-        - "-log-level={{ .Values.logLevel }}"
-        {{ if .Values.insecureTls }}- "--insecure-tls" {{end}}
+        - "--insecure-tls"
+{{ toYaml .Values.extraArgs | indent 8 }}
+{{- else if $.Values.insecureTls }}
+        args: 
+        - "--insecure-tls"
+{{- else if $.Values.extraArgs }}
+        args:
+{{ toYaml .Values.extraArgs | indent 8 }}
+{{- end }}
         ports:
         - name: "{{ .Chart.Name }}-api"
           containerPort: {{ .Values.service.internalApiPort }}
@@ -56,11 +64,11 @@ spec:
           protocol: TCP
         livenessProbe:
           httpGet:
-            path: /health
+            path: {{ .Values.service.path }}
             port: {{ .Values.service.internalHealthPort }}
         readinessProbe:
           httpGet:
-            path: /health
+            path: {{ .Values.service.path }}
             port: {{ .Values.service.internalHealthPort }}
         volumeMounts:
         - name: "{{ .Chart.Name }}-config"
