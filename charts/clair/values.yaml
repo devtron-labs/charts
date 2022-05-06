@@ -1,26 +1,34 @@
 config:
-  enabledFeatureListers:
-  - apk
-  - dpkg
-  - rpm
-  enabledNamespaceDetectors:
-  - os-release
-  - lsb-release
-  - apt-sources
-  - alpine-release
-  - redhat-release
-  enabledUpdaters:
-  - debian
-  - ubuntu
-  - redhat
-  - oracle
-  - alpine
-  - redhat
-  notificationWebhookEndpoint: https://example.com/notify/me
-  paginationKey: XxoPtCUzrUv4JV5dS+yQ+MdW7yLEJnRMwigVY/bpgtQ=
-  postgresServiceName: clair-pg-postgresql
-  postgresURI: postgres://clair:clair@clair-pg-postgresql:5432/clair?sslmode=disable
-  updateInterval: 2h
+  postgresHost: clair-pg-postgresql
+  postgresPort: 5432
+  postgresdbname: clairv4
+  postgresUser: clair
+  postgresPassword: clair
+  introspection_addr: :6061
+  http_listen_addr: :6060
+  log_level: debug
+  indexer:
+    scanlock_retry: 10
+    layer_scan_concurrency: 5
+    migrations: true
+  matcher:
+    indexer_addr: :6060
+    max_conn_pool: 100
+    migrations: true
+    clairUpdaterSets:
+    - alpine
+    - aws
+    - debian
+    - oracle
+    - photon
+    - pyupio
+    - rhel
+    - suse
+    - ubuntu
+  notifier:
+    delivery_interval: 1m
+    poll_interval: 5m
+    migrations: true
 image:
   pullPolicy: Never
   repository: clair-local
@@ -32,7 +40,6 @@ ingress:
   - chart-example.local
   tls: null
 insecureTls: false
-logLevel: info
 nodeSelector: {}
 replicaCount: 1
 podLabels:
@@ -49,6 +56,8 @@ service:
   externalHealthPort: 6061
   internalApiPort: 6060
   internalHealthPort: 6061
+  internalHealthPath: /healthz
   type: ClusterIP
 tolerations: []
 extraEnv: []
+extraArgs: []
