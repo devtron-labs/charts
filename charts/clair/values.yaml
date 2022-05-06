@@ -1,29 +1,34 @@
 config:
-  clairUpdaterSets:
-  - alpine
-  - aws
-  - debian
-  - oracle
-  - photon
-  - pyupio
-  - rhel
-  - suse
-  - ubuntu
-  clairHost: clair-pg-postgresql
-  clairPort: 5432
-  dbname: clairv4
-  user: clair
-  password: clair
+  postgresHost: clair-pg-postgresql
+  postgresPort: 5432
+  postgresdbname: clairv4
+  postgresUser: clair
+  postgresPassword: clair
   introspection_addr: :6061
   http_listen_addr: :6060
   log_level: debug
-  scanlock_retry: 10
-  layer_scan_concurrency: 5
-  migrations: true
-  max_conn_pool: 100
-  delivery_interval: 1m
-  poll_interval: 5m
-  indexer_addr: :6060
+  indexer:
+    scanlock_retry: 10
+    layer_scan_concurrency: 5
+    migrations: true
+  matcher:
+    indexer_addr: :6060
+    max_conn_pool: 100
+    migrations: true
+    clairUpdaterSets:
+    - alpine
+    - aws
+    - debian
+    - oracle
+    - photon
+    - pyupio
+    - rhel
+    - suse
+    - ubuntu
+  notifier:
+    delivery_interval: 1m
+    poll_interval: 5m
+    migrations: true
 image:
   pullPolicy: Never
   repository: clair-local
