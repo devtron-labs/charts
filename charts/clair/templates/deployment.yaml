@@ -64,11 +64,11 @@ spec:
           protocol: TCP
         livenessProbe:
           httpGet:
-            path: {{ .Values.service.path }}
+            path: {{ .Values.service.internalHealthPath }}
             port: {{ .Values.service.internalHealthPort }}
         readinessProbe:
           httpGet:
-            path: {{ .Values.service.path }}
+            path: {{ .Values.service.internalHealthPath }}
             port: {{ .Values.service.internalHealthPort }}
         volumeMounts:
         - name: "{{ .Chart.Name }}-config"
