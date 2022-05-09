@@ -1,5 +1,5 @@
 name: discord-alertmanager
-description: A Helm chart to deploy discord alert manager
+description: Helm chart to deploy webhook integration for sending alert manager alerts on discord.
 version: 0.10.0
 appVersion: 0.1.0
 maintainers:
