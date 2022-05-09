@@ -1,6 +1,6 @@
 # Devtron helm chart to deploy discord alert manager
 
-> Helm chart to deploy alert manager for discord
+> Helm chart to deploy webhook integration for sending alert manager alerts on discord. Give this a webhook (with the DISCORD_WEBHOOK environment variable) and point it as a webhook on alertmanager, and it will post your alerts into a discord channel for you as they trigger
 
 ## Note : Right now we don't have direct support in prometheus to send alerts on discord.
 
