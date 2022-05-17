@@ -333,6 +333,10 @@ spec:
             memory: {{ .Values.rollout.resources.limits.memory }}
             cpu: {{ .Values.rollout.resources.limits.cpu }}
       serviceAccountName: argo-rollouts
+      {{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+     {{- end }}
       volumes:
       - emptyDir: {}
         name: tmp
