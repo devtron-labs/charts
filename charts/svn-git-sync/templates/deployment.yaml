@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: svn-git-sync
+    release: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+      release: {{ .Release.Name }}
+  replicas: 1
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+        release: {{ .Release.Name }}
+    spec:
+      {{- if $.Values.persistence.enabled }}
+      volumes:
+        - name: {{ .Release.Name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
+      {{- end }}
+      terminationGracePeriodSeconds: 30
+      restartPolicy: Always
+      containers:
+        - name: {{ .Release.Name }}
+          image: {{ $.Values.image }}
+          imagePullPolicy: {{ $.Values.imagePullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-cm
+          - secretRef:
+              name: {{ .Release.Name }}-secret
+          volumeMounts:
+            - name: {{ .Release.Name }}-volume
+              mountPath: /app

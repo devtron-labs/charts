@@ -1,0 +1,19 @@
+configs:
+  REPO_NAME: ""
+  SVN_REPO_URL: ""
+  SVN_USERNAME: ""
+  # Add git remote url without https://
+  GIT_REMOTE_URL: ""
+  GIT_REMOTE_USERNAME: ""
+
+secrets:
+  SVN_PASSWORD: ""
+  GIT_REMOTE_TOKEN: ""
+
+image: "quay.io/devtron/svn-git-sync:v1"
+imagePullPolicy: "IfNotPresent"
+
+persistence:
+  enabled: true
+  size: "2Gi"
+  storageClass: "default"

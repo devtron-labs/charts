@@ -1,0 +1,8 @@
+apiVersion: v1
+appVersion: 0.1.0
+description: This chart is used to sync SVN repo with a repo on remote git.
+maintainers:
+- email: pawan.mehta@devtron.ai
+  name: Pawan Kumar
+name: svn-git-sync
+version: 0.1.0
