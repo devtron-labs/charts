@@ -1,41 +1,41 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: svn-to-git
+  name: {{ .Release.Name }}
   labels:
-    app: svn-to-git
-    release: svn-to-git
+    app: {{ .Release.Name }}
+    release: {{ .Release.Name }}
 spec:
   selector:
     matchLabels:
-      app: svn-to-git
-      release: svn-to-git
+      app: {{ .Release.Name }}
+      release: {{ .Release.Name }}
   replicas: 1
   minReadySeconds: 60
   template:
     metadata:
       labels:
-        app: svn-to-git
-        release: svn-to-git
+        app: {{ .Release.Name }}
+        release: {{ .Release.Name }}
     spec:
       {{- if $.Values.persistence.enabled }}
       volumes:
-        - name: svn-volume
+        - name: {{ .Release.Name }}-volume
           persistentVolumeClaim:
-            claimName: svn-pvc
+            claimName: {{ .Release.Name }}-pvc
       {{- end }}
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
-      serviceAccountName: svn-to-git
+      serviceAccountName: {{ .Release.Name }}
       containers:
-        - name: svn-to-git
+        - name: {{ .Release.Name }}
           image: {{ $.Values.image }}
           imagePullPolicy: {{ $.Values.imagePullPolicy }}
           envFrom:
           - configMapRef:
-              name: "svn-config"
+              name: {{ .Release.Name }}-cm
           - secretRef:
-              name: "svn-secret"
+              name: {{ .Release.Name }}-secret
           volumeMounts:
-            - name: svn-volume
+            - name: {{ .Release.Name }}-volume
               mountPath: /app
