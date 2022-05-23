@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ .Release.Name }}
   labels:
-    app: {{ .Release.Name }}
+    app: svn-git-sync
     release: {{ .Release.Name }}
 spec:
   selector:
