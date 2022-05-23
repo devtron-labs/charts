@@ -26,7 +26,6 @@ spec:
       {{- end }}
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
-      serviceAccountName: {{ .Release.Name }}
       containers:
         - name: {{ .Release.Name }}
           image: {{ $.Values.image }}
