@@ -1636,6 +1636,19 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/secret-replicator-0.1.0/secret-replicator-0.1.0.tgz
     version: 0.1.0
+  svn-git-sync:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-05-23T10:28:43.941507625Z"
+    description: This chart is used to sync SVN repo with a repo on remote git.
+    digest: b6c26f8b04d500a69ad624f6a80c55469f247ef7f277ce72c1968f6058a2a285
+    maintainers:
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: svn-git-sync
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/svn-git-sync-0.1.0/svn-git-sync-0.1.0.tgz
+    version: 0.1.0
   twistlock-defender:
   - apiVersion: v1
     created: "2022-03-09T07:50:07.739766276Z"
@@ -1645,4 +1658,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-05-20T16:49:35.722335582Z"
+generated: "2022-05-23T10:28:43.941813425Z"
