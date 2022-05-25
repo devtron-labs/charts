@@ -1304,6 +1304,18 @@ entries:
   dt-kubewatch:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-05-25T18:10:29.585386843Z"
+    description: Chart to deploy Devtron Kubewatch
+    digest: dfa88071706b1b637a0f10decc7f4977623c9d23c941f786c49afd28c667539a
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: dt-kubewatch
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dt-kubewatch-0.13.2/dt-kubewatch-0.13.2.tgz
+    version: 0.13.2
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2021-08-05T05:39:41.92003056Z"
     description: Chart to deploy Devtron Kubewatch
     digest: da612ce65d3771cae7a84d0775aa1974807b70579f22063d4a22567482151071
@@ -1683,4 +1695,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-05-25T16:47:28.670848257Z"
+generated: "2022-05-25T18:10:29.585648341Z"
