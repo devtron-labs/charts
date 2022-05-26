@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   argo-workflow:
   - apiVersion: v1
+    created: "2022-05-26T09:42:59.909542999Z"
+    description: Chart to deploy argo-workflow
+    digest: d2768fdf29ee22af0052b493b77d4b2a39b3779a19a2891ea19e747e817c8291
+    maintainers:
+    - email: pawan@devtron.ai
+      name: Pawan
+    name: argo-workflow
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argo-workflow-0.1.2/argo-workflow-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v1
     created: "2022-03-31T05:47:42.9421015Z"
     description: Chart to deploy argo-workflow
     digest: b8f291b53c7e712d54db0cde805aaf634b95d48c6bd0cc65a3327a1f61a30e4e
@@ -1695,4 +1706,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-05-25T18:10:29.585648341Z"
+generated: "2022-05-26T09:42:59.909993605Z"
