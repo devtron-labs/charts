@@ -18,6 +18,11 @@ spec:
       labels:
         app: {{ .Release.Name }}
         release: {{ .Release.Name }}
+      {{- if .Values.podLabels }}{{ toYaml .Values.podLabels | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if $.Values.persistence.enabled }}
       volumes:
