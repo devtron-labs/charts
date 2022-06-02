@@ -10,3 +10,4 @@ rollout:
 tolerations: []
 podLabels: {}
 podAnnotations: {}
+replicaCount: 1
