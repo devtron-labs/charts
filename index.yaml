@@ -1548,6 +1548,25 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/dt-secrets-0.10.1/dt-secrets-0.10.1.tgz
     version: 0.10.1
+  elasticsearch-curator:
+  - apiVersion: v2
+    appVersion: 5.8.4
+    created: "2022-06-08T16:53:32.525735501Z"
+    description: A Helm chart for Elasticsearch Curator
+    digest: 6d990ee4e2cd027cdd062a427f5091fb8b0b67f6e6246780d420d380b44083e1
+    home: https://github.com/elastic/curator
+    icon: https://helm.elastic.co/icons/elasticsearch.png
+    keywords:
+    - curator
+    - elasticsearch
+    - elasticsearch-curator
+    name: elasticsearch-curator
+    sources:
+    - https://github.com/bitnami/bitnami-docker-elasticsearch-curator
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/elasticsearch-curator-3.2.2/elasticsearch-curator-3.2.2.tgz
+    version: 3.2.2
   gitsensor:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -1868,4 +1887,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-06-08T16:30:43.513651778Z"
+generated: "2022-06-08T16:53:32.52616814Z"
