@@ -19,6 +19,9 @@ CUSTOM_BRANCHES_TO_SYNC: []
 image: "quay.io/devtron/svn-git-sync:v6"
 imagePullPolicy: "IfNotPresent"
 
+podLabels: {}
+podAnnotations: {}
+
 persistence:
   enabled: true
   size: "2Gi"
