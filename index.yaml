@@ -1867,6 +1867,18 @@ entries:
     version: 0.1.0
   svn-git-sync:
   - apiVersion: v1
+    appVersion: 0.1.1
+    created: "2022-06-09T07:37:10.864769964Z"
+    description: This chart is used to sync SVN repo with a repo on remote git.
+    digest: fdaabdf2852c6f35a237760f4e0fd48a7d55ac049245348bd68df21b12046328
+    maintainers:
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: svn-git-sync
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/svn-git-sync-0.1.1/svn-git-sync-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v1
     appVersion: 0.1.0
     created: "2022-05-23T10:28:43.941507625Z"
     description: This chart is used to sync SVN repo with a repo on remote git.
@@ -1887,4 +1899,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-06-08T16:53:32.52616814Z"
+generated: "2022-06-09T07:37:10.86530067Z"
