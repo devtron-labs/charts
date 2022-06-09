@@ -34,7 +34,7 @@ spec:
             claimName: {{ .Release.Name }}-pvc
       {{- else if $.Values.CUSTOM_BRANCHES_TO_SYNC }}
       volumes:
-        - name: custom-branches
+        - name: {{ .Release.Name }}-branches
           configMap:
             name: {{ .Release.Name }}-branches-cm
       {{- end }}
@@ -62,6 +62,6 @@ spec:
               mountPath: /app
           {{- else if $.Values.CUSTOM_BRANCHES_TO_SYNC }}
           volumeMounts:
-            - name: custom-branches
+            - name: {{ .Release.Name }}-branches
               mountPath: /app/{{ $.Values.configs.REPO_NAME }}/
           {{- end }}
