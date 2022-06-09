@@ -68,6 +68,5 @@ spec:
           {{- else if $.Values.CUSTOM_BRANCHES_TO_SYNC }}
           volumeMounts:
             - name: custom-branches
-              mountPath: /app/{{ $.Values.configs.REPO_NAME }}/custom_branches.txt
-              subPath: custom_branches.txt
+              mountPath: /app/{{ $.Values.configs.REPO_NAME }}/
           {{- end }}
