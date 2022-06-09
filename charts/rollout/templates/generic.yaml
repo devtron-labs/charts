@@ -306,6 +306,7 @@ metadata:
     app.kubernetes.io/part-of: argo-rollouts
   name: argo-rollouts
 spec:
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app.kubernetes.io/name: argo-rollouts
@@ -315,6 +316,11 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: argo-rollouts
+      {{- if .Values.podLabels }}{{ toYaml .Values.podLabels | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
     spec:
       containers:
       - command:
