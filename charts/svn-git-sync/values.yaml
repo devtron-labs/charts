@@ -5,13 +5,22 @@ configs:
   # Add git remote url without https://
   GIT_REMOTE_URL: ""
   GIT_REMOTE_USERNAME: ""
+  # If your branches are on a location other than default branches/, then mention that
+  # for e.g. branch/* if branches are available in branch directory
+  BRANCHES: ""
 
 secrets:
   SVN_PASSWORD: ""
   GIT_REMOTE_TOKEN: ""
 
-image: "quay.io/devtron/svn-git-sync:v1"
+# If you want to sync only few branches and don't want to sync all branches, then mention those branches here
+CUSTOM_BRANCHES_TO_SYNC: []
+
+image: "quay.io/devtron/svn-git-sync:v6"
 imagePullPolicy: "IfNotPresent"
+
+podLabels: {}
+podAnnotations: {}
 
 persistence:
   enabled: true

@@ -18,12 +18,30 @@ spec:
       labels:
         app: {{ .Release.Name }}
         release: {{ .Release.Name }}
+      {{- if .Values.podLabels }}{{ toYaml .Values.podLabels | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podAnnotations }}
+      annotations: {{ toYaml .Values.podAnnotations | nindent 8 }}
+      {{- end }}
     spec:
-      {{- if $.Values.persistence.enabled }}
+      {{- if and $.Values.persistence.enabled $.Values.CUSTOM_BRANCHES_TO_SYNC }}
       volumes:
         - name: {{ .Release.Name }}-volume
           persistentVolumeClaim:
             claimName: {{ .Release.Name }}-pvc
+        - name: {{ .Release.Name }}-branches
+          configMap:
+            name: {{ .Release.Name }}-branches-cm
+      {{- else if $.Values.persistence.enabled }}
+      volumes:
+        - name: {{ .Release.Name }}-volume
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-pvc
+      {{- else if $.Values.CUSTOM_BRANCHES_TO_SYNC }}
+      volumes:
+        - name: {{ .Release.Name }}-branches
+          configMap:
+            name: {{ .Release.Name }}-branches-cm
       {{- end }}
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
@@ -36,6 +54,18 @@ spec:
               name: {{ .Release.Name }}-cm
           - secretRef:
               name: {{ .Release.Name }}-secret
+          {{- if and $.Values.persistence.enabled $.Values.CUSTOM_BRANCHES_TO_SYNC }}
           volumeMounts:
             - name: {{ .Release.Name }}-volume
               mountPath: /app
+            - name: {{ .Release.Name }}-branches
+              mountPath: /app/{{ $.Values.configs.REPO_NAME }}/
+          {{- else if $.Values.persistence.enabled }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-volume
+              mountPath: /app
+          {{- else if $.Values.CUSTOM_BRANCHES_TO_SYNC }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-branches
+              mountPath: /app/{{ $.Values.configs.REPO_NAME }}/
+          {{- end }}
