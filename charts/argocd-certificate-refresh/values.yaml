@@ -1,0 +1,40 @@
+# Default values for argocd-certificate-refresh.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+# docker image information
+image: aju121/argocd-cert-refresh:latest
+
+serviceAccount:
+  name: argocd-cert-refresh-sa
+
+# values of role
+role:
+  name: argocd-cert-refresh-role
+  resources:
+  - pods
+  - secrets
+  verbs:
+    - create
+    - get
+    - delete
+
+# Values for rolebinding    
+rolebinding:
+  name: argocd-cert-refresh-rolebinding
+  rolename: argocd-cert-refresh-role
+  serviceaccount: argocd-cert-refresh-sa
+
+# values for cronjob
+cronjob:
+  name: argocd-cert-refresh-cronjob
+  schedule: "*/5 * * * *"
+
+
+
+
+
+
+
+

@@ -1,0 +1,18 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ $.Values.cronjob.name }}
+spec:
+  schedule: {{ $.Values.cronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ $.Values.serviceAccount.name }}
+          serviceAccount: {{ $.Values.serviceAccount.name }}
+          containers:
+          - name: argocd-cert-refresh-con
+            image: {{ $.Values.image }}
+            imagePullPolicy: IfNotPresent
+            command: ["./argocd.sh"]
+          restartPolicy: OnFailure
