@@ -9,7 +9,7 @@ image: quay.io/devtron/argocd-cert-refresh:v1
 
 # values for cronjob
 cronjob:
-  schedule: "*/5 * * * *"
+  schedule: "59 23 * */6 *"
 
 
 
