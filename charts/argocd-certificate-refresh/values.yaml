@@ -1,0 +1,20 @@
+# Default values for argocd-certificate-refresh.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+# docker image information
+image: quay.io/devtron/argocd-cert-refresh:v1
+
+
+# values for cronjob
+cronjob:
+  schedule: "59 23 * */6 *"
+
+
+
+
+
+
+
+
