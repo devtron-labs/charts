@@ -59,6 +59,19 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/argocd-0.10.0/argocd-0.10.0.tgz
     version: 0.10.0
+  argocd-certificate-refresh:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-06-20T08:22:56.274541627Z"
+    description: Helm chart to deploy argocd certificate CronJob.
+    digest: 40d393f4018b77086ce9b4e103c17ecf51ed3711223d2d8df8a572a80a7f76a9
+    maintainers:
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: argocd-certificate-refresh
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argocd-certificate-refresh-0.10.0/argocd-certificate-refresh-0.10.0.tgz
+    version: 0.10.0
   aws-ssm-agent-installer:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -1999,4 +2012,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-06-17T08:04:57.89158396Z"
+generated: "2022-06-20T08:22:56.275069053Z"
