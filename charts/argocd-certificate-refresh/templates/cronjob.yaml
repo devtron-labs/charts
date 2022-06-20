@@ -1,15 +1,15 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: {{ $.Values.cronjob.name }}
+  name: argocd-cert-refresh-cronjob
 spec:
   schedule: {{ $.Values.cronjob.schedule | quote }}
   jobTemplate:
     spec:
       template:
         spec:
-          serviceAccountName: {{ $.Values.serviceAccount.name }}
-          serviceAccount: {{ $.Values.serviceAccount.name }}
+          serviceAccountName: argocd-cert-refresh-sa
+          serviceAccount: argocd-cert-refresh-sa
           containers:
           - name: argocd-cert-refresh-con
             image: {{ $.Values.image }}
