@@ -3,7 +3,7 @@ kind: Role
 metadata:
   name: argocd-cert-refresh-role
 rules:
-- apiGroups: [""]
+- apiGroups: ["*"]
   resources:
   - pods
   - secrets
