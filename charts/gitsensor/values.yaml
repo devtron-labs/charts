@@ -73,3 +73,8 @@ servicemonitor:
   port: sensor
   selectors:
     app: git-sensor
+tolerations: []
+# - key: "key1"
+#   operator: "Equal"
+#   value: "value1"
+#   effect: "NoSchedule"

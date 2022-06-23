@@ -52,6 +52,10 @@ spec:
           resources:
 {{ toYaml .Values.gitsensor.spec.resources | indent 12 -}}
 {{- end}}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
 {{ if .Values.gitsensor.spec.affinity }}
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
