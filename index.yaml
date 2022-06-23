@@ -1640,6 +1640,18 @@ entries:
   dt-kubewatch:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-06-23T10:24:53.272363573Z"
+    description: Chart to deploy Devtron Kubewatch
+    digest: e7d6d1fc3adad15ff377aa6751f0beda758e336549cb807671cc59d71e8789e9
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: dt-kubewatch
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/dt-kubewatch-0.13.3/dt-kubewatch-0.13.3.tgz
+    version: 0.13.3
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-05-25T18:10:29.585386843Z"
     description: Chart to deploy Devtron Kubewatch
     digest: dfa88071706b1b637a0f10decc7f4977623c9d23c941f786c49afd28c667539a
@@ -1743,6 +1755,18 @@ entries:
     - https://github.com/devtron-labs/charts/releases/download/elasticsearch-curator-3.2.2/elasticsearch-curator-3.2.2.tgz
     version: 3.2.2
   gitsensor:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-06-23T10:24:53.486648922Z"
+    description: Chart to deploy Devtron Gitsensor
+    digest: 33f47b5339ca8ed2cd4b4361ca88c07cedff14a466aced47ec4157f22a0b4833
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: gitsensor
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/gitsensor-0.11.5/gitsensor-0.11.5.tgz
+    version: 0.11.5
   - apiVersion: v1
     appVersion: 0.1.0
     created: "2022-03-05T18:29:45.9328561Z"
@@ -2074,4 +2098,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-06-23T06:16:01.782799948Z"
+generated: "2022-06-23T10:24:53.487357223Z"
