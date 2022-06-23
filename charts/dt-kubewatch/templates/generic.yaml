@@ -180,7 +180,14 @@ spec:
         resources:
 {{ toYaml .Values.kubewatch.resources | indent 10 }}
       serviceAccountName: kubewatch
-      tolerations: []
+      {{- with .Values.affinity }}
+      affinity:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       restartPolicy: Always
       volumes:
       - name: kubewatch-config-map
