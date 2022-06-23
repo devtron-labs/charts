@@ -62,6 +62,18 @@ entries:
   argocd-certificate-refresh:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-06-23T06:16:01.782351047Z"
+    description: Helm chart to deploy argocd certificate CronJob.
+    digest: 425ad4c5b277a87c2983b0a453efab01c11a0992c969f9e91134c272de18db1a
+    maintainers:
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: argocd-certificate-refresh
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argocd-certificate-refresh-0.10.1/argocd-certificate-refresh-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-06-20T08:22:56.274541627Z"
     description: Helm chart to deploy argocd certificate CronJob.
     digest: 40d393f4018b77086ce9b4e103c17ecf51ed3711223d2d8df8a572a80a7f76a9
@@ -2062,4 +2074,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-06-22T16:02:23.381984337Z"
+generated: "2022-06-23T06:16:01.782799948Z"
