@@ -4,7 +4,7 @@
 
 
 # docker image information
-image: quay.io/devtron/argocd-cert-refresh:v1
+image: quay.io/devtron/argocd-cert-refresh:v2
 
 
 # values for cronjob
