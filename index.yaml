@@ -300,6 +300,31 @@ entries:
     version: 0.10.0
   devtron-operator:
   - apiVersion: v1
+    appVersion: 0.4.22
+    created: "2022-07-05T14:47:25.308410485Z"
+    description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
+      system.
+    digest: 9943e6e3de7fb5f396a347bacd7afe519f2c06adf81f2c05f94db91f3c9a7ba6
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    - argocd
+    - Hyperion
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-operator
+    sources:
+    - https://github.com/devtron-labs/charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.22.25/devtron-operator-0.22.25.tgz
+    version: 0.22.25
+  - apiVersion: v1
     appVersion: 0.4.21
     created: "2022-07-01T14:59:43.461725542Z"
     description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
@@ -2198,4 +2223,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-07-01T14:59:43.462246966Z"
+generated: "2022-07-05T14:47:25.308954888Z"
