@@ -1,5 +1,5 @@
 on: pull_request
-name: Main
+name: Chart Validator
 jobs:
   chart-lint:
     runs-on: ubuntu-latest
