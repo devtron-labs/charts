@@ -134,6 +134,19 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/aws-ssm-agent-installer-0.10.1/aws-ssm-agent-installer-0.10.1.tgz
     version: 0.10.1
+  caddy-reverse-proxy:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-07-06T10:20:49.307535874Z"
+    description: Helm chart to deploy posthog reverse proxy.
+    digest: aef1f797594b8243ae7a837f7821a30856885a8714e34bd04d1d57d05c364e51
+    maintainers:
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: caddy-reverse-proxy
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/caddy-reverse-proxy-0.10.0/caddy-reverse-proxy-0.10.0.tgz
+    version: 0.10.0
   calico:
   - apiVersion: v1
     created: "2021-09-02T12:15:58.21954746Z"
@@ -2236,4 +2249,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-07-06T10:07:34.826213292Z"
+generated: "2022-07-06T10:20:49.307957281Z"
