@@ -1,33 +1,3 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: argo-ui
-  namespace: devtroncd
-spec:
-  selector:
-    matchLabels:
-      app: argo-ui
-  template:
-    metadata:
-      labels:
-        app: argo-ui
-    spec:
-      containers:
-      - env:
-        - name: ARGO_NAMESPACE
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.namespace
-        - name: IN_CLUSTER
-          value: "true"
-        - name: ENABLE_WEB_CONSOLE
-          value: "false"
-        - name: BASE_HREF
-          value: /
-        image: {{ .Values.image.argoui }}
-        name: argo-ui
-      serviceAccountName: argo-ui
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -50,6 +20,12 @@ spec:
         {{- end }}
         command:
         - workflow-controller
+        env:
+        - name: LEADER_ELECTION_IDENTITY
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
         image: {{ .Values.image.wf_controller }}
         name: workflow-controller
         resources:

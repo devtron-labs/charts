@@ -2,9 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-# scope either Namespaced or Cluster
-crd:
-  scope: Namespaced
 
 # config map data for workflow-controller
 configmap:
@@ -17,29 +14,25 @@ configmap:
         endpoint: s3.amazonaws.com
         bucket: devtron-ci-logs
         region: ap-southeast-1
-        keyFormat: "logs-v1\
-          /{{workflow.name}}"
+        keyFormat: "logs-v1/{{workflow.name}}"
     containerRuntimeExecutor: pns
     executor:
       imagePullPolicy: Always
 
 
-# Image information of argoui and workflow controller
+# Image information of workflow controller
 image:
-  argoui: argoproj/argoui:v2.3.0
-  wf_controller: quay.io/argoproj/workflow-controller:v2.3.0
+  wf_controller: quay.io/argoproj/workflow-controller:v3.0.7
   
 # Arguments of workflow controller
 workflow_controller:
-  arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v2.3.0"]
+  arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v3.0.7"]
 
 
 # All the service accounts per below namespaces
 service_account_external:
   namespaces:
-    - abc
-    - xyz
-    - pqr
+    - data-prod-app
 
 # Access and secret key to upload logs to devtron logs bucket
 accesskey: xxxx
