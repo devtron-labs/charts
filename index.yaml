@@ -1,5 +1,18 @@
 apiVersion: v1
 entries:
+  Posthog:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-07-06T10:07:34.82574209Z"
+    description: Helm chart to deploy posthog reverse proxy.
+    digest: 3dda3a2bb97c4b5449fc0034d4d9d2fdaab399a84824b9097ec8c84ac210d3e2
+    maintainers:
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: Posthog
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/Posthog-0.10.0/Posthog-0.10.0.tgz
+    version: 0.10.0
   argo-workflow:
   - apiVersion: v1
     created: "2022-05-26T09:42:59.909542999Z"
@@ -2223,4 +2236,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-07-05T14:47:25.308954888Z"
+generated: "2022-07-06T10:07:34.826213292Z"
