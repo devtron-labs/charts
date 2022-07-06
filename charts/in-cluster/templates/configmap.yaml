@@ -1,0 +1,26 @@
+apiVersion: v1
+data:
+  {{- with .Values.configmap.config }}
+  config: |
+    {{- toYaml . | nindent 4 }}
+  {{- end }}     
+kind: ConfigMap
+metadata:
+  name: workflow-controller-configmap
+  namespace: devtroncd
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  {{- with .Values.kubewatch.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: kubewatch-config
+  namespace: devtroncd
+data:
+  {{- with .Values.kubewatch.config }}
+  .kubewatch.yaml: |
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+       

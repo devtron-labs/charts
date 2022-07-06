@@ -1,0 +1,114 @@
+# Default values for in-cluster.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# scope either Namespaced or Cluster
+crd:
+  scope: Namespaced
+
+# config map data for workflow-controller
+configmap:
+  config:
+    parallelism: 50
+    artifactRepository:
+      archiveLogs: true
+      instanceID: devtron-runner
+      s3:
+        endpoint: s3.amazonaws.com
+        bucket: devtron-ci-logs
+        region: ap-southeast-1
+        keyFormat: "logs-v1\
+          /{{workflow.name}}"
+    containerRuntimeExecutor: pns
+    executor:
+      imagePullPolicy: Always
+
+
+# Image information of argoui and workflow controller
+image:
+  argoui: argoproj/argoui:v2.3.0
+  wf_controller: quay.io/argoproj/workflow-controller:v2.3.0
+  
+# Arguments of workflow controller
+workflow_controller:
+  arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v2.3.0"]
+
+
+# All the service accounts per below namespaces
+service_account_external:
+  namespaces:
+    - abc
+    - xyz
+    - pqr
+
+# Access and secret key to upload logs to devtron logs bucket
+accesskey: xxxx
+secretkey: xxxx
+
+# Kubewatch Information for workflow
+kubewatch:
+  image: 686244538589.dkr.ecr.us-east-2.amazonaws.com/release/kubewatch:d465e245-14-143
+  annotations:
+    checksum/config-map: ae58540f4f666750bf92d3af7f94dbccd3bbea95fe76308c7572469c36d55bdc
+
+  labels:
+    app: kubewatch
+    chart: kubewatch-0.6.1
+    heritage: "Tiller"
+    release: "kubewatch"
+
+  replicaCount: 1
+
+  env:
+    - name: DEFAULT_NAMESPACE
+      value: "devtron-ci"
+    - name: CI_INFORMER
+      value: "true"
+    - name: ACD_NAMESPACE
+      value: "devtroncd"
+    - name: ACD_INFORMER
+      value: "true"
+    - name: CD_EXTERNAL_LISTENER_URL
+      value: https://cd.delhivery.com/orchestrator/webhook/msg/nats
+    - name: CD_EXTERNAL_ORCHESTRATOR_TOKEN
+      value: gy567567Ggdl6HlKLgf
+    - name: CD_EXTERNAL_REST_LISTENER
+      value: "true"
+
+  resources:  
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 128Mi
+      cpu: 100m
+
+  tolerations: []
+
+  # Config map data information
+  config:
+    handler:
+        webhook:
+          enabled: true
+          url: http://devtroncd-event-handler-service-prod.devtroncd/event
+    resource:
+      daemonset: false
+      deployment: false
+      events: true
+      job: false
+      persistentvolume: false
+      pod: false
+      replicaset: false
+      replicationcontroller: false
+      services: false
+
+# Provide the resources for workflow controller
+resources:
+  limits:
+    cpu: "0.3"
+    memory: "300Mi"
+  requests:
+    cpu: "0.3"
+    memory: "300Mi"
+
+

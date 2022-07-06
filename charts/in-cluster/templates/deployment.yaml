@@ -1,0 +1,109 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: argo-ui
+  namespace: devtroncd
+spec:
+  selector:
+    matchLabels:
+      app: argo-ui
+  template:
+    metadata:
+      labels:
+        app: argo-ui
+    spec:
+      containers:
+      - env:
+        - name: ARGO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.namespace
+        - name: IN_CLUSTER
+          value: "true"
+        - name: ENABLE_WEB_CONSOLE
+          value: "false"
+        - name: BASE_HREF
+          value: /
+        image: {{ .Values.image.argoui }}
+        name: argo-ui
+      serviceAccountName: argo-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-controller
+  namespace: devtroncd
+spec:
+  selector:
+    matchLabels:
+      app: workflow-controller
+  template:
+    metadata:
+      labels:
+        app: workflow-controller
+    spec:
+      containers:
+      - args:
+        {{- range $.Values.workflow_controller.arguments }}
+        - {{ . }}
+        {{- end }}
+        command:
+        - workflow-controller
+        image: {{ .Values.image.wf_controller }}
+        name: workflow-controller
+        resources:
+          {{- toYaml $.Values.resources | nindent 10 }}
+      serviceAccountName: argo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  {{- with .Values.kubewatch.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  name: kubewatch
+  namespace: devtroncd
+spec:
+  replicas: {{ .Values.kubewatch.replicaCount }}
+  selector:
+    matchLabels:
+      app: kubewatch
+      release: kubewatch
+  template:
+    metadata:
+      {{- with .Values.kubewatch.annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubewatch.labels }}
+      labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      containers:
+      - name: kubewatch
+        image: {{ .Values.kubewatch.image }}
+        env:
+        {{- range $name, $value := .Values.kubewatch.env }}
+        - name: {{ $value.name }}
+          value: {{ $value.value }}
+        {{- end }}
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: kubewatch-config-map
+          mountPath: /root/.kubewatch.yaml
+          subPath: .kubewatch.yaml
+        resources:
+          {{- toYaml $.Values.kubewatch.resources | nindent 10 }}
+      serviceAccountName: kubewatch
+      {{- with .Values.kubewatch.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Always
+      volumes:
+      - name: kubewatch-config-map
+        configMap:
+          name: kubewatch-config
