@@ -1,5 +1,6 @@
 name: Posthog
 description: Helm chart to deploy posthog reverse proxy.
+apiVersion: v1
 version: 0.10.0
 appVersion: 0.1.0
 maintainers:
