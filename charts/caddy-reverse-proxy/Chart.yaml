@@ -1,4 +1,4 @@
-name: Posthog
+name: caddy-reverse-proxy
 description: Helm chart to deploy posthog reverse proxy.
 apiVersion: v1
 version: 0.10.0
