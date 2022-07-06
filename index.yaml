@@ -137,6 +137,18 @@ entries:
   caddy-reverse-proxy:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-07-06T11:09:21.039209906Z"
+    description: Helm chart to deploy caddy reverse proxy.
+    digest: 12973a190dba3dea723ba579b8df035f2021edd9ebe7173f48800214322eea89
+    maintainers:
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: caddy-reverse-proxy
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/caddy-reverse-proxy-0.10.1/caddy-reverse-proxy-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-07-06T10:20:49.307535874Z"
     description: Helm chart to deploy posthog reverse proxy.
     digest: aef1f797594b8243ae7a837f7821a30856885a8714e34bd04d1d57d05c364e51
@@ -2249,4 +2261,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-07-06T10:20:49.307957281Z"
+generated: "2022-07-06T11:09:21.039707032Z"
