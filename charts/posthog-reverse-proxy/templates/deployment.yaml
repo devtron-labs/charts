@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: posthog-reverse-proxy
+  labels:
+    app: posthog-reverse-proxy
+spec:
+  replicas: {{ $.Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: posthog-reverse-proxy
+  template:
+    metadata:
+      labels:
+        app: posthog-reverse-proxy
+    spec:
+      containers:
+      - name: posthog-reverse-proxy
+        image: {{ $.Values.image }}
+        command:
+        - caddy
+        args:          
+          {{- range $.Values.arguments }}
+            - {{ . }}
+          {{- end }}
+        ports:
+          {{- range $name, $value := $.Values.ports }}
+          - containerPort: {{ $value.containerPort }}
+            name: {{ $value.name }}
+          {{- end }}
+        resources:
+            {{- toYaml $.Values.resources | nindent 12 }}

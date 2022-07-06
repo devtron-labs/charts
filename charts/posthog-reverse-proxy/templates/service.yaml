@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: posthog-reverse-proxy-service
+  labels:
+    app: posthog-reverse-proxy
+spec:
+  ports:
+  {{- range $name, $value := $.Values.service.ports }}
+  - name: {{ $value.name }}
+    port: {{ $value.port }}
+    protocol: {{ $value.protocol }}
+    targetPort: {{ $value.targetPort }}
+  {{- end }}
+  selector:
+    app: posthog-reverse-proxy
+  type: {{ $.Values.service.type }}
