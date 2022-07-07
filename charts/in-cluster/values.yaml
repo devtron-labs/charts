@@ -29,14 +29,16 @@ workflow_controller:
   arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v3.0.7"]
 
 
-# external service accounts per namespaces
-service_account_external:
+# namespaces to execute in application env
+execute_in_application_env:
   namespaces:
     - data-prod-app
-
+    - dwh
+    - testns
+  accesskey: xxxx
+  secretkey: xxxx
 # Access and secret key to upload logs to devtron logs bucket
-accesskey: xxxx
-secretkey: xxxx
+
 
 # Kubewatch Information for workflow
 kubewatch:

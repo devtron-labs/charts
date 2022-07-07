@@ -325,7 +325,7 @@ roleRef:
   kind: ClusterRole
   name: workflow-cluster-role
 subjects:
-{{- range .Values.service_account_external.namespaces }}
+{{- range .Values.execute_in_application_env.namespaces }}
 - kind: ServiceAccount
   name: cd-runner
   namespace: {{ . }}
