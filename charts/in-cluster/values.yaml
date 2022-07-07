@@ -29,7 +29,7 @@ workflow_controller:
   arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v3.0.7"]
 
 
-# All the service accounts per below namespaces
+# external service accounts per namespaces
 service_account_external:
   namespaces:
     - data-prod-app
@@ -62,9 +62,9 @@ kubewatch:
     - name: ACD_INFORMER
       value: "true"
     - name: CD_EXTERNAL_LISTENER_URL
-      value: https://cd.delhivery.com/orchestrator/webhook/msg/nats
+      value: https://example.com/nats
     - name: CD_EXTERNAL_ORCHESTRATOR_TOKEN
-      value: gy567567Ggdl6HlKLgf
+      value: xxxx
     - name: CD_EXTERNAL_REST_LISTENER
       value: "true"
 
@@ -83,7 +83,7 @@ kubewatch:
     handler:
         webhook:
           enabled: true
-          url: http://devtroncd-event-handler-service-prod.devtroncd/event
+          url: http://mywebhook.com/event
     resource:
       daemonset: false
       deployment: false
