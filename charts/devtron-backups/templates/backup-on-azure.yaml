@@ -32,8 +32,8 @@ spec:
             - -c
             - pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
           containers:
-          - name: aws-cli-for-s3-download
-            image: quay.io/devtron/k8s-utils:aws-cli-ubuntu
+          - name: az-cli-for-upload
+            image: quay.io/devtron/k8s-utils:az-cli-ubuntu
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
@@ -84,8 +84,8 @@ spec:
             - -c
             - argocd-util export --namespace devtroncd > /cache/backup.yaml;
           containers:
-          - name: aws-cli-for-s3-upload
-            image: quay.io/devtron/k8s-utils:aws-cli-ubuntu
+          - name: az-cli-for-upload
+            image: quay.io/devtron/k8s-utils:az-cli-ubuntu
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
