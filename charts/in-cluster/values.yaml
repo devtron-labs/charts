@@ -52,6 +52,10 @@ kubewatch:
     heritage: "Tiller"
     release: "kubewatch"
 
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
   replicaCount: 1
 
   env:
@@ -97,13 +101,18 @@ kubewatch:
       replicationcontroller: false
       services: false
 
-# Provide the resources for workflow controller
+# Provide the resources and affinity , nodeselector and tolerations for workflow controller
 resources:
   limits:
     cpu: "0.3"
     memory: "300Mi"
   requests:
     cpu: "0.3"
-    memory: "300Mi"
+    memory: "300Mi"    
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
 
 

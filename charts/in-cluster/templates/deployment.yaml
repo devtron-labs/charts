@@ -30,6 +30,18 @@ spec:
         name: workflow-controller
         resources:
           {{- toYaml $.Values.resources | nindent 10 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: argo
 ---
 apiVersion: apps/v1
@@ -73,6 +85,18 @@ spec:
           subPath: .kubewatch.yaml
         resources:
           {{- toYaml $.Values.kubewatch.resources | nindent 10 }}
+      {{- with .Values.kubewatch.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubewatch.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubewatch.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       serviceAccountName: kubewatch
       {{- with .Values.kubewatch.tolerations }}
       tolerations:
