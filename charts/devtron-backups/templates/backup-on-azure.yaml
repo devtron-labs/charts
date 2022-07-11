@@ -39,8 +39,8 @@ spec:
               name: psql-volume
             env:
             {{- with .Values.global.AZURE }}
-            - name: AZURE_ACCOUNT_NAME
-              value: "{{ .AZURE_ACCOUNT_NAME }}"
+            - name: AZURE_BLOB_ACCOUNT_NAME
+              value: "{{ .AZURE_BLOB_ACCOUNT_NAME }}"
             - name: AZURE_ACCOUNT_KEY
               value: {{ .AZURE_ACCOUNT_KEY }}
             - name: AZURE_BLOB_CONTAINER_FOR_POSTGRES
@@ -52,7 +52,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; az storage blob upload --account-name $AZURE_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /tmp/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; 
+            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /tmp/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; 
           volumes:
           - name: psql-volume
             emptyDir: {}
@@ -93,8 +93,8 @@ spec:
               name: argocd-volume
             env:
             {{- with .Values.global.AZURE }}
-            - name: AZURE_ACCOUNT_NAME
-              value: "{{ .AZURE_ACCOUNT_NAME }}"
+            - name: AZURE_BLOB_ACCOUNT_NAME
+              value: "{{ .AZURE_BLOB_ACCOUNT_NAME }}"
             - name: AZURE_ACCOUNT_KEY
               value: {{ .AZURE_ACCOUNT_KEY }}
             - name: AZURE_BLOB_CONTAINER_FOR_POSTGRES
@@ -106,7 +106,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; az storage blob upload --account-name $AZURE_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /cache/backup-$date1.yaml --account-key $AZURE_ACCOUNT_KEY;  
+            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /cache/backup-$date1.yaml --account-key $AZURE_ACCOUNT_KEY;  
           volumes:
           - name: argocd-volume
             emptyDir: {}
