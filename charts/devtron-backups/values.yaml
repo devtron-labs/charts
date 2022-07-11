@@ -9,10 +9,12 @@ global:
     AWS_SECRET_KEY: ""
     AWS_REGION: ""
   AZURE:
-    enabled: true
+    enabled: false
     AZURE_ACCOUNT_NAME: ""
     AZURE_ACCOUNT_KEY: ""
-    AZURE_BLOB_CONTAINER: ""
+    AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
+    AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
+    
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
