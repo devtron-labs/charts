@@ -1,6 +1,6 @@
 global:
   # Twice a day
-  schedule: "0 */12 * * *"
+  schedule: "7 * * * *"
   # devtron-backups
   AWS:
     enabled: false
@@ -10,9 +10,11 @@ global:
     AWS_REGION: ""
   AZURE:
     enabled: true
-    AZURE_ACCOUNT_NAME: "devtronbackuptest"
+    AZURE_BLOB_ACCOUNT_NAME: "devtronbackuptest"
     AZURE_ACCOUNT_KEY: "2SzJ04la0YIWQu2nLSh77v/g18QxGyNyWTn7RO82WWXcEm3TE44Pmej2Kh48ftn59fcRzCjbJNJ9+AStRpkWgg=="
-    AZURE_BLOB_CONTAINER: "backupcontainer"
+    AZURE_BLOB_CONTAINER_FOR_POSTGRES: "backup-postgres"
+    AZURE_BLOB_CONTAINER_FOR_ARGOCD: "backup-argocd"
+    
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
