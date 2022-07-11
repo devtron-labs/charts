@@ -1,6 +1,6 @@
 global:
   # Twice a day
-  schedule: "0 * * * *"
+  schedule: "0 */12 * * *"
   # devtron-backups
   AWS:
     enabled: false
