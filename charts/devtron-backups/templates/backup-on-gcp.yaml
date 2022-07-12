@@ -1,0 +1,115 @@
+{{- if .Values.global.GCP.enabled }}
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: CronJob
+metadata:
+  name: postgres-app-backup-cronjob
+  namespace: devtroncd
+spec:
+  schedule: {{ .Values.global.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: postgres-app-backup-cronjob
+            image: postgres:11.3
+            volumeMounts:
+            - mountPath: /tmp
+              name: psql-volume
+            env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PASSWORD
+                  name: {{ .Values.postgres_backup.secretName }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+          containers:
+          - name: gcp-cli-for-download
+            image: anugrah29/gcloudcliubnutu:latest
+            volumeMounts:
+            - mountPath: /tmp
+              name: psql-volume
+            env:
+            {{- with .Values.global.GCP }}
+            - name: GCP_BUCKET_NAME
+              value: "gs://{{ .BUCKET_NAME }}"
+            - name: GCP_PROJECT_NAME
+              value: {{ .GCP_PROJECT_NAME }}
+            - name: GCPSECRET
+               valueFrom: 
+                 secretKeyRef:
+                  - name: gcp-secret
+              {{- end }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; gsutil cp /tmp/backup-$date1.tar $BUCKET_NAME/postgres/;
+          volumes:
+          - name: psql-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+---
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: CronJob
+metadata:
+    name: argocd-app-backup-cronjob
+    namespace: devtroncd
+spec:
+  schedule: {{ .Values.global.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: argocd-app-backup-job
+            image: argoproj/argocd:v1.8.1
+            volumeMounts:
+            - mountPath: /cache
+              name: argocd-volume
+            env:
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - argocd-util export --namespace devtroncd > /cache/backup.yaml;
+          containers:
+          - name: gcp-cli-for-upload
+            image: anugrah29/gcloudcliubnutu:latest
+            volumeMounts:
+            - mountPath: /cache
+              name: argocd-volume
+            env:
+            {{- with .Values.global.GCP }}
+            - name: GCP_BUCKET_NAME
+              value: "gs://{{ .BUCKET_NAME }}"
+            - name: GCP_PROJECT_NAME
+              value: {{ .GCP_PROJECT_NAME }}
+            - name: GCPSECRET
+               valueFrom: 
+                 secretKeyRef:
+                  - name: gcp-secret
+            {{- end }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml;  gsutil cp /cache/backup-$date1.yaml $GCP_BUCKET_NAME/argocd/;
+          volumes:
+          - name: argocd-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+          serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}
