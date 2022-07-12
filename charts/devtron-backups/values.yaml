@@ -18,13 +18,9 @@ global:
     enabled: true
     GCP_BUCKET_NAME: ""
     GCP_PROJECT_NAME: ""
-  GCPSECRET:
-    # this Secret info is taken from service_account_key's json for authorization in GCP
-    project_id: ""
-    private_key_id: ""
-    private_key: ""
-    client_id: ""
-
+    gcp_secret:
+      secretjson: ''
+      
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
