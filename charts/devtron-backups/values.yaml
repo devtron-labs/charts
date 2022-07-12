@@ -1,6 +1,6 @@
 global:
   # Twice a day
-  schedule: "7 * * * *"
+  schedule: "0 */12 * * *"
   # devtron-backups
   AWS:
     enabled: false
@@ -9,12 +9,21 @@ global:
     AWS_SECRET_KEY: ""
     AWS_REGION: ""
   AZURE:
-    enabled: true
+    enabled: false
     AZURE_BLOB_ACCOUNT_NAME: ""
-    AZURE_ACCOUNT_KEY: "2SzJ04la0YIWQu2nLSh77v/g18QxGyNyWTn7RO82WWXcEm3TE44Pmej2Kh48ftn59fcRzCjbJNJ9+AStRpkWgg=="
-    AZURE_BLOB_CONTAINER_FOR_POSTGRES: "backup-postgres"
-    AZURE_BLOB_CONTAINER_FOR_ARGOCD: "backup-argocd"
-    
+    AZURE_ACCOUNT_KEY: ""
+    AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
+    AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
+  GCP:
+    enabled: true
+    GCP_BUCKET_NAME: ""
+    GCP_PROJECT_NAME: ""
+  GCPSECRET:
+    # this Secret info is taken from service_account_key's json for authorization in GCP
+    project_id: ""
+    private_key_id: ""
+    private_key: ""
+    client_id: ""
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
