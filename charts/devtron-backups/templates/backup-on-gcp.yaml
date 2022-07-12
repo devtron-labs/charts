@@ -96,6 +96,9 @@ spec:
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
+            - name: gcp-secret-file
+              mountPath: /tmp/secret
+              readOnly: true
             env:
             {{- with .Values.global.GCP }}
             - name: GCP_BUCKET_NAME
@@ -109,7 +112,7 @@ spec:
             - -c
             - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml;  gsutil cp /cache/backup-$date1.yaml $GCP_BUCKET_NAME/argocd/;
           volumes:
-          - name: psql-volume
+          - name: argocd-volume
             emptyDir: {}
           - name: gcp-secret-file
             secret: 
