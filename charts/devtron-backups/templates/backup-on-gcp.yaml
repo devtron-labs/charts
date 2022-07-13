@@ -38,20 +38,18 @@ spec:
             - mountPath: /tmp
               name: psql-volume
             - name: gcp-secret-file
-              mountPath: /tmp/secret
+              mountPath: /secret
               readOnly: true
             env:
             {{- with .Values.global.GCP }}
             - name: GCP_BUCKET_NAME
-              value: "gs://{{ .BUCKET_NAME }}"
-            - name: GCP_PROJECT_NAME
-              value: {{ .GCP_PROJECT_NAME }}
+              value: "gs://{{ .GCP_BUCKET_NAME }}/"
               {{- end }}
             imagePullPolicy: Always
             args:
             - /bin/bash
             - -c
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; gsutil cp /tmp/backup-$date1.tar $BUCKET_NAME/postgres/;
+            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; gcloud auth activate-service-account --key-file /secret/secret-file; gsutil cp /tmp/backup-$date1.tar $BUCKET_NAME/;
           volumes:
           - name: psql-volume
             emptyDir: {}
@@ -60,7 +58,7 @@ spec:
               secretName: gcp-secret
               items: 
                 - key: gcloud.json
-                  path: 
+                  path: secret-file
           restartPolicy: OnFailure
 ---
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -97,26 +95,27 @@ spec:
             - mountPath: /cache
               name: argocd-volume
             - name: gcp-secret-file
-              mountPath: /tmp/secret
+              mountPath: /secret
               readOnly: true
             env:
             {{- with .Values.global.GCP }}
             - name: GCP_BUCKET_NAME
-              value: "gs://{{ .BUCKET_NAME }}"
-            - name: GCP_PROJECT_NAME
-              value: {{ .GCP_PROJECT_NAME }}
+              value: "gs://{{ .GCP_BUCKET_NAME }}/"
             {{- end }}
             imagePullPolicy: Always
             args:
             - /bin/bash
             - -c
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml;  gsutil cp /cache/backup-$date1.yaml $GCP_BUCKET_NAME/argocd/;
+            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; gcloud auth activate-service-account --key-file /secret/secret-file ; gsutil cp /cache/backup-$date1.yaml $GCP_BUCKET_NAME/;
           volumes:
           - name: argocd-volume
             emptyDir: {}
           - name: gcp-secret-file
             secret: 
               secretName: gcp-secret
+              items: 
+                - key: gcloud.json
+                  path: secret-file
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}

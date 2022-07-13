@@ -17,7 +17,6 @@ global:
   GCP:
     enabled: true
     GCP_BUCKET_NAME: ""
-    GCP_PROJECT_NAME: ""
     gcp_secret:
       secretjson: ''
       
