@@ -9,7 +9,6 @@ replicaCount: 1
 image: quay.io/devtron/winter-soldier:3f10a62b-196-5753
 graceperiod: 10
 
-
 resources: {}
   # limits:
   #   cpu: 100m
@@ -23,3 +22,50 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Provide the list of Hibernator objects in the yaml format with your custom requirements.
+hybernators:
+# - apiVersion: pincher.devtron.ai/v1alpha1
+#   kind: Hibernator
+#   metadata:
+#     name: deploy-hibernator
+#   spec:
+#     timeRangesWithZone:
+#       timeZone: "Asia/Kolkata"
+#       timeRanges:
+#       - timeFrom: 00:00
+#         timeTo: 23:59:59
+#         weekdayFrom: Mon
+#         weekdayTo: Sun
+#     selectors:
+#     - inclusions:
+#       - objectSelector:
+#           name: ""
+#           type: "deployment"
+#           fieldSelector:
+#             - AfterTime(Now(), AddTime(ParseTime({{metadata.creationTimestamp}}, '2006-01-02T15:04:05Z'), '3d'))
+#         namespaceSelector:
+#           name: "test,staging"
+#     action: delete
+# - apiVersion: pincher.devtron.ai/v1alpha1
+#   kind: Hibernator
+#   metadata:
+#     name: statefulset-hibernator
+#   spec:
+#     timeRangesWithZone:
+#       timeZone: "Asia/Kolkata"
+#       timeRanges:
+#       - timeFrom: 00:00
+#         timeTo: 23:59:59
+#         weekdayFrom: Mon
+#         weekdayTo: Sun
+#     selectors:
+#     - inclusions:
+#       - objectSelector:
+#           name: ""
+#           type: "statefulset"
+#           fieldSelector:
+#             - AfterTime(Now(), AddTime(ParseTime({{metadata.creationTimestamp}}, '2006-01-02T15:04:05Z'), '3d'))
+#         namespaceSelector:
+#           name: "all"
+#     action: sleep
