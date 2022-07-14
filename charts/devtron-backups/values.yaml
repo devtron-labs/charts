@@ -15,11 +15,12 @@ global:
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
   GCP:
-    enabled: true
-    GCP_BUCKET_NAME: ""
+    enabled: false
+    GCP_BUCKET_NAME: ""  
     gcp_secret:
+      # this Secret json is the service_account_key.json file that is used for authorization purpose 
       secretjson: ''
-      
+  
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
