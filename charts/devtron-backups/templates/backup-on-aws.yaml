@@ -75,7 +75,12 @@ spec:
         spec:
           initContainers:
           - name: argocd-app-backup-job
+            {{- if eq .Values.argocdversion "v2"}}
+            image: quay.io/argoproj/argocd:v2.4.0
+            {{- end }}
+            {{- if eq .Values.argocdversion "v1"}}
             image: argoproj/argocd:v1.8.1
+            {{- end }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
@@ -84,7 +89,12 @@ spec:
             args:
             - /bin/bash
             - -c
+            {{- if eq .Values.argocdversion "v2"}}
+            - argocd admin export -n devtroncd > /cache/backup.yaml
+            {{- end }}
+            {{- if eq .Values.argocdversion "v1"}}
             - argocd-util export --namespace devtroncd > /cache/backup.yaml;
+            {{- end }}
           containers:
           - name: aws-cli-for-s3-upload
             image: quay.io/devtron/k8s-utils:aws-cli-ubuntu

@@ -9,6 +9,8 @@ global:
     AWS_SECRET_KEY: ""
     AWS_REGION: ""
 
+argocdversion: v1
+
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
