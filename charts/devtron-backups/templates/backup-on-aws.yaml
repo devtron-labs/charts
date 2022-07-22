@@ -33,7 +33,7 @@ spec:
             - pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
           containers:
           - name: aws-cli-for-s3-download
-            image: quay.io/devtron/k8s-utils:aws-cli-ubuntu
+            image: quay.io/devtron/k8s-utils:ubuntu-aws-cli
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
@@ -52,7 +52,11 @@ spec:
             args:
             - /bin/bash
             - -c
+          {{- if $.Values.global.encryption.enabled }}          
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; aws s3 cp /tmp/backup-$date1.tar.gpg $S3_BUCKET/postgres/;
+          {{- else}}
             - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; aws s3 cp /tmp/backup-$date1.tar $S3_BUCKET/postgres/;
+          {{- end }}
           volumes:
           - name: psql-volume
             emptyDir: {}
@@ -97,7 +101,7 @@ spec:
             {{- end }}
           containers:
           - name: aws-cli-for-s3-upload
-            image: quay.io/devtron/k8s-utils:aws-cli-ubuntu
+            image: quay.io/devtron/k8s-utils:ubuntu-aws-cli
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
@@ -116,7 +120,11 @@ spec:
             args:
             - /bin/bash
             - -c
+          {{- if $.Values.global.encryption.enabled }}
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; aws s3 cp /cache/backup-$date1.yaml.gpg $S3_BUCKET/argocd/;
+          {{- else}}
             - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; aws s3 cp /cache/backup-$date1.yaml $S3_BUCKET/argocd/;
+          {{- end }}
           volumes:
           - name: argocd-volume
             emptyDir: {}

@@ -8,7 +8,10 @@ global:
     AWS_ACCESS_KEY: ""
     AWS_SECRET_KEY: ""
     AWS_REGION: ""
-
+  encryption:
+  # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
+    enabled: false
+    passphrase: ""
 argocdversion: v2
 
 postgres_backup:
