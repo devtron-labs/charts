@@ -4,8 +4,6 @@ kubewatch:
       value: "devtron-ci"
     - name: CI_INFORMER
       value: "true"
-    - name: ACD_NAMESPACE
-      value: "devtroncd"
     - name: ACD_INFORMER
       value: "true"
   resources:
