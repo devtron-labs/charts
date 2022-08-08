@@ -164,14 +164,10 @@ spec:
       - name: kubewatch
         image: {{ .Values.kubewatch.image.repo }}:{{ .Values.kubewatch.image.tag }}
         env:
-        - name: DEFAULT_NAMESPACE
-          value: "devtron-ci"
-        - name: CI_INFORMER
-          value: "true"
-        - name: ACD_NAMESPACE
-          value: {{ .Values.kubewatch.acdNamespace }}
-        - name: ACD_INFORMER
-          value: "true"
+        {{- range $name, $value := .Values.kubewatch.env }}
+        - name: {{ $value.name }}
+          value: {{ $value.value }}
+        {{- end }}
         imagePullPolicy: Always
         volumeMounts:
         - name: kubewatch-config-map

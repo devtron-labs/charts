@@ -1,5 +1,13 @@
 kubewatch:
-  acdNamespace: devtroncd
+  env:
+    - name: DEFAULT_NAMESPACE
+      value: "devtron-ci"
+    - name: CI_INFORMER
+      value: "true"
+    - name: ACD_NAMESPACE
+      value: "devtroncd"
+    - name: ACD_INFORMER
+      value: "true"
   resources:
     requests:
       memory: 128Mi
