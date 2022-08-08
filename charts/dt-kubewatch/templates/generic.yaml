@@ -164,10 +164,7 @@ spec:
       - name: kubewatch
         image: {{ .Values.kubewatch.image.repo }}:{{ .Values.kubewatch.image.tag }}
         env:
-        {{- range $i := .Values.kubewatch.env }}
-        - name: {{ $i.name }}
-          value: {{ $i.value }}
-        {{- end }}
+{{ toYaml .Values.kubewatch.env | indent 8 }}
         imagePullPolicy: Always
         volumeMounts:
         - name: kubewatch-config-map
