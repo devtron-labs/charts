@@ -164,6 +164,8 @@ spec:
       - name: kubewatch
         image: {{ .Values.kubewatch.image.repo }}:{{ .Values.kubewatch.image.tag }}
         env:
+        - name: ACD_NAMESPACE
+          value: {{ .Values.kubewatch.acdNamespace }}
 {{ toYaml .Values.kubewatch.env | indent 8 }}
         imagePullPolicy: Always
         volumeMounts:
