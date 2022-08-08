@@ -164,9 +164,9 @@ spec:
       - name: kubewatch
         image: {{ .Values.kubewatch.image.repo }}:{{ .Values.kubewatch.image.tag }}
         env:
-        {{- range $name, $value := .Values.kubewatch.env }}
-        - name: {{ $value.name }}
-          value: {{ $value.value }}
+        {{- range $i := .Values.kubewatch.env }}
+        - name: {{ $i.name }}
+          value: {{ $i.value }}
         {{- end }}
         imagePullPolicy: Always
         volumeMounts:
