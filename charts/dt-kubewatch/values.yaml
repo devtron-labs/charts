@@ -1,4 +1,5 @@
 kubewatch:
+  acdNamespace: devtroncd
   env:
     - name: DEFAULT_NAMESPACE
       value: "devtron-ci"
