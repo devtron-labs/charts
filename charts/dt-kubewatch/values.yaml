@@ -1,5 +1,6 @@
 kubewatch:
   acdNamespace: devtroncd
+  replicaCount: 1
   env:
     - name: DEFAULT_NAMESPACE
       value: "devtron-ci"
