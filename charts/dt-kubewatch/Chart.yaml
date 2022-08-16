@@ -1,5 +1,6 @@
 name: dt-kubewatch
 appVersion: 0.1.0
+apiVersion: v1
 description: Chart to deploy Devtron Kubewatch
 engine: gotpl
 version: 0.13.5
