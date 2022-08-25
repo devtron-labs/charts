@@ -69,3 +69,16 @@ spec:
             - name: {{ .Release.Name }}-branches
               mountPath: /app/{{ $.Values.configs.REPO_NAME }}/
           {{- end }}
+        - name: {{ .Release.Name }}-cron
+          image: quay.io/devtron/svn-git-sync:cron
+          imagePullPolicy: {{ $.Values.imagePullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-cm
+          {{- if $.Values.persistence.enabled }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-volume
+              mountPath: /app
+          {{- end }}
+          
+          
