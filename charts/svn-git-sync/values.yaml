@@ -22,6 +22,8 @@ imagePullPolicy: "IfNotPresent"
 podLabels: {}
 podAnnotations: {}
 
+autoRestart: false
+
 persistence:
   enabled: true
   size: "2Gi"
