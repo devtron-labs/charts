@@ -302,6 +302,15 @@ entries:
     - https://github.com/devtron-labs/charts/releases/download/coralogix-fluentd-1.0.3/coralogix-fluentd-1.0.3.tgz
     version: 1.0.3
   devtron-backups:
+  - apiVersion: v2
+    appVersion: "1.0"
+    created: "2022-08-25T12:29:23.715797772Z"
+    description: A Helm chart for Devtron Backups
+    digest: 84edd2b9cb11ba1a912bab0ef02fab45a75d2bb2fc84d24dedba9ac6b93039da
+    name: devtron-backups
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.1.1/devtron-backups-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v1
     appVersion: "1.0"
     created: "2022-02-08T13:00:53.295332897Z"
@@ -2410,4 +2419,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-08-17T05:16:39.155547698Z"
+generated: "2022-08-25T12:29:23.716667887Z"
