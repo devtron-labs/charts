@@ -16,11 +16,13 @@ secrets:
 # If you want to sync only few branches and don't want to sync all branches, then mention those branches here
 CUSTOM_BRANCHES_TO_SYNC: []
 
-image: "quay.io/devtron/svn-git-sync:v6"
+image: "quay.io/devtron/svn-git-sync:v7"
 imagePullPolicy: "IfNotPresent"
 
 podLabels: {}
 podAnnotations: {}
+
+autoRestart: false
 
 persistence:
   enabled: true
