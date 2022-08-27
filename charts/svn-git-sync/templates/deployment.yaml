@@ -44,6 +44,9 @@ spec:
             name: {{ .Release.Name }}-branches-cm
       {{- end }}
       terminationGracePeriodSeconds: 30
+      {{- if .Values.autoRestart }}
+      serviceAccountName: {{ .Release.Name }}
+      {{- end }}
       restartPolicy: Always
       containers:
         - name: {{ .Release.Name }}
