@@ -304,6 +304,15 @@ entries:
   devtron-backups:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2022-09-06T07:02:42.334753072Z"
+    description: A Helm chart for Devtron Backups
+    digest: 3160c2553cc4d94deda77dd4b6002b7f10cda35b0da014fad0bf9a48154264d3
+    name: devtron-backups
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.1.2/devtron-backups-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2022-08-25T12:29:23.715797772Z"
     description: A Helm chart for Devtron Backups
     digest: 84edd2b9cb11ba1a912bab0ef02fab45a75d2bb2fc84d24dedba9ac6b93039da
@@ -2518,4 +2527,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-09-01T13:57:20.718505065Z"
+generated: "2022-09-06T07:02:42.335370071Z"
