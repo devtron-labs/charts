@@ -12,3 +12,5 @@ rules:
   - get
   - list
   - delete
+  - update
+  - patch
