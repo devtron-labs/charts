@@ -35,7 +35,7 @@ spec:
       - name: pg-ready-wait
         image: postgres:11.3
         command: [ "sh", "-c",
-          "until pg_isready -h {{ .Values.config.postgresServiceName }} -p 5432;
+          "until pg_isready -h {{ .Values.config.postgresHost }} -p 5432;
           do echo waiting for database; sleep 1; done;"]
       containers:
       - name: {{ .Chart.Name }}
