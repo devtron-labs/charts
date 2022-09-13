@@ -1,0 +1,16 @@
+apiVersion: v2
+name: security
+description: A Helm chart for devtron to enable security integration
+type: application
+maintaintainers:
+  - name: Pawan Kumar
+    email: pawan.mehta@devtron.ai
+sources:
+  - https://github.com/devtron-labs/charts
+version: 0.1.0
+appVersion: "0.1.0"
+dependencies:
+- name: clair
+  version: "0.x.x"
+  repository: https://helm.devtron.ai
+  condition: clair.enabled
