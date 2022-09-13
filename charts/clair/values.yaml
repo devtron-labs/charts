@@ -1,9 +1,9 @@
 config:
-  postgresHost: clair-pg-postgresql
+  postgresHost: postgresql-postgresql.devtroncd
   postgresPort: 5432
   postgresdbname: clairv4
-  postgresUser: clair
-  postgresPassword: clair
+  postgresUser: postgres
+  postgresPassword: ""
   introspection_addr: :6061
   http_listen_addr: :6060
   log_level: debug
@@ -30,9 +30,9 @@ config:
     poll_interval: 5m
     migrations: true
 image:
-  pullPolicy: Never
-  repository: clair-local
-  tag: latest
+  pullPolicy: IfNotPresent
+  repository: quay.io/coreos/clair
+  tag: v4.3.6
 ingress:
   annotations: null
   enabled: false
@@ -46,11 +46,8 @@ podLabels:
   component: clair
 resources:
   limits:
-    cpu: 200m
-    memory: 1500Mi
-  requests:
-    cpu: 100m
-    memory: 500Mi
+    cpu: 500m
+    memory: 3Gi
 service:
   externalApiPort: 6060
   externalHealthPort: 6061
@@ -59,5 +56,9 @@ service:
   internalHealthPath: /healthz
   type: ClusterIP
 tolerations: []
-extraEnv: []
+extraEnv:
+- name: CLAIR_CONF
+  value: /etc/clair/config.yaml
+- name: CLAIR_MODE
+  value: combo
 extraArgs: []
