@@ -15,6 +15,7 @@ imageScanner:
     keyName: postgresql-password
   image: "quay.io/devtron/image-scanner:b278f42b-334-10141"
   imagePullPolicy: IfNotPresent
+  replicaCount: 1
   resources: {}
 
 clair:
