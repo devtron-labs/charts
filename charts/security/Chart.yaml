@@ -1,6 +1,14 @@
 apiVersion: v2
 name: security
 description: A Helm chart for devtron to enable security integration
+keywords:
+  - kubernetes
+  - security
+  - k8s
+  - scanning
+  - container registry
+  - image scanning
+  - source code scanning
 type: application
 maintaintainers:
   - name: Pawan Kumar
