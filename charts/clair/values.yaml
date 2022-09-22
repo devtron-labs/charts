@@ -48,6 +48,9 @@ resources:
   limits:
     cpu: 500m
     memory: 3Gi
+  requests:
+    cpu: 200m
+    memory: 1500Mi
 service:
   externalApiPort: 6060
   externalHealthPort: 6061
