@@ -53,7 +53,7 @@ spec:
     matchLabels:
       app: image-scanner
       release: devtron
-  replicas: 1
+  replicas: {{ .replicaCount }}
   minReadySeconds: 60
   template:
     metadata:
