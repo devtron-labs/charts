@@ -203,6 +203,25 @@ entries:
   clair:
   - apiVersion: v1
     appVersion: 3.0.0-pre
+    created: "2022-09-24T12:39:50.445638632Z"
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: 85883fc0e07bb2fe819ad8da904770ed4f530b723bc9d0ba4a39f1c0a5d5db04
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    maintainers:
+    - email: jimmy.zelinskie@coreos.com
+      name: Jimmy Zelinskie
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: clair
+    sources:
+    - https://github.com/coreos/clair
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/clair-0.1.6/clair-0.1.6.tgz
+    version: 0.1.6
+  - apiVersion: v1
+    appVersion: 3.0.0-pre
     created: "2022-05-06T12:57:17.441451194Z"
     description: Clair is an open source project for the static analysis of vulnerabilities
       in application containers.
@@ -2576,4 +2595,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-09-10T06:15:38.222096133Z"
+generated: "2022-09-24T12:39:50.446763355Z"
