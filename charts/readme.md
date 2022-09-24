@@ -2,7 +2,6 @@
 
 # Devtron Charts
 
-
 This Repository contains all the charts used by Devtron for different components and is maintained by Devtron.
 
 ## Introduction
