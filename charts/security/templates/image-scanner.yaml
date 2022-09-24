@@ -1,0 +1,98 @@
+{{- with .Values.imageScanner }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: image-scanner-secret
+  labels:
+    release: devtron
+type: Opaque
+{{- if .secrets }}
+data:
+{{- range $k, $v := .secrets }}
+  {{ $k }}: {{ $v | b64enc }}
+{{- end }}
+{{- end }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: image-scanner-cm
+  labels:
+    release: devtron
+data:
+{{- if .configs}}
+{{ toYaml .configs | indent 2 }}
+---
+{{- end }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: image-scanner-service
+  labels:
+    app: image-scanner
+    release: devtron
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: app
+      protocol: TCP
+      name: app
+  selector:
+    app: image-scanner
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: image-scanner
+  labels:
+    app: image-scanner
+    release: devtron
+spec:
+  selector:
+    matchLabels:
+      app: image-scanner
+      release: devtron
+  replicas: {{ .replicaCount }}
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: image-scanner
+        release: devtron
+    spec:
+      terminationGracePeriodSeconds: 30
+      restartPolicy: Always
+      containers:
+        - name: image-scanner
+          image: {{ .image }}
+          imagePullPolicy: {{ .imagePullPolicy }}
+          ports:
+            - name: app
+              containerPort: 8080
+              protocol: TCP
+          env:
+            - name: DEVTRON_APP_NAME
+              value: image-scanner
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            {{- if .dbconfig }}
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .dbconfig.secretName }}
+                  key: {{ .dbconfig.keyName }}
+            {{- end }}
+          envFrom:
+          - configMapRef:
+              name: image-scanner-cm
+          - secretRef:
+              name: image-scanner-secret
+{{- if .resources }}
+          resources:
+{{ toYaml .resources | indent 12 }}
+{{- end }}
+  revisionHistoryLimit: 3
+{{- end }}
