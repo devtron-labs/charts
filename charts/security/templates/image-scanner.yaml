@@ -9,7 +9,7 @@ type: Opaque
 {{- if .secrets }}
 data:
 {{- range $k, $v := .secrets }}
-  {{ $k }}: {{ $v | b64enc | quote }}
+  {{ $k }}: {{ $v | b64enc }}
 {{- end }}
 {{- end }}
 ---
@@ -78,11 +78,13 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            {{- if .dbconfig }}
             - name: PG_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ .dbconfig.secretName }}
                   key: {{ .dbconfig.keyName }}
+            {{- end }}
           envFrom:
           - configMapRef:
               name: image-scanner-cm
