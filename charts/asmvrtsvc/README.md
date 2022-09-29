@@ -4,18 +4,10 @@ Virtual Service help us to decide how and what traffic gets routed to the backen
 
 ## Usage
 
-The helm chart is uploaded in Custom chart of devtron tool section.
+## Pre-requistes
 
-Following parameters need to be set while creating standard devtron app workflow
-1. Use sample dockerfile given in repo to build pipeline.
-2. In App Configuration, Select Deployment Template and choose custom helm chart with latest version.
-3. Update values file accordingly.
-
-To Update Helm chart in devtron tool.
-
-* After making changes update version parameter in Chart.yaml file.
-* Package the helm chart in .tgz format with the ```helm package <folder-name>``` command.
-* Upload the helm chart in Custom chart section in Global Configurations.
+* All required Google Anthos Service Mesh components should be installed on Google Kubernetes Engine. You can also use Google Anthos Service Mesh Deployment Helm Chart provided by Devtron labs.
+* This Helm Chart deployment require a GKE cluster version 1.16 or later
 
 ## Following Istio Features are implemented in Helm Chart
 
