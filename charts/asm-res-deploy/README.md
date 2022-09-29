@@ -15,7 +15,7 @@ The following Helm chart deploy one-time deployment components for Anthos Servic
 kubectl label namespace asm-ingress istio-injection=enabled
 ```
 
-4. Create kubernetes secret with tls certificate used by GKE Ingress.
+4. Create kubernetes secret with tls certificate used by Istio Gateway.
 ```sh
 kubectl -n asm-ingress create secret tls edge2mesh-credential \
  --key=<domain_name>.key \
