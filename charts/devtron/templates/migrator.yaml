@@ -41,6 +41,13 @@ spec:
         envFrom:
           - secretRef:
               name: postgresql-migrator
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "100m"
+          limits:
+            memory: "250Mi"
+            cpu: "100m"
       restartPolicy: OnFailure
   backoffLimit: 20
   activeDeadlineSeconds: 1500
@@ -91,8 +98,11 @@ spec:
               name: postgresql-migrator
         resources:
           requests:
-            cpu: 0.5
-            memory: 500Mi
+            memory: "250Mi"
+            cpu: "100m"
+          limits:
+            memory: "250Mi"
+            cpu: "100m"
       restartPolicy: OnFailure
   backoffLimit: 20
   activeDeadlineSeconds: 1500

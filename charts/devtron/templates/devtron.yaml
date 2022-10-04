@@ -108,6 +108,13 @@ spec:
           image: {{ $.Values.components.devtron.image }}
           {{- end }}
           imagePullPolicy: {{ .imagePullPolicy }}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
           lifecycle:
             preStop:
               exec:

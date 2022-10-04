@@ -60,6 +60,13 @@ spec:
         - /shared/authenticator
         - rundex
         image: {{ .image }}
+        resources:
+          limits:
+            cpu: 25m
+            memory: 50Mi
+          requests:
+            cpu: 25m
+            memory: 50Mi
         imagePullPolicy: {{ .imagePullPolicy }}
         name: dex
         ports:
@@ -81,6 +88,13 @@ spec:
         volumeMounts:
         - mountPath: /shared
           name: static-files
+        resources:
+          limits:
+            cpu: 25m
+            memory: 50Mi
+          requests:
+            cpu: 25m
+            memory: 50Mi
       serviceAccountName: argocd-dex-server
       volumes:
       - emptyDir: {}
