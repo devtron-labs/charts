@@ -10,30 +10,36 @@ The following Helm chart deploy one-time deployment components for Anthos Servic
 
 2. If you want to Enable Anthos Service mesh on existing GKE cluster then review the [Install Anthos Service mesh](https://cloud.google.com/architecture/exposing-service-mesh-apps-through-gke-ingress#install-service-mesh). 
 
-3. Make sure all namespaces is labelled with "istio-injection=enabled"
+3. Create Kubernetes Namespace where all istio components will be placed.
+```sh
+kubectl create namespace asm-ingress
+```
+
+4. Make sure all namespaces is labelled with "istio-injection=enabled"
 ```sh
 kubectl label namespace asm-ingress istio-injection=enabled
 ```
 
-4. Create kubernetes secret with tls certificate used by Istio Gateway.
+5. Create kubernetes secret with tls certificate used by Istio Gateway.
 ```sh
 kubectl -n asm-ingress create secret tls edge2mesh-credential \
  --key=<domain_name>.key \
  --cert=<domain_name>.crt
 ```
+Note: You need to bring your own tls certificate for istio gateway.
 
-5. Create Static IP Address in Google cloud for GKE Ingress
+6. Create Static IP Address in Google cloud for GKE Ingress
 ```sh
 gcloud compute addresses create ingress-ip --global
 ```
 
-6. Get the static ip address
+7. Get the static ip address
 ```sh
 export GCLB_IP=$(gcloud compute addresses describe ingress-ip --global --format "value(address)")
 echo ${GCLB_IP}
 ```
 
-7. Configure Firewall Rule for LB backend communication with Istio Gateway.
+8. Configure Firewall Rule for LB backend communication with Istio Gateway.
 ```sh
 gcloud compute firewall-rules update <rule_name> --description "L7 firewall rule" --allow tcp:15021,tcp:30000-32767,tcp:443 --source-ranges 130.211.0.0/22,35.191.0.0/16 --target-tags <node_name> --project <project_name>
 ```
