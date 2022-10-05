@@ -69,6 +69,13 @@ spec:
       - name: devtron-rollout
         image: "quay.io/devtron/kubectl:latest"
         command: ['sh', '-c', 'kubectl rollout restart deployment/devtron -n devtroncd']
+        resources:
+          requests:
+            memory: "50Mi"
+            cpu: "25m"
+          limits:
+            memory: "50Mi"
+            cpu: "25m"
       initContainers:
       - name: postgresql-migrate-casbin
         image: {{ .image }}
