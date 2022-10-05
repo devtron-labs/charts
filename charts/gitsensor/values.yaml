@@ -25,11 +25,11 @@ gitsensor:
     serviceName: git-sensor
     resources:
       limits:
-        cpu: 1
-        memory: 800Mi
+        cpu: 50m
+        memory: 100Mi
       requests:
-        cpu: 1
-        memory: 500Mi
+        cpu: 50m
+        memory: 100Mi
     template:
       metadata:
         labels:
