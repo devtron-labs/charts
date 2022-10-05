@@ -110,11 +110,11 @@ spec:
           imagePullPolicy: {{ .imagePullPolicy }}
           resources:
             limits:
-              cpu: 100m
-              memory: 200Mi
+              cpu: 50m
+              memory: 100Mi
             requests:
-              cpu: 100m
-              memory: 200Mi
+              cpu: 50m
+              memory: 100Mi
           lifecycle:
             preStop:
               exec:
