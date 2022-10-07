@@ -6,7 +6,7 @@ gitsensor:
   image:
     pullPolicy: Always
     repository: quay.io/devtron/git-sensor
-    tag: 5d527335-200-4349
+    tag: 0360b73a-198-10935
   service:
     metadata:
       labels:
