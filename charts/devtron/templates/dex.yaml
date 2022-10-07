@@ -91,10 +91,10 @@ spec:
         resources:
           limits:
             cpu: 10m
-            memory: 25Mi
+            memory: 20Mi
           requests:
             cpu: 10m
-            memory: 25Mi
+            memory: 20Mi
       serviceAccountName: argocd-dex-server
       volumes:
       - emptyDir: {}
