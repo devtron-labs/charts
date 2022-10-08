@@ -25,6 +25,13 @@ spec:
       containers:
         - name: kubelink
           image: {{ .image }}
+          resources:
+            limits:
+              cpu: 150m
+              memory: 300Mi
+            requests:
+              cpu: 150m
+              memory: 300Mi
           imagePullPolicy: {{ .imagePullPolicy }}
           ports:
             - name: app

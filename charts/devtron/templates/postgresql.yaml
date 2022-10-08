@@ -117,6 +117,13 @@ spec:
       initContainers:
         - name: init-chmod-data
           image: "quay.io/devtron/minideb:latest"
+          resources:
+            limits:
+              cpu: 10m
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 20Mi
           imagePullPolicy: "IfNotPresent"
           command:
             - /bin/sh
@@ -140,6 +147,13 @@ spec:
       containers:
         - name: postgresql-postgresql
           image: {{ .image }}
+          resources:
+            limits:
+              cpu: 100m
+              memory: 200Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
           imagePullPolicy: {{ .imagePullPolicy }}
           securityContext:
             runAsUser: 1001
@@ -203,6 +217,13 @@ spec:
               subPath:
         - name: metrics
           image: quay.io/devtron/postgres_exporter:v0.4.7
+          resources:
+            limits:
+              cpu: 10m
+              memory: 20Mi
+            requests:
+              cpu: 10m
+              memory: 20Mi
           imagePullPolicy: "IfNotPresent"
           env:
             - name: DATA_SOURCE_URI

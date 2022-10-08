@@ -96,11 +96,11 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 50m
-              memory: 500Mi
+              cpu: 100m
+              memory: 250Mi
             requests:
-              cpu: 10m
-              memory: 100Mi
+              cpu: 100m
+              memory: 250Mi
       restartPolicy: Always
       serviceAccountName: installer
       terminationGracePeriodSeconds: 30
