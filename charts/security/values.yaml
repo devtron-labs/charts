@@ -17,6 +17,8 @@ imageScanner:
   imagePullPolicy: IfNotPresent
   replicaCount: 1
   resources: {}
+  nodeSelector: {}
+  tolerations: []
 
 clair:
   enabled: false
