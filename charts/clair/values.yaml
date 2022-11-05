@@ -11,6 +11,7 @@ config:
     scanlock_retry: 10
     layer_scan_concurrency: 5
     migrations: true
+    extraConfig: {}
   matcher:
     indexer_addr: :6060
     max_conn_pool: 100
@@ -25,10 +26,12 @@ config:
     - rhel
     - suse
     - ubuntu
+    extraConfig: {}
   notifier:
     delivery_interval: 1m
     poll_interval: 5m
     migrations: true
+    extraConfig: {}
 image:
   pullPolicy: IfNotPresent
   repository: quay.io/projectquay/clair
