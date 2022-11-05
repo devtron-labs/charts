@@ -2816,6 +2816,31 @@ entries:
   security:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2022-11-05T12:53:07.9407651Z"
+    dependencies:
+    - condition: clair.enabled
+      name: clair
+      repository: https://helm.devtron.ai
+      version: 0.x.x
+    description: A Helm chart for devtron to enable security integration
+    digest: baf355103ccbe155edf13ae5e96de208b8032579f96305c64ebd72cc437ca8c9
+    keywords:
+    - kubernetes
+    - security
+    - k8s
+    - scanning
+    - container registry
+    - image scanning
+    - source code scanning
+    name: security
+    sources:
+    - https://github.com/devtron-labs/charts
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/security-0.1.2/security-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2022-10-13T09:38:44.887530129Z"
     dependencies:
     - condition: clair.enabled
@@ -2922,4 +2947,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-11-05T12:50:24.048506261Z"
+generated: "2022-11-05T12:53:07.9410205Z"
