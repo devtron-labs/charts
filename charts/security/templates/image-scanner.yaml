@@ -94,5 +94,13 @@ spec:
           resources:
 {{ toYaml .resources | indent 12 }}
 {{- end }}
+{{- if .nodeSelector }}
+      nodeSelector:
+{{ toYaml .nodeSelector | indent 8 }}
+{{- end }}
+{{- if .tolerations }}
+      tolerations:
+{{ toYaml .tolerations | indent 8 }}
+{{- end }}
   revisionHistoryLimit: 3
 {{- end }}
