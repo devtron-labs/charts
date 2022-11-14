@@ -1,4 +1,0 @@
-{{- range .Values.hybernators }}
----
-{{ toYaml . }}
-{{- end -}}
