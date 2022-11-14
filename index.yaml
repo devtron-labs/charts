@@ -2981,4 +2981,21 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/twistlock-defender-22.01.858/twistlock-defender-22.01.858.tgz
     version: 22.01.858
-generated: "2022-11-10T18:25:14.752173456Z"
+  winter-soldier:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2022-11-14T11:31:31.487328383Z"
+    description: Helm chart to deploy winter-soldier. Winter soldier can be used for
+      scheduled cleaning up of Kubernetes resources and scaledown kubernetes workloads
+      according to user defined time of the day and conditions.
+    digest: 1ec0f69c515c333ce2fcf40ba8bffbb1a0c675abbd09291b0c35c903d718f66b
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops Team
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: winter-soldier
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
+    version: 0.10.0
+generated: "2022-11-14T11:31:31.487555884Z"
