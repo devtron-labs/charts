@@ -24,7 +24,7 @@ tolerations: []
 affinity: {}
 
 # Provide the list of Hibernator objects in the yaml format with your custom requirements.
-hybernator:
+hibernator:
 # - apiVersion: pincher.devtron.ai/v1alpha1
 #   kind: Hibernator
 #   metadata:
