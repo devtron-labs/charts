@@ -4,6 +4,7 @@ kind: Secret
 metadata:
   name: image-scanner-secret
   labels:
+    app: image-scanner
     release: devtron
 type: Opaque
 {{- if .secrets }}
@@ -18,6 +19,7 @@ kind: ConfigMap
 metadata:
   name: image-scanner-cm
   labels:
+    app: image-scanner
     release: devtron
 data:
 {{- if .configs}}
