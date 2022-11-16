@@ -47,3 +47,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: winter-soldier
+  namespace: {{ .Release.Namespace | quote }}
