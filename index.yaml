@@ -2984,6 +2984,22 @@ entries:
   winter-soldier:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2022-11-16T13:20:19.06135193Z"
+    description: Helm chart to deploy winter-soldier. Winter soldier can be used for
+      scheduled cleaning up of Kubernetes resources and scaledown kubernetes workloads
+      according to user defined time of the day and conditions.
+    digest: f629c38537c84e320b3d9412b827fe73cc9ae1b10a1b6b93f93848de31922762
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops Team
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: winter-soldier
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.1/winter-soldier-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-11-14T11:31:31.487328383Z"
     description: Helm chart to deploy winter-soldier. Winter soldier can be used for
       scheduled cleaning up of Kubernetes resources and scaledown kubernetes workloads
@@ -2998,4 +3014,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2022-11-14T11:31:31.487555884Z"
+generated: "2022-11-16T13:20:19.061669831Z"
