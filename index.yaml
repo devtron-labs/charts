@@ -438,6 +438,40 @@ entries:
   devtron-operator:
   - apiVersion: v2
     appVersion: 0.6.7
+    created: "2022-11-24T12:28:08.576164297Z"
+    dependencies:
+    - condition: argo-cd.enabled
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 5.2.0
+    - condition: security.enabled
+      name: security
+      repository: https://helm.devtron.ai
+      version: 0.x.x
+    description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
+      system.
+    digest: d4640dd55abf78307d96459fdcd8b98ebc93813011931a4db965efc8f75c038c
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    - argocd
+    - Hyperion
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-operator
+    sources:
+    - https://github.com/devtron-labs/charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.22.44/devtron-operator-0.22.44.tgz
+    version: 0.22.44
+  - apiVersion: v2
+    appVersion: 0.6.7
     created: "2022-11-23T16:11:02.597819004Z"
     dependencies:
     - condition: argo-cd.enabled
@@ -3048,4 +3082,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2022-11-23T16:11:02.59821161Z"
+generated: "2022-11-24T12:28:08.576637098Z"
