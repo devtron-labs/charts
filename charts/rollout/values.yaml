@@ -11,3 +11,8 @@ tolerations: []
 podLabels: {}
 podAnnotations: {}
 replicaCount: 1
+serviceMonitorEnabled: false
+servicemonitorLabels: 
+  app: argo-rollouts
+  kind: Prometheus
+  release: monitoring

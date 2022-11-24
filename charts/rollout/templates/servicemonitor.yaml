@@ -1,0 +1,21 @@
+{{- if $.Values.serviceMonitorEnabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+{{- if .Values.servicemonitorLabels }}
+  labels:
+{{ toYaml .Values.servicemonitorLabels | indent 4 }}
+{{- end }}
+  name: argo-rollouts-sm
+  namespace: {{ .Release.Namespace }}
+spec:
+  endpoints:
+  - interval: 50s
+    path: /metrics
+    port: metrics
+    scheme: http
+    scrapeTimeout: 9s
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: argo-rollouts-metrics
+{{- end }}
