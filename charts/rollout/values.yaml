@@ -11,8 +11,17 @@ tolerations: []
 podLabels: {}
 podAnnotations: {}
 replicaCount: 1
-serviceMonitorEnabled: false
-servicemonitorLabels: 
-  app: argo-rollouts
-  kind: Prometheus
-  release: monitoring
+serviceMonitor:
+  enabled: false
+  labels:
+    app: argo-rollouts
+    kind: Prometheus
+    release: monitoring
+  endpoints:
+  - interval: 50s
+    path: /metrics
+    port: metrics
+    scheme: http
+    scrapeTimeout: 9s
+  matchLabels:
+    app.kubernetes.io/name: argo-rollouts-metrics
