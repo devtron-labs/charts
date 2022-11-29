@@ -42,6 +42,7 @@ ingress:
   hosts:
   - chart-example.local
   tls: null
+fullnameOverride: clair
 insecureTls: false
 nodeSelector: {}
 replicaCount: 1

@@ -7,16 +7,26 @@ metadata:
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
     app: {{ template "clair.fullname" . }}
+    integration: security
 {{ toYaml .Values.podLabels | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "clair.fullname" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app: {{ template "clair.fullname" . }}
+    integration: security
   template:
     metadata:
       labels:
+        matchLabels:
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
         app: {{ template "clair.fullname" . }}
+        integration: security
 {{ toYaml .Values.podLabels | indent 8 }}
     spec:
       volumes:
