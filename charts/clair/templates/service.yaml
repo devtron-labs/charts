@@ -6,7 +6,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
+    app: clair
     integration: security
 spec:
   type: {{ .Values.service.type }}
@@ -29,5 +29,5 @@ spec:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
+    app: clair
     integration: security

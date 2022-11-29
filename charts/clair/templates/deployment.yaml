@@ -6,7 +6,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
+    app: clair
     integration: security
 {{ toYaml .Values.podLabels | indent 4 }}
 spec:
@@ -16,7 +16,7 @@ spec:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
+    app: clair
     integration: security
   template:
     metadata:
@@ -25,7 +25,7 @@ spec:
         heritage: {{ .Release.Service | quote }}
         release: {{ .Release.Name | quote }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-        app: {{ template "clair.fullname" . }}
+        app: clair
         integration: security
 {{ toYaml .Values.podLabels | indent 8 }}
     spec:

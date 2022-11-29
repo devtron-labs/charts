@@ -10,7 +10,7 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
+    app: clair
     integration: security
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
