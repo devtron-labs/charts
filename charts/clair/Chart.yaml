@@ -12,4 +12,4 @@ maintainers:
 name: clair
 sources:
 - https://github.com/coreos/clair
-version: 0.1.8
+version: 0.1.9

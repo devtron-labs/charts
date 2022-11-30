@@ -6,8 +6,9 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
-{{ toYaml .Values.podLabels | indent 4 }}
+    app: clair
+    integration: security
+{{ toYaml .Values.labels | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -17,7 +18,12 @@ spec:
     metadata:
       labels:
         app: {{ template "clair.fullname" . }}
-{{ toYaml .Values.podLabels | indent 8 }}
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+        app: clair
+        integration: security
+{{ toYaml .Values.labels | indent 8 }}
     spec:
       volumes:
       - name: "{{ .Chart.Name }}-config"
