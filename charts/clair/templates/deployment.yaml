@@ -13,14 +13,11 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      heritage: {{ .Release.Service | quote }}
-      release: {{ .Release.Name | quote }}
-      chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-      app: clair
-      integration: security
+      app: {{ template "clair.fullname" . }}
   template:
     metadata:
       labels:
+        app: {{ template "clair.fullname" . }}
         heritage: {{ .Release.Service | quote }}
         release: {{ .Release.Name | quote }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
