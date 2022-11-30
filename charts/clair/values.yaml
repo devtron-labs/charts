@@ -45,7 +45,7 @@ ingress:
 insecureTls: false
 nodeSelector: {}
 replicaCount: 1
-podLabels:
+labels:
   component: clair
 resources:
   limits:

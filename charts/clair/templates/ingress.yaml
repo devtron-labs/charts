@@ -12,6 +12,7 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
     app: clair
     integration: security
+{{ toYaml .Values.labels | indent 4 }}
   annotations:
     {{- range $key, $value := .Values.ingress.annotations }}
       {{ $key }}: {{ $value | quote }}

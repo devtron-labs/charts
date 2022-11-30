@@ -8,6 +8,7 @@ metadata:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
     app: clair
     integration: security
+{{ toYaml .Values.labels | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -31,3 +32,4 @@ spec:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
     app: clair
     integration: security
+{{ toYaml .Values.labels | indent 4 }}
