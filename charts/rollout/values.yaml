@@ -11,6 +11,8 @@ tolerations: []
 podLabels: {}
 podAnnotations: {}
 replicaCount: 1
+
+# configuration for service monitor
 serviceMonitor:
   enabled: false
   labels:
@@ -25,3 +27,53 @@ serviceMonitor:
     scrapeTimeout: 9s
   matchLabels:
     app.kubernetes.io/name: argo-rollouts-metrics
+
+# configuration for prometheus rule
+prometheusRule:
+  enabled: false
+# Provide the requried labels
+  labels: {}
+  annotations: {}
+  namespace: monitoring
+  rules:
+    - alert: Rollout-Paused
+      annotations:
+        message: Rollout {{ $labels.name }} is Paused in namespace {{
+          $labels.exported_namespace }}
+      expr: sum by (name,exported_namespace) (rollout_phase{phase="Paused"} ) > 0
+      for: 1m
+      labels:
+        severity: critical
+    - alert: Rollout-InvalidSpec
+      annotations:
+        message: Rollout {{ $labels.name }} has InvalidSpec in namespace {{
+          $labels.exported_namespace }}
+      expr: sum by (name,exported_namespace) (rollout_phase{phase="InvalidSpec"} ) > 0
+      for: 1m
+      labels:
+        severity: critical
+    - alert: Rollout-Error
+      annotations:
+        message: Rollout {{ $labels.name }} has Error in namespace {{
+          $labels.exported_namespace }}
+      expr: sum by (name,exported_namespace) (rollout_phase{phase="Error"} ) > 0
+      for: 1m
+      labels:
+        severity: critical
+    - alert: Rollout-Progressing
+      annotations:
+        message: Rollout {{ $labels.name }} is in progressing state in namespace {{
+          $labels.exported_namespace }} since 20 minute
+      expr: sum by (name,exported_namespace) (rollout_phase{phase="Progressing"} ) > 0
+      for: 20m
+      labels:
+        severity: critical
+    - alert: Rollout-Timeout
+      annotations:
+        message: Rollout {{ $labels.name }} taking longer to get healthy in namespace {{
+          $labels.exported_namespace }}
+      expr: sum by (name,exported_namespace) (rollout_phase{phase="Timeout"} ) > 0
+      for: 1m
+      labels:
+        severity: critical
+
