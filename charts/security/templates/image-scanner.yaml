@@ -4,7 +4,12 @@ kind: Secret
 metadata:
   name: image-scanner-secret
   labels:
-    release: devtron
+    app: image-scanner
+    release: {{ $.Release.Name }}
+    integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 4 }}    
+{{- end}} 
 type: Opaque
 {{- if .secrets }}
 data:
@@ -18,7 +23,12 @@ kind: ConfigMap
 metadata:
   name: image-scanner-cm
   labels:
-    release: devtron
+    app: image-scanner
+    release: {{ $.Release.Name }}
+    integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 4 }}    
+{{- end}} 
 data:
 {{- if .configs}}
 {{ toYaml .configs | indent 2 }}
@@ -30,7 +40,11 @@ metadata:
   name: image-scanner-service
   labels:
     app: image-scanner
-    release: devtron
+    release: {{ $.Release.Name }}
+    integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 4 }}    
+{{- end}} 
 spec:
   type: ClusterIP
   ports:
@@ -40,6 +54,11 @@ spec:
       name: app
   selector:
     app: image-scanner
+    release: {{ $.Release.Name }}
+    integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 4 }}    
+{{- end}} 
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -47,19 +66,31 @@ metadata:
   name: image-scanner
   labels:
     app: image-scanner
-    release: devtron
+    release: {{ $.Release.Name }}
+    integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 4 }}    
+{{- end}} 
 spec:
   selector:
     matchLabels:
       app: image-scanner
-      release: devtron
+      release: {{ $.Release.Name }}
+      integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 6 }}    
+{{- end}} 
   replicas: {{ .replicaCount }}
   minReadySeconds: 60
   template:
     metadata:
       labels:
         app: image-scanner
-        release: devtron
+        release: {{ $.Release.Name }}
+        integration: security
+{{- if .labels }}
+{{ toYaml .labels | indent 8 }}    
+{{- end}} 
     spec:
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
