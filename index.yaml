@@ -2894,6 +2894,18 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/openvpn-4.2.5/openvpn-4.2.5.tgz
     version: 4.2.5
+  prom2teams:
+  - apiVersion: v1
+    appVersion: 4.2.0
+    created: "2022-12-01T09:46:31.308851056Z"
+    description: prom2teams is a service built with Python that receives alert notifications
+      from a previously configured Prometheus Alertmanager instance and forwards it
+      to Microsoft Teams using defined connectors.
+    digest: 0c524467670f87a974bfbff85367820b7d74a1ee52b0537ce294f9815fbcfd79
+    name: prom2teams
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/prom2teams-0.2.0/prom2teams-0.2.0.tgz
+    version: 0.2.0
   rollout:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -3160,4 +3172,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2022-12-01T05:49:04.359282976Z"
+generated: "2022-12-01T09:46:31.309459062Z"
