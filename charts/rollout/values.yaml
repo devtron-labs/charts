@@ -41,7 +41,7 @@ prometheusRule:
         message: Rollout {{ $labels.name }} is Paused in namespace {{
           $labels.exported_namespace }}
       expr: sum by (name,exported_namespace) (rollout_phase{phase="Paused"} ) > 0
-      for: 1m
+      for: 5m
       labels:
         severity: critical
     - alert: Rollout-InvalidSpec
@@ -49,7 +49,7 @@ prometheusRule:
         message: Rollout {{ $labels.name }} has InvalidSpec in namespace {{
           $labels.exported_namespace }}
       expr: sum by (name,exported_namespace) (rollout_phase{phase="InvalidSpec"} ) > 0
-      for: 1m
+      for: 5m
       labels:
         severity: critical
     - alert: Rollout-Error
