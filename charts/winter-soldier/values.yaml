@@ -1,10 +1,5 @@
 # Default values for winter-soldier.
 
- # either Namespaced or Cluster
-crd:
-  scope: Namespaced
-
-# Information for winter-soldier application 
 replicaCount: 1
 image: quay.io/devtron/winter-soldier:3f10a62b-196-5753
 graceperiod: 10
