@@ -3017,6 +3017,31 @@ entries:
   security:
   - apiVersion: v2
     appVersion: 0.1.1
+    created: "2022-12-15T07:57:13.985756711Z"
+    dependencies:
+    - condition: clair.enabled
+      name: clair
+      repository: https://helm.devtron.ai
+      version: 0.x.x
+    description: A Helm chart for devtron to enable security integration
+    digest: ab176e57ebfb542b4743d843b811089c20f4ce7e7c3170eef8d0b2fdc4a33316
+    keywords:
+    - kubernetes
+    - security
+    - k8s
+    - scanning
+    - container registry
+    - image scanning
+    - source code scanning
+    name: security
+    sources:
+    - https://github.com/devtron-labs/charts
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/security-0.1.4/security-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v2
+    appVersion: 0.1.1
     created: "2022-12-01T05:49:04.358919575Z"
     dependencies:
     - condition: clair.enabled
@@ -3238,4 +3263,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2022-12-14T13:56:24.289326638Z"
+generated: "2022-12-15T07:57:13.986041017Z"
