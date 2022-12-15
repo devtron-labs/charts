@@ -75,8 +75,7 @@ spec:
   selector:
     matchLabels:
       app: image-scanner
-      release: {{ $.Release.Name }}
-      integration: security
+      release: devtron
 {{- if .labels }}
 {{ toYaml .labels | indent 6 }}    
 {{- end}} 
@@ -86,7 +85,7 @@ spec:
     metadata:
       labels:
         app: image-scanner
-        release: {{ $.Release.Name }}
+        release: devtron
         integration: security
 {{- if .labels }}
 {{ toYaml .labels | indent 8 }}    
