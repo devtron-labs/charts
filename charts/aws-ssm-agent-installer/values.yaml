@@ -2,6 +2,7 @@ installUser: "root"
 installCommand: "yum install -y"
 installUrl: "https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm"
 installCronPath: "/etc/cron.d"
+image: quay.io/devtron/k8s-utils:amazonlinux-latest
 daemonsetapiversion: apps/v1  #For Clusters running on k8s < 1.16 use extensions/v1beta1
 tolerations:
   - key: CriticalAddonsOnly
