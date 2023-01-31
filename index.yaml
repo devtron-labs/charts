@@ -416,6 +416,15 @@ entries:
   devtron-backups:
   - apiVersion: v2
     appVersion: "1.0"
+    created: "2023-01-31T09:33:18.411469508Z"
+    description: A Helm chart for Devtron Backups
+    digest: 1deceee12f28e2cbda430f05b9c0439dfcc6d99404ef16c2cd596102a349b581
+    name: devtron-backups
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.1.3/devtron-backups-0.1.3.tgz
+    version: 0.1.3
+  - apiVersion: v2
+    appVersion: "1.0"
     created: "2022-09-06T07:02:42.334753072Z"
     description: A Helm chart for Devtron Backups
     digest: 3160c2553cc4d94deda77dd4b6002b7f10cda35b0da014fad0bf9a48154264d3
@@ -3343,4 +3352,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2023-01-31T06:26:52.428548417Z"
+generated: "2023-01-31T09:33:18.41170722Z"
