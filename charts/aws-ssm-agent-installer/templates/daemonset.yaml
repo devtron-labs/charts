@@ -19,8 +19,13 @@ spec:
       containers:
       - args:
         - -c
+        {{- if .Values.runAsSudo }}
+        - echo '* * * * * {{ .Values.installUser }} {{ .Values.installCommand }} {{ .Values.installUrl }}
+          && sudo rm -rf {{ .Values.installCronPath }}/ssmstart' > {{ .Values.installCronPath }}/ssmstart & tail -f > /dev/null
+        {{- else }}
         - echo '* * * * * {{ .Values.installUser }} {{ .Values.installCommand }} {{ .Values.installUrl }}
           && rm -rf {{ .Values.installCronPath }}/ssmstart' > {{ .Values.installCronPath }}/ssmstart & tail -f > /dev/null
+        {{- end }}
         command:
         - /bin/bash
         image: quay.io/devtron/k8s-utils:amazonlinux-latest
