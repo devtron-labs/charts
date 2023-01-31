@@ -28,7 +28,7 @@ spec:
         {{- end }}
         command:
         - /bin/bash
-        image: quay.io/devtron/k8s-utils:amazonlinux-latest
+        image: {{ .Values.image }}
         imagePullPolicy: IfNotPresent
         {{- if $.Values.imagePullSecrets}}
         imagePullSecrets:
