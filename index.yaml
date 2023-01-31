@@ -124,6 +124,18 @@ entries:
   aws-ssm-agent-installer:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2023-01-31T06:26:52.428198818Z"
+    description: Chart to enable AWS SSM Agent on EKS nodes
+    digest: ba54a7cb211ba5e3acdf94000e674a88bc965a69b1882fa2018f6f7ae9001353
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: aws-ssm-agent-installer
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-ssm-agent-installer-0.10.4/aws-ssm-agent-installer-0.10.4.tgz
+    version: 0.10.4
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2022-02-04T05:39:57.686190177Z"
     description: Chart to enable AWS SSM Agent on EKS nodes
     digest: 660ffbc6593071fd1651a6ea97a8b935ee2ce3d89cc8bc23d6ab0e1fcf0222a3
@@ -3331,4 +3343,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2023-01-09T14:43:31.878546117Z"
+generated: "2023-01-31T06:26:52.428548417Z"
