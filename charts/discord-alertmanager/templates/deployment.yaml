@@ -31,4 +31,12 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-        
+       {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 10 }}
+      {{- end }}
+      {{ if .Values.affinity }}
+      affinity:
+          {{ toYaml .Values.affinity | indent 10 }}
+          {{- end }}
+
