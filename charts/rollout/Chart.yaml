@@ -1,3 +1,4 @@
+apiVersion: v2
 name: rollout
 appVersion: 0.1.0
 description: Chart to deploy Rollout
