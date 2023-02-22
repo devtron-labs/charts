@@ -3386,4 +3386,18 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.0/winter-soldier-0.10.0.tgz
     version: 0.10.0
-generated: "2023-01-31T14:19:25.666719358Z"
+  zinc:
+  - apiVersion: v2
+    appVersion: v0.2.6
+    created: "2023-02-22T09:18:25.649903287Z"
+    description: Zinc is a search engine that does full text indexing. It is a lightweight
+      alternative to Elasticsearch and runs in less than 100 MB of RAM.
+    digest: 9d24b00ad03599a70c0b0dd437391a9a06964ff2097aa317cd6080126f35e5ec
+    name: zinc
+    sources:
+    - https://github.com/zinclabs/zinc
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
+    version: 0.1.0
+generated: "2023-02-22T09:18:25.650522596Z"
