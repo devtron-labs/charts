@@ -35,6 +35,9 @@ spec:
                   name: {{ include "zinc.fullname" . }}
             - name: ZINC_DATA_PATH
               value: /go/bin/data
+            {{- with $.Values.envVariable }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           # command: ["/bin/bash", "-c", "while true; do sleep 1; done"]
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
