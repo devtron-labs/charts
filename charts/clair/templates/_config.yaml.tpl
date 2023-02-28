@@ -1,7 +1,7 @@
 {{- if .Values.global.externalDatabase }}
-{{- $postgresHost := clair-postgresql.devtroncd }}
+{{- $postgresHost := "clair-postgresql.devtroncd" }}
 {{- else }}
-{{- $postgresHost := postgresql-postgresql.devtroncd }}
+{{- $postgresHost := "postgresql-postgresql.devtroncd" }}
 
 introspection_addr: {{ .Values.config.introspection_addr }}
 http_listen_addr: {{ .Values.config.http_listen_addr }}
