@@ -79,12 +79,24 @@ tolerations: []
 #   value: "value1"
 #   effect: "NoSchedule"
 
-podSecurityContext: {}
-  # runAsUser: 1000
-  # runAsGroup: 3000
-  # fsGroup: 2000
+podSecurityContext: 
+  runAsUser: 1000
+  runAsGroup: 3000
+  fsGroup: 2000
 
-containerSecurityContext: {}
+containerSecurityContext: 
   allowPrivilegeEscalation: false
-## Pods Service Account
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+ # Pods Service Account
+ # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+
+serviceAccount:
+  ## @param serviceAccount.create Enable creation of ServiceAccount for pods
+  ##  
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the `.Chart.Name .fullname` template
+  name: ""
+  ## @param serviceAccount.annotations Annotations for service account. Evaluated as a template.
+  ## Only used if `create` is `true`.
+  ##  
+  annotations: {}
