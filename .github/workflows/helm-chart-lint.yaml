@@ -1,4 +1,4 @@
-name: Chart Validator - NewApproach
+name: Helm Chart Linting - NewApproach
 on: pull_request
 jobs:
   helm-lint_and_helm-template:
