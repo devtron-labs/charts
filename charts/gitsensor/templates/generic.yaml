@@ -33,7 +33,7 @@ spec:
 {{ toYaml .Values.gitsensor.spec.template.metadata.labels | indent 8 }}
     {{- end }}
     spec:
-      terminationGracePeriodSeconds: 10
+      terminationGracePeriodSeconds: 10\
       {{- if $.Values.podSecurityContext }}
       securityContext:
 {{ toYaml .Values.podSecurityContext | indent 8 }}
@@ -56,7 +56,6 @@ spec:
           resources:
 {{ toYaml .Values.gitsensor.spec.resources | indent 12 -}}
 {{- end}}
-          serviceAccountName: {{ default "default" .Values.serviceAccount.name }}
           {{- if .Values.containerSecurityContext }}
           securityContext:
 {{ toYaml .Values.containerSecurityContext | indent 12 }}
@@ -84,20 +83,20 @@ spec:
 {{- end }}
 
 
----
-{{- if $.Values.serviceAccount }}
-{{- if $.Values.serviceAccount.create }}
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: {{ default "default" .Values.serviceAccount.name }}
-  {{- if .Values.podLabels }}
-  labels:
-{{ toYaml .Values.podLabels | indent 4 }}
-  {{- end }}
-  {{- if .Values.serviceAccount.annotations }}
-  annotations:
-{{ toYaml .Values.serviceAccount.annotations | indent 4 }}
-  {{- end }}
-{{- end -}}
-{{- end -}}
+# ---
+# {{- if $.Values.serviceAccount }}
+# {{- if $.Values.serviceAccount.create }}
+# apiVersion: v1
+# kind: ServiceAccount
+# metadata:
+#   name: {{ default "default" .Values.serviceAccount.name }}
+#   {{- if .Values.podLabels }}
+#   labels:
+# {{ toYaml .Values.podLabels | indent 4 }}
+#   {{- end }}
+#   {{- if .Values.serviceAccount.annotations }}
+#   annotations:
+# {{ toYaml .Values.serviceAccount.annotations | indent 4 }}
+#   {{- end }}
+# {{- end -}}
+# {{- end -}}
