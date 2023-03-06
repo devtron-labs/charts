@@ -34,6 +34,10 @@ spec:
     {{- end }}
     spec:
       terminationGracePeriodSeconds: 10
+      {{- if $.Values.podSecurityContext }}
+      securityContext:
+{{ toYaml .Values.podSecurityContext | indent 8 }}
+      {{- end }}
       containers:
         - name: git-sensor
           image: {{ .Values.gitsensor.image.repository }}:{{ .Values.gitsensor.image.tag }}
@@ -52,6 +56,10 @@ spec:
           resources:
 {{ toYaml .Values.gitsensor.spec.resources | indent 12 -}}
 {{- end}}
+          {{- if .Values.containerSecurityContext }}
+          securityContext:
+{{ toYaml .Values.containerSecurityContext | indent 12 }}
+{{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
