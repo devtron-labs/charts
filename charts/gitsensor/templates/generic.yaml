@@ -33,7 +33,7 @@ spec:
 {{ toYaml .Values.gitsensor.spec.template.metadata.labels | indent 8 }}
     {{- end }}
     spec:
-      terminationGracePeriodSeconds: 10\
+      terminationGracePeriodSeconds: 10
       {{- if $.Values.podSecurityContext }}
       securityContext:
 {{ toYaml .Values.podSecurityContext | indent 8 }}
@@ -81,22 +81,3 @@ spec:
         nodeAffinity:
 {{ toYaml .Values.gitsensor.storage.nodeAffinity | indent 10 }}
 {{- end }}
-
-
-# ---
-# {{- if $.Values.serviceAccount }}
-# {{- if $.Values.serviceAccount.create }}
-# apiVersion: v1
-# kind: ServiceAccount
-# metadata:
-#   name: {{ default "default" .Values.serviceAccount.name }}
-#   {{- if .Values.podLabels }}
-#   labels:
-# {{ toYaml .Values.podLabels | indent 4 }}
-#   {{- end }}
-#   {{- if .Values.serviceAccount.annotations }}
-#   annotations:
-# {{ toYaml .Values.serviceAccount.annotations | indent 4 }}
-#   {{- end }}
-# {{- end -}}
-# {{- end -}}
