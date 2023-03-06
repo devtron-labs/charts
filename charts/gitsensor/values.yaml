@@ -85,6 +85,6 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 containerSecurityContext: {}
-  # allowPrivilegeEscalation: false
+  allowPrivilegeEscalation: false
 ## Pods Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
