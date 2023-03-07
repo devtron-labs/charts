@@ -37,5 +37,5 @@ spec:
       {{- end }}
       {{ if $.Values.affinity }}
       affinity:
-          {{ toYaml $.Values.affinity | indent 10 }}
+{{ toYaml $.Values.affinity | indent 8 }}
           {{- end }}
