@@ -29,3 +29,22 @@ resources: {}
   # requests:
   #   cpu: 100m
   #   memory: 128Mi
+tolerations: []
+# - key: "key1"
+#   operator: "Equal"
+#   value: "value1"
+#   effect: "NoSchedule"
+
+affinity: {}
+ # nodeAffinity:
+      #   required:
+      #     nodeSelectorTerms:
+      #     - matchExpressions:
+      #       - key: topology.kubernetes.io/zone
+      #         operator: In
+      #         values:
+      #         - us-east-2a
+      #       - key: topology.kubernetes.io/region
+      #         operator: In
+      #         values:
+      #         - us-east-2
