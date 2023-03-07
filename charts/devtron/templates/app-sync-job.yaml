@@ -49,15 +49,15 @@ spec:
       restartPolicy: OnFailure
       {{- if .Values.components.migrator }}
       {{- if .Values.components.migrator.appSync }}
-      {{- with .Values.components.migrator.appSync.affinity | default .Values.global.affinity }}
+      {{- with $.Values.components.migrator.appSync.affinity | default $.Values.global.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.components.migrator.appSync.tolerations | default .Values.global.tolerations }}
+      {{- with $.Values.components.migrator.appSync.tolerations | default $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.components.migrator.appSync.nodeSelector | default .Values.global.nodeSelector }}
+      {{- with $.Values.components.migrator.appSync.nodeSelector | default $.Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -97,15 +97,15 @@ spec:
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
       serviceAccountName: devtron
-      {{- with .Values.components.devtron.affinity | default .Values.global.affinity }}
+      {{- with $.Values.components.devtron.affinity | default $.Values.global.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.components.devtron.tolerations | default .Values.global.tolerations }}
+      {{- with $.Values.components.devtron.tolerations | default $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.components.devtron.nodeSelector | default .Values.global.nodeSelector }}
+      {{- with $.Values.components.devtron.nodeSelector | default $.Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
