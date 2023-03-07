@@ -78,3 +78,14 @@ tolerations: []
 #   operator: "Equal"
 #   value: "value1"
 #   effect: "NoSchedule"
+
+podSecurityContext: {}
+  # runAsUser: 1000
+  # runAsGroup: 3000
+  # fsGroup: 2000
+
+containerSecurityContext: {}
+ # allowPrivilegeEscalation: false
+ # Pods Service Account
+ # ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+
