@@ -363,6 +363,18 @@ spec:
       labels:
         app: workflow-controller
     spec:
+      {{- with $.Values.workflowController.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.workflowController.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.workflowController.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - args:
         - --configmap

@@ -260,6 +260,18 @@ spec:
         release: {{ $.Release.Name }}
     spec:
       serviceAccountName: "devtron-minio"
+      {{- with $.Values.minio.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.minio.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.minio.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -337,6 +349,18 @@ spec:
               - secret:
                   name: devtron-minio
       serviceAccountName: "devtron-minio"
+      {{- with $.Values.minio.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.minio.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.minio.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: minio-mc
           image: {{ $.Values.minio.mbImage }}
@@ -383,6 +407,18 @@ spec:
         release: devtron-minio
     spec:
       serviceAccountName: "devtron-minio"
+      {{- with $.Values.minio.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.minio.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.minio.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: minio
           image: "quay.io/devtron/minio:RELEASE.2020-12-03T05-49-24Z"

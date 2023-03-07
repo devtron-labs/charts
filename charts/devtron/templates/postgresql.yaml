@@ -115,6 +115,18 @@ spec:
     spec:
       securityContext:
         fsGroup: 1001
+      {{- with $.Values.components.postgres.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.postgres.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.postgres.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       initContainers:
         - name: init-chmod-data
           image: "quay.io/devtron/minideb:latest"
@@ -444,6 +456,18 @@ spec:
     spec:
       securityContext:
         fsGroup: 999
+      {{- with $.Values.components.postgres.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.postgres.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.postgres.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       initContainers:
         - name: postgres-init
           securityContext:

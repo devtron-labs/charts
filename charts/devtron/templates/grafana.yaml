@@ -15,6 +15,18 @@ spec:
   template:
     spec:
       serviceAccountName: devtron
+      {{- with $.Values.monitoring.grafana.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.monitoring.grafana.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.monitoring.grafana.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: grafana-restart
         image: "quay.io/devtron/kubectl:latest"
@@ -660,6 +672,18 @@ metadata:
   namespace: devtroncd
 spec:
   serviceAccountName: devtron-grafana-test
+  {{- with $.Values.monitoring.grafana.affinity | default $.Values.global.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.monitoring.grafana.tolerations | default $.Values.global.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with $.Values.monitoring.grafana.nodeSelector | default $.Values.global.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
   containers:
     - name: devtron-test
       image: "quay.io/devtron/bats:v1.4.1"

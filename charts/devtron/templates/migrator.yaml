@@ -48,6 +48,18 @@ spec:
         {{- end }}
         {{- end }}           
       restartPolicy: OnFailure
+      {{- with $.Values.components.migrator.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.migrator.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.migrator.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
   backoffLimit: 20
   activeDeadlineSeconds: 1500
 ---
@@ -113,6 +125,18 @@ spec:
             memory: 500Mi
         {{- end }}                     
       restartPolicy: OnFailure
+      {{- with $.Values.components.migrator.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.migrator.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.components.migrator.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
   backoffLimit: 20
   activeDeadlineSeconds: 1500
 {{- end }}

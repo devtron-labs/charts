@@ -74,6 +74,18 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
+      {{- with $.Values.notifier.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.notifier.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.notifier.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: notifier
           image: {{ .image }}

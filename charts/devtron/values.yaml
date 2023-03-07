@@ -308,3 +308,8 @@ monitoring:
       resources: {}
     persistence:
       storage: "2Gi"
+      
+global:    
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
