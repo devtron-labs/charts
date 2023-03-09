@@ -30,7 +30,7 @@ tolerations: []
 #   value: "value1"
 #   effect: "NoSchedule"
 
-affinity: 
+affinity: {}
   # nodeAffinity:
   #    requiredDuringSchedulingIgnoredDuringExecution :
   #         nodeSelectorTerms:
