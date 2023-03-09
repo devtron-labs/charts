@@ -48,17 +48,23 @@ spec:
         {{- end }}
         {{- end }}           
       restartPolicy: OnFailure
+      {{- if or $.Values.components.migrator.affinity  (and $.Values.global $.Values.global.affinity) }}
       {{- with $.Values.components.migrator.affinity | default $.Values.global.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.migrator.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
       {{- with $.Values.components.migrator.tolerations | default $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.migrator.nodeSelector (and $.Values.global $.Values.global.nodeSelector ) }}
       {{- with $.Values.components.migrator.nodeSelector | default $.Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
   backoffLimit: 20
   activeDeadlineSeconds: 1500
@@ -125,17 +131,23 @@ spec:
             memory: 500Mi
         {{- end }}                     
       restartPolicy: OnFailure
+      {{- if or $.Values.components.migrator.affinity  (and $.Values.global $.Values.global.affinity) }}
       {{- with $.Values.components.migrator.affinity | default $.Values.global.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.migrator.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
       {{- with $.Values.components.migrator.tolerations | default $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.migrator.nodeSelector (and $.Values.global $.Values.global.nodeSelector ) }}
       {{- with $.Values.components.migrator.nodeSelector | default $.Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
   backoffLimit: 20
   activeDeadlineSeconds: 1500

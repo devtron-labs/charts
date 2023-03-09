@@ -260,17 +260,23 @@ spec:
         release: {{ $.Release.Name }}
     spec:
       serviceAccountName: "devtron-minio"
+      {{- if or $.Values.minio.affinity  (and $.Values.global $.Values.global.affinity) }}
       {{- with $.Values.minio.affinity | default $.Values.global.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.minio.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
       {{- with $.Values.minio.tolerations | default $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.minio.nodeSelector  (and $.Values.global $.Values.global.nodeSelector ) }}
       {{- with $.Values.minio.nodeSelector | default $.Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
       securityContext:
         runAsUser: 1000

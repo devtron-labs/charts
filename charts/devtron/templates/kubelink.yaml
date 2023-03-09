@@ -21,17 +21,23 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
+      {{- if or $.Values.components.kubelink.affinity  (and $.Values.global $.Values.global.affinity) }}
       {{- with $.Values.components.kubelink.affinity | default $.Values.global.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.kubelink.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
       {{- with $.Values.components.kubelink.tolerations | default $.Values.global.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.kubelink.nodeSelector  (and $.Values.global $.Values.global.nodeSelector ) }}
       {{- with $.Values.components.kubelink.nodeSelector | default $.Values.global.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- end }}
       serviceAccount: devtron
       containers:
