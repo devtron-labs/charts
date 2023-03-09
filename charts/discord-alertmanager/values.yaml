@@ -20,19 +20,19 @@ env:
 
 resources: {}
 
-tolerations: []
-# - key: "key1"
-#   operator: "Equal"
-#   value: "value1"
-#   effect: "NoSchedule"
-# - key: "key2"
-#   operator: "Equal"
-#   value: "value1"
-#   effect: "NoSchedule"
+tolerations: 
+ - key: "key1"
+   operator: "Equal"
+   value: "value1"
+   effect: "NoSchedule"
+ - key: "key2"
+   operator: "Equal"
+   value: "value1"
+   effect: "NoSchedule"
 
 affinity: {}
  # nodeAffinity:
-      #   required:
+      #requiredDuringSchedulingIgnoredDuringExecution :
       #     nodeSelectorTerms:
       #     - matchExpressions:
       #       - key: topology.kubernetes.io/zone
