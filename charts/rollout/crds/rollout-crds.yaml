@@ -7275,6 +7275,7 @@ kind: CustomResourceDefinition
 metadata:
   name: rollouts.argoproj.io
 spec:
+  preserveUnknownFields: false
   group: argoproj.io
   names:
     kind: Rollout
