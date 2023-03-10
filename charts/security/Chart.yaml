@@ -19,6 +19,6 @@ version: 0.1.5
 appVersion: "0.1.1"
 dependencies:
 - name: clair
-  version: "0.x.x"
+  version: "0.1.10"
   repository: https://helm.devtron.ai
   condition: clair.enabled

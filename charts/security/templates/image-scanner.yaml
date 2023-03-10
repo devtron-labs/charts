@@ -1,3 +1,4 @@
+{{- $postgresHost := (include "postgres.host" $) }}
 {{- with .Values.imageScanner }}
 apiVersion: v1
 kind: Secret
@@ -30,12 +31,7 @@ metadata:
 {{ toYaml .labels | indent 4 }}    
 {{- end}} 
 data:
-{{- if $.Values.global.externalDatabase }}
-{{- $PG_ADDR := "clair-postgresql.devtroncd" }}
-{{- else }}
-{{- $PG_ADDR := "postgresql-postgresql.devtroncd" }}
-  PG_ADDR: {{ $PG_ADDR }}
-{{- end }}
+  PG_ADDR: {{ $postgresHost }}
 {{- if .configs}}
 {{ toYaml .configs | indent 2 }}
 ---
@@ -139,5 +135,4 @@ spec:
 {{ toYaml .tolerations | indent 8 }}
 {{- end }}
   revisionHistoryLimit: 3
-{{- end }}
 {{- end }}
