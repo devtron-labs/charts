@@ -1,4 +1,4 @@
-{{- if .Values.global.externalDatabase }}
+{{- if $.Values.global.externalDatabase }}
 {{- $postgresHost := "clair-postgresql.devtroncd" }}
 {{- else }}
 {{- $postgresHost := "postgresql-postgresql.devtroncd" }}

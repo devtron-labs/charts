@@ -40,8 +40,12 @@ spec:
       initContainers:
       - name: pg-ready-wait
         image: postgres:11.3
+{{- if $.Values.global.externalDatabase }}
+{{- $postgresHost := "clair-postgresql.devtroncd" }}
+{{- else }}
+{{- $postgresHost := "postgresql-postgresql.devtroncd" }}
         command: [ "sh", "-c",
-          "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
+          "until pg_isready -h {{ $postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
       containers:
       - name: {{ .Chart.Name }}
