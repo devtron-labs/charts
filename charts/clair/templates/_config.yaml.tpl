@@ -44,4 +44,3 @@ notifier:
   {{- if .Values.config.notifier.extraConfig }}
   {{- toYaml .Values.config.notifier.extraConfig | nindent 2 }}
   {{- end }}
-  {{- end }}
