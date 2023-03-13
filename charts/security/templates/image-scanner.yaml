@@ -1,4 +1,5 @@
 {{- $postgresHost := (include "postgres.host" $) }}
+{{- $postgresDB := (include "postgres.db" $) }}
 {{- with .Values.imageScanner }}
 apiVersion: v1
 kind: Secret
@@ -32,6 +33,7 @@ metadata:
 {{- end}} 
 data:
   PG_ADDR: {{ $postgresHost }}
+  PG_DATABASE: {{ $postgresDB }}
 {{- if .configs}}
 {{ toYaml .configs | indent 2 }}
 ---
