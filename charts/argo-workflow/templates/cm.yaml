@@ -12,7 +12,7 @@ items:
 {{ toYaml .Values.argoWorkflow.s3 | indent 10 }}
       containerRuntimeExecutor: pns
       executor:
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: {{ .Values.argoWorkflow.executor.imagePullPolicy }}
   kind: ConfigMap
   metadata:
     name: workflow-controller-configmap
