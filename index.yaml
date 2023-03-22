@@ -3508,6 +3508,19 @@ entries:
   zinc:
   - apiVersion: v2
     appVersion: v0.2.6
+    created: "2023-03-22T13:04:03.305945915Z"
+    description: Zinc is a search engine that does full text indexing. It is a lightweight
+      alternative to Elasticsearch and runs in less than 100 MB of RAM.
+    digest: 35141a03c179ea571dc181548cfb5bc03a364f99b240a5aae384f4de7c144fa5
+    name: zinc
+    sources:
+    - https://github.com/zinclabs/zinc
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.2/zinc-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: v0.2.6
     created: "2023-02-24T06:41:57.517929475Z"
     description: Zinc is a search engine that does full text indexing. It is a lightweight
       alternative to Elasticsearch and runs in less than 100 MB of RAM.
@@ -3532,4 +3545,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-03-15T08:41:40.732651144Z"
+generated: "2023-03-22T13:04:03.306417418Z"
