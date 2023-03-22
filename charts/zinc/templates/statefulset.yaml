@@ -13,6 +13,10 @@ spec:
       {{- include "zinc.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- if .Values.podAnnotation }}
+      annotation:
+      {{- toYaml .Values.podAnnotation | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "zinc.selectorLabels" . | nindent 8 }}
     spec:
