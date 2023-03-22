@@ -13,9 +13,9 @@ spec:
       {{- include "zinc.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- if .Values.podAnnotation }}
+      {{- if .Values.podAnnotations }}
       annotation:
-      {{- toYaml .Values.podAnnotation | nindent 8 }}
+      {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- end }}
       labels:
         {{- include "zinc.selectorLabels" . | nindent 8 }}
