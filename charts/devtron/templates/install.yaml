@@ -108,6 +108,24 @@ spec:
           {{- end }}    
       restartPolicy: Always
       serviceAccountName: installer
+      {{- if or $.Values.installer.affinity  (and $.Values.global $.Values.global.affinity) }}
+      {{- with $.Values.installer.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or $.Values.installer.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
+      {{- with $.Values.installer.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or $.Values.installer.nodeSelector  (and $.Values.global $.Values.global.nodeSelector ) }}
+      {{- with $.Values.installer.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
       terminationGracePeriodSeconds: 30
 {{- end }}
 {{- end }}

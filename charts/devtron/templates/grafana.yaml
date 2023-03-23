@@ -15,6 +15,18 @@ spec:
   template:
     spec:
       serviceAccountName: devtron
+      {{- with $.Values.monitoring.grafana.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.monitoring.grafana.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.Values.monitoring.grafana.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
       - name: grafana-restart
         image: "quay.io/devtron/kubectl:latest"
@@ -660,6 +672,24 @@ metadata:
   namespace: devtroncd
 spec:
   serviceAccountName: devtron-grafana-test
+  {{- if or $.Values.monitoring.grafana.affinity  (and $.Values.global $.Values.global.affinity) }}
+  {{- with $.Values.monitoring.grafana.affinity | default $.Values.global.affinity }}
+  affinity:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if or $.Values.monitoring.grafana.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
+  {{- with $.Values.monitoring.grafana.tolerations | default $.Values.global.tolerations }}
+  tolerations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
+  {{- if or $.Values.monitoring.grafana.nodeSelector  (and $.Values.global $.Values.global.nodeSelector ) }}
+  {{- with $.Values.monitoring.grafana.nodeSelector | default $.Values.global.nodeSelector }}
+  nodeSelector:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- end }}
   containers:
     - name: devtron-test
       image: "quay.io/devtron/bats:v1.4.1"

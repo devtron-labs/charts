@@ -47,9 +47,31 @@ spec:
         {{- end }}
         {{- end }}
       restartPolicy: OnFailure
+      {{- if .Values.components.migrator }}
+      {{- if .Values.components.migrator.appSync }}
+      {{- if or  $.Values.components.migrator.appSync.affinity  (and $.Values.global $.Values.global.affinity) }}
+      {{- with  $.Values.components.migrator.appSync.affinity | default $.Values.global.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.migrator.appSync.tolerations  (and $.Values.global $.Values.global.tolerations ) }}
+      {{- with $.Values.components.migrator.appSync.tolerations | default $.Values.global.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if or $.Values.components.migrator.appSync.nodeSelector   (and $.Values.global $.Values.global.nodeSelector ) }}
+      {{- with $.Values.components.migrator.appSync.nodeSelector | default $.Values.global.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
   backoffLimit: 4
 ---
-{{- end }}
 {{- if .Capabilities.APIVersions.Has "batch/v1/CronJob" }}
 apiVersion: batch/v1
 {{- else -}}
