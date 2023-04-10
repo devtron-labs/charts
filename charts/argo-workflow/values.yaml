@@ -3,6 +3,7 @@ argoWorkflow:
     bucket: devtron-pro-ci-logs
     keyFormat: demo-v1/{{workflow.name}}
     region: us-east-2
+  replicas: 1
   workflowController:
     image: quay.io/argoproj/workflow-controller:v3.0.7
     resources:

@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: workflow-controller
 spec:
+  {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.replicas }}
+  replicas: {{ $.Values.argoWorkflow.replicas }}
+  {{- end }}
   selector:
     matchLabels:
       app: workflow-controller
