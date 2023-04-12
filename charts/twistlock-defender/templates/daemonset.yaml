@@ -11,9 +11,25 @@ spec:
     metadata:
       annotations:
         container.apparmor.security.beta.kubernetes.io/twistlock-defender: unconfined
+{{- if .Values.gke_autopilot_annotation }}
+        {{ .Values.gke_autopilot_annotation }}
+{{- end}}
+{{- if .Values.annotations }}
+  {{- range $key, $val := .Values.annotations }}
+        {{ $key }}: {{ $val }}
+  {{- end}}
+{{- end}}
       labels:
         app: twistlock-defender
     spec:
+  {{- if .Values.tolerations }}
+      tolerations:
+      {{- range $i, $toleration := .Values.tolerations }}{{ $first := 1 }}
+        {{- range $key, $val := $toleration }}
+      {{if eq $first 1 }}- {{ $key }}: {{ $val -}} {{ $first = 0 }}{{ else }}  {{ $key }}: {{ $val -}}{{- end }}
+        {{- end}}
+      {{- end}}
+  {{- end}}
       serviceAccountName: twistlock-service
 {{- if .Values.secrets_name }}
       imagePullSecrets:
@@ -24,6 +40,9 @@ spec:
       nodeSelector:
         {{ .Values.node_selector }}
 {{- end}}
+{{- if .Values.priority_class_name }}
+      priorityClassName: {{.Values.priority_class_name}}
+{{- end}}
       containers:
       - name: twistlock-defender
         image: {{ .Values.image_name }}
@@ -32,16 +51,24 @@ spec:
           mountPath: "{{ .Values.twistlock_data_folder }}"
         - name: certificates # Setting the certificates mount after data-folder since it is nested and was overridden in CRI based GKE cluster
           mountPath: "/var/lib/twistlock/certificates"
+{{- if .Values.docker_socket_folder}}
         - name: docker-sock-folder
           mountPath: "{{ .Values.docker_socket_folder }}"
+{{- end}}
+{{- if not .Values.talos }}
         - name: passwd
           mountPath: "/etc/passwd"
+{{- end}}
           readOnly: true
         - name: syslog-socket
           mountPath: "/dev/log"
-{{- if eq .Values.defender_type "cri" }}
+{{- if .Values.containers_storage_mount }}
         - name: {{ .Values.cri_data_volume_name }}
-          mountPath: "/var/lib/containers"
+          mountPath: {{ .Values.containers_storage_mount }}
+{{- end}}
+{{- if .Values.runc_proxy_sock_folder }}
+        - name: runc-proxy-sock-folder
+          mountPath: "/run"
 {{- end}}
         env:
         - name: WS_ADDRESS
@@ -72,6 +99,10 @@ spec:
           value: "{{ .Values.host_custom_compliance }}"
         - name: CLOUD_HOSTNAME_ENABLED
           value: "{{ .Values.unique_hostname }}"
+{{- if .Values.FIPS_ENABLED }}
+        - name: FIPS_ENABLED
+          value: "{{ .Values.FIPS_ENABLED }}"
+{{- end}}
         securityContext:
           readOnlyRootFilesystem: true
           privileged: {{ .Values.privileged }}
@@ -106,16 +137,25 @@ spec:
       - name: data-folder
         hostPath:
           path: "{{ .Values.DATA_FOLDER }}"
+{{- if not .Values.talos }}
       - name: passwd
         hostPath:
           path: "/etc/passwd"
+{{- end}}
+{{- if .Values.docker_socket_folder}}
       - name: docker-sock-folder
         hostPath:
           path: "{{ .Values.docker_socket_folder }}"
-{{- if eq .Values.defender_type "cri" }}
+{{- end}}
+{{- if .Values.containers_storage_mount }}
       - name: {{ .Values.cri_data_volume_name }}
         hostPath:
-          path: "/var/lib/containers"
+          path: {{ .Values.containers_storage_mount }}
+{{- end}}
+{{- if .Values.runc_proxy_sock_folder}}
+      - name: runc-proxy-sock-folder
+        hostPath:
+          path: "/run"
 {{- end}}
       hostPID: true
       hostNetwork: true

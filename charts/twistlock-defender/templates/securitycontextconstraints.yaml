@@ -10,7 +10,7 @@ allowHostIPC: false
 allowHostNetwork: true
 allowHostPID: true
 allowHostPorts: true
-allowPrivilegedContainer: false
+allowPrivilegedContainer: {{ .Values.privileged }}
 allowedCapabilities:
 - NET_ADMIN  # Required for process monitoring
 - NET_RAW    # Required for iptables (CNNF, runtime DNS, WAAS). See: https://bugzilla.redhat.com/show_bug.cgi?id=1895032
