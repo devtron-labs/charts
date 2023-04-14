@@ -21,6 +21,9 @@ spec:
     metadata:
       labels:
         app: workflow-controller
+        {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.labels }}
+{{- toYaml $.Values.argoWorkflow.labels | nindent 8 }}      
+        {{- end }}
     spec:
       containers:
       - args:
