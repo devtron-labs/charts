@@ -4,6 +4,8 @@ argoWorkflow:
     keyFormat: demo-v1/{{workflow.name}}
     region: us-east-2
   replicas: 1
+  labels: {}
+  annotations: {}
   workflowController:
     image: quay.io/argoproj/workflow-controller:v3.0.7
     resources:
