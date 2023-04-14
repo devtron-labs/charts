@@ -4,11 +4,11 @@ metadata:
   name: workflow-controller
   {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.annotations }}
   annotations:
-{{ toYaml $.Values.argoWorkflow.annotations | nindent 4 }}
+{{- toYaml $.Values.argoWorkflow.annotations | nindent 4 }}
   {{- end }}
-  {{- and $.Values.argoWorkflow $.Values.argoWorkflow.labels }}
+  {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.labels }}
   labels:
-{{ toYaml .$.Values.argoWorkflow.labels | nindent 4 }}      
+{{- toYaml $.Values.argoWorkflow.labels | nindent 4 }}      
   {{- end }}
 spec:
   {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.replicas }}
@@ -31,11 +31,14 @@ spec:
         command:
         - workflow-controller
         env:
-        - name: LEADER_ELECTION_IDENTITY
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.name
+          - name: LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+         {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.EnvVariables }}
+{{ toYaml $.Values.argoWorkflow.EnvVariables | indent 10 }}
+         {{- end }}
         resources:
 {{ toYaml .Values.argoWorkflow.workflowController.resources | indent 10 }}
         image: {{ .Values.argoWorkflow.workflowController.image }}

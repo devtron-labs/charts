@@ -6,6 +6,7 @@ argoWorkflow:
   replicas: 1
   labels: {}
   annotations: {}
+  EnvVariables: []
   workflowController:
     image: quay.io/argoproj/workflow-controller:v3.0.7
     resources:
