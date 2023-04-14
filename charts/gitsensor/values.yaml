@@ -49,57 +49,13 @@ gitsensor:
       #         values:
       #         - us-east-2
   
-  ConfigMaps:
-  enabled: false
-  maps: []
-  #  - name: config-map-1
-  #    type: environment
-  #    external: false
-  #    data:
-  #     key1: key1value-1
-  #     key2: key2value-1
-  #     key3: key3value-1
-  #  - name: config-map-2
-  #    type: volume
-  #    external: false
-  #    mountPath: /etc/config/2
-  #    data:
-  #     key1: |
-  #      club : manchester utd
-  #      nation : england
-  #     key2: abc-2
-  #     key3: abc-2
-  #  - name: config-map-3
-  #    type: environment
-  #    external: true
-  #    mountPath: /etc/config/3
-  #    data: []
-  #  - name: config-map-4
-  #    type: volume
-  #    external: true
-  #    mountPath: /etc/config/4
-  #    data: []
-
-
-  ConfigSecrets:
-  enabled: false
-  secrets: []
-  #  - name: config-secret-1
-  #    type: environment
-  #    external: false
-  #    data:
-  #     key1: key1value-1
-  #     key2: key2value-1
-  #     key3: key3value-1
-  #  - name: config-secret-2
-  #    type: volume
-  #    external: false
-  #    mountPath: /etc/config/2
-  #    data:
-  #     key1: |
-  #      club : manchester utd
-  #      nation : england
-  #     key2: abc-2    
+  envFrom:
+    configMapRef: []
+    #  - "test"
+    #  - "test2"
+    configSecretRef: 
+    #  - "Test3"
+     
   storage:
     class: gp2
     requests: 2Gi
