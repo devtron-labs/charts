@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: {{ .Release.Name }}-jaeger-all-in-one
+ namespace: opentelemetry
+ labels:
+   {{- include "stateful label" . | nindent 3 }}
+spec: 
+  serviceName: "jaeger-headless"
+  replicas: {{ .Values.jaeger.replicas }}
+  selector:
+   matchLabels:
+       {{- include "stateful label" . | nindent 6 }}
+  template:
+   metadata:
+     labels:
+        {{- include "stateful label" . | nindent 7 }}
+   spec:
+     containers:
+       - image: {{ .Values.jaeger.image  }}
+         name: jaeger
+         ports:
+          - containerPort: {{ .Values.jaeger.ports.containerPort1 }}
+          - containerPort: {{ .Values.jaeger.ports.containerPort2 }}
+          - containerPort: {{ .Values.jaeger.ports.containerPort3 }}
+         env:
+         - name:  {{ quote .Values.jaeger.env.name1 }}
+           value: {{ quote .Values.jaeger.env.value1 }}
+         - name:  {{ quote .Values.jaeger.env.name2 }}
+           value: {{ quote .Values.jaeger.env.value2 }}
+         - name:  {{ quote .Values.jaeger.env.name3 }}
+           value: {{ quote .Values.jaeger.env.value3 }}
+         - name:  {{ quote .Values.jaeger.env.name4 }}
+           value: {{ quote .Values.jaeger.env.value4 }}
+         - name:  {{ quote .Values.jaeger.env.name5 }}
+           value: {{ quote .Values.jaeger.env.value5 }}
+         volumeMounts:
+         - name: jaeger-pvc
+           mountPath: /badger
+  volumeClaimTemplates:
+  - metadata:
+      name: jaeger-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage:  {{ .Values.jaeger.storage  }} 

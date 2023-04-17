@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: {{ .Release.Name }}-optl
+ namespace: opentelemetry
+ labels:
+   app: opentelemetry
+   component: otel-collector
+spec:
+ type: {{ .Values.optl_service_ports.type }}
+ ports:
+   - name:  {{  .Values.optl_service_ports.name1 }} # Default endpoint for OpenTelemetry gRPC receiver.
+     port:  {{  .Values.optl_service_ports.port1 }}
+     protocol: TCP
+     targetPort: {{   .Values.optl_service_ports.targetport1 }}
+   - name: {{ .Values.optl_service_ports.name2 }} # Default endpoint for OpenTelemetry HTTP receiver.
+     port: {{ .Values.optl_service_ports.port2 }}
+     protocol: TCP
+     targetPort: {{ .Values.optl_service_ports.targetport2 }}
+  #  - name: zpages
+  #    port: 55679
+  #    protocol: TCP
+  #    targetPort: 55679
+  #  - name: health-check
+  #    port: 13133
+  #    protocol: TCP
+  #    targetPort: 13133
+ selector:
+   app: opentelemetry
+   name: optl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-jaeger-headless
+  namespace: opentelemetry
+  labels:
+   app: opentelemetry
+   component: optl-collector
+spec:
+  ports:
+  - port: {{ .Values.jaeger_servie_ports.port1 }}
+    name: {{ .Values.jaeger_servie_ports.name1 }}
+  - port: {{ .Values.jaeger_servie_ports.port2 }}
+    name: {{ .Values.jaeger_servie_ports.name2 }}
+  - port: {{ .Values.jaeger_servie_ports.port3 }}
+    name: {{ .Values.jaeger_servie_ports.name3 }}
+  clusterIP: None
+  selector:
+       app: opentelemetry
+       component: optl-collector
+       name: jaeger
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-jaeger-query
+  namespace: opentelemetry
+  labels:
+   app: opentelemetry
+   component: optl-collector
+   name: jaeger
+spec:
+  ports:
+    - name: {{ .Values.jaeger_query_ports.name }}
+      port: {{ .Values.jaeger_query_ports.port }}
+      protocol: TCP
+  selector:
+      app: opentelemetry
+      component: optl-collector
+      name: jaeger
+  type: {{ .Values.jaeger_query_ports.type }}
