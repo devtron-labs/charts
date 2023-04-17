@@ -1,9 +1,9 @@
 config:
-  postgresHost: clair-pg-postgresql
+  postgresHost: postgresql-postgresql.devtroncd
   postgresPort: 5432
   postgresdbname: clairv4
-  postgresUser: clair
-  postgresPassword: clair
+  postgresUser: postgres
+  postgresPassword: ""
   introspection_addr: :6061
   http_listen_addr: :6060
   log_level: debug
@@ -11,6 +11,7 @@ config:
     scanlock_retry: 10
     layer_scan_concurrency: 5
     migrations: true
+    extraConfig: {}
   matcher:
     indexer_addr: :6060
     max_conn_pool: 100
@@ -25,14 +26,16 @@ config:
     - rhel
     - suse
     - ubuntu
+    extraConfig: {}
   notifier:
     delivery_interval: 1m
     poll_interval: 5m
     migrations: true
+    extraConfig: {}
 image:
-  pullPolicy: Never
-  repository: clair-local
-  tag: latest
+  pullPolicy: IfNotPresent
+  repository: quay.io/projectquay/clair
+  tag: 4.3.6
 ingress:
   annotations: null
   enabled: false
@@ -42,15 +45,15 @@ ingress:
 insecureTls: false
 nodeSelector: {}
 replicaCount: 1
-podLabels:
+labels:
   component: clair
 resources:
   limits:
+    cpu: 500m
+    memory: 4Gi
+  requests:
     cpu: 200m
     memory: 1500Mi
-  requests:
-    cpu: 100m
-    memory: 500Mi
 service:
   externalApiPort: 6060
   externalHealthPort: 6061
@@ -59,5 +62,9 @@ service:
   internalHealthPath: /healthz
   type: ClusterIP
 tolerations: []
-extraEnv: []
+extraEnv:
+- name: CLAIR_CONF
+  value: /etc/clair/config.yaml
+- name: CLAIR_MODE
+  value: combo
 extraArgs: []

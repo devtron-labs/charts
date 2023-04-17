@@ -1,13 +1,16 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: argocd-cert-refresh-role
+  name: argocd-cert-role
 rules:
-- apiGroups: ["*"]
+- apiGroups: [""]
   resources:
   - pods
   - secrets
   verbs:
   - create
   - get
+  - list
   - delete
+  - update
+  - patch

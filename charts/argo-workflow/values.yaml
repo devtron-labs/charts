@@ -12,3 +12,5 @@ argoWorkflow:
       requests:
         cpu: "0.03"
         memory: 50Mi
+  executor:
+    imagePullPolicy: IfNotPresent

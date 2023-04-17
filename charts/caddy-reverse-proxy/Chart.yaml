@@ -1,0 +1,8 @@
+name: caddy-reverse-proxy
+description: Helm chart to deploy caddy reverse proxy.
+apiVersion: v1
+version: 0.10.1
+appVersion: 0.1.0
+maintainers:
+- email: ajay@devtron.ai
+  name: Ajay

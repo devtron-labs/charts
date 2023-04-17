@@ -6,8 +6,9 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
-{{ toYaml .Values.podLabels | indent 4 }}
+    app: clair
+    integration: security
+{{ toYaml .Values.labels | indent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -17,7 +18,12 @@ spec:
     metadata:
       labels:
         app: {{ template "clair.fullname" . }}
-{{ toYaml .Values.podLabels | indent 8 }}
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+        app: clair
+        integration: security
+{{ toYaml .Values.labels | indent 8 }}
     spec:
       volumes:
       - name: "{{ .Chart.Name }}-config"
@@ -35,7 +41,7 @@ spec:
       - name: pg-ready-wait
         image: postgres:11.3
         command: [ "sh", "-c",
-          "until pg_isready -h {{ .Values.config.postgresServiceName }} -p 5432;
+          "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
       containers:
       - name: {{ .Chart.Name }}

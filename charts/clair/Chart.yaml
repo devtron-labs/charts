@@ -7,7 +7,9 @@ icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-1
 maintainers:
 - email: jimmy.zelinskie@coreos.com
   name: Jimmy Zelinskie
+- email: pawan.mehta@devtron.ai
+  name: Pawan Kumar
 name: clair
 sources:
 - https://github.com/coreos/clair
-version: 0.1.5
+version: 0.1.9

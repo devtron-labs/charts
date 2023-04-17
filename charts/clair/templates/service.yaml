@@ -6,7 +6,9 @@ metadata:
     heritage: {{ .Release.Service | quote }}
     release: {{ .Release.Name | quote }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-    app: {{ template "clair.fullname" . }}
+    app: clair
+    integration: security
+{{ toYaml .Values.labels | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -25,4 +27,9 @@ spec:
     nodePort: {{ .Values.service.healthNodePort }}
 {{- end }}
   selector:
-    app: {{ template "clair.fullname" . }}
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    app: clair
+    integration: security
+{{ toYaml .Values.labels | indent 4 }}

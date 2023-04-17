@@ -12,7 +12,7 @@ items:
 {{ toYaml .Values.argoWorkflow.s3 | indent 10 }}
       containerRuntimeExecutor: pns
       executor:
-        imagePullPolicy: Always
+{{ toYaml .Values.argoWorkflow.executor | indent 8 }}
   kind: ConfigMap
   metadata:
     name: workflow-controller-configmap

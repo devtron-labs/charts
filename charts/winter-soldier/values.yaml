@@ -1,0 +1,93 @@
+# Default values for winter-soldier.
+
+replicaCount: 1
+image: quay.io/devtron/winter-soldier:cc4a8ba6-414-12871
+graceperiod: 10
+
+resources: {}
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Provide the list of Hibernator objects in the yaml format with your custom requirements.
+hibernator: []
+# - apiVersion: pincher.devtron.ai/v1alpha1
+#   kind: Hibernator
+#   metadata:
+#     name: deploy-hibernator
+#   spec:
+#     timeRangesWithZone:
+#       timeZone: "Asia/Kolkata"
+#       timeRanges:
+#       - timeFrom: 00:00
+#         timeTo: 23:59:59
+#         weekdayFrom: Mon
+#         weekdayTo: Sun
+#     selectors:
+#     - inclusions:
+#       - objectSelector:
+#           name: ""
+#           type: "deployment"
+#           fieldSelector:
+#             - AfterTime(Now(), AddTime(ParseTime({{metadata.creationTimestamp}}, '2006-01-02T15:04:05Z'), '3d'))
+#         namespaceSelector:
+#           name: "test,staging"
+#     action: delete
+# - apiVersion: pincher.devtron.ai/v1alpha1
+#   kind: Hibernator
+#   metadata:
+#     name: statefulset-hibernator
+#   spec:
+#     timeRangesWithZone:
+#       timeZone: "Asia/Kolkata"
+#       timeRanges:
+#       - timeFrom: 00:00
+#         timeTo: 23:59:59
+#         weekdayFrom: Mon
+#         weekdayTo: Sun
+#     selectors:
+#     - inclusions:
+#       - objectSelector:
+#           name: ""
+#           type: "statefulset"
+#           fieldSelector:
+#             - AfterTime(Now(), AddTime(ParseTime({{metadata.creationTimestamp}}, '2006-01-02T15:04:05Z'), '3d'))
+#         namespaceSelector:
+#           name: "all"
+#     action: sleep
+# - apiVersion: pincher.devtron.ai/v1alpha1
+#   kind: Hibernator
+#   metadata:
+#     name: statefulset-hibernator
+#   spec:
+#     timeRangesWithZone:
+#       timeZone: "Asia/Kolkata"
+#       timeRanges:
+#       - timeFrom: 22:00
+#         timeTo: 23:59:59
+#         weekdayFrom: Mon
+#         weekdayTo: Sun
+#       - timeFrom: 00:00
+#         timeTo: 06:00:00
+#         weekdayFrom: Mon
+#         weekdayTo: Sun
+#     selectors:
+#     - inclusions:
+#       - objectSelector:
+#           name: ""
+#           type: "hpa"
+#           fieldSelector:
+#             - AfterTime(Now(), AddTime(ParseTime({{metadata.creationTimestamp}}, '2006-01-02T15:04:05Z'), '3d'))
+#         namespaceSelector:
+#           name: "all"
+#     action: scale
+#     targetReplicas: [1,1]

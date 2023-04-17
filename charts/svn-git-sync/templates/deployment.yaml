@@ -44,6 +44,9 @@ spec:
             name: {{ .Release.Name }}-branches-cm
       {{- end }}
       terminationGracePeriodSeconds: 30
+      {{- if .Values.autoRestart }}
+      serviceAccountName: {{ .Release.Name }}
+      {{- end }}
       restartPolicy: Always
       containers:
         - name: {{ .Release.Name }}
@@ -69,3 +72,18 @@ spec:
             - name: {{ .Release.Name }}-branches
               mountPath: /app/{{ $.Values.configs.REPO_NAME }}/
           {{- end }}
+        {{- if .Values.autoRestart }}
+        - name: {{ .Release.Name }}-cron
+          image: quay.io/devtron/svn-git-sync:cron
+          imagePullPolicy: {{ $.Values.imagePullPolicy }}
+          envFrom:
+          - configMapRef:
+              name: {{ .Release.Name }}-cm
+          {{- if $.Values.persistence.enabled }}
+          volumeMounts:
+            - name: {{ .Release.Name }}-volume
+              mountPath: /app
+          {{- end }}
+        {{- end }}
+          
+          
