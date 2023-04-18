@@ -54,14 +54,17 @@ Deployment:
               #  - containerPort: 13133  # health check
 
 #optl_service
-optl_service_ports:
+optl_service:
      type: "ClusterIP"
-     name1: otlp-grpc # Default endpoint for OpenTelemetry gRPC receiver.
-     port1: "4317"
-     targetPort1: "4317"
-     name2: otlp-http # Default endpoint for OpenTelemetry HTTP receiver.
-     port2: "4318"
-     targetPort2: "4318"
+     ports: 
+        - name: otlp-grpc # Default endpoint for OpenTelemetry gRPC receiver.
+          port: "4317"
+          protocol: TCP
+          targetPort: "4317"
+        - name: otlp-http # Default endpoint for OpenTelemetry HTTP receiver.
+          port: "4318"
+          protocol: TCP
+          targetPort: "4318"
   #  - name3: zpages
   #    port3: 55679
   #    protocol: TCP
@@ -76,12 +79,12 @@ optl_service_ports:
 
 # service for jaeger-headless
 jaeger_servie_ports:
-    port1: "16686"
-    name1: web
-    port2: "14250"
-    name2: optl-connection
-    port3: "4317"
-    name3: grpc
+ -   port: "16686"
+     name: web
+ -   port: "14250"
+     name: optl-connection
+ -   port: "4317"
+     name: grpc
 
 #service for jaeger-query
 jaeger_query_ports:
@@ -93,23 +96,22 @@ jaeger_query_ports:
 jaeger:
       replicas: "1"
       image: jaegertracing/all-in-one:latest
+      storage: "10Gi"
       ports:
            containerPort1: "16686"
            containerPort2: "14250"
            containerPort3: "4317"
-      env:
-        name1: "SPAN_STORAGE_TYPE"
-        value1: "badger"
-        name2: "COLLECTOR_OTLP_ENABLED"
-        value2: "true"
-        name3: "BADGER_EPHEMERAL"
-        value3: "false" 
-        name4: "BADGER_DIRECTORY_VALUE"
-        value4: "/badger/data"
-        name5: "BADGER_DIRECTORY_KEY"
-        value5: "/badger/key"
-      storage: "10Gi"
-
+      env: 
+      - name: "SPAN_STORAGE_TYPE"
+        value: "badger"
+      - name: "COLLECTOR_OTLP_ENABLED"
+        value: "true"
+      - name: "BADGER_EPHEMERAL"
+        value: "false" 
+      - name: "BADGER_DIRECTORY_VALUE"
+        value: "/badger/data"
+      - name: "BADGER_DIRECTORY_KEY"
+        value: "/badger/key"
 #test-file-connectivity
 service:
   type: NodePort

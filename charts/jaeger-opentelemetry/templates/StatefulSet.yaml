@@ -20,20 +20,16 @@ spec:
        - image: {{ .Values.jaeger.image  }}
          name: jaeger
          ports:
-          - containerPort: {{ .Values.jaeger.ports.containerPort1 }}
-          - containerPort: {{ .Values.jaeger.ports.containerPort2 }}
-          - containerPort: {{ .Values.jaeger.ports.containerPort3 }}
+         {{- range $port := .Values.jaeger.ports }}
+          - containerPort: {{ $port }}
+        {{- end}}
+        {{if .Values.jaeger.env }}
          env:
-         - name:  {{ quote .Values.jaeger.env.name1 }}
-           value: {{ quote .Values.jaeger.env.value1 }}
-         - name:  {{ quote .Values.jaeger.env.name2 }}
-           value: {{ quote .Values.jaeger.env.value2 }}
-         - name:  {{ quote .Values.jaeger.env.name3 }}
-           value: {{ quote .Values.jaeger.env.value3 }}
-         - name:  {{ quote .Values.jaeger.env.name4 }}
-           value: {{ quote .Values.jaeger.env.value4 }}
-         - name:  {{ quote .Values.jaeger.env.name5 }}
-           value: {{ quote .Values.jaeger.env.value5 }}
+         {{- range $env := .Values.jaeger.env }}
+           - name: {{ $env.name | quote }}
+             value: {{ $env.value | quote }}
+         {{- end }}
+        {{- end }}
          volumeMounts:
          - name: jaeger-pvc
            mountPath: /badger

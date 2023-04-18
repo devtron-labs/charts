@@ -32,10 +32,7 @@ spec:
              cpu: {{ .Values.Deployment.resource.request.cpu  }}
              memory: {{ .Values.Deployment.resource.request.memory }}
          ports:
-           - containerPort: {{ .Values.Deployment.ports.containerPort }}   #otlp grpc  4317
-          #  - containerPort: 4318   # otlp http
-          #  - containerPort: 55679  # zpages
-          #  - containerPort: 13133  # health check
+           - containerPort: {{ .Values.Deployment.ports.containerPort }}
          volumeMounts:
            - name: optl-collector-config-vol
              mountPath: /conf
