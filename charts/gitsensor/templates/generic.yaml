@@ -55,19 +55,15 @@ spec:
           {{- with .Values.gitsensor.envFrom }}
           {{- if or (.configMapRef) (.configSecretRef) }}
           envFrom:
-          {{- with .configMapRef }}
-          - configMapRef:
-          {{- range . }} 
-               name: {{ . }}
-          {{- end }}
-          {{- end }}
-          {{- with .configSecretRef }}    
-          - secretRef: 
-          {{- range . }} 
-              name: {{ . }} 
-          {{- end }}
-          {{- end }}     
+          {{- range .configMapRef }}
+           configMapRef:
+             name: {{ . }}
           {{- end }}  
+          {{- range .configSecretRef }}
+           configSecretRef:
+             name: {{ . }}
+          {{- end }}    
+          {{- end }} 
           {{- end }}   
           {{- if $.Values.gitsensor.spec.resources}}
           resources:

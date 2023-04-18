@@ -50,11 +50,12 @@ gitsensor:
       #         - us-east-2
   
   envFrom:
-    configMapRef: []
+    configMapRef:
     #  - "test"
     #  - "test2"
     configSecretRef: 
     #  - "Test3"
+    #  - "Test4"
      
   storage:
     class: gp2
