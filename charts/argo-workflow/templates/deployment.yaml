@@ -11,7 +11,7 @@ metadata:
 {{- toYaml $.Values.argoWorkflow.labels | nindent 4 }}      
   {{- end }}
 spec:
-  replicas: {{ $.Values.argoWorkflow.replicas | default 1}}
+  replicas: {{ $.Values.argoWorkflow.replicas | default 1 }}
   selector:
     matchLabels:
       app: workflow-controller
