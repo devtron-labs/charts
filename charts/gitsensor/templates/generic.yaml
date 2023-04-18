@@ -30,7 +30,7 @@ spec:
     metadata:
       labels:
     {{- if $.Values.gitsensor.spec.template.metadata.labels }}
-{{ toYaml $.Values.gitsensor.spec.template.metadata.labels | nindent 8 }}
+{{ toYaml $.Values.gitsensor.spec.template.metadata.labels | indent 8 }}
     {{- end }}
     spec:
       terminationGracePeriodSeconds: 10
