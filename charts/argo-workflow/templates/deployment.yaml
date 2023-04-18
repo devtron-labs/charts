@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: workflow-controller
-  {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.annotations }}
+  {{- if  $.Values.argoWorkflow.annotations }}
   annotations:
 {{- toYaml $.Values.argoWorkflow.annotations | nindent 4 }}
   {{- end }}
-  {{- if and $.Values.argoWorkflow $.Values.argoWorkflow.labels }}
+  {{- if  $.Values.argoWorkflow.labels }}
   labels:
 {{- toYaml $.Values.argoWorkflow.labels | nindent 4 }}      
   {{- end }}
