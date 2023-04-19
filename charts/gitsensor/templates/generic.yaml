@@ -12,7 +12,7 @@ spec:
     - port: {{ $env.port }}
       name: {{ $env.name }}
       targetPort: {{ $env.targetPort }}
-     {{- end }} 
+  {{- end }} 
   selector:
     {{- if .Values.gitsensor.service.spec.selector }}
 {{ toYaml .Values.gitsensor.service.spec.selector | indent 4 }}
@@ -44,10 +44,10 @@ spec:
         - name: git-sensor
           image: {{ .Values.gitsensor.image.repository }}:{{ .Values.gitsensor.image.tag }}
           ports:
-            - containerPort: 8080
-              name: sensor
-            - containerPort: 8081
-              name: grpc
+          {{- range $env := .Values.gitsensor.containerPort }}
+            - containerPort: {{ $env.port}}
+              name: {{ $env.name }}
+          {{- end }}
           volumeMounts:
             - name: git-volume
               mountPath: /git-base/
