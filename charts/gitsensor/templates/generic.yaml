@@ -56,11 +56,11 @@ spec:
           {{- if or (.configMapRef) (.configSecretRef) }}
           envFrom:
           {{- range .configMapRef }}
-           configMapRef:
+           - configMapRef:
              name: {{ . }}
           {{- end }}  
           {{- range .configSecretRef }}
-           configSecretRef:
+           - configSecretRef:
              name: {{ . }}
           {{- end }}    
           {{- end }} 
