@@ -57,11 +57,11 @@ spec:
           envFrom:
           {{- range .configMapRef }}
            - configMapRef:
-             name: {{ . }}
+               name: {{ . }}
           {{- end }}  
           {{- range .configSecretRef }}
-           - configSecretRef:
-             name: {{ . }}
+           - secretRef:
+               name: {{ . }}
           {{- end }}    
           {{- end }} 
           {{- end }}   
