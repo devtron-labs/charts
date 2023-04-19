@@ -46,6 +46,8 @@ spec:
           ports:
             - containerPort: 8080
               name: sensor
+            - containerPort: 8081
+              name: grpc
           volumeMounts:
             - name: git-volume
               mountPath: /git-base/
