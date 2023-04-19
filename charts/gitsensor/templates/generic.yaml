@@ -8,9 +8,11 @@ metadata:
     {{- end }}
 spec:
   ports:
-    - port: {{ .Values.gitsensor.service.spec.port }}
-      name: sensor
-      targetPort: {{ .Values.gitsensor.service.spec.targetPort }}
+  {{- range $env := .Values.gitsensor.service.spec.ports }}
+    - port: {{ $env.port }}
+      name: {{ $env.name }}
+      targetPort: {{ $env.targetPort }}
+     {{- end }} 
   selector:
     {{- if .Values.gitsensor.service.spec.selector }}
 {{ toYaml .Values.gitsensor.service.spec.selector | indent 4 }}
@@ -64,7 +66,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{ if .Values.gitsensor.spec.affinity }}
+{{- if .Values.gitsensor.spec.affinity }}
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
 {{- end }}

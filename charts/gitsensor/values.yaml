@@ -13,10 +13,15 @@ gitsensor:
         app: git-sensor
       name: git-sensor-service
     spec:
-      port: 80
+      ports:
+      - port: 80
+        name: sensor
+        targetPort: 8080
+      - port: 90
+        name: grpc
+        targetPort: 8081
       selector:
         app: git-sensor
-      targetPort: 8080
   spec:
     replicas: 1
     selector:
