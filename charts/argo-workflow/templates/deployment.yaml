@@ -2,7 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: workflow-controller
+  {{- if  $.Values.argoWorkflow.annotations }}
+  annotations:
+{{- toYaml $.Values.argoWorkflow.annotations | nindent 4 }}
+  {{- end }}
+  {{- if  $.Values.argoWorkflow.labels }}
+  labels:
+{{- toYaml $.Values.argoWorkflow.labels | nindent 4 }}      
+  {{- end }}
 spec:
+  replicas: {{ $.Values.argoWorkflow.replicas | default 1 }}
   selector:
     matchLabels:
       app: workflow-controller
@@ -10,6 +19,9 @@ spec:
     metadata:
       labels:
         app: workflow-controller
+        {{- if  $.Values.argoWorkflow.labels }}
+{{- toYaml $.Values.argoWorkflow.labels | nindent 8 }}      
+        {{- end }}
     spec:
       containers:
       - args:
@@ -20,11 +32,18 @@ spec:
         command:
         - workflow-controller
         env:
-        - name: LEADER_ELECTION_IDENTITY
-          valueFrom:
-            fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.name
+          - name: LEADER_ELECTION_IDENTITY
+            valueFrom:
+              fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.name
+          {{- if  $.Values.argoWorkflow.EnvVariables }}
+{{ toYaml $.Values.argoWorkflow.EnvVariables | indent 10 }}
+          {{- end }}
+        {{- if  $.Values.argoWorkflow.EnvVariablesFrom }}
+        envFrom:
+{{ toYaml $.Values.argoWorkflow.EnvVariablesFrom | indent 10 }}
+        {{- end }}
         resources:
 {{ toYaml .Values.argoWorkflow.workflowController.resources | indent 10 }}
         image: {{ .Values.argoWorkflow.workflowController.image }}
