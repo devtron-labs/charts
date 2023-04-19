@@ -29,8 +29,8 @@ spec:
   template:
     metadata:
       labels:
-    {{- if .Values.gitsensor.spec.template.metadata.labels }}
-{{ toYaml .Values.gitsensor.spec.template.metadata.labels | indent 8 }}
+    {{- if $.Values.gitsensor.spec.template.metadata.labels }}
+{{ toYaml $.Values.gitsensor.spec.template.metadata.labels | indent 8 }}
     {{- end }}
     spec:
       terminationGracePeriodSeconds: 10
@@ -50,13 +50,26 @@ spec:
           env:
           {{- range $key, $val := .Values.gitsensor.envVariables.data }}
             - name: {{ $key }}
-              value: {{ $val | quote }}
+              value: {{ $val | quote }}    
           {{- end }}
+          {{- with .Values.gitsensor.envFrom }}
+          {{- if or (.configMapRef) (.configSecretRef) }}
+          envFrom:
+          {{- range .configMapRef }}
+           - configMapRef:
+               name: {{ . }}
+          {{- end }}  
+          {{- range .configSecretRef }}
+           - secretRef:
+               name: {{ . }}
+          {{- end }}    
+          {{- end }} 
+          {{- end }}   
           {{- if $.Values.gitsensor.spec.resources}}
           resources:
-{{ toYaml .Values.gitsensor.spec.resources | indent 12 -}}
-{{- end}}
-          {{- if .Values.containerSecurityContext }}
+{{ toYaml .Values.gitsensor.spec.resources | indent 12 }}
+          {{- end}}
+          {{- if .Values.containerSecurityContext }} 
           securityContext:
 {{ toYaml .Values.containerSecurityContext | indent 12 }}
 {{- end }}
@@ -64,7 +77,7 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-{{ if .Values.gitsensor.spec.affinity }}
+{{- if .Values.gitsensor.spec.affinity }}
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
 {{- end }}

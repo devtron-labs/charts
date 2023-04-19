@@ -48,6 +48,15 @@ gitsensor:
       #         operator: In
       #         values:
       #         - us-east-2
+  
+  envFrom:
+    configMapRef:
+    #  - "test"
+    #  - "test2"
+    configSecretRef: 
+    #  - "Test3"
+    #  - "Test4"
+     
   storage:
     class: gp2
     requests: 2Gi
