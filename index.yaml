@@ -15,6 +15,17 @@ entries:
     version: 0.10.0
   argo-workflow:
   - apiVersion: v1
+    created: "2023-04-19T07:26:57.036527787Z"
+    description: Chart to deploy argo-workflow
+    digest: fcfaee0ab2a5de55d1ce05b7ca4bc509a7b69f9751c3798bcce66b88a4987ea1
+    maintainers:
+    - email: pawan@devtron.ai
+      name: Pawan
+    name: argo-workflow
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argo-workflow-0.1.4/argo-workflow-0.1.4.tgz
+    version: 0.1.4
+  - apiVersion: v1
     created: "2023-03-15T08:41:40.731968626Z"
     description: Chart to deploy argo-workflow
     digest: 2ee7460ac9692043e7908ea92f342fddb549ecec6d804d6070de5abe9fd69fd3
@@ -3646,4 +3657,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-12T08:50:29.152539133Z"
+generated: "2023-04-19T07:26:57.036993304Z"
