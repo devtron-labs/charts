@@ -4,12 +4,12 @@ gitsensor:
       PG_ADDR: postgresql-postgresql.devtroncd
       PG_PASS: password
   envFrom:
-    configMapRef:
-     - "test"
-     - "test2"
-    configSecretRef: 
-      - "Test3"
-      - "Test4"
+    configMap: []
+     #- "test"
+    # - "test2"
+    secret: []
+     # - "Test3"
+     # - "Test4"
   image:
     pullPolicy: Always
     repository: quay.io/devtron/git-sensor

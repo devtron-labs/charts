@@ -57,13 +57,13 @@ spec:
               value: {{ $val | quote }}
           {{- end }}
           {{- with .Values.gitsensor.envFrom }}
-          {{- if or (.configMapRef) (.configSecretRef) }}
+          {{- if or (.configMap) (.secret) }}
           envFrom:
-          {{- range .configMapRef }}
+          {{- range .configMap }}
            - configMapRef:
                 name: {{ . }}
           {{- end }}
-          {{- range .configSecretRef }}
+          {{- range .secret }}
            - secretRef:
                 name: {{ . }}
           {{- end }}
