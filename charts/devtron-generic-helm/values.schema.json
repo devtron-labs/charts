@@ -3,13 +3,28 @@
   "type": "object",
   "properties": {
     "data": {
-      "type": "object",
+      "type": "array",
       "properties": {
-        "command": {
-          "type": "string",
-          "form": true,
-          "title": "Tenant Id"
-        }
+        "spec": {
+          "type": "object",
+          "properties": {
+            "templates": {
+              "type": "array",
+              "properties": {
+                "container": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "string",
+                      "form": true,
+                      "title": "Tenant Id"
+                    }
+                  }
+                }
+              }
+            }
+         }
+       }
       }
     }
   }
