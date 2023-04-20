@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "data": {
-      "type": "array",
+      "type": "object",
       "form": true,
       "title": "Tenant Onboarding",
       "properties": {
