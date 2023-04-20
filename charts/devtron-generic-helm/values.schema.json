@@ -15,9 +15,14 @@
                   "type": "object",
                   "properties": {
                     "command": {
-                      "type": "string",
-                      "form": true,
-                      "title": "Tenant Id"
+                      "type": "array",
+                      "properties": {
+                        "-t": {
+                          "type": "string",
+                          "form": true,
+                          "title": "Tenant Id"
+                        } 
+                      }
                     }
                   }
                 }
