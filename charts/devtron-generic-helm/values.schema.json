@@ -8,7 +8,7 @@
       "title": "Tenant Onboarding",
       "properties": {
         "command": {
-          "type": "array",
+          "type": "string",
           "form": true,
           "title": "Tenant Id"
         }
