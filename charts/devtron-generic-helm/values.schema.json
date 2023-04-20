@@ -4,26 +4,13 @@
   "properties": {
     "data": {
       "type": "array",
+      "form": true,
+      "title": "Tenant Onboarding",
       "properties": {
-        "spec": {
-          "type": "object",
-          "properties": {
-            "templates": {
-              "type": "array",
-              "properties": {
-                "container": {
-                  "type": "object",
-                  "properties": {
-                    "command": {
-                      "type": "array",
-                      "form": true,
-                      "title": "Tenant Id"
-                    }
-                  }
-                }
-              }
-            }
-          }
+        "command": {
+          "type": "array",
+          "form": true,
+          "title": "Tenant Id"
         }
       }
     }
