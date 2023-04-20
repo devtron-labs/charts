@@ -4,8 +4,6 @@
   "properties": {
     "data": {
       "type": "object",
-      "form": true,
-      "title": "Tenant Onboarding",
       "properties": {
         "command": {
           "type": "string",
