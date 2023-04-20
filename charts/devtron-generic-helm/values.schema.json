@@ -2,17 +2,28 @@
     "$schema": "http://json-schema.org/schema#",
     "type": "object",
     "properties": {
-      "service": {
-        "type": "object",
+      "data": {
+        "type": "array",
         "form": true,
-        "title": "Tenant Onboarding",
         "properties": {
-          "type": {
-            "type": "string",
+          "spec": {
+            "type": "object",
             "form": true,
-            "title": "Tenant Id"
+            "properties": {
+              "templates": {
+                "type": "array",
+                "form": true,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "form": true,
+                    "title": "Tenant Id"
+                  }
+              }
+            }
           }
         }
       }
     }
+  }
 }
