@@ -1,37 +1,50 @@
 data:
-- apiVersion: v1
-  kind: Service
+- apiVersion: argoproj.io/v1alpha1
+  kind: Workflow
   metadata:
-    annotations:
-    labels:
-      app: sample-metrics-app
-    name: sample-metrics-app
-    namespace: default
+    name: tenant-onboarding
   spec:
-    ports:
-    - name: web
-      port: 80
-      protocol: TCP
-      targetPort: 8080
-    selector:
-      app: sample-metrics-app
-    sessionAffinity: None
-    type: ClusterIP
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-    labels:
-      app: sample-metrics-app
-    name: sample-metrics-app
-    namespace: default
-  spec:
-    ports:
-    - name: web
-      port: 80
-      protocol: TCP
-      targetPort: 8080
-    selector:
-      app: sample-metrics-app
-    sessionAffinity: None
-    type: ClusterIP
+    serviceAccountName: cd-runner
+    entrypoint: dag-first
+    templates:
+      - name: tenant-data-creation
+        container:
+          image: 429738059147.dkr.ecr.ap-south-1.amazonaws.com/platform-coreos/tenant-onboarding:1.0.72
+          command: ["echo", "hi"]
+            #command: ["yarn", "run", "script", "to", "-s", "all", "-w", "query", "-t", "test-tenant"]
+          envFrom:
+            - configMapRef:
+                name: f-default
+            - secretRef:
+                name: f-default
+      - name: bake-tenant-dns
+        container:
+          image: 429738059147.dkr.ecr.ap-south-1.amazonaws.com/platform-infra/dns-create-delete-docker-image:1.0.2
+          command: ["echo", "hii"]
+            #command: ["./upsert-dns-recordset.sh"]
+          envFrom:
+            - configMapRef:
+                name: f-default
+            - secretRef:
+                name: f-default
+      - name: entity-data-population
+        container:
+          image: 429738059147.dkr.ecr.ap-south-1.amazonaws.com/platform-coreos/tenant-onboarding:1.0.72
+          command: ["echo", "hiii"]
+            #command: ["yarn script csvToDb csv -f entity_script/csvs/event.csv -w event -t test-tenant -e test -k coreos && yarn script csvToDb csv -f entity_script/csvs/reason.csv -w reason -t test-tenant -e test -k coreos"]
+          envFrom:
+            - configMapRef:
+                name: f-default
+            - secretRef:
+                name: f-default
+      - name: dag-first
+        dag:
+          tasks:
+            - name: First
+              template: tenant-data-creation
+            - name: Second
+              dependencies: [First]
+              template: bake-tenant-dns
+            - name: Third
+              dependencies: [First]
+              template: entity-data-population

@@ -1,24 +1,26 @@
 {
-    "$schema": "http://json-schema.org/schema#",
-    "type": "object",
-    "properties": {
-      "data": {
-        "type": "array",
-        "form": true,
-        "properties": {
-          "spec": {
-            "type": "object",
-            "form": true,
-            "properties": {
-              "templates": {
-                "type": "array",
-                "form": true,
-                "properties": {
-                  "type": {
-                    "type": "string",
-                    "form": true,
-                    "title": "Tenant Id"
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "data": {
+      "type": "array",
+      "properties": {
+        "spec": {
+          "type": "object",
+          "properties": {
+            "templates": {
+              "type": "array",
+              "properties": {
+                "container": {
+                  "type": "object",
+                  "properties": {
+                    "command": {
+                      "type": "array",
+                      "form": true,
+                      "title": "Tenant Id"
+                    }
                   }
+                }
               }
             }
           }
