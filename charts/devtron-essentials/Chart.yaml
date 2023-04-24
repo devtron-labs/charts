@@ -1,0 +1,58 @@
+apiVersion: v2
+name: devtron
+description: A Helm chart for Kubernetes
+version: 0.1.0
+maintaintainers:
+  - name: Kamal Acharya
+    email: kamal@devtron.ai
+
+sources:
+  - https://github.com/kedacore/keda
+  - https://github.com/devtron-labs/charts/tree/main/charts/rollout
+  - https://github.com/devtron-labs/charts/tree/main/charts/winter-soldier
+  - https://github.com/kubernetes-sigs/metrics-server
+  - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
+  - https://github.com/fluxcd/flagger/tree/main/charts/flagger
+  - https://kyverno.github.io/kyverno/
+  - https://external-secrets.io/
+  - https://
+appVersion: "1.16.0"
+
+dependencies:
+- name: keda
+  version: "2.6.0"
+  repository: https://kedacore.github.io/charts
+  condition: keda.enabled
+- name: rollout
+  version: "0.14.5"
+  repository: https://helm.devtron.ai
+  condition: rollout.enabled 
+- name: winter-soldier
+  version: "0.10.4"
+  repository: https://helm.devtron.ai
+  condition: winter-soldier.enabled  
+- name: aws-ebs-csi-driver
+  version: "2.17.2"
+  repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  condition: aws-ebs-csi-driver.enabled 
+- name: flagger
+  version: "1.30.0"
+  repository: https://flagger.app
+  condition: flagger.enabled   
+- name: metrics-server
+  version: "3.10.0"
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  condition: metrics-server.enabled   
+- name: external-secrets
+  version: "0.8.1"
+  repository: https://external-secrets.io/
+  condition: external-secrets.enabled
+- name: kyverno
+  version: "3.0.0-alpha.2"
+  repository: https://kyverno.github.io/kyverno/
+  condition: kyverno.enabled
+
+
+
+
+

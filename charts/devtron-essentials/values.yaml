@@ -1,0 +1,66 @@
+keda:
+ enabled: false
+
+metrics-server:
+  enabled: false
+  defaultArgs:
+  - --cert-dir=/tmp
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  - --kubelet-use-node-status-port
+  - --metric-resolution=15s
+  - --kubelet-insecure-tls 
+
+rollout:
+  enabled: false
+  rollout:
+    image: "quay.io/devtron/rollout:v0.6.2"
+    resources:
+      limits:
+        memory: 200Mi
+        cpu: 250m
+      requests:
+        memory: 100Mi
+        cpu: 50m
+
+winter-soldier:
+ enabled: false
+ replicaCount: 3
+ resources: 
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+aws-ebs-csi-driver:
+  enabled: false
+  region: "" #Specify your cluster region
+  image:
+    repository: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver
+    tag: "1.17.2"
+  pullPolicy: IfNotPresent
+  serviceAccount:
+# A service account will be created for you if set to true. Set to false if you want to use your own.
+  create: true
+  name: ebs-csi-controller-sa
+  annotations: {}
+  tolerations: []
+    # - key: CriticalAddonsOnly
+    #   operator: Exists
+    # - effect: NoExecute
+    #   operator: Exists
+    #   tolerationSeconds: 300
+
+flagger:
+ enabled: false
+
+external-secrets:
+ enabled: false
+
+kyverno:
+ enabled: false
+  
+
+ 
+
