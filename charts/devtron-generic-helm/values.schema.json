@@ -2,35 +2,10 @@
   "$schema": "http://json-schema.org/schema#",
   "type": "object",
   "properties": {
-    "data": {
-      "type": "array",
-      "properties": {
-        "spec": {
-          "type": "object",
-          "properties": {
-            "templates": {
-              "type": "array",
-              "properties": {
-                "container": {
-                  "type": "object",
-                  "properties": {
-                    "command": {
-                      "type": "array",
-                      "properties": {
-                        "-t": {
-                          "type": "string",
-                          "form": true,
-                          "title": "Tenant Id"
-                        } 
-                      }
-                    }
-                  }
-                }
-              }
-            }
-         }
-       }
-      }
+    "tenant_id": {
+      "type": "string",
+      "form": true,
+      "title": "Tenant Id"
     }
   }
 }
