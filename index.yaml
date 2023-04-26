@@ -3175,6 +3175,22 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/mautic-0.1.2/mautic-0.1.2.tgz
     version: 0.1.2
+  migration-incluster-cd:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2023-04-26T07:51:41.074387811Z"
+    description: Helm chart to enable execute in environment for a target cluster,
+      which is added on devtron UI.
+    digest: b1ead220c7147f33ce9e39a2d79b9770c19613c7a3fc78fed4a1bb9513bea0cb
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops Team
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: migration-incluster-cd
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/migration-incluster-cd-0.10.0/migration-incluster-cd-0.10.0.tgz
+    version: 0.10.0
   nats-server:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -3669,4 +3685,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-04-19T11:03:41.975187625Z"
+generated: "2023-04-26T07:51:41.07476842Z"
