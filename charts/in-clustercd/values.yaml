@@ -1,4 +1,4 @@
-# Default values for in-clustercd.
+# Default values for devtron-in-clustercd.
 
 # Declare variables to be passed into your templates.
 

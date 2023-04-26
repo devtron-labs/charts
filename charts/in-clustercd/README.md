@@ -4,7 +4,7 @@ This helm chart to install devtron agent on target/application cluster by which 
 
 or 
 
-Devtron helm chart to deploy In-cluster to run the post and pre deployment devtron agents on apllication cluster, not on devtron cluster
+Devtron helm chart to deploy devtron-in-clustercd to run the post and pre deployment devtron agents on apllication cluster, not on devtron cluster
 
 ##Prerequisites
 
@@ -29,7 +29,7 @@ helm install incluster-migration devtron/migration-incluster-cd \
 
 Here `cluster_name` is prod-eks , this cluster name should be added on devtron cluster .
 
-# 2. Install `in-clustercd` helm chart on target cluster (this one).
+# 2. Install `devtron-in-clustercd` helm chart on target cluster (this one).
 
 # 3. Put ORCH_HOST key value pair in `devtron-cm` and bounce the devtron pod
 
