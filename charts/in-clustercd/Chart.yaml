@@ -1,5 +1,5 @@
 name: in-clustercd
-description: Helm chart to deploy in-clustercd to run pre and post deployment in application environments.
+description: Helm chart to deploy in-clustercd to run pre and post deployment in application/target cluster.
 version: 0.10.0
 appVersion: 0.1.0
 apiVersion: v1

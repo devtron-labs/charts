@@ -46,12 +46,12 @@ workflow:
 
   affinity: {}
 
-# Namespaces to execute in application environments
+#Namespaces to execute in application environments for pre/post deployment on target clusters
 execute_in_application_env:
   namespaces:
     - abc
     - xyz
-    
+
 # Kubewatch configuration
 kubewatch:
   image: quay.io/devtron/kubewatch:b7c8b777-419-12558
@@ -64,9 +64,9 @@ kubewatch:
       value: "devtroncd"
     - name: ACD_INFORMER
       value: "true"
-    - name: CD_EXTERNAL_LISTENER_URL # Note:- There must be connectivity between application k8s cluster to devtron cluster.
-      value: http://test.devtron.com/orchestrator/webhook/msg/nats # Here put the host like cd.devtron-test.com by which devtron dashboard is accessable .
-    - name: CD_EXTERNAL_ORCHESTRATOR_TOKEN # This is devtron token to call nats api from application cluster . # To get this just exec into devtron pod and run ``printenv | grep ORCH_TOKEN`` . Just copy this token and put here. 
+    - name: CD_EXTERNAL_LISTENER_URL # Note:- There must be connectivity from target cluster to devtron cluster.
+      value: http://test.devtron.com/orchestrator/webhook/msg/nats # Here provide the ORCH_HOST(This host is used kubewatch which is running on target cluster to hit api call to nats which is running on devtron cluster) and test.devtron.com is host name where we are accessing devtron dashboard.
+    - name: CD_EXTERNAL_ORCHESTRATOR_TOKEN # This is devtron token to call nats api from kubewatch running on target cluster . # To get this just exec into devtron pod and run ``printenv | grep ORCH_TOKEN`` . Just copy this token and put here. 
       value: XXXXXXXXX
     - name: CD_EXTERNAL_REST_LISTENER
       value: "true"
