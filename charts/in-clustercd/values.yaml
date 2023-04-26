@@ -1,0 +1,104 @@
+# Default values for in-clustercd.
+
+# Declare variables to be passed into your templates.
+
+# Configuration for workflow-controller 
+workflow:
+  config:
+    parallelism: 50
+    artifactRepository:
+      archiveLogs: true
+      instanceID: devtron-runner
+      s3:
+        endpoint: s3.amazonaws.com
+        bucket: devtron-logs-test
+        region: us-east-1
+        keyFormat: "logs-v1/{{workflow.name}}"
+        #keep it uncommented if logs will pushing through AWS node role permission(recommended)
+        # accessKeySecret:                
+        #   name: workflow-minio-cred
+        #   key: accessKey
+        # secretKeySecret:                
+        #   name: workflow-minio-cred
+        #   key: secretKey
+    containerRuntimeExecutor: pns
+    executor:
+      imagePullPolicy: Always
+
+  # Access key and Secret key of AWS account to push logs to above S3 bucket if not provided it will use node role.
+  use_access_secret_key: false
+  #Keep it uncommented if logs will pushing through AWS node role permission , if you want to push logs using aws access and secret key please provide here access and secret key which is reflect on workflow-minio-cred secret .
+  # accesskey: XXXXXX
+  # secretkey: XXXXX
+
+  image: quay.io/argoproj/workflow-controller:v3.0.7
+  arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v3.0.7"]
+  resources:
+    limits:
+      cpu: "0.3"
+      memory: "300Mi"
+    requests:
+      cpu: "0.3"
+      memory: "300Mi"    
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+# Namespaces to execute in application environments
+execute_in_application_env:
+  namespaces:
+    - abc
+    - xyz
+    
+# Kubewatch configuration
+kubewatch:
+  image: quay.io/devtron/kubewatch:b7c8b777-419-12558
+  env:
+    - name: DEFAULT_NAMESPACE
+      value: "devtron-ci"
+    - name: CI_INFORMER
+      value: "true"
+    - name: ACD_NAMESPACE
+      value: "devtroncd"
+    - name: ACD_INFORMER
+      value: "true"
+    - name: CD_EXTERNAL_LISTENER_URL # Note:- There must be connectivity between application k8s cluster to devtron cluster.
+      value: http://test.devtron.com/orchestrator/webhook/msg/nats # Here put the host like cd.devtron-test.com by which devtron dashboard is accessable .
+    - name: CD_EXTERNAL_ORCHESTRATOR_TOKEN # This is devtron token to call nats api from application cluster . # To get this just exec into devtron pod and run ``printenv | grep ORCH_TOKEN`` . Just copy this token and put here. 
+      value: XXXXXXXXX
+    - name: CD_EXTERNAL_REST_LISTENER
+      value: "true"
+  resources:  
+    requests:
+      memory: 128Mi
+      cpu: 100m
+    limits:
+      memory: 128Mi
+      cpu: 100m
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  replicaCount: 1
+
+  # Kubewatch configuration
+  config:
+    handler:
+      webhook:
+        enabled: false
+        url: ""
+    resource:
+      daemonset: false
+      deployment: false
+      events: true
+      job: false
+      persistentvolume: false
+      pod: false
+      replicaset: false
+      replicationcontroller: false
+      services: false
+
+
+
+

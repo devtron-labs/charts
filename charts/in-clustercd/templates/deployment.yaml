@@ -1,4 +1,3 @@
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -15,7 +14,7 @@ spec:
     spec:
       containers:
       - args:
-        {{- range $.Values.workflow_controller.arguments }}
+        {{- range $.Values.workflow.arguments }}
         - {{ . }}
         {{- end }}
         command:
@@ -26,19 +25,19 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.name
-        image: {{ .Values.image.wf_controller }}
+        image: {{ .Values.workflow.image }}
         name: workflow-controller
         resources:
-          {{- toYaml $.Values.resources | nindent 10 }}
-      {{- with .Values.nodeSelector }}
+          {{- toYaml $.Values.workflow.resources | nindent 10 }}
+      {{- with .Values.workflow.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.workflow.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.workflow.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -47,10 +46,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  {{- with .Values.kubewatch.labels }}
-  labels:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
   name: kubewatch
   namespace: devtroncd
 spec:
@@ -61,22 +56,16 @@ spec:
       release: kubewatch
   template:
     metadata:
-      {{- with .Values.kubewatch.annotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
-      {{- with .Values.kubewatch.labels }}
       labels:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        app: kubewatch
+        release: kubewatch
     spec:
       containers:
       - name: kubewatch
         image: {{ .Values.kubewatch.image }}
+        {{- if $.Values.kubewatch.env }}
         env:
-        {{- range $name, $value := .Values.kubewatch.env }}
-        - name: {{ $value.name }}
-          value: {{ $value.value }}
+        {{- toYaml $.Values.kubewatch.env | nindent 8 }}
         {{- end }}
         imagePullPolicy: Always
         volumeMounts:

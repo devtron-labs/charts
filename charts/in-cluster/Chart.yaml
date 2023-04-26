@@ -1,7 +1,0 @@
-name: in-cluster
-description: Helm chart to deploy in-cluster.
-version: 0.10.0
-appVersion: 0.1.0
-maintainers:
-- email: ajay@devtron.ai
-  name: Ajay
