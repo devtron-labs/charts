@@ -26,7 +26,7 @@ spec:
             image: {{ .Values.tenant_data_creation.image }}:{{ .Values.tenant_data_creation.tag }}
             arguments:
               parameters: [{name: command, value: "[yarn run script to -s all -w query -t {{ .Values.tenant_id }}]" }]
-          - name: bake-tenant-dns
+          - name: bake-tenant-dns`
             dependencies: [First]
             template: tenant-onboarding
             image: {{ .Values.bake_tenant_dns.image }}:{{ .Values.bake_tenant_dns.tag }}

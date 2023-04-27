@@ -1,4 +1,4 @@
-tenant_id: ""
+tenant_id: "testtest"
 serviceAccountName: "cd-runner"
 tenant_data_creation:
   image: 429738059147.dkr.ecr.ap-south-1.amazonaws.com/platform-coreos/tenant-onboarding
