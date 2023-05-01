@@ -15,7 +15,7 @@ sources:
   - https://github.com/fluxcd/flagger/tree/main/charts/flagger
   - https://kyverno.github.io/kyverno/
   - https://external-secrets.io/
-  - https://
+  - https://helm.devtron.ai
 appVersion: "1.16.0"
 
 dependencies:
@@ -51,6 +51,14 @@ dependencies:
   version: "3.0.0-alpha.2"
   repository: https://kyverno.github.io/kyverno/
   condition: kyverno.enabled
+- name: aws-load-balancer-controller
+  version: "1.5.2"
+  repository: https://aws.github.io/eks-charts
+  condition: "aws-load-balancer-controller.enabled"  
+- name: devtron-in-clustercd
+  version: " 0.10.0"
+  repository: https://helm.devtron.ai
+  condition: devtron-in-clustercd.enabled  
 
 
 
