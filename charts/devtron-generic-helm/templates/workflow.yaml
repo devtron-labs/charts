@@ -27,7 +27,7 @@ spec:
     - name: entity-data-population
       container:
         image: {{ .Values.entity_data_population.image }}:{{ .Values.entity_data_population.tag }}
-        command: [{{.Values.entity_data_population.command_part1}} -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} && {{.Values.entity_data_population.command_part2}} -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }}]
+        command: [{{.Values.entity_data_population.command_part1}} -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} {{.Values.entity_data_population.command_part2}} -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }}]
         envFrom:
           - configMapRef:
               name: f-default

@@ -16,4 +16,4 @@ entity_data_population:
   tag: 1.0.72
   env: test
   command_part1: "yarn script csvToDb csv -f entity_script/csvs/event.csv -w event -k coreos"
-  command_part2: "yarn script csvToDb csv -f entity_script/csvs/reason.csv -w reason -k coreos"
+  command_part2: "&& yarn script csvToDb csv -f entity_script/csvs/reason.csv -w reason -k coreos"
