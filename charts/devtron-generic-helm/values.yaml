@@ -1,10 +1,10 @@
-tenant_id: "testtest"
+tenant_id: "testTenant"
 serviceAccountName: "cd-runner"
 name: "tenant-onboarding"
 tenant_data_creation:
   image: 429738059147.dkr.ecr.ap-south-1.amazonaws.com/platform-coreos/tenant-onboarding
   tag: 1.0.72
-  command: '"yarn", "run", "script", "to", "-s", "all", "-w", "query", "-t"'
+  command: '"run", "script", "to", "-s", "all", "-w", "query", "-t"'
   
 bake_tenant_dns:
   image: 429738059147.dkr.ecr.ap-south-1.amazonaws.com/platform-infra/dns-create-delete-docker-image

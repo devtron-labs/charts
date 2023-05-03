@@ -7,39 +7,39 @@ spec:
   entrypoint: dag-first
   templates:
     - name: tenant-data-creation
-      inputs:
-        parameters:
-        - name: command
+      # inputs:
+      #   parameters:
+      #   - name: command
       container:
         image: {{ .Values.tenant_data_creation.image }}:{{ .Values.tenant_data_creation.tag }}
-        command: [bash -c]
-        args: ["{{`{{inputs.parameters.command}}`}}"]
+        command: [{{.Values.tenant_data_creation.command}}, "{{.Values.tenant_id}}"]
+        # args: ["{{`{{inputs.parameters.command}}`}}"]
         envFrom:
           - configMapRef:
               name: f-default
           - secretRef:
               name: f-default
     - name: bake-tenant-dns
-      inputs:
-        parameters:
-        - name: command
+      # inputs:
+      #   parameters:
+      #   - name: command
       container:
         image: {{ .Values.bake_tenant_dns.image }}:{{ .Values.bake_tenant_dns.tag }}
-        command: [bash -c]
-        args: ["{{`{{inputs.parameters.command}}`}}"]
+        command: [./upsert-dns-recordset.sh]
+        # args: ["{{`{{inputs.parameters.command}}`}}"]
         envFrom:
           - configMapRef:
               name: f-default
           - secretRef:
               name: f-default
     - name: entity-data-population
-      inputs:
-        parameters:
-        - name: command
+      # inputs:
+      #   parameters:
+      #   - name: command
       container:
         image: {{ .Values.entity_data_population.image }}:{{ .Values.entity_data_population.tag }}
-        command: [bash -c]
-        args: ["{{`{{inputs.parameters.command}}`}}"]
+        command: [yarn script csvToDb csv -f entity_script/csvs/event.csv -w event -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} -k coreos && yarn script csvToDb csv -f entity_script/csvs/reason.csv -w reason -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} -k coreos]
+        # args: ["{{`{{inputs.parameters.command}}`}}"]
         envFrom:
           - configMapRef:
               name: f-default
@@ -51,17 +51,17 @@ spec:
           - name: tenant-data-creation
             template: tenant-data-creation
             # image: {{ .Values.tenant_data_creation.image }}:{{ .Values.tenant_data_creation.tag }}
-            arguments:
-              parameters: [{name: command, value: '[{{.Values.tenant_data_creation.command}}, "{{.Values.tenant_id}}"]' }]
+            # arguments:
+            #   parameters: [{name: command, value: '[{{.Values.tenant_data_creation.command}}, "{{.Values.tenant_id}}"]' }]
           - name: bake-tenant-dns
             dependencies: [tenant-data-creation]
             template: bake-tenant-dns
             # image: {{ .Values.bake_tenant_dns.image }}:{{ .Values.bake_tenant_dns.tag }}
-            arguments:
-              parameters: [{name: command, value: "[./upsert-dns-recordset.sh]" }]
+            # arguments:
+            #   parameters: [{name: command, value: "[./upsert-dns-recordset.sh]" }]
           - name: entity-data-population
             dependencies: [tenant-data-creation]
             template: entity-data-population
             # image: {{ .Values.entity_data_population.image }}:{{ .Values.entity_data_population.tag }}
-            arguments:
-              parameters: [{name: command, value: "[yarn script csvToDb csv -f entity_script/csvs/event.csv -w event -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} -k coreos && yarn script csvToDb csv -f entity_script/csvs/reason.csv -w reason -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} -k coreos]" }]
+            # arguments:
+            #   parameters: [{name: command, value: "[yarn script csvToDb csv -f entity_script/csvs/event.csv -w event -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} -k coreos && yarn script csvToDb csv -f entity_script/csvs/reason.csv -w reason -t {{ .Values.tenant_id }} -e {{ .Values.entity_data_population.env }} -k coreos]" }]
