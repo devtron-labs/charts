@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Workflow
 metadata:
-  name: tenant-onboarding
+  name: {{ .Values.name }}
 spec:
   serviceAccountName: {{ .Values.serviceAccountName }}
   entrypoint: dag-first
@@ -25,8 +25,8 @@ spec:
             template: tenant-onboarding
             image: {{ .Values.tenant_data_creation.image }}:{{ .Values.tenant_data_creation.tag }}
             arguments:
-              parameters: [{name: command, value: "[yarn run script to -s all -w query -t {{ .Values.tenant_id }}]" }]
-          - name: bake-tenant-dns`
+              parameters: [{name: command, value: '[{{.Values.tenant_data_creation.command}}, "{{.Values.tenant_id}}"]' }]
+          - name: bake-tenant-dns
             dependencies: [First]
             template: tenant-onboarding
             image: {{ .Values.bake_tenant_dns.image }}:{{ .Values.bake_tenant_dns.tag }}
