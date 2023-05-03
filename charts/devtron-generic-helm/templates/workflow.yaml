@@ -27,13 +27,13 @@ spec:
             arguments:
               parameters: [{name: command, value: '[{{.Values.tenant_data_creation.command}}, "{{.Values.tenant_id}}"]' }]
           - name: bake-tenant-dns
-            dependencies: [First]
+            dependencies: [tenant-data-creation]
             template: tenant-onboarding
             image: {{ .Values.bake_tenant_dns.image }}:{{ .Values.bake_tenant_dns.tag }}
             arguments:
               parameters: [{name: command, value: "[./upsert-dns-recordset.sh]" }]
           - name: entity-data-population
-            dependencies: [First]
+            dependencies: [tenant-data-creation]
             template: tenant-onboarding
             image: {{ .Values.entity_data_population.image }}:{{ .Values.entity_data_population.tag }}
             arguments:
