@@ -21,7 +21,6 @@ spec:
         heritage: {{ .Release.Service | quote }}
         release: {{ .Release.Name | quote }}
         chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
-        app: clair
         integration: security
 {{ toYaml .Values.labels | indent 8 }}
     spec:
