@@ -53,7 +53,9 @@ aws-ebs-csi-driver:
     #   tolerationSeconds: 300
 
 flagger:
- enabled: false
+ enabled: false  
+ crd:
+  create: false   
 
 external-secrets:
  enabled: false
@@ -71,6 +73,7 @@ aws-load-balancer-controller:
   region:
 # The VPC ID for the Kubernetes cluster. Set this manually when your pods are unable to use the metadata service to determine this automatically
   vpcId: ""
+
 
 devtron-in-clustercd:
   enabled: false
@@ -116,6 +119,7 @@ devtron-in-clustercd:
   tolerations: []
 
   affinity: {}
+
 
 #Namespaces to execute in application environments for pre/post deployment on target clusters
   execute_in_application_env:
