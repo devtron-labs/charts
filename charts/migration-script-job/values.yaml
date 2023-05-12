@@ -1,7 +1,7 @@
 # Default values for tenant onboarding app.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-SCRIPT_COMMAND: "echo hi"
+SCRIPT_COMMAND: ""
 job:
   name: migration-script-job
   image: 217425097687.dkr.ecr.ap-south-1.amazonaws.com/platform-coreos/migration-scripts
@@ -9,7 +9,7 @@ job:
   command: '["/bin/sh"]'
   args: '"-c"'
   serviceAccount:
-    name: fxtrt-apps
+    name: fxtrt-app
   # envVars:
   #   - name: VAR1
   #     value: '${ parameters.var1 }' # This is assuming being run by Spinnaker
