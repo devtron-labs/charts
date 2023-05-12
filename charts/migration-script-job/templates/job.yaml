@@ -36,7 +36,7 @@ spec:
         {{- if .Values.job.command }}
         command: {{ .Values.job.command }}
         {{- if .Values.job.args }}
-        args: {{ .Values.job.args }}
+        args: [{{ .Values.job.args }}, "{{.Values.SCRIPT_COMMAND}}"]
         {{- end }}
         {{- end }}
         resources:
