@@ -1,0 +1,7 @@
+apiVersion: v2
+appVersion: 1.16.0
+description: Runs generic limited-access Kubernetes jobs. Useful for dev teams to
+  run Dockerized, peer-reviewed migration jobs.
+name: fxtrt-job
+type: application
+version: 0.1.0

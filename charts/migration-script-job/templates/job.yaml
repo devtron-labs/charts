@@ -1,0 +1,49 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    {{- include "app.labels" $ | nindent 4 }}
+    app.kubernetes.io/name: {{ .Values.job.name }}
+  name: {{ .Values.job.name }}-{{ randAlphaNum 5 | lower }}
+  namespace: {{ .Values.namespace }}
+spec:
+  ttlSecondsAfterFinished: {{ .Values.job.ttlSecondsAfterFinished }}
+  backoffLimit: {{ .Values.job.backoffLimit }}
+  template:
+    metadata:
+      labels:
+        {{- include "app.labels" $ | nindent 8 }}
+        app.kubernetes.io/name: {{ .Values.job.name }}
+        sidecar.istio.io/inject: "false"
+    spec:
+      serviceAccountName: "{{if .Values.job.serviceAccount }}{{ .Values.job.serviceAccount.name }}{{ else}}default{{ end }}"
+      containers:
+      - image: "{{ .Values.job.image }}:{{ .Values.job.tag }}"
+        name: {{ .Values.job.name }}
+        envFrom: 
+          - configMapRef:
+              name: f-default
+          - secretRef:
+              name: f-default
+        {{- if .Values.envVars }}
+        env:
+        {{- range $env := .Values.envVars }}
+          - name: {{ $env.name }}
+            value: {{ $env.value }}
+        {{- end }}
+        {{- end }}
+        {{- if .Values.job.command }}
+        command: {{ .Values.job.command }}
+        {{- if .Values.job.args }}
+        args: {{ .Values.job.args }}
+        {{- end }}
+        {{- end }}
+        resources:
+          requests:
+            cpu: 100m
+            memory: "200Mi"
+          limits:
+            cpu: "1"
+            memory: 1G
+      restartPolicy: "{{if .Values.job.restartPolicy }}{{ .Values.job.restartPolicy }}{{ else}}Never{{ end }}"

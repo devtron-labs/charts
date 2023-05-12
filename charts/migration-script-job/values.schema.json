@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "SCRIPT_COMMAND": {
+        "type": "string",
+        "form": true,
+        "title": "Script Command",
+        "description": "please provide command to be executed. eg: yarn start dataDump -t test_tenant -s notification_service -f 2_test"
+        }
+    }
+}
+  
