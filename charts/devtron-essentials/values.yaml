@@ -64,7 +64,7 @@ kyverno:
  enabled: false
   
 aws-load-balancer-controller:
-  enabled: true
+  enabled: false
   resources: {}
   nodeSelector: {}
   tolerations: []
@@ -175,5 +175,38 @@ devtron-in-clustercd:
         services: false
 
 
- 
+
+clair:
+ enabled: false
+ config: 
+  postgresServiceName: "" 
+  postgresHost: ""
+  postgresPassword: ""
+
+dt-postgresql:
+ enabled: false
+ fullnameOverride: ""
+ postgresqlPassword: ""
+
+ingress-nginx:
+ enabled: true
+ fullnameoverride: "my-ingress"
+ controller: 
+  service:
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ""      
+      nginx.ingress.kubernetes.io/force-ssl-redirect: true
+      nginx.ingress.kubernetes.io/ssl-redirect: true
+
+cluster-autoscaler:
+ enabled: false
+ awsRegion: ""
+ clusterName: ""
+
+argo-workflow:
+ enabled: false
+ bucket: ""
+ keyformat: ""
+ region: ""
+
 

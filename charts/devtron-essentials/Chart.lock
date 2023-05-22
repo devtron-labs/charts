@@ -1,0 +1,45 @@
+dependencies:
+- name: keda
+  repository: https://kedacore.github.io/charts
+  version: 2.6.0
+- name: rollout
+  repository: https://helm.devtron.ai
+  version: 0.14.5
+- name: winter-soldier
+  repository: https://helm.devtron.ai
+  version: 0.10.4
+- name: aws-ebs-csi-driver
+  repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  version: 2.17.2
+- name: flagger
+  repository: https://flagger.app
+  version: 1.30.0
+- name: metrics-server
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  version: 3.10.0
+- name: external-secrets
+  repository: https://external-secrets.io/
+  version: 0.8.1
+- name: kyverno
+  repository: https://kyverno.github.io/kyverno/
+  version: 3.0.0-alpha.2
+- name: aws-load-balancer-controller
+  repository: https://aws.github.io/eks-charts
+  version: 1.5.2
+- name: devtron-in-clustercd
+  repository: https://helm.devtron.ai
+  version: 0.10.0
+- name: clair
+  repository: https://helm.devtron.ai
+  version: 0.1.10
+- name: dt-postgresql
+  repository: https://devtron-charts.s3.us-east-2.amazonaws.com/charts
+  version: 5.3.3
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.6.1
+- name: cluster-autoscaler
+  repository: https://kubernetes.github.io/autoscaler/
+  version: 9.28.0
+digest: sha256:7ef540a929698985cb5987b4fda6e5222d696e100df6e999b9f9415c648abf93
+generated: "2023-05-16T23:25:21.910799+05:30"
