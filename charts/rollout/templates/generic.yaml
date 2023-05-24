@@ -325,6 +325,17 @@ spec:
       containers:
       - command:
         - /bin/rollouts-controller
+        {{- if and .Values.namespaced .Values.extraArgs }}
+        args:
+        - --namespace={{ $.Release.Namespace }}
+{{- toYaml .Values.extraArgs | nindent 8 }}
+        {{- else if .Values.extraArgs }}
+        args:
+{{- toYaml .Values.extraArgs | nindent 8 }}
+        {{- else if .Values.namespaced }}
+        args:
+        - --namespace={{ $.Release.Namespace }}
+        {{- end }}
         image: {{ .Values.rollout.image }}
         imagePullPolicy: Always
         name: argo-rollouts
