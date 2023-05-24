@@ -302,7 +302,7 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/component: rollouts-controller
-    app.kubernetes.io/name: argo-rollouts
+    app.kubernetes.io/name: {{ $.Release.Name }}
     app.kubernetes.io/part-of: argo-rollouts
   name: {{ $.Release.Name }}
 spec:

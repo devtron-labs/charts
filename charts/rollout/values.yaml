@@ -9,9 +9,9 @@ rollout:
       memory: 100Mi
       cpu: 50m
 
+nodeSelector: {}
 # nodeSelector:
 #   kubernetes.io/os: linux
-nodeSelector: {}
 tolerations: []
 podLabels: {}
 podAnnotations: {}
