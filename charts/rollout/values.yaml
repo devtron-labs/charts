@@ -1,5 +1,6 @@
 rollout:
   image: "quay.io/devtron/rollout:v0.6.2"
+  imagePullPolicy: IfNotPresent
   resources:
     limits:
       memory: 200Mi
@@ -7,10 +8,14 @@ rollout:
     requests:
       memory: 100Mi
       cpu: 50m
+
+# nodeSelector:
+#   kubernetes.io/os: linux
 nodeSelector: {}
 tolerations: []
 podLabels: {}
 podAnnotations: {}
 replicaCount: 1
+# If enabled it'll watch only the namespace in which rollout controller is deployed
 namespaced: false
 extraArgs: []
