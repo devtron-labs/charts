@@ -11,3 +11,5 @@ tolerations: []
 podLabels: {}
 podAnnotations: {}
 replicaCount: 1
+namespaced: false
+extraArgs: []
