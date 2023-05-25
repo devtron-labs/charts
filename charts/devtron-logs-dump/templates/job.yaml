@@ -1,0 +1,14 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.job.name }}
+  namespace: devtroncd
+spec:
+  template:
+    spec:
+      containers:
+      - name: {{ .Values.job.name }}
+        image: {{ .Values.job.image }}
+        imagePullPolicy: {{ .Values.job.imagePullPolicy }}
+      restartPolicy: Never
+      serviceAccountName: {{ .Values.serviceAccount.name }}
