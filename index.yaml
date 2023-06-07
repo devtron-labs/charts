@@ -532,6 +532,16 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-in-clustercd-0.10.0/devtron-in-clustercd-0.10.0.tgz
     version: 0.10.0
+  devtron-logs-dump:
+  - apiVersion: v1
+    appVersion: 0.1.0
+    created: "2023-06-07T11:05:50.130649367Z"
+    description: Chart to extract devtron stack logs
+    digest: c1243cb779d83a404687e3922acdc598b734b3e7dacc17c15b1fc6064f874e9c
+    name: devtron-logs-dump
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-logs-dump-0.1.0/devtron-logs-dump-0.1.0.tgz
+    version: 0.1.0
   devtron-operator:
   - apiVersion: v2
     appVersion: 0.6.17
@@ -3850,4 +3860,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-06-01T11:30:56.942616927Z"
+generated: "2023-06-07T11:05:50.130954871Z"
