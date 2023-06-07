@@ -1,0 +1,5 @@
+name: devtron-logs-dump
+appVersion: 0.1.0
+description: Chart to extract devtron stack logs
+version: 0.1.0
+apiVersion: v1
