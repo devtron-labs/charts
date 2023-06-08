@@ -1,0 +1,13 @@
+# Default values for migration-incluster-cd.
+
+# Declare variables to be passed into your templates.
+
+# Here put the name of cluster for which we are going to enable Execute in environment on devtron UI .
+
+#Note:- This helm chart should be install on devtron cluster.
+cluster_name: "test-cluster"
+
+
+postgres_auth:
+  # Reference to secret which has postgresql password in PG_PASSWORD key
+  secretName: "devtron-secret"

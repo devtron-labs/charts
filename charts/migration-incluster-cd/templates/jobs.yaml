@@ -1,0 +1,34 @@
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: Job
+metadata:
+  name: in-clustercd-migration-job-{{ .Release.Name }}
+  namespace: devtroncd
+spec:
+  template:
+    spec:
+      containers:
+      - name: inclustercd
+        image: postgres:12
+        env:
+        - name: PGPASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: PG_PASSWORD
+              name: {{ $.Values.postgres_auth.secretName }}
+        args:
+          - /bin/bash
+          - -c
+          - psql -h postgresql-postgresql.devtroncd -d orchestrator -p 5432 -U postgres -f /tmp/inclustercd_migration.sql;
+        volumeMounts:
+        - name: inclustercd-migration
+          mountPath: /tmp
+      restartPolicy: OnFailure
+      volumes:
+        - name: inclustercd-migration
+          configMap:
+            name: inclustercd-migration-script-{{ .Release.Name }}
+
