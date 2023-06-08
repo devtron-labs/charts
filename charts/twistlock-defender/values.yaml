@@ -1,49 +1,58 @@
-COMMUNICATION_PORT: ""
+COMMUNICATION_PORT:
 CONSOLE_CN:
-DATA_FOLDER: 
-DATA_RECOVERY_ENABLED: "true"
-DATA_RECOVERY_VOLUME: 
-DEFENDER_CN: ""
-DEFENDER_LISTENER_TYPE: NONE
-DISABLE_CONSOLE_CGROUP_LIMITS: "false"
-DOCKER_SOCKET: 
-DOCKER_TWISTLOCK_TAG: _22_01_858
-MANAGEMENT_PORT_HTTP: ""
-MANAGEMENT_PORT_HTTPS: ""
-READ_ONLY_FS: "true"
-RUN_CONSOLE_AS_ROOT: "false"
-SELINUX_LABEL: disable
-SYSTEMD_ENABLED: "false"
-access_ca: ""
-admission_cert: 
-admission_key: 
+DATA_FOLDER:
+DATA_RECOVERY_ENABLED:
+DATA_RECOVERY_VOLUME:
+DEFENDER_CN:
+DEFENDER_LISTENER_TYPE:
+DISABLE_CONSOLE_CGROUP_LIMITS:
+DOCKER_SOCKET:
+DOCKER_TWISTLOCK_TAG:
+FIPS_ENABLED:
+MANAGEMENT_PORT_HTTP:
+MANAGEMENT_PORT_HTTPS:
+READ_ONLY_FS:
+RUN_CONSOLE_AS_ROOT:
+SELINUX_LABEL:
+SYSTEMD_ENABLED:
+access_ca:
+admission_cert:
+admission_key:
 cluster: ""
-cluster_id: 
-cluster_role_name: 
-collect_pod_labels: false
-cri_data_volume_name: cri-data
-defender_ca_cert: 
+cluster_id:
+cluster_role_name:
+collect_pod_labels: true
+containers_storage_mount: ""
+cri_data_volume_name:
+defender_ca_cert:
 defender_client_cert:
 defender_client_key:
-defender_service_port: 
-defender_type: daemonset
-docker_socket_folder: 
-docker_socket_path: 
+defender_service_port:
+defender_type:
+docker_socket_folder:
+docker_socket_path:
+gke_autopilot_annotation: ""
 host_custom_compliance: false
-image_name: 
+image_name:
 install_bundle:
-limit_cpu: ''
-limit_memory: ''
+limit_cpu:
+limit_memory:
 monitor_istio: false
 monitor_service_accounts: true
-namespace: 
+namespace:
 node_selector: ""
+old_defender_ca_cert: ""
+old_defender_client_cert: ""
+old_defender_client_key: ""
 openshift: false
 privileged: "false"
+role_arn: ""
+runc_proxy_sock_folder:
 secrets_name: ""
 selinux_header: ""
 selinux_options: ""
 service_parameter:
+talos: false
 twistlock_data_folder:
 unique_hostname: false
 ws_address:

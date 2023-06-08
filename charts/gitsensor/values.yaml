@@ -3,20 +3,37 @@ gitsensor:
     data:
       PG_ADDR: postgresql-postgresql.devtroncd
       PG_PASS: password
+  envFrom:
+    configMap: []
+     #- "test"
+    # - "test2"
+    secret: []
+     # - "Test3"
+     # - "Test4"
   image:
     pullPolicy: Always
     repository: quay.io/devtron/git-sensor
     tag: 5d527335-200-4349
+  containerPort:
+  - port: 8080
+    name: sensor
+  - port: 8081
+    name: grpc
   service:
     metadata:
       labels:
         app: git-sensor
       name: git-sensor-service
     spec:
-      port: 80
+      ports:
+      - port: 80
+        name: sensor
+        targetPort: 8080
+      - port: 90
+        name: grpc
+        targetPort: 8081
       selector:
         app: git-sensor
-      targetPort: 8080
   spec:
     replicas: 1
     selector:

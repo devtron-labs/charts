@@ -69,6 +69,9 @@ resources:
      cpu: 32m
      memory: 50Mi
 
+
+podAnnotations: {}
+
 nodeSelector: {}
 
 tolerations: []

@@ -93,10 +93,18 @@ spec:
     spec:
       terminationGracePeriodSeconds: 30
       restartPolicy: Always
+      {{- if and $.Values.global $.Values.global.podSecurityContext }}
+      securityContext:
+{{- toYaml $.Values.global.podSecurityContext | nindent 8 }}
+      {{- end }}
       containers:
         - name: image-scanner
           image: {{ .image }}
           imagePullPolicy: {{ .imagePullPolicy }}
+          {{- if and $.Values.global $.Values.global.containerSecurityContext }}
+          securityContext:
+{{- toYaml $.Values.global.containerSecurityContext | nindent 12 }}
+          {{- end }}
           ports:
             - name: app
               containerPort: 8080
