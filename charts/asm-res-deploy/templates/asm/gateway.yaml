@@ -1,0 +1,18 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{.Values.gateway.name}}
+  namespace: {{.Values.commonConfig.namespace}}
+spec:
+  selector:
+    asm: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    hosts:
+    - "*" # IMPORTANT: Must use wildcard here when using SSL, see note below
+    tls:
+      mode: SIMPLE
+      credentialName: {{.Values.gateway.credentialName}}
