@@ -1,0 +1,10 @@
+name: migration-incluster-cd
+description: Helm chart to enable execute in environment for a target cluster, which is added on devtron UI.
+version: 0.10.0
+appVersion: 0.1.0
+apiVersion: v1
+maintainers:
+- email: devops@devtron.ai
+  name: Devtron Devops Team
+- email: ajay@devtron.ai
+  name: Ajay

@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  inclustercd_migration.sql: |
+    UPDATE cluster SET cd_argo_setup=true where active=true and cluster_name='{{ $.Values.cluster_name }}';
+    SELECT cluster_name,server_url,cd_argo_setup from cluster WHERE active=true and cluster_name='{{ $.Values.cluster_name }}';
+kind: ConfigMap
+metadata:
+  name: inclustercd-migration-script-{{ .Release.Name }}
+  namespace: devtroncd
