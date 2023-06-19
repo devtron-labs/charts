@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workflow-controller
+  namespace: devtroncd
+spec:
+  selector:
+    matchLabels:
+      app: workflow-controller
+  template:
+    metadata:
+      labels:
+        app: workflow-controller
+    spec:
+      containers:
+      - args:
+        {{- range $.Values.workflow.arguments }}
+        - {{ . }}
+        {{- end }}
+        command:
+        - workflow-controller
+        env:
+        - name: LEADER_ELECTION_IDENTITY
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        image: {{ .Values.workflow.image }}
+        name: workflow-controller
+        resources:
+          {{- toYaml $.Values.workflow.resources | nindent 10 }}
+      {{- with .Values.workflow.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.workflow.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.workflow.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: argo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubewatch
+  namespace: devtroncd
+spec:
+  replicas: {{ .Values.kubewatch.replicaCount }}
+  selector:
+    matchLabels:
+      app: kubewatch
+      release: kubewatch
+  template:
+    metadata:
+      labels:
+        app: kubewatch
+        release: kubewatch
+    spec:
+      containers:
+      - name: kubewatch
+        image: {{ .Values.kubewatch.image }}
+        {{- if $.Values.kubewatch.env }}
+        env:
+        {{- toYaml $.Values.kubewatch.env | nindent 8 }}
+        {{- end }}
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: kubewatch-config-map
+          mountPath: /root/.kubewatch.yaml
+          subPath: .kubewatch.yaml
+        resources:
+          {{- toYaml $.Values.kubewatch.resources | nindent 10 }}
+      {{- with .Values.kubewatch.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubewatch.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.kubewatch.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: kubewatch
+      {{- with .Values.kubewatch.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Always
+      volumes:
+      - name: kubewatch-config-map
+        configMap:
+          name: kubewatch-config

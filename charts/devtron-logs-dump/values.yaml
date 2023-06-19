@@ -2,5 +2,5 @@ serviceAccount:
   name: "devtron-logs-dump"
 job:
   name: "devtron-logs-dump"
-  image: docker.io/rupinsolanki07/test:logs-dump4
+  image: quay.io/devtron/k8s-utils:807ca3c2-488-14005
   imagePullPolicy: IfNotPresent
