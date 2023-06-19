@@ -1,0 +1,10 @@
+{{- if .Values.configmap.enabled }}
+apiVersion: v1
+{{- if .Values.configmap.data }}
+data:
+ {{- toYaml .Values.configmap.data | nindent 2 }}
+{{- end }}
+kind: ConfigMap
+metadata:
+  name: config-map-deepak
+{{- end }}
