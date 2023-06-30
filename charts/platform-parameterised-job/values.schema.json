@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "Job_Name": {
+        "type": "string",
+        "form": true,
+        "title": "Job Name",
+        "description": "please provide a jobname"
+        }
+    }
+}
+  
