@@ -31,9 +31,9 @@ spec:
           - name: {{ $env.name }}
             value: {{ $env.value }}
         {{- end }}
-        {{- end }}
           - name: jobname
             value: {{ .Values.Job_Name }}
+        {{- end }}
         {{- if .Values.job.command }}
         command: {{ .Values.job.command }}
         {{- if .Values.job.args }}
