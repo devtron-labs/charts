@@ -5,6 +5,8 @@ argoWorkflow:
     region: us-east-2
   replicas: 1
   labels: {}
+  nodeselector: {}
+  tolerations: []
   annotations: {}
   EnvVariables: []
   EnvVariablesFrom: []
