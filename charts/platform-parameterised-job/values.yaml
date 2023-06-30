@@ -1,0 +1,16 @@
+# Default values for tenant onboarding app.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+Job_Name: ""
+namespace: tenant-developerplatform-dev
+job:
+  name: application-service-cli
+  image: 217425097687.dkr.ecr.ap-south-1.amazonaws.com/developer-platform/application-service-cli
+  tag: 0.0.1-dev-2e3db2f
+  command: '["/bin/sh"]'
+  args: '["-c", "/usr/opt/app/cli/run.sh"]'
+  envVars:
+    # - name: jobname
+    #   value: ${ parameters.jobname }
+    - name: APPLICATION_SERVICE_ENDPOINT
+      value: application-service-service.tenant-developerplatform-dev.svc.cluster.local:50052
