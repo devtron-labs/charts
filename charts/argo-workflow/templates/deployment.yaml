@@ -23,6 +23,18 @@ spec:
 {{- toYaml $.Values.argoWorkflow.labels | nindent 8 }}      
         {{- end }}
     spec:
+     {{- if $.Values.argoWorkflow.nodeselector }}
+      nodeSelector:
+      {{- toYaml .Values.argoWorkflow.nodeselector | nindent 8}}
+      {{- end }}
+      {{- if $.Values.argoWorkflow.tolerations }}
+      tolerations:
+      {{- range $tol := .Values.argoWorkflow.tolerations }}
+        - key: {{ $tol.key }}
+          operator: {{ $tol.operator }}
+          effect: {{ $tol.effect }}
+      {{- end }}    
+      {{- end }}
       containers:
       - args:
         - --configmap
