@@ -10,7 +10,5 @@ job:
   command: '["/bin/sh"]'
   args: '["-c", "/usr/opt/app/cli/run.sh"]'
   envVars:
-    # - name: jobname
-    #   value: ${ parameters.jobname }
     - name: APPLICATION_SERVICE_ENDPOINT
       value: application-service-service.tenant-developerplatform-dev.svc.cluster.local:50052
