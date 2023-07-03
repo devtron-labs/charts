@@ -4,4 +4,4 @@ description: Runs generic limited-access Kubernetes jobs. Useful for dev teams t
   run Dockerized, peer-reviewed migration jobs.
 name: platform-parameterised-job
 type: application
-version: 0.1.4
+version: 0.1.3
