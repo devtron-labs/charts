@@ -18,6 +18,12 @@ global:
     AZURE_ACCOUNT_KEY: ""
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
+  GCP:
+    enabled: false
+    GCS_BUCKET_NAME: ""
+    encryption:
+      enabled: false
+      passphrase: ""
 
 argocdversion: v2
     
