@@ -1,0 +1,122 @@
+{{- if .Values.global.GCP.enabled }}
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: CronJob
+metadata:
+  name: postgres-app-backup-cronjob
+  namespace: devtroncd
+spec:
+  schedule: {{ .Values.global.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: postgres-app-backup-cronjob
+            image: postgres:12
+            volumeMounts:
+            - mountPath: /tmp
+              name: psql-volume
+            env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PASSWORD
+                  name: {{ .Values.postgres_backup.secretName }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            - pg_dumpall -h postgresql-postgresql.devtroncd --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+          containers:
+          - name: gcloud-cli-for-cloud-storage-upload
+            image: google/cloud-sdk:alpine
+            volumeMounts:
+            - mountPath: /tmp
+              name: psql-volume
+            env:
+            {{- with .Values.global.GCP }}
+            - name: GCS_BUCKET
+              value: "gs://{{ .GCS_BUCKET_NAME }}"
+            {{- end }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+          {{- if $.Values.global.GCP.encryption.enabled }}          
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; gcloud storage cp /tmp/backup-$date1.tar.gpg $GCS_BUCKET/postgres/;
+          {{- else}}
+            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; gcloud storage cp /tmp/backup-$date1.tar $GCS_BUCKET/postgres/;
+          {{- end }}
+          volumes:
+          - name: psql-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+          serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+---
+{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: batch/v1
+{{ else -}}
+apiVersion: batch/v1beta1
+{{ end -}}
+kind: CronJob
+metadata:
+    name: argocd-app-backup-cronjob
+    namespace: devtroncd
+spec:
+  schedule: {{ .Values.global.schedule }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          initContainers:
+          - name: argocd-app-backup-job
+            {{- if eq .Values.argocdversion "v2"}}
+            image: quay.io/argoproj/argocd:v2.4.0
+            {{- end }}
+            {{- if eq .Values.argocdversion "v1"}}
+            image: argoproj/argocd:v1.8.1
+            {{- end }}
+            volumeMounts:
+            - mountPath: /cache
+              name: argocd-volume
+            env:
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+            {{- if eq .Values.argocdversion "v2"}}
+            - argocd admin export -n devtroncd > /cache/backup.yaml
+            {{- end }}
+            {{- if eq .Values.argocdversion "v1"}}
+            - argocd-util export --namespace devtroncd > /cache/backup.yaml;
+            {{- end }}
+          containers:
+          - name: gcloud-cli-for-cloud-storage-upload
+            image: google/cloud-sdk:alpine
+            volumeMounts:
+            - mountPath: /cache
+              name: argocd-volume
+            env:
+            {{- with .Values.global.GCP }}
+            - name: GCS_BUCKET
+              value: "gs://{{ .GCS_BUCKET_NAME }}"
+            {{- end }}
+            imagePullPolicy: Always
+            args:
+            - /bin/bash
+            - -c
+          {{- if $.Values.global.GCP.encryption.enabled }}
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; gcloud storage cp /cache/backup-$date1.yaml.gpg $GCS_BUCKET/argocd/;
+          {{- else}}
+            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; gcloud storage cp /cache/backup-$date1.yaml $GCS_BUCKET/argocd/;
+          {{- end }}
+          volumes:
+          - name: argocd-volume
+            emptyDir: {}
+          restartPolicy: OnFailure
+          serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}
