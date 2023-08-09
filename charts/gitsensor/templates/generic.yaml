@@ -91,8 +91,7 @@ spec:
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
 {{- end }}
-{{- if  .Values.gitsensor.storage.existingVolume  }}
-{{- else }}
+{{- if not .Values.gitsensor.storage.existingVolume  }}
   volumeClaimTemplates:
     - metadata:
         name: git-volume

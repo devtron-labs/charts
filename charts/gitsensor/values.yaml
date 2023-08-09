@@ -66,7 +66,7 @@ gitsensor:
       #         values:
       #         - us-east-2
   storage:
-    existingVolume: ""
+    #existingVolume: "git-sensor"
     class: gp2
     requests: 2Gi
     nodeAffinity: {}
