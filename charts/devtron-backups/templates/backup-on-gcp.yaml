@@ -1,3 +1,14 @@
+{{- if .Values.global.GCP.CREDENTIALS.enabled }}
+apiVersion: v1
+data:
+  GOOGLE_APPLICATION_CREDENTIALS: {{ $.Values.global.GCP.CREDENTIALS.GCP_CREDENTIALS_JSON }}
+kind: Secret
+metadata:
+  name: gcp-credentials
+  namespace: devtroncd
+type: Opaque
+{{ end -}}
+---
 {{- if .Values.global.GCP.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
@@ -41,6 +52,13 @@ spec:
             {{- with .Values.global.GCP }}
             - name: GCS_BUCKET
               value: "gs://{{ .GCS_BUCKET_NAME }}"
+            {{- if .CREDENTIALS.enabled }}
+            - name: gcp-credentials
+              valueFrom:
+                secretKeyRef:
+                  name: gcp-credentials
+                  key: GOOGLE_APPLICATION_CREDENTIALS
+            {{- end }}
             {{- end }}
             imagePullPolicy: Always
             args:
@@ -104,6 +122,13 @@ spec:
             {{- with .Values.global.GCP }}
             - name: GCS_BUCKET
               value: "gs://{{ .GCS_BUCKET_NAME }}"
+            {{- if .CREDENTIALS.enabled }}
+            - name: gcp-credentials
+              valueFrom:
+                secretKeyRef:
+                  name: gcp-credentials
+                  key: GOOGLE_APPLICATION_CREDENTIALS
+            {{- end }}
             {{- end }}
             imagePullPolicy: Always
             args:
