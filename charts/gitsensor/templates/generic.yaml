@@ -91,12 +91,7 @@ spec:
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
 {{- end }}
-<<<<<<< HEAD
 {{- if not .Values.gitsensor.storage.existingVolume  }}
-=======
-{{- if  .Values.gitsensor.storage.existingVolume  }}
-{{- else }}
->>>>>>> origin/git-sensor-pvc
   volumeClaimTemplates:
     - metadata:
         name: git-volume
