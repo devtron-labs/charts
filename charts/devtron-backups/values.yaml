@@ -29,7 +29,7 @@ global:
     
     encryption:
       enabled: false # Recommended
-      passphrase: ""
+      passphrase: "" # Required if encryption is enabled
 
 argocdversion: v2
     
