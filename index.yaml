@@ -3812,6 +3812,22 @@ entries:
   winter-soldier:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2023-08-10T09:15:55.028989553Z"
+    description: Helm chart to deploy winter-soldier. Winter soldier can be used for
+      scheduled cleaning up of Kubernetes resources and scaledown kubernetes workloads
+      according to user defined time of the day and conditions.
+    digest: ae29e041e43453fdb2ec250ee9d5b48c2e97f6a2ddb57aa4845f66f90198746e
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops Team
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: winter-soldier
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/winter-soldier-0.10.6/winter-soldier-0.10.6.tgz
+    version: 0.10.6
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2023-05-29T14:35:35.350744882Z"
     description: Helm chart to deploy winter-soldier. Winter soldier can be used for
       scheduled cleaning up of Kubernetes resources and scaledown kubernetes workloads
@@ -3946,4 +3962,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-09T06:16:19.577308886Z"
+generated: "2023-08-10T09:15:55.029450262Z"
