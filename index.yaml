@@ -3300,6 +3300,17 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/gitsensor-0.11.1/gitsensor-0.11.1.tgz
     version: 0.11.1
+  jaeger-all-in-one-opentelemetry:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-08-10T11:31:27.976790473Z"
+    description: A Helm chart for Kubernetes
+    digest: be798b95eb52b6b5a051177a74a2b73d3daf018642e4239cd9f33aad45457f7e
+    name: jaeger-all-in-one-opentelemetry
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/jaeger-all-in-one-opentelemetry-0.1.0/jaeger-all-in-one-opentelemetry-0.1.0.tgz
+    version: 0.1.0
   knative-installer:
   - apiVersion: v2
     created: "2021-06-14T05:45:35.085899302Z"
@@ -3971,4 +3982,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-08-10T09:17:08.19022199Z"
+generated: "2023-08-10T11:31:27.977360801Z"
