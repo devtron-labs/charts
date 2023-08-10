@@ -1,0 +1,15 @@
+replicaCount: 0
+database:
+  host: listmonk-postgresql
+  username: listmonk
+  password: listmonk
+  database: listmonk
+
+postgresql:
+  enable: false
+  fullnameOverride: listmonk-postgresql
+  postgresqlDatabase: listmonk
+  postgresqlUsername: listmonk
+  postgresqlPassword: listmonk
+  persistence:
+    enabled: false
