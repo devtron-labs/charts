@@ -53,7 +53,7 @@ spec:
             - name: GCS_BUCKET
               value: "gs://{{ .GCS_BUCKET_NAME }}"
             {{- if .CREDENTIALS.enabled }}
-            - name: gcp-credentials
+            - name: gcp_credentials
               valueFrom:
                 secretKeyRef:
                   name: gcp-credentials
@@ -65,9 +65,9 @@ spec:
             - /bin/bash
             - -c
           {{- if $.Values.global.GCP.encryption.enabled }}          
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; gcloud storage cp /tmp/backup-$date1.tar.gpg $GCS_BUCKET/postgres/;
+            - echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; gcloud storage cp /tmp/backup-$date1.tar.gpg $GCS_BUCKET/postgres/;
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; gcloud storage cp /tmp/backup-$date1.tar $GCS_BUCKET/postgres/;
+            - echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; gcloud storage cp /tmp/backup-$date1.tar $GCS_BUCKET/postgres/;
           {{- end }}
           volumes:
           - name: psql-volume
@@ -123,7 +123,7 @@ spec:
             - name: GCS_BUCKET
               value: "gs://{{ .GCS_BUCKET_NAME }}"
             {{- if .CREDENTIALS.enabled }}
-            - name: gcp-credentials
+            - name: gcp_credentials
               valueFrom:
                 secretKeyRef:
                   name: gcp-credentials
@@ -135,9 +135,9 @@ spec:
             - /bin/bash
             - -c
           {{- if $.Values.global.GCP.encryption.enabled }}
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; gcloud storage cp /cache/backup-$date1.yaml.gpg $GCS_BUCKET/argocd/;
+            - echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; gcloud storage cp /cache/backup-$date1.yaml.gpg $GCS_BUCKET/argocd/;
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; gcloud storage cp /cache/backup-$date1.yaml $GCS_BUCKET/argocd/;
+            - echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; gcloud storage cp /cache/backup-$date1.yaml $GCS_BUCKET/argocd/;
           {{- end }}
           volumes:
           - name: argocd-volume
