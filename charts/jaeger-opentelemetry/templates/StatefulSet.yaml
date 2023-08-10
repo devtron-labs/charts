@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+ name: {{ .Release.Name }}-jaeger-all-in-one
+ namespace: opentelemetry
+ labels:
+   {{- include "stateful label" . | nindent 3 }}
+spec: 
+  serviceName: "jaeger-headless"
+  replicas: {{ .Values.jaeger.replicas }}
+  selector:
+   matchLabels:
+       {{- include "stateful label" . | nindent 6 }}
+  template:
+   metadata:
+     labels:
+        {{- include "stateful label" . | nindent 7 }}
+   spec:
+     containers:
+       - image: {{ .Values.jaeger.image  }}
+         name: jaeger
+         ports:
+         {{- range $port := .Values.jaeger.ports }}
+          - containerPort: {{ $port }}
+        {{- end}}
+        {{if .Values.jaeger.env }}
+         env:
+         {{- range $env := .Values.jaeger.env }}
+           - name: {{ $env.name | quote }}
+             value: {{ $env.value | quote }}
+         {{- end }}
+        {{- end }}
+         volumeMounts:
+         - name: jaeger-pvc
+           mountPath: /badger
+  volumeClaimTemplates:
+  - metadata:
+      name: jaeger-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage:  {{ .Values.jaeger.storage  }} 

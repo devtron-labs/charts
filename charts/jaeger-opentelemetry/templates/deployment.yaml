@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: {{ .Release.Name }}-optl-deployment
+ namespace: opentelemetry
+ labels:
+   {{- include "deployment-optl label" . | nindent 3 }}
+spec:
+ selector:
+   matchLabels:
+     {{- include "deployment-optl label" . | nindent 5 }}
+ minReadySeconds: 5
+ replicas: {{ .Values.Deployment.Replicas }}
+ template:
+   metadata:
+     name: {{ .Release.Name }}-optl
+     namespace: opentelemetry
+     labels:
+       {{- include "deployment-optl label" . | nindent 7 }}
+   spec:
+     containers:
+       - command:
+           - '/otelcol'
+           - '--config=/conf/optl-collector-config.yaml'
+         image: {{ .Values.Deployment.image }}
+         name: otel-collector
+         resources:
+           limits:
+             cpu: {{ .Values.Deployment.resource.limit.cpu }}
+             memory: {{ .Values.Deployment.resource.limit.memory  }}
+           requests:
+             cpu: {{ .Values.Deployment.resource.request.cpu  }}
+             memory: {{ .Values.Deployment.resource.request.memory }}
+         ports:
+           - containerPort: {{ .Values.Deployment.ports.containerPort }}
+         volumeMounts:
+           - name: optl-collector-config-vol
+             mountPath: /conf
+     volumes:
+       - configMap:
+           name: {{ .Release.Name }}-config
+           items:
+             - key: optl-collector-config
+               path: optl-collector-config.yaml
+         name: optl-collector-config-vol

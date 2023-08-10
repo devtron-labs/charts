@@ -1,0 +1,60 @@
+apiVersion: v1
+kind: Service
+metadata:
+ name: {{ .Release.Name }}-optl
+ namespace: opentelemetry
+ labels:
+   app: opentelemetry
+   component: otel-collector
+spec:
+ type: {{ .Values.optl_service.type }}
+ ports:
+  {{- range $env := .Values.optl_service.ports }}
+   - name: {{ $env.name }} 
+     port: {{  $env.port }}
+     protocol: {{  $env.protocol }}
+     targetPort:  {{  $env.targetPort }}
+    {{- end }}
+ selector:
+   app: opentelemetry
+   name: optl
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-jaeger-headless
+  namespace: opentelemetry
+  labels:
+   app: opentelemetry
+   component: optl-collector
+spec:
+  ports:
+  {{- range $env := .Values.jaeger_servie_ports }}
+   - port: {{ $env.port }}
+     name: {{ $env.name }}
+    {{- end }}
+  clusterIP: None
+  selector:
+       app: opentelemetry
+       component: optl-collector
+       name: jaeger
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-jaeger-query
+  namespace: opentelemetry
+  labels:
+   app: opentelemetry
+   component: optl-collector
+   name: jaeger
+spec:
+  ports:
+    - name: {{ .Values.jaeger_query_ports.name }}
+      port: {{ .Values.jaeger_query_ports.port }}
+      protocol: TCP
+  selector:
+      app: opentelemetry
+      component: optl-collector
+      name: jaeger
+  type: {{ .Values.jaeger_query_ports.type }}

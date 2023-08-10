@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  namespace: opentelemetry
+  labels:
+   {{- include "optl-label" . | nindent 3 }}
+data:
+  optl-collector-config: {{toYaml .Values.optl_collector_config | indent  4}}

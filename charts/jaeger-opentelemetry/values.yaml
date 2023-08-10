@@ -1,0 +1,133 @@
+#config_map
+optl_collector_config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "0.0.0.0:4317"
+          http:
+            endpoint: "0.0.0.0:4318"
+    processors:
+      batch:
+      memory_limiter:
+        # 80% of maximum memory up to 2G
+        limit_mib: 1500
+        # 25% of limit up to 2G
+        spike_limit_mib: 512
+        check_interval: 5s
+    extensions:
+      zpages: {}
+      memory_ballast:
+        # Memory Ballast size should be max 1/3 to 1/2 of memory.
+        size_mib: 683
+    exporters:
+      logging:
+        loglevel: info
+      jaeger:
+        endpoint: jaeger-headless.opentelemetry:14250
+        tls:
+          insecure: true
+    service:
+      extensions: [zpages, memory_ballast]
+      pipelines:
+        traces/1:
+          receivers: [otlp]
+          #processors: [memory_limiter, batch]
+          exporters: [logging, jaeger]
+
+
+#optl_Deployment
+Deployment:
+    Replicas: 1
+    image: otel/opentelemetry-collector:latest
+    resource:
+              limit:
+                cpu: "1"
+                memory: 2Gi
+              request:
+                cpu: 200m
+                memory: 400Mi
+    ports:
+      containerPort: "4317"   #otlp grpc
+              #  - containerPort: 4318   # otlp http
+              #  - containerPort: 55679  # zpages
+              #  - containerPort: 13133  # health check
+
+#optl_service
+optl_service:
+     type: "ClusterIP"
+     ports: 
+        - name: otlp-grpc # Default endpoint for OpenTelemetry gRPC receiver.
+          port: "4317"
+          protocol: TCP
+          targetPort: "4317"
+        - name: otlp-http # Default endpoint for OpenTelemetry HTTP receiver.
+          port: "4318"
+          protocol: TCP
+          targetPort: "4318"
+  #  - name3: zpages
+  #    port3: 55679
+  #    protocol: TCP
+  #    targetPort: 55679
+  #  - name: health-check
+  #    port: 13133
+  #    protocol: TCP
+  #    targetPort: 13133
+     selector:
+       app: opentelemetry
+       name: optl
+
+# service for jaeger-headless
+jaeger_servie_ports:
+ -   port: "16686"
+     name: web
+ -   port: "14250"
+     name: optl-connection
+ -   port: "4317"
+     name: grpc
+
+#service for jaeger-query
+jaeger_query_ports:
+      name: query-http
+      port: "16686"
+      type: "ClusterIP"
+
+#StatefulSet-jaeger all in one
+jaeger:
+      replicas: "1"
+      image: jaegertracing/all-in-one:latest
+      storage: "10Gi"
+      ports:
+           containerPort1: "16686"
+           containerPort2: "14250"
+           containerPort3: "4317"
+      env: 
+      - name: "SPAN_STORAGE_TYPE"
+        value: "badger"
+      - name: "COLLECTOR_OTLP_ENABLED"
+        value: "true"
+      - name: "BADGER_EPHEMERAL"
+        value: "false" 
+      - name: "BADGER_DIRECTORY_VALUE"
+        value: "/badger/data"
+      - name: "BADGER_DIRECTORY_KEY"
+        value: "/badger/key"
+#test-file-connectivity
+service:
+  type: NodePort
+  port: 80 
+
+ingress:
+  name: jaeger-query
+  enabled: true
+  className: ""
+  labels: {}
+  annotations: {}
+  hosts:
+    - host: "foo.bar.com"
+      pathType: "ImplementationSpecific"
+      paths: "/"
+  tls: 
+    #- secretName: chart-example-tls
+    #  hosts:
+      #  - chart-example.local
