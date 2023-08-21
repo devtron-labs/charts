@@ -77,6 +77,12 @@ spec:
           securityContext:
 {{ toYaml .Values.containerSecurityContext | indent 12 }}
 {{- end }}
+      {{- if  .Values.gitsensor.storage.existingVolume  }}
+      volumes:
+        - name: "git-volume"
+          persistentVolumeClaim: 
+            claimName: {{ .Values.gitsensor.storage.existingVolume }}
+      {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
@@ -85,6 +91,7 @@ spec:
       affinity:
 {{ toYaml .Values.gitsensor.spec.affinity | indent 8 }}
 {{- end }}
+{{- if not .Values.gitsensor.storage.existingVolume  }}
   volumeClaimTemplates:
     - metadata:
         name: git-volume
@@ -97,4 +104,5 @@ spec:
 {{ if .Values.gitsensor.storage.nodeAffinity }}
         nodeAffinity:
 {{ toYaml .Values.gitsensor.storage.nodeAffinity | indent 10 }}
+{{- end }}
 {{- end }}
