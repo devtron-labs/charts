@@ -1,4 +1,5 @@
 {{- if .Values.global.AZURE.enabled }}
+{{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{ else -}}
@@ -57,7 +58,9 @@ spec:
           - name: psql-volume
             emptyDir: {}
           restartPolicy: OnFailure
+{{ end -}}          
 ---
+{{- if .Values.argocd_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{ else -}}
@@ -112,4 +115,5 @@ spec:
             emptyDir: {}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}
 {{- end }}
