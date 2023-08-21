@@ -19,7 +19,7 @@ global:
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
   GCP:
-    enabled: true
+    enabled: false
     GCS_BUCKET_NAME: "" # Required if GCP is enabled
     CREDENTIALS: # Optional. Use only if in case node doesn't have permission to push over GCS.
       enabled: false
@@ -37,7 +37,7 @@ argocdversion: v2
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
-  enabled: true
+  enabled: false
 
 argocd_backup:
   serviceAccountName: "argocd-backup"
