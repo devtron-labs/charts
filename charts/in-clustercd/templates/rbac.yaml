@@ -391,6 +391,11 @@ subjects:
   name: cd-runner
   namespace: {{ . }}
 {{- end }}
+{{- range .Values.execute_in_application_env.namespaces }}
+- kind: ServiceAccount
+  name: ci-runner
+  namespace: {{ . }}
+{{- end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
