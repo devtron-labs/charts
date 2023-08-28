@@ -1,4 +1,5 @@
 {{- if .Values.global.AZURE.enabled }}
+{{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{ else -}}
@@ -52,12 +53,18 @@ spec:
             args:
             - /bin/bash
             - -c
+             {{- if $.Values.global.AZURE.encryption.enabled }}
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /tmp/backup-$date1.tar.gpg --account-key $AZURE_ACCOUNT_KEY; 
+            {{- else }} 
             - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /tmp/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; 
+            {{- end }}
           volumes:
           - name: psql-volume
             emptyDir: {}
           restartPolicy: OnFailure
+{{- end }}          
 ---
+{{- if .Values.argocd_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{ else -}}
@@ -106,10 +113,15 @@ spec:
             args:
             - /bin/bash
             - -c
+            {{- if $.Values.global.AZURE.encryption.enabled }}
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /cache/backup.yaml ;rm -rvf /cache/backup.yaml ;mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /cache/backup-$date1.yaml.gpg --account-key $AZURE_ACCOUNT_KEY;  
+            {{- else }} 
             - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /cache/backup-$date1.yaml --account-key $AZURE_ACCOUNT_KEY;  
+            {{- end }}
           volumes:
           - name: argocd-volume
             emptyDir: {}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}
 {{- end }}

@@ -10,6 +10,7 @@ type: Opaque
 {{ end -}}
 ---
 {{- if .Values.global.GCP.enabled }}
+{{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{ else -}}
@@ -74,7 +75,9 @@ spec:
             emptyDir: {}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}
 ---
+{{- if .Values.argocd_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
 {{ else -}}
@@ -144,4 +147,5 @@ spec:
             emptyDir: {}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
+{{- end }}
 {{- end }}
