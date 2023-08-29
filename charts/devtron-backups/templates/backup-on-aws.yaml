@@ -104,7 +104,7 @@ spec:
             {{- end }}
           containers:
           - name: aws-cli-for-s3-upload
-            image: {{default "quay.io/devtron/k8s-utils:ubuntu-aws-cli" .Values.global.AWS.image}}
+            image: {{ .Values.global.AWS.image}}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume

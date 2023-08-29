@@ -12,7 +12,7 @@ global:
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
       enabled: false
       passphrase: ""
-    # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
+    image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
     enabled: false 
@@ -23,7 +23,8 @@ global:
     encryption:
       enabled: false # Recommended
       passphrase:  # Required if encryption is enabled
-    # image: quay.io/devtron/k8s-utils:az-cli-ubuntu #amd
+
+    image: quay.io/devtron/k8s-utils:az-cli-ubuntu #amd
   GCP:
     enabled: false
     GCS_BUCKET_NAME: "" # Required if GCP is enabled
@@ -36,7 +37,8 @@ global:
     encryption:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled
-    # image: google/cloud-sdk:alpine # default amd
+
+    image: google/cloud-sdk:alpine # default amd
 argocdversion: v2
     
 
