@@ -12,6 +12,8 @@ global:
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
       enabled: false
       passphrase: ""
+    # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
+    # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
     enabled: false 
     AZURE_BLOB_ACCOUNT_NAME: ""
@@ -33,7 +35,7 @@ global:
     encryption:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled
-
+    # image: google/cloud-sdk:alpine # default amd
 argocdversion: v2
     
 
