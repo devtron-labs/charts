@@ -23,6 +23,7 @@ global:
     encryption:
       enabled: false # Recommended
       passphrase:  # Required if encryption is enabled
+    # image: quay.io/devtron/k8s-utils:az-cli-ubuntu #amd
   GCP:
     enabled: false
     GCS_BUCKET_NAME: "" # Required if GCP is enabled
