@@ -117,7 +117,7 @@ spec:
             {{- end }}
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
-            image:  {{.Values.global.GCP.image }}
+            image:  {{ .Values.global.GCP.image }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
