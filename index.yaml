@@ -3316,6 +3316,18 @@ entries:
   gitsensor:
   - apiVersion: v1
     appVersion: 0.2.0
+    created: "2023-09-05T10:14:24.61481028Z"
+    description: Chart to deploy Devtron Gitsensor
+    digest: 95b1b8861cd9986fedbbd88dd2e6388149746ddf3684b8bc7c3a05506155451d
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: gitsensor
+    urls:
+    - gitsensor-0.11.8.tgz
+    version: 0.11.8
+  - apiVersion: v1
+    appVersion: 0.2.0
     created: "2023-04-19T11:03:41.974383221Z"
     description: Chart to deploy Devtron Gitsensor
     digest: fd67ba7bfcd2833a322162dedf7d70311640c450174936139668ae340f6ae660
@@ -4080,4 +4092,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-04T11:42:31.553651562Z"
+generated: "2023-09-05T10:14:24.615263588Z"
