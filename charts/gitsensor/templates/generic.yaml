@@ -77,6 +77,10 @@ spec:
           securityContext:
 {{ toYaml .Values.containerSecurityContext | indent 12 }}
 {{- end }}
+      {{- if $.Values.gitsensor.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.gitsensor.imagePullSecrets | indent 8 }}    
+      {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
