@@ -14,6 +14,8 @@ gitsensor:
     pullPolicy: Always
     repository: quay.io/devtron/git-sensor
     tag: 5d527335-200-4349
+  imagePullSecrets: []
+  #     - name: my-image-pull-secret
   containerPort:
   - port: 8080
     name: sensor
