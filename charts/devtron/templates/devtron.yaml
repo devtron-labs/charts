@@ -101,6 +101,46 @@ spec:
       securityContext:
 {{- toYaml $.Values.global.podSecurityContext | nindent 8 }}
       {{- end }}
+      volumes:
+        - emptyDir: {}
+          name: shared-volume
+      initContainers:
+        - command:
+            - /bin/sh
+            - -c
+            - cp -r /scripts/sql /shared/
+          image: quay.io/devtron/test:3036c7aa-907-5086
+          name: init-devtron
+          volumeMounts:
+            - mountPath: /shared
+              name: shared-volume
+        - command:
+            - /bin/sh
+            - -c
+            - 'if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable up;  else   echo $(MIGRATE_TO_VERSION); migrate -path $(SCRIPT_LOCATION)  -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable goto $(MIGRATE_TO_VERSION);    fi '
+          env:
+            - name: SCRIPT_LOCATION
+              value: /shared/sql/
+            - name: DB_TYPE
+              value: postgres
+            - name: DB_USER_NAME
+              value: postgres
+            - name: DB_HOST
+              value: postgresql-postgresql.devtroncd
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: orchestrator
+            - name: MIGRATE_TO_VERSION
+              value: "0"
+          envFrom:
+            - secretRef:
+                name: postgresql-migrator
+          image: migrate/migrate
+          name: postgresql-migrate-devtron
+          volumeMounts:
+            - mountPath: /shared
+              name: shared-volume
       containers:
         - name: devtron
           {{- if $.Values.installer.modules }}

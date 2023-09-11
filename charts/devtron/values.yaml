@@ -108,8 +108,8 @@ components:
       keyName: postgresql-password
 
   postgres:
-    image: "quay.io/devtron/postgres:11.9.0-debian-10-r26"
-    armImage: "quay.io/devtron/postgres:11.9"
+    image: "docker.io/bitnami/postgresql:15.3.0-debian-11-r22"
+    armImage: "docker.io/bitnami/postgresql:15.3.0"
     imagePullPolicy: "IfNotPresent"
     persistence:
       volumeSize: "20Gi"
