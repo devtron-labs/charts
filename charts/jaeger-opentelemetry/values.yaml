@@ -39,7 +39,7 @@ optl_collector_config: |
 #optl_Deployment
 Deployment:
     Replicas: 1
-    image: otel/opentelemetry-collector:latest
+    image: otel/opentelemetry-collector:0.83.0
     resource:
               limit:
                 cpu: "1"
@@ -95,7 +95,7 @@ jaeger_query_ports:
 #StatefulSet-jaeger all in one
 jaeger:
       replicas: "1"
-      image: jaegertracing/all-in-one:latest
+      image: jaegertracing/all-in-one:1.48
       storage: "10Gi"
       ports:
            containerPort1: "16686"
