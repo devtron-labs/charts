@@ -39,7 +39,7 @@ optl_collector_config: |
 #optl_Deployment
 Deployment:
     Replicas: 1
-    image: otel/opentelemetry-collector:0.83.0
+    image: otel/opentelemetry-collector:0.84.0
     resource:
               limit:
                 cpu: "1"
