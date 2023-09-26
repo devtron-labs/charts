@@ -23,24 +23,24 @@
             "default": {},
             "title": "The database_credentials Schema",
             "required": [
-                "db_type",
-                "db_host",
-                "db_port",
-                "db_user",
-                "db_password"
+                "DB_TYPE",
+                "DB_HOST",
+                "DB_PORT",
+                "DB_USER",
+                "DB_PASSWORD"
             ],
             "properties": {
-                "db_type": {
+                "DB_TYPE": {
                     "type": "string",
-                    "default": "postgress",
+                    "default": "postgres",
                     "description": "database type",
                     "title": "database type",
                     "examples": [
-                        "postgress",
+                        "postgres",
                         "sql"
                     ]
                 },
-                "db_user": {
+                "DB_USER": {
                     "type": "string",
                     "default": "",
                     "title": "The db_user Schema",
@@ -48,7 +48,7 @@
                         "postgres"
                     ]
                 },
-                "db_host": {
+                "DB_HOST": {
                     "type": "string",
                     "default": "postgresql-postgresql.default",
                     "description": "database host url",
@@ -58,7 +58,7 @@
                         "postgresql-service.qa-database"
                     ]
                 },
-                "db_port": {
+                "DB_PORT": {
                     "type": "string",
                     "default": "5432",
                     "description": "database port number",
@@ -67,7 +67,7 @@
                         "5432"
                     ]
                 },
-                "db_password": {
+                "DB_PASSWORD": {
                     "type": "string",
                     "default": "",
                     "description": "database password string",
@@ -79,11 +79,11 @@
             },
             "examples": [
                 {
-                    "db_type": "postgres",
-                    "db_host": "postgresql-postgresql.devtroncd",
-                    "db_port": "5432",
-                    "db_user": "postgres",
-                    "db_password": "xxxxxx"
+                    "DB_TYPE": "postgres",
+                    "DB_HOST": "postgresql-postgresql.devtroncd",
+                    "DB_PORT": "5432",
+                    "DB_USER": "postgres",
+                    "DB_PASSWORD": "xxxxxx"
                 }
             ]
         },
@@ -95,11 +95,12 @@
                 "type": "object",
                 "title": "A Schema",
                 "required": [
-                    "location",
-                    "repo_url",
-                    "repo_name",
-                    "branch",
-                    "version"
+                    "SCRIPT_LOCATION",
+                    "REPO_URL",
+                    "REPO_NAME",
+                    "BRANCH",
+                    "VERSION",
+                    "DB_NAME"
                 ],
                 "properties": {
                     "enable": {
@@ -110,7 +111,7 @@
                             "true"
                         ]
                     },
-                    "location": {
+                    "SCRIPT_LOCATION": {
                         "type": "string",
                         "default": "sql/",
                         "title": "The location Schema",
@@ -118,54 +119,54 @@
                             "scripts/sql/"
                         ]
                     },
-                    "repo_url": {
+                    "REPO_URL": {
                         "type": "string",
                         "title": "The repo_url for running git clone",
                         "examples": [
                             "https://<user>:<token>@github.com/<user>/<repo>.git"
                         ]
                     },
-                    "repo_name": {
+                    "REPO_NAME": {
                         "type": "string",
                         "title": "The repo_name ",
                         "examples": [
                             "yyy"
                         ]
                     },
-                    "branch": {
+                    "BRANCH": {
                         "type": "string",
-                        "default": "amin",
+                        "default": "main",
                         "title": "The branch ",
                         "examples": [
                             "main",
                             "migration-test"
                         ]
                     },
-                    "db_name": {
+                    "DB_NAME": {
                         "type": "string",
                         "title": "The db_name Schema",
-                        "default": "",
+                        "default": "my-db",
                         "examples": [
                             "orchestrator",
                             "git_sensor"
                         ]
                     },
-                    "commit": {
+                    "COMMIT": {
                         "type": "string",
                         "title": "The commit ",
                         "examples": [
                             "122sddffff222ddd"
                         ]
                     },
-                    "query": {
+                    "PARAM": {
                         "type": "string",
                         "default": "",
-                        "title": "The query that pased after ? in rest API ",
+                        "title": "The API query param that pased after ? in rest API ",
                         "examples": [
                             "authSource=admin"
                         ]
                     },
-                    "version": {
+                    "VERSION": {
                         "type": "string",
                         "default": "0",
                         "title": "The version Schema",
@@ -176,28 +177,30 @@
                 },
                 "examples": [
                     {
-                        "location": "scripts/sql/",
-                        "repo_url": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                        "repo_name": "yyy",
-                        "branch": "main",
-                        "commit": "",
-                        "db_name": "orchestrator",
-                        "query": "sslmode=disable",
-                        "version": "0"
+                        "enable" : true
+                        "SCRIPT_LOCATION": "scripts/sql/",
+                        "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
+                        "REPO_NAME": "repo",
+                        "BRANCH": "main",
+                        "COMMIT": "",
+                        "DB_NAME": "orchestrator",
+                        "PARAM": "sslmode=disable",
+                        "VERSION": "0"
                     }
                 ]
             },
             "examples": [
                 [
                     {
-                        "location": "scripts/sql/",
-                        "repo_url": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                        "repo_name": "repo",
-                        "branch": "main",
-                        "commit": "2692583b259a17bc3b479b3845c2a85582274157",
-                        "db_name": "orchestrator",
-                        "query": "sslmode=disable",
-                        "version": "0"
+                        "enable" : true
+                        "SCRIPT_LOCATION": "scripts/sql/",
+                        "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
+                        "REPO_NAME": "repo",
+                        "BRANCH": "main",
+                        "COMMIT": "",
+                        "DB_NAME": "orchestrator",
+                        "PARAM": "sslmode=disable",
+                        "VERSION": "0"
                     }
                 ]
             ]
@@ -207,22 +210,23 @@
         {
             "image": "migrate/migrate",
             "database_credentials": {
-                "db_type": "postgres",
-                "db_host": "postgresql-postgresql.devtroncd",
-                "db_port": 5432,
-                "db_user": "postgres",
-                "db_password": "xxxxxx"
+                "DB_TYPE": "postgres",
+                "DB_HOST": "postgresql-postgresql.devtroncd",
+                "DB_PORT": "5432",
+                "DB_USER": "postgres",
+                "DB_PASSWORD": "xxxxxx"
             },
             "migrations": [
                 {
-                    "location": "scripts/sql/",
-                    "repo_url": "https://<user>:<token>@github.com/<user>/repo.git",
-                    "repo_name": "repo",
-                    "branch": "main",
-                    "commit": "",
-                    "instance_name": "orchestrator",
-                    "query": "sslmode=disable",
-                    "version": "0"
+                   "enable" : true
+                    "SCRIPT_LOCATION": "scripts/sql/",
+                    "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
+                    "REPO_NAME": "repo",
+                    "BRANCH": "main",
+                    "COMMIT": "",
+                    "DB_NAME": "orchestrator",
+                    "PARAM": "sslmode=disable",
+                    "VERSION": "0"
                 }
             ]
         }
