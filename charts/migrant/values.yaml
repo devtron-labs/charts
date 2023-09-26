@@ -14,3 +14,4 @@ migrations:
     location: scripts/psql/
     query: "sslmode=disable"
     version: "0" # if 0 then it will take run all.
+    db_name: "my-db"
