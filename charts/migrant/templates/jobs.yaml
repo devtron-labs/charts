@@ -24,7 +24,8 @@ spec:
               cd $(REPO_NAME)
               # Check out the specific branch
               git checkout $BRANCH_NAME
-              if [ $(COMMIT_HASH) -eq "" ]; then
+              echo $COMMIT_HASH
+              if [ -z $(COMMIT_HASH)  ]; then
                 echo "we are on latest commit"
               else
                 echo "git checkout on"
@@ -41,34 +42,38 @@ spec:
               echo "Current commit: $CURRENT_COMMIT"
               echo "Migrating to version (0 for latest)"
               echo $(MIGRATE_TO_VERSION);
-              if [ $(DB_TYPE) -eq "postgres" ]; then
+              if [ "$(DB_TYPE)" = "postgres" ]; then
                 echo "migration for postgres"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
                   migrate -path $(SCRIPT_DIR) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) up;
                 else
-                  migrate -path $(SCRIPT_DIR) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) goto $(MIGRATE_TO_VERSION);  
+                  migrate -path $(SCRIPT_DIR) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) goto $(MIGRATE_TO_VERSION);
                 fi
-              elif [ $(DB_TYPE) -eq "mongodb" ]; then
+              elif [ "$(DB_TYPE)" = "mongodb" ]; then
                 echo "migration for mongodb"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
                   migrate -path $(SCRIPT_DIR) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) up;
                 else
-                  migrate -path $(SCRIPT_DIR) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) goto $(MIGRATE_TO_VERSION);  
+                  migrate -path $(SCRIPT_DIR) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) goto $(MIGRATE_TO_VERSION);
                 fi
-              elif [ $(DB_TYPE) -eq "mysql" ]; then
+              elif [ "$(DB_TYPE)" = "mysql" ]; then
                 echo "migration for mysql"
-                if [ $MIGRATE_TO_VERSION -eq "0" ] then
+                DB="tcp($DB_HOST:$DB_PORT)"
+                echo $DB
+                if [ $MIGRATE_TO_VERSION -eq "0" ]; then
                   migrate -path $SCRIPT_DIR -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB/$DB_NAME?$QUERY up;
                 else
                   migrate -path $SCRIPT_DIR -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB_HOST:$DB?$QUERY goto $MIGRATE_TO_VERSION;
                 fi
-              elif [ $(DB_TYPE) -eq "sqlserver" ]; then
+              elif [ "$(DB_TYPE)" = "sqlserver" ]; then
                 echo "migration for sqlserver"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
                   migrate -path $(SCRIPT_DIR) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(QUERY) up;
                 else
-                  migrate -path $(SCRIPT_DIR) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(QUERY) goto $(MIGRATE_TO_VERSION);  
+                  migrate -path $(SCRIPT_DIR) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(QUERY) goto $(MIGRATE_TO_VERSION);
                 fi
+              else
+                echo "no database matched"
               fi
         env:
           - name: REPO_URL
