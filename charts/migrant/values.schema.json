@@ -177,7 +177,7 @@
                 },
                 "examples": [
                     {
-                        "enable" : true
+                        "enable" : true,
                         "SCRIPT_LOCATION": "scripts/sql/",
                         "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
                         "REPO_NAME": "repo",
@@ -192,7 +192,7 @@
             "examples": [
                 [
                     {
-                        "enable" : true
+                        "enable" : true,
                         "SCRIPT_LOCATION": "scripts/sql/",
                         "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
                         "REPO_NAME": "repo",
@@ -218,7 +218,7 @@
             },
             "migrations": [
                 {
-                   "enable" : true
+                   "enable" : true,
                     "SCRIPT_LOCATION": "scripts/sql/",
                     "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
                     "REPO_NAME": "repo",
