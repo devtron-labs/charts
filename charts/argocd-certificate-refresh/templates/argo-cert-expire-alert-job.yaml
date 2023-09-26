@@ -1,0 +1,29 @@
+{{- if $.Values.alert.enabled -}}
+{{- if .Capabilities.APIVersions.Has "batch/v1/CronJob" }}
+apiVersion: batch/v1
+{{- else -}}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+  name: argocd-cert-alert
+spec:
+  schedule: {{ $.Values.alert.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: argocd-cert-sa
+          serviceAccount: argocd-cert-sa
+          containers:
+          - name: argocd-alert-container
+            image:  {{ $.Values.alert.image }}
+            imagePullPolicy: IfNotPresent
+            command: ["./alert.sh"]
+            env:
+              - name: discord_url
+                value: {{$.Values.alert.discord_url  }}
+              - name: alert_before
+                value: {{$.Values.alert.alert_before }}
+          restartPolicy: OnFailure
+{{- end }}

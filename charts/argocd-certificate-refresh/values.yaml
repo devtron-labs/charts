@@ -14,6 +14,18 @@ cronjob:
 
 
 
+#set up this If you need alert for argocd cert expire
+alert:
+  enabled: false
+  image: badal773/argo-alert:v1
+  discord_url: " " 
+  schedule: "59 23 * */6 *"
+  alert_before: 10
+
+
+
+
+
 
 
 

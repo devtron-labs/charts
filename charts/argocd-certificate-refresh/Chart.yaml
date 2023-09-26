@@ -1,8 +1,9 @@
 name: argocd-certificate-refresh
 description: Helm chart to deploy argocd certificate refresh CronJob.
-version: 0.10.5
+version: 0.10.6
 appVersion: 0.1.0
 apiVersion: v1
 maintainers:
 - email: ajay@devtron.ai
   name: Ajay
+
