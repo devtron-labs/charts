@@ -1,17 +1,17 @@
 database_credentials:
-  db_host: "mssql-latest-deploy.default"
-  db_password: "Toughpass1!" #don't encode this password
-  db_port: "1433"
-  db_type: "sqlserver" # postgres, mysql, mongodb, sqlserver
-  db_user: "sa"
+  DB_HOST: "mssql-latest-deploy.default"
+  DB_PASSWORD: "Toughpass1!" #don't encode this password
+  DB_PORT: "1433"
+  DB_TYPE: "sqlserver" # postgres, mysql, mongodb, sqlserver
+  DB_USER: "sa"
 image: migrate/migrate
 migrations:
   - enable: true
-    repo_url: "https://github.com/devtron-labs/devtron" # any git repo clone command.
-    repo_name: "<repo>"
-    branch: "main"
-    commit: "" # if blanck then it will take latest commit.
-    location: scripts/psql/
-    query: "sslmode=disable"
-    version: "0" # if 0 then it will take run all.
-    db_name: "my-db"
+    REPO_URL: "" # any git repo clone command.
+    REPO_NAME: "repo-name"
+    BRANCH: "main"
+    COMMIT: "" # if blanck then it will take latest commit.
+    SCRIPT_LOCATION: scripts/psql/
+    PARAM: "sslmode=disable"
+    VERSION: "0" # if 0 then it will take run all.
+    DB_NAME: "my-db"
