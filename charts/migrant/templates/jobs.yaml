@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ $.Release.Name  }}-{{ .db_name | replace "_" "-" }}-{{ randAlphaNum 5 | lower }}
+  name: {{ $.Release.Name  }}-{{ .DB_NAME | replace "_" "-" }}-{{ randAlphaNum 5 | lower }}
   annotations: {}
   labels:
     job: {{ $.Release.Name }}-migration
@@ -45,55 +45,55 @@ spec:
               if [ "$(DB_TYPE)" = "postgres" ]; then
                 echo "migration for postgres"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_DIR) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) up;
+                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) up;
                 else
-                  migrate -path $(SCRIPT_DIR) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) goto $(MIGRATE_TO_VERSION);
                 fi
               elif [ "$(DB_TYPE)" = "mongodb" ]; then
                 echo "migration for mongodb"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_DIR) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) up;
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) up;
                 else
-                  migrate -path $(SCRIPT_DIR) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(QUERY) goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) goto $(MIGRATE_TO_VERSION);
                 fi
               elif [ "$(DB_TYPE)" = "mysql" ]; then
                 echo "migration for mysql"
                 DB="tcp($DB_HOST:$DB_PORT)"
                 echo $DB
                 if [ $MIGRATE_TO_VERSION -eq "0" ]; then
-                  migrate -path $SCRIPT_DIR -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB/$DB_NAME?$QUERY up;
+                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB/$DB_NAME?$PARAM up;
                 else
-                  migrate -path $SCRIPT_DIR -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB_HOST:$DB?$QUERY goto $MIGRATE_TO_VERSION;
+                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB_HOST:$DB?$PARAM goto $MIGRATE_TO_VERSION;
                 fi
               elif [ "$(DB_TYPE)" = "sqlserver" ]; then
                 echo "migration for sqlserver"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_DIR) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(QUERY) up;
+                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(PARAM) up;
                 else
-                  migrate -path $(SCRIPT_DIR) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(QUERY) goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(PARAM) goto $(MIGRATE_TO_VERSION);
                 fi
               else
                 echo "no database matched"
               fi
         env:
           - name: REPO_URL
-            value: {{ .repo_url }}
+            value: {{ .REPO_URL }}
           - name: BRANCH_NAME
-            value: {{ .branch }}
+            value: {{ .BRANCH }}
+          {{- if .COMMIT }}
           - name: COMMIT_HASH
-            value: {{ .commit }}
+            value: {{ .COMMIT }}
+          {{- end}}
           - name: REPO_NAME
             value: {{ .repo_name }}
-          - name: SCRIPT_DIR
-            value: {{ .location }}
-          - name: DB_NAME
-            value: {{ .db_name }}
+          - name: SCRIPT_LOCATION
+            value: {{ .SCRIPT_LOCATION }}
           - name: MIGRATE_TO_VERSION
-            value: {{ .version | quote }}
-          - name: INSTNACE_NAME
-            value: {{ .instance_name }}
-          - name: QUERY
-            value: {{ .query }}
+            value: {{ .VERSION | quote }}
+          - name: DB_NAME
+            value: {{ .DB_NAME }}
+          - name: PARAM
+            value: {{ .PARAM }}
         envFrom:
           - secretRef:
               name: {{ $.Release.Name  }}-secret
