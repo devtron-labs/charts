@@ -18,6 +18,8 @@ spec:
         args:
             - |
               #!/bin/sh
+              set -e
+              set -o pipefail
               apk add git
               echo "git cloning"
               git clone $REPO_URL
@@ -85,7 +87,7 @@ spec:
             value: {{ .COMMIT }}
           {{- end}}
           - name: REPO_NAME
-            value: {{ .repo_name }}
+            value: {{ .REPO_NAME }}
           - name: SCRIPT_LOCATION
             value: {{ .SCRIPT_LOCATION }}
           - name: MIGRATE_TO_VERSION
