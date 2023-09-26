@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ $.Release.Name  }}-{{ .db_name | replace "_" "-" }}-migration
+  name: {{ $.Release.Name  }}-{{ .db_name | replace "_" "-" }}-{{ randAlphaNum 5 | lower }}
   annotations: {}
   labels:
     job: {{ $.Release.Name }}-migration
