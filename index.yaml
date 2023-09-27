@@ -3572,6 +3572,20 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/mautic-0.1.2/mautic-0.1.2.tgz
     version: 0.1.2
+  migrant:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2023-09-27T04:52:24.268313017Z"
+    description: A Helm chart for Kubernetes
+    digest: d9f2a335c93452910a76c733b11399bc7844564e2a36052170ce0ad3a84b483e
+    maintainers:
+    - email: devops@devtron.ai
+      name: Jatin
+    name: migrant
+    type: application
+    urls:
+    - migrant-0.0.1.tgz
+    version: 0.0.1
   migration-incluster-cd:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -4126,4 +4140,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-15T01:45:59.58214148Z"
+generated: "2023-09-27T04:52:24.269001911Z"
