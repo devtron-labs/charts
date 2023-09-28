@@ -47,32 +47,32 @@ spec:
               if [ "$(DB_TYPE)" = "postgres" ]; then
                 echo "migration for postgres"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) up;
+                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" up;
                 else
-                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" goto $(MIGRATE_TO_VERSION);
                 fi
               elif [ "$(DB_TYPE)" = "mongodb" ]; then
                 echo "migration for mongodb"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) up;
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" up;
                 else
-                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?$(PARAM) goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" goto $(MIGRATE_TO_VERSION);
                 fi
               elif [ "$(DB_TYPE)" = "mysql" ]; then
                 echo "migration for mysql"
                 DB="tcp($DB_HOST:$DB_PORT)"
                 echo $DB
                 if [ $MIGRATE_TO_VERSION -eq "0" ]; then
-                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB/$DB_NAME?$PARAM up;
+                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB/$DB_NAME?"$PARAM" up;
                 else
-                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB_HOST:$DB?$PARAM goto $MIGRATE_TO_VERSION;
+                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB_HOST:$DB?"$PARAM" goto $MIGRATE_TO_VERSION;
                 fi
               elif [ "$(DB_TYPE)" = "sqlserver" ]; then
                 echo "migration for sqlserver"
                 if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(PARAM) up;
+                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?"$(PARAM)" up;
                 else
-                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?$(PARAM) goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?"$(PARAM)" goto $(MIGRATE_TO_VERSION);
                 fi
               else
                 echo "no database matched"
