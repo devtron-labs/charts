@@ -1,234 +1,140 @@
 {
-    "$schema": "https://json-schema.org/draft/2019-09/schema",
-    "$id": "http://example.com/example.json",
-    "type": "object",
-    "default": {},
-    "title": "Root Schema",
-    "required": [
-        "image",
-        "database_credentials",
-        "migrations"
-    ],
-    "properties": {
-        "image": {
-            "type": "string",
-            "default": "migrate/migrate",
-            "title": "Migrator Image",
-            "examples": [
-                "migrate/migrate"
-            ]
-        },
-        "database_credentials": {
+    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$ref": "#/definitions/Welcome2",
+    "definitions": {
+        "Welcome2": {
             "type": "object",
-            "default": {},
-            "title": "The database_credentials Schema",
-            "required": [
-                "DB_TYPE",
-                "DB_HOST",
-                "DB_PORT",
-                "DB_USER",
-                "DB_PASSWORD"
-            ],
+            "additionalProperties": false,
             "properties": {
-                "DB_TYPE": {
-                    "type": "string",
-                    "default": "postgres",
-                    "description": "database type",
-                    "title": "database type",
-                    "examples": [
-                        "postgres",
-                        "sql"
-                    ]
+                "database_credentials": {
+                    "$ref": "#/definitions/DatabaseCredentials"
                 },
-                "DB_USER": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The db_user Schema",
-                    "examples": [
-                        "postgres"
-                    ]
+                "image": {
+                    "type": "string"
                 },
+                "migrations": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Migration"
+                    }
+                }
+            },
+            "required": [
+                "database_credentials",
+                "image",
+                "migrations"
+            ],
+            "title": "Welcome2"
+        },
+        "DatabaseCredentials": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "env": {
+                    "$ref": "#/definitions/DatabaseCredentialsEnv"
+                },
+                "envFrom": {
+                    "$ref": "#/definitions/EnvFrom"
+                }
+            },
+            "required": [],
+            "title": "DatabaseCredentials"
+        },
+        "DatabaseCredentialsEnv": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
                 "DB_HOST": {
-                    "type": "string",
-                    "default": "postgresql-postgresql.default",
-                    "description": "database host url",
-                    "title": "database host",
-                    "examples": [
-                        "postgresql-postgresql.demo-test",
-                        "postgresql-service.qa-database"
-                    ]
+                    "type": "string"
+                },
+                "DB_PASSWORD": {
+                    "type": "string"
                 },
                 "DB_PORT": {
                     "type": "string",
-                    "default": "5432",
-                    "description": "database port number",
-                    "title": "database port",
-                    "examples": [
-                        "5432"
-                    ]
+                    "format": "integer"
                 },
-                "DB_PASSWORD": {
-                    "type": "string",
-                    "default": "",
-                    "description": "database password string",
-                    "title": "database password",
-                    "examples": [
-                        "myDBPasswordSecret"
-                    ]
+                "DB_TYPE": {
+                    "type": "string"
                 }
             },
-            "examples": [
-                {
-                    "DB_TYPE": "postgres",
-                    "DB_HOST": "postgresql-postgresql.devtroncd",
-                    "DB_PORT": "5432",
-                    "DB_USER": "postgres",
-                    "DB_PASSWORD": "xxxxxx"
-                }
-            ]
+            "required": [],
+            "title": "DatabaseCredentialsEnv"
         },
-        "migrations": {
-            "type": "array",
-            "default": [],
-            "title": "The migrations Schema",
-            "items": {
-                "type": "object",
-                "title": "A Schema",
-                "required": [
-                    "SCRIPT_LOCATION",
-                    "REPO_URL",
-                    "REPO_NAME",
-                    "BRANCH",
-                    "VERSION",
-                    "DB_NAME"
-                ],
-                "properties": {
-                    "enable": {
-                        "type": "boolean",
-                        "default": "true",
-                        "title": "enable",
-                        "examples": [
-                            "true"
-                        ]
-                    },
-                    "SCRIPT_LOCATION": {
-                        "type": "string",
-                        "default": "sql/",
-                        "title": "The location Schema",
-                        "examples": [
-                            "scripts/sql/"
-                        ]
-                    },
-                    "REPO_URL": {
-                        "type": "string",
-                        "title": "The repo_url for running git clone",
-                        "examples": [
-                            "https://<user>:<token>@github.com/<user>/<repo>.git"
-                        ]
-                    },
-                    "REPO_NAME": {
-                        "type": "string",
-                        "title": "The repo_name ",
-                        "examples": [
-                            "yyy"
-                        ]
-                    },
-                    "BRANCH": {
-                        "type": "string",
-                        "default": "main",
-                        "title": "The branch ",
-                        "examples": [
-                            "main",
-                            "migration-test"
-                        ]
-                    },
-                    "DB_NAME": {
-                        "type": "string",
-                        "title": "The db_name Schema",
-                        "default": "my-db",
-                        "examples": [
-                            "orchestrator",
-                            "git_sensor"
-                        ]
-                    },
-                    "COMMIT": {
-                        "type": "string",
-                        "title": "The commit ",
-                        "examples": [
-                            "122sddffff222ddd"
-                        ]
-                    },
-                    "PARAM": {
-                        "type": "string",
-                        "default": "",
-                        "title": "The API query param that pased after ? in rest API ",
-                        "examples": [
-                            "authSource=admin"
-                        ]
-                    },
-                    "VERSION": {
-                        "type": "string",
-                        "default": "0",
-                        "title": "The version Schema",
-                        "examples": [
-                            "0"
-                        ]
+        "EnvFrom": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "secret": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
-                },
-                "examples": [
-                    {
-                        "enable" : true,
-                        "SCRIPT_LOCATION": "scripts/sql/",
-                        "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                        "REPO_NAME": "repo",
-                        "BRANCH": "main",
-                        "COMMIT": "",
-                        "DB_NAME": "orchestrator",
-                        "PARAM": "sslmode=disable",
-                        "VERSION": "0"
-                    }
-                ]
-            },
-            "examples": [
-                [
-                    {
-                        "enable" : true,
-                        "SCRIPT_LOCATION": "scripts/sql/",
-                        "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                        "REPO_NAME": "repo",
-                        "BRANCH": "main",
-                        "COMMIT": "",
-                        "DB_NAME": "orchestrator",
-                        "PARAM": "sslmode=disable",
-                        "VERSION": "0"
-                    }
-                ]
-            ]
-        }
-    },
-    "examples": [
-        {
-            "image": "migrate/migrate",
-            "database_credentials": {
-                "DB_TYPE": "postgres",
-                "DB_HOST": "postgresql-postgresql.devtroncd",
-                "DB_PORT": "5432",
-                "DB_USER": "postgres",
-                "DB_PASSWORD": "xxxxxx"
-            },
-            "migrations": [
-                {
-                   "enable" : true,
-                    "SCRIPT_LOCATION": "scripts/sql/",
-                    "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                    "REPO_NAME": "repo",
-                    "BRANCH": "main",
-                    "COMMIT": "",
-                    "DB_NAME": "orchestrator",
-                    "PARAM": "sslmode=disable",
-                    "VERSION": "0"
                 }
-            ]
+            },
+            "required": [],
+            "title": "EnvFrom"
+        },
+        "Migration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "env": {
+                    "$ref": "#/definitions/MigrationEnv"
+                },
+                "post_query": {
+                    "type": "array",
+                    "items": {}
+                }
+            },
+            "required": [
+                "enable"
+            ],
+            "title": "Migration"
+        },
+        "MigrationEnv": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "REPO_URL": {
+                    "type": "string",
+                    "format": "uri",
+                    "qt-uri-protocols": [
+                        "https"
+                    ]
+                },
+                "REPO_NAME": {
+                    "type": "string"
+                },
+                "BRANCH": {
+                    "type": "string"
+                },
+                "COMMIT": {
+                    "type": "string"
+                },
+                "SCRIPT_LOCATION": {
+                    "type": "string"
+                },
+                "PARAM": {
+                    "type": "string"
+                },
+                "MIGRATE_TO_VERSION": {
+                    "type": "string",
+                    "format": "integer"
+                },
+                "DB_NAME": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "DB_NAME",
+                "REPO_NAME",
+                "REPO_URL"
+            ],
+            "title": "MigrationEnv"
         }
-    ]
+    }
 }

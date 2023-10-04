@@ -1,17 +1,25 @@
 database_credentials:
-  DB_HOST: "mssql-latest-deploy.default"
-  DB_PASSWORD: "Toughpass1!" #don't encode this password
-  DB_PORT: "1433"
-  DB_TYPE: "sqlserver" # postgres, mysql, mongodb, sqlserver
-  DB_USER: "sa"
+  env: 	
+    DB_HOST: "postgresql-postgresql.devtroncd"
+    DB_PASSWORD: "password!" #don't encode this password 
+    DB_PORT: "1234"
+    DB_TYPE: "postgres" # postgres, mysql, mongodb, sqlserver
+    DB_USER: "postgres"
+  envFrom:
+    secret: []
+    # - db-secret
 image: migrate/migrate
 migrations:
   - enable: true
-    REPO_URL: "" # any git repo clone command.
-    REPO_NAME: "repo-name"
-    BRANCH: "main"
-    COMMIT: "" # if blanck then it will take latest commit.
-    SCRIPT_LOCATION: scripts/psql/
-    PARAM: "sslmode=disable"
-    VERSION: "0" # if 0 then it will take run all.
-    DB_NAME: "my-db"
+    env:
+      REPO_URL: "https://github.com/test-labs/test" # any git repo clone command.
+      REPO_NAME: "test"
+      BRANCH: "main"
+      COMMIT: "" # if blanck then it will take latest commit.
+      SCRIPT_LOCATION: scripts/sql/ 
+      PARAM: "sslmode=disable"
+      MIGRATE_TO_VERSION: "0" # if 0 then it will take run all.
+      DB_NAME: "orchestrator"
+    post_query: [] # we can custom Query
+    # - ls
+    # - echo "migrate -path . -database "mongodb://localhost:27017/mongo_migrate_test?directConnection=true" -verbose up"
