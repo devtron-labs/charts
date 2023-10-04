@@ -6,8 +6,10 @@ database_credentials:
     DB_TYPE: "mongodb+srv" # postgres, mysql, mongodb, sqlserver, mongodb+srv
     DB_USER: "postgres"
   envFrom:
-    secret: []
-    # - db-secret
+    # - configMapRef:
+    #      name: release-name-configmap
+    # - secretRef:
+    #     name: release-name-secret
 image: migrate/migrate
 migrations:
   - enable: true

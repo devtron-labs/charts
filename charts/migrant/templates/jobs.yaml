@@ -127,19 +127,10 @@ spec:
          - name: {{ $key }}
            value: {{ $val | quote }}
         {{- end }}
+        {{- if $.Values.database_credentials.envFrom }}
         envFrom:
-          {{- range .configMap }}
-          - configMapRef:
-               name: {{ . }}
-          {{- end }}
-          # - configMapRef:
-          #      name: {{ $.Release.Name  }}-configmap
-          {{- range .secret }}
-          - secretRef:
-              name: {{ . }}
-          {{- end }}
-          # - secretRef:
-          #     name: {{ $.Release.Name  }}-secret
+{{ toYaml $.Values.database_credentials.envFrom | nindent 10 }}
+        {{- end }}
 ---
 {{-  end }}
 {{-  end }}
