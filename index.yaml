@@ -576,6 +576,21 @@ entries:
   devtron-in-clustercd:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2023-10-04T14:25:59.571271418Z"
+    description: Helm chart to deploy devtron-in-clustercd to run pre and post deployment
+      in application/target cluster.
+    digest: 4c0509104d11b520a170a37991a99897254181865debf4969fcbd529a5526729
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops Team
+    - email: ajay@devtron.ai
+      name: Ajay
+    name: devtron-in-clustercd
+    urls:
+    - devtron-in-clustercd-0.10.1.tgz
+    version: 0.10.1
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2023-04-26T12:09:54.631800238Z"
     description: Helm chart to deploy devtron-in-clustercd to run pre and post deployment
       in application/target cluster.
@@ -4153,4 +4168,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-09-28T07:02:20.814519069Z"
+generated: "2023-10-04T14:25:59.571690319Z"
