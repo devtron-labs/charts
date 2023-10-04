@@ -46,7 +46,7 @@ workflow:
 
   affinity: {}
 
-#Namespaces to execute in application environments for pre/post deployment on target clusters
+#Namespaces to execute in application environments for pre/post deployment and Run Jobs on target clusters
 execute_in_application_env:
   namespaces:
     - abc
@@ -54,7 +54,7 @@ execute_in_application_env:
 
 # Kubewatch configuration
 kubewatch:
-  image: quay.io/devtron/kubewatch:b7c8b777-419-12558
+  image: quay.io/devtron/kubewatch:49f906a5-419-14814
   env:
     - name: DEFAULT_NAMESPACE
       value: "devtron-ci"
