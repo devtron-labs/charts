@@ -10,6 +10,7 @@ argoWorkflow:
   EnvVariablesFrom: []
   workflowController:
     image: quay.io/argoproj/workflow-controller:v3.0.7
+    # image: quay.io/argoproj/argoexec:v3.4.3
     resources:
       limits:
         cpu: "0.3"
@@ -19,3 +20,6 @@ argoWorkflow:
         memory: 50Mi
   executor:
     imagePullPolicy: IfNotPresent
+
+
+disable_IMDSv2: true

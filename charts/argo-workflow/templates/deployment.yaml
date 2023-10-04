@@ -28,7 +28,11 @@ spec:
         - --configmap
         - workflow-controller-configmap
         - --executor-image
+        {{- if $.Values.disable_IMDSv2 }}
         - quay.io/argoproj/argoexec:v3.0.7
+        {{- else }}
+        - quay.io/argoproj/argoexec:v3.4.3
+        {{- end }}
         command:
         - workflow-controller
         env:
