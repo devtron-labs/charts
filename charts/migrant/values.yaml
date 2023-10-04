@@ -3,7 +3,7 @@ database_credentials:
     DB_HOST: "postgresql-postgresql.devtroncd"
     DB_PASSWORD: "password!" #don't encode this password 
     DB_PORT: "1234"
-    DB_TYPE: "postgres" # postgres, mysql, mongodb, sqlserver
+    DB_TYPE: "mongodb+srv" # postgres, mysql, mongodb, sqlserver, mongodb+srv
     DB_USER: "postgres"
   envFrom:
     secret: []

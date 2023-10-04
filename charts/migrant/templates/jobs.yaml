@@ -90,6 +90,13 @@ spec:
                 else
                   migrate -path $(SCRIPT_LOCATION) -database mongodb://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" goto $MIGRATE_TO_VERSION;
                 fi
+              elif [ "$(DB_TYPE)" = "mongodb+srv" ]; then
+                echo "migration for mongodb"
+                if [ $MIGRATE_TO_VERSION -eq "0" ]; then
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb+srv://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" up;
+                else
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb+srv://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" goto $MIGRATE_TO_VERSION;
+                fi
               elif [ "$(DB_TYPE)" = "mysql" ]; then
                 echo "migration for mysql"
                 DB="tcp($DB_HOST:$DB_PORT)"

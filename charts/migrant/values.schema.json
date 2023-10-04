@@ -1,140 +1,327 @@
 {
-    "$schema": "http://json-schema.org/draft-06/schema#",
-    "$ref": "#/definitions/Welcome2",
-    "definitions": {
-        "Welcome2": {
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+        "database_credentials",
+        "image",
+        "migrations"
+    ],
+    "properties": {
+        "database_credentials": {
             "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "database_credentials": {
-                    "$ref": "#/definitions/DatabaseCredentials"
-                },
-                "image": {
-                    "type": "string"
-                },
-                "migrations": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Migration"
-                    }
-                }
-            },
-            "required": [
-                "database_credentials",
-                "image",
-                "migrations"
-            ],
-            "title": "Welcome2"
-        },
-        "DatabaseCredentials": {
-            "type": "object",
-            "additionalProperties": false,
+            "default": {},
+            "title": "The database_credentials Schema",
+            "required": [],
             "properties": {
                 "env": {
-                    "$ref": "#/definitions/DatabaseCredentialsEnv"
-                },
-                "envFrom": {
-                    "$ref": "#/definitions/EnvFrom"
-                }
-            },
-            "required": [],
-            "title": "DatabaseCredentials"
-        },
-        "DatabaseCredentialsEnv": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "DB_HOST": {
-                    "type": "string"
-                },
-                "DB_PASSWORD": {
-                    "type": "string"
-                },
-                "DB_PORT": {
-                    "type": "string",
-                    "format": "integer"
-                },
-                "DB_TYPE": {
-                    "type": "string"
-                }
-            },
-            "required": [],
-            "title": "DatabaseCredentialsEnv"
-        },
-        "EnvFrom": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "secret": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            },
-            "required": [],
-            "title": "EnvFrom"
-        },
-        "Migration": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "enable": {
-                    "type": "boolean"
-                },
-                "env": {
-                    "$ref": "#/definitions/MigrationEnv"
-                },
-                "post_query": {
-                    "type": "array",
-                    "items": {}
-                }
-            },
-            "required": [
-                "enable"
-            ],
-            "title": "Migration"
-        },
-        "MigrationEnv": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "REPO_URL": {
-                    "type": "string",
-                    "format": "uri",
-                    "qt-uri-protocols": [
-                        "https"
+                    "type": "object",
+                    "default": {},
+                    "title": "The env Schema",
+                    "required": [
+                        "DB_HOST",
+                        "DB_PORT",
+                        "DB_TYPE"
+                    ],
+                    "properties": {
+                        "DB_HOST": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The DB_HOST Schema",
+                            "examples": [
+                                "postgresql-postgresql.devtroncd"
+                            ]
+                        },
+                        "DB_PASSWORD": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The DB_PASSWORD Schema",
+                            "examples": [
+                                ""
+                            ]
+                        },
+                        "DB_PORT": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The DB_PORT Schema",
+                            "examples": [
+                                "1234"
+                            ]
+                        },
+                        "DB_TYPE": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The DB_TYPE Schema",
+                            "examples": [
+                                "postgres"
+                            ]
+                        },
+                        "DB_USER": {
+                            "type": "string",
+                            "default": "",
+                            "title": "The DB_USER Schema",
+                            "examples": [
+                                "postgres"
+                            ]
+                        }
+                    },
+                    "examples": [
+                        {
+                            "DB_HOST": "postgresql-postgresql.devtroncd",
+                            "DB_PASSWORD": "",
+                            "DB_PORT": "1234",
+                            "DB_TYPE": "postgres"
+                        }
                     ]
                 },
-                "REPO_NAME": {
-                    "type": "string"
-                },
-                "BRANCH": {
-                    "type": "string"
-                },
-                "COMMIT": {
-                    "type": "string"
-                },
-                "SCRIPT_LOCATION": {
-                    "type": "string"
-                },
-                "PARAM": {
-                    "type": "string"
-                },
-                "MIGRATE_TO_VERSION": {
-                    "type": "string",
-                    "format": "integer"
-                },
-                "DB_NAME": {
-                    "type": "string"
+                "envFrom": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The envFrom Schema",
+                    "required": [],
+                    "properties": {
+                        "secret": {
+                            "type": "array",
+                            "default": [],
+                            "title": "The secret Schema",
+                            "items": {
+                                "type": "string",
+                                "default": "",
+                                "title": "A Schema",
+                                "examples": [
+                                    "db-secret"
+                                ]
+                            },
+                            "examples": [
+                                [
+                                    "db-secret"
+                                ]
+                            ]
+                        }
+                    },
+                    "examples": [
+                        {
+                            "secret": [
+                                "db-secret"
+                            ]
+                        }
+                    ]
                 }
             },
-            "required": [
-                "DB_NAME",
-                "REPO_NAME",
-                "REPO_URL"
-            ],
-            "title": "MigrationEnv"
+            "examples": [
+                {
+                    "env": {
+                        "DB_HOST": "postgresql-postgresql.devtroncd",
+                        "DB_PASSWORD": "",
+                        "DB_PORT": "1234",
+                        "DB_TYPE": "postgres"
+                    },
+                    "envFrom": {
+                        "secret": [
+                            "db-secret"
+                        ]
+                    }
+                }
+            ]
+        },
+        "image": {
+            "type": "string",
+            "default": "",
+            "title": "The image Schema",
+            "examples": [
+                "migrate/migrate"
+            ]
+        },
+        "migrations": {
+            "type": "array",
+            "default": [],
+            "title": "The migrations Schema",
+            "items": {
+                "type": "object",
+                "default": {},
+                "title": "A Schema",
+                "required": [
+                    "enable",
+                    "env"
+                ],
+                "properties": {
+                    "enable": {
+                        "type": "boolean",
+                        "default": false,
+                        "title": "The enable Schema",
+                        "examples": [
+                            true
+                        ]
+                    },
+                    "env": {
+                        "type": "object",
+                        "default": {},
+                        "title": "The env Schema",
+                        "required": [
+                            "REPO_URL",
+                            "REPO_NAME",
+                            "DB_NAME"
+                        ],
+                        "properties": {
+                            "REPO_URL": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The REPO_URL Schema",
+                                "examples": [
+                                    "https://github.com/devtron-labs/devtron"
+                                ]
+                            },
+                            "REPO_NAME": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The REPO_NAME Schema",
+                                "examples": [
+                                    "devtron"
+                                ]
+                            },
+                            "BRANCH": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The BRANCH Schema",
+                                "examples": [
+                                    "main"
+                                ]
+                            },
+                            "COMMIT": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The COMMIT Schema",
+                                "examples": [
+                                    ""
+                                ]
+                            },
+                            "SCRIPT_LOCATION": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The SCRIPT_LOCATION Schema",
+                                "examples": [
+                                    "scripts/sql/"
+                                ]
+                            },
+                            "PARAM": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The PARAM Schema",
+                                "examples": [
+                                    "sslmode=disable"
+                                ]
+                            },
+                            "MIGRATE_TO_VERSION": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The MIGRATE_TO_VERSION Schema",
+                                "examples": [
+                                    "0"
+                                ]
+                            },
+                            "DB_NAME": {
+                                "type": "string",
+                                "default": "",
+                                "title": "The DB_NAME Schema",
+                                "examples": [
+                                    "orchestrator"
+                                ]
+                            }
+                        },
+                        "examples": [
+                            {
+                                "REPO_URL": "https://github.com/devtron-labs/devtron",
+                                "REPO_NAME": "devtron",
+                                "BRANCH": "main",
+                                "COMMIT": "",
+                                "SCRIPT_LOCATION": "scripts/sql/",
+                                "PARAM": "sslmode=disable",
+                                "MIGRATE_TO_VERSION": "0",
+                                "DB_NAME": "orchestrator"
+                            }
+                        ]
+                    },
+                    "post_query": {
+                        "type": "array",
+                        "default": [],
+                        "title": "The post_query Schema",
+                        "items": {},
+                        "examples": [
+                            ["ls"]
+                        ]
+                    }
+                },
+                "examples": [
+                    {
+                        "enable": true,
+                        "env": {
+                            "REPO_URL": "https://github.com/devtron-labs/devtron",
+                            "REPO_NAME": "devtron",
+                            "BRANCH": "main",
+                            "COMMIT": "",
+                            "SCRIPT_LOCATION": "scripts/sql/",
+                            "PARAM": "sslmode=disable",
+                            "MIGRATE_TO_VERSION": "0",
+                            "DB_NAME": "orchestrator"
+                        },
+                        "post_query": []
+                    }
+                ]
+            },
+            "examples": [
+                [
+                    {
+                        "enable": true,
+                        "env": {
+                            "REPO_URL": "https://github.com/devtron-labs/devtron",
+                            "REPO_NAME": "devtron",
+                            "BRANCH": "main",
+                            "COMMIT": "",
+                            "SCRIPT_LOCATION": "scripts/sql/",
+                            "PARAM": "sslmode=disable",
+                            "MIGRATE_TO_VERSION": "0",
+                            "DB_NAME": "orchestrator"
+                        },
+                        "post_query": []
+                    }
+                ]
+            ]
         }
-    }
+    },
+    "examples": [
+        {
+            "database_credentials": {
+                "env": {
+                    "DB_HOST": "postgresql-postgresql.devtroncd",
+                    "DB_PASSWORD": "",
+                    "DB_PORT": "1234",
+                    "DB_TYPE": "postgres"
+                },
+                "envFrom": {
+                    "secret": [
+                        "db-secret"
+                    ]
+                }
+            },
+            "image": "migrate/migrate",
+            "migrations": [
+                {
+                    "enable": true,
+                    "env": {
+                        "REPO_URL": "https://github.com/devtron-labs/devtron",
+                        "REPO_NAME": "devtron",
+                        "BRANCH": "main",
+                        "COMMIT": "",
+                        "SCRIPT_LOCATION": "scripts/sql/",
+                        "PARAM": "sslmode=disable",
+                        "MIGRATE_TO_VERSION": "0",
+                        "DB_NAME": "orchestrator"
+                    },
+                    "post_query": []
+                }
+            ]
+        }
+    ]
 }
