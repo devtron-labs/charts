@@ -1,10 +1,10 @@
 database_credentials:
   env: 	
-    DB_HOST: "postgresql-postgresql.devtroncd"
-    DB_PASSWORD: "password!" #don't encode this password 
+    DB_HOST: ""
+    DB_PASSWORD: "" #don't encode this password 
     DB_PORT: "1234"
-    DB_TYPE: "mongodb+srv" # postgres, mysql, mongodb, sqlserver, mongodb+srv
-    DB_USER: "postgres"
+    DB_TYPE: "postgres" # postgres, mysql, mongodb, sqlserver, mongodb+srv
+    DB_USER: ""
   envFrom:
     # - configMapRef:
     #      name: release-name-configmap
@@ -14,14 +14,14 @@ image: migrate/migrate
 migrations:
   - enable: true
     env:
-      REPO_URL: "https://github.com/test-labs/test" # any git repo clone command.
-      REPO_NAME: "test"
+      REPO_URL: "" # any git repo clone command.
+      REPO_NAME: ""
       BRANCH: "main"
       COMMIT: "" # if blanck then it will take latest commit.
       SCRIPT_LOCATION: scripts/sql/ 
       PARAM: "sslmode=disable"
       MIGRATE_TO_VERSION: "0" # if 0 then it will take run all.
-      DB_NAME: "orchestrator"
+      DB_NAME: ""
     post_query: [] # we can custom Query
     # - ls
     # - echo "migrate -path . -database "mongodb://localhost:27017/mongo_migrate_test?directConnection=true" -verbose up"
