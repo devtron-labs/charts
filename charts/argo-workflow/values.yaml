@@ -9,8 +9,12 @@ argoWorkflow:
   EnvVariables: []
   EnvVariablesFrom: []
   workflowController:
+    args:
+      execImage: quay.io/argoproj/argoexec:v3.0.7
+      # if you making disableIMDSv1 as true please use the below image or latest tag one
+      # execImage: quay.io/argoproj/argoexec:v3.4.3
     image: quay.io/argoproj/workflow-controller:v3.0.7
-    # image: quay.io/argoproj/argoexec:v3.4.3
+    # image: quay.io/argoproj/workflow-controller:v3.4.3
     resources:
       limits:
         cpu: "0.3"
@@ -22,4 +26,4 @@ argoWorkflow:
     imagePullPolicy: IfNotPresent
 
 
-disable_IMDSv2: true
+disableIMDSv1: false
