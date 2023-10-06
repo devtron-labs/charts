@@ -120,12 +120,16 @@ spec:
               {{- end }}
         env:
         {{- range $key, $val := $.Values.database_credentials.env }}
+        {{- if ne $val "" }}
          - name: {{ $key }}
            value: {{ $val | quote }}
         {{- end }}
+        {{- end }}
         {{- range $key, $val := .env }}
+        {{- if ne $val "" }}
          - name: {{ $key }}
            value: {{ $val | quote }}
+        {{- end }}
         {{- end }}
         {{- if $.Values.database_credentials.envFrom }}
         envFrom:

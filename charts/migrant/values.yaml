@@ -5,7 +5,7 @@ database_credentials:
     DB_PORT: "1234"
     DB_TYPE: "postgres" # postgres, mysql, mongodb, sqlserver, mongodb+srv
     DB_USER: ""
-  envFrom:
+  envFrom: []
     # - configMapRef:
     #      name: release-name-configmap
     # - secretRef:
