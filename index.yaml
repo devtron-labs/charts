@@ -3729,6 +3729,18 @@ entries:
   rollout:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2023-10-06T12:56:30.300429869Z"
+    description: Chart to deploy Rollout
+    digest: 0ff8a52fda75785aa85e908cfd4f819a91f4d3a62882e54137b13e9008314c09
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: rollout
+    urls:
+    - rollout-0.14.7.tgz
+    version: 0.14.7
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2023-05-24T07:24:02.80308917Z"
     description: Chart to deploy Rollout
     digest: e2937f24078e18627f527c5b1607c7be30846fe9e7df5d57290444d600290838
@@ -4194,4 +4206,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-06T08:31:28.367675616Z"
+generated: "2023-10-06T12:56:30.301228673Z"
