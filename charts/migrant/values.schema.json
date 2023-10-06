@@ -5,86 +5,86 @@
     "default": {},
     "title": "Root Schema",
     "required": [
-        "image",
         "database_credentials",
+        "image",
         "migrations"
     ],
     "properties": {
-        "image": {
-            "type": "string",
-            "default": "migrate/migrate",
-            "title": "Migrator Image",
-            "examples": [
-                "migrate/migrate"
-            ]
-        },
         "database_credentials": {
             "type": "object",
             "default": {},
             "title": "The database_credentials Schema",
-            "required": [
-                "DB_TYPE",
-                "DB_HOST",
-                "DB_PORT",
-                "DB_USER",
-                "DB_PASSWORD"
-            ],
+            "required": [],
             "properties": {
-                "DB_TYPE": {
-                    "type": "string",
-                    "default": "postgres",
-                    "description": "database type",
-                    "title": "database type",
+                "env": {
+                    "type": "object",
+                    "default": {},
+                    "title": "The env Schema",
+                    "required": [],
+                    "additionalProperties": {
+                        "type": "string"
+                    },
                     "examples": [
-                        "postgres",
-                        "sql"
+                        {
+                            "DB_HOST": "postgresql-postgresql.devtroncd",
+                            "DB_PASSWORD": "",
+                            "DB_PORT": "1234",
+                            "DB_TYPE": "postgres"
+                        }
                     ]
                 },
-                "DB_USER": {
-                    "type": "string",
-                    "default": "",
-                    "title": "The db_user Schema",
-                    "examples": [
-                        "postgres"
-                    ]
-                },
-                "DB_HOST": {
-                    "type": "string",
-                    "default": "postgresql-postgresql.default",
-                    "description": "database host url",
-                    "title": "database host",
-                    "examples": [
-                        "postgresql-postgresql.demo-test",
-                        "postgresql-service.qa-database"
-                    ]
-                },
-                "DB_PORT": {
-                    "type": "string",
-                    "default": "5432",
-                    "description": "database port number",
-                    "title": "database port",
-                    "examples": [
-                        "5432"
-                    ]
-                },
-                "DB_PASSWORD": {
-                    "type": "string",
-                    "default": "",
-                    "description": "database password string",
-                    "title": "database password",
-                    "examples": [
-                        "myDBPasswordSecret"
-                    ]
+                "envFrom": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "configMapRef": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "configMapRef"
+                                ]
+                            },
+                            {
+                                "properties": {
+                                    "secretRef": {
+                                        "type": "object",
+                                        "properties": {
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "required": [
+                                            "name"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "secretRef"
+                                ]
+                            }
+                        ]
+                    }
                 }
-            },
+            }
+        },
+        "image": {
+            "type": "string",
+            "default": "",
+            "title": "The image Schema",
             "examples": [
-                {
-                    "DB_TYPE": "postgres",
-                    "DB_HOST": "postgresql-postgresql.devtroncd",
-                    "DB_PORT": "5432",
-                    "DB_USER": "postgres",
-                    "DB_PASSWORD": "xxxxxx"
-                }
+                "migrate/migrate"
             ]
         },
         "migrations": {
@@ -93,114 +93,92 @@
             "title": "The migrations Schema",
             "items": {
                 "type": "object",
+                "default": {},
                 "title": "A Schema",
                 "required": [
-                    "SCRIPT_LOCATION",
-                    "REPO_URL",
-                    "REPO_NAME",
-                    "BRANCH",
-                    "VERSION",
-                    "DB_NAME"
+                    "enable",
+                    "env"
                 ],
                 "properties": {
                     "enable": {
                         "type": "boolean",
-                        "default": "true",
-                        "title": "enable",
+                        "default": false,
+                        "title": "The enable Schema",
                         "examples": [
-                            "true"
+                            true
                         ]
                     },
-                    "SCRIPT_LOCATION": {
-                        "type": "string",
-                        "default": "sql/",
-                        "title": "The location Schema",
+                    "env": {
+                        "type": "object",
+                        "default": {},
+                        "title": "The env Schema",
+                        "required": [
+                            "REPO_URL",
+                            "REPO_NAME",
+                            "DB_NAME"
+                        ],
+                        "additionalProperties": {
+                            "type": "string"
+                        },
                         "examples": [
-                            "scripts/sql/"
+                            {
+                                "REPO_URL": "https://github.com/devtron-labs/devtron",
+                                "REPO_NAME": "devtron",
+                                "BRANCH": "main",
+                                "COMMIT": "",
+                                "SCRIPT_LOCATION": "scripts/sql/",
+                                "PARAM": "sslmode=disable",
+                                "MIGRATE_TO_VERSION": "0",
+                                "DB_NAME": "orchestrator"
+                            }
                         ]
                     },
-                    "REPO_URL": {
-                        "type": "string",
-                        "title": "The repo_url for running git clone",
+                    "post_query": {
+                        "type": "array",
+                        "default": [],
+                        "title": "The post_query Schema",
+                        "items": {
+                            "type": "string"
+                        },
                         "examples": [
-                            "https://<user>:<token>@github.com/<user>/<repo>.git"
-                        ]
-                    },
-                    "REPO_NAME": {
-                        "type": "string",
-                        "title": "The repo_name ",
-                        "examples": [
-                            "yyy"
-                        ]
-                    },
-                    "BRANCH": {
-                        "type": "string",
-                        "default": "main",
-                        "title": "The branch ",
-                        "examples": [
-                            "main",
-                            "migration-test"
-                        ]
-                    },
-                    "DB_NAME": {
-                        "type": "string",
-                        "title": "The db_name Schema",
-                        "default": "my-db",
-                        "examples": [
-                            "orchestrator",
-                            "git_sensor"
-                        ]
-                    },
-                    "COMMIT": {
-                        "type": "string",
-                        "title": "The commit ",
-                        "examples": [
-                            "122sddffff222ddd"
-                        ]
-                    },
-                    "PARAM": {
-                        "type": "string",
-                        "default": "",
-                        "title": "The API query param that pased after ? in rest API ",
-                        "examples": [
-                            "authSource=admin"
-                        ]
-                    },
-                    "VERSION": {
-                        "type": "string",
-                        "default": "0",
-                        "title": "The version Schema",
-                        "examples": [
-                            "0"
+                            [
+                                "ls"
+                            ]
                         ]
                     }
                 },
                 "examples": [
                     {
-                        "enable" : true,
-                        "SCRIPT_LOCATION": "scripts/sql/",
-                        "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                        "REPO_NAME": "repo",
-                        "BRANCH": "main",
-                        "COMMIT": "",
-                        "DB_NAME": "orchestrator",
-                        "PARAM": "sslmode=disable",
-                        "VERSION": "0"
+                        "enable": true,
+                        "env": {
+                            "REPO_URL": "https://github.com/devtron-labs/devtron",
+                            "REPO_NAME": "devtron",
+                            "BRANCH": "main",
+                            "COMMIT": "",
+                            "SCRIPT_LOCATION": "scripts/sql/",
+                            "PARAM": "sslmode=disable",
+                            "MIGRATE_TO_VERSION": "0",
+                            "DB_NAME": "orchestrator"
+                        },
+                        "post_query": []
                     }
                 ]
             },
             "examples": [
                 [
                     {
-                        "enable" : true,
-                        "SCRIPT_LOCATION": "scripts/sql/",
-                        "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                        "REPO_NAME": "repo",
-                        "BRANCH": "main",
-                        "COMMIT": "",
-                        "DB_NAME": "orchestrator",
-                        "PARAM": "sslmode=disable",
-                        "VERSION": "0"
+                        "enable": true,
+                        "env": {
+                            "REPO_URL": "https://github.com/devtron-labs/devtron",
+                            "REPO_NAME": "devtron",
+                            "BRANCH": "main",
+                            "COMMIT": "",
+                            "SCRIPT_LOCATION": "scripts/sql/",
+                            "PARAM": "sslmode=disable",
+                            "MIGRATE_TO_VERSION": "0",
+                            "DB_NAME": "orchestrator"
+                        },
+                        "post_query": []
                     }
                 ]
             ]
@@ -208,25 +186,37 @@
     },
     "examples": [
         {
-            "image": "migrate/migrate",
             "database_credentials": {
-                "DB_TYPE": "postgres",
-                "DB_HOST": "postgresql-postgresql.devtroncd",
-                "DB_PORT": "5432",
-                "DB_USER": "postgres",
-                "DB_PASSWORD": "xxxxxx"
+                "env": {
+                    "DB_HOST": "postgresql-postgresql.devtroncd",
+                    "DB_PASSWORD": "",
+                    "DB_PORT": "1234",
+                    "DB_TYPE": "postgres"
+                },
+                "envFrom":  [
+                    {
+                        "secretRef": {
+                            "name": "release-name-secret"
+                        }
+                    }
+                ]
+                
             },
+            "image": "migrate/migrate",
             "migrations": [
                 {
-                   "enable" : true,
-                    "SCRIPT_LOCATION": "scripts/sql/",
-                    "REPO_URL": "https://<user>:<token>@github.com/<user>/<repo>.git",
-                    "REPO_NAME": "repo",
-                    "BRANCH": "main",
-                    "COMMIT": "",
-                    "DB_NAME": "orchestrator",
-                    "PARAM": "sslmode=disable",
-                    "VERSION": "0"
+                    "enable": true,
+                    "env": {
+                        "REPO_URL": "https://github.com/devtron-labs/devtron",
+                        "REPO_NAME": "devtron",
+                        "BRANCH": "main",
+                        "COMMIT": "",
+                        "SCRIPT_LOCATION": "scripts/sql/",
+                        "PARAM": "sslmode=disable",
+                        "MIGRATE_TO_VERSION": "0",
+                        "DB_NAME": "orchestrator"
+                    },
+                    "post_query": []
                 }
             ]
         }

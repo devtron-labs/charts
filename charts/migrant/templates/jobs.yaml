@@ -3,7 +3,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ $.Release.Name  }}-{{ .DB_NAME | replace "_" "-" }}-{{ randAlphaNum 5 | lower }}
+  name: {{ $.Release.Name  }}-{{ .env.DB_NAME | replace "_" "-" }}-{{ randAlphaNum 5 | lower }}
   annotations: {}
   labels:
     job: {{ $.Release.Name }}-migration
@@ -20,13 +20,39 @@ spec:
               #!/bin/sh
               set -e
               set -o pipefail
+              if [ -z $(REPO_URL)  ]; then
+                echo "Please enter REPO_URL"
+                exit 1
+              fi
+              if [ -z $(REPO_NAME)  ]; then
+                echo "Please enter REPO_NAME"
+                exit 1
+              fi
+              if [ -z $DB_HOST  ]; then
+                echo "Please enter DB_HOST"
+                exit 1
+              fi
+              if [ -z $DB_NAME  ]; then
+                echo "Please enter DB_NAME"
+                exit 1
+              fi
+              if [ -z $(SCRIPT_LOCATION)  ]; then
+                SCRIPT_LOCATION="."
+              fi
+              
               apk add git
               echo "git cloning"
               git clone $REPO_URL
               cd $(REPO_NAME)
-              # Check out the specific branch
-              git checkout $BRANCH_NAME
-              echo $COMMIT_HASH
+              if [ -z $(BRANCH)  ]; then
+                echo "we are on main commit"
+              else
+                echo "git checkout on"
+                echo $BRANCH
+                # Check out the specific commit hash
+                git checkout $BRANCH
+              fi
+
               if [ -z $(COMMIT_HASH)  ]; then
                 echo "we are on latest commit"
               else
@@ -43,64 +69,72 @@ spec:
               echo "Current branch: $CURRENT_BRANCH"
               echo "Current commit: $CURRENT_COMMIT"
               echo "Migrating to version (0 for latest)"
-              echo $(MIGRATE_TO_VERSION);
+              echo $MIGRATE_TO_VERSION;
+
+              DB_CRED=""
+              if [ -n "$(DB_USER)"  ]; then
+                  DB_CRED="$DB_USER:$DB_PASSWORD@"
+              fi
+              
               if [ "$(DB_TYPE)" = "postgres" ]; then
                 echo "migration for postgres"
-                if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" up;
+                if [ $MIGRATE_TO_VERSION -eq "0" ]; then
+                  migrate -path $(SCRIPT_LOCATION) -database postgres://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" up;
                 else
-                  migrate -path $(SCRIPT_LOCATION) -database postgres://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database postgres://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" goto $MIGRATE_TO_VERSION;
                 fi
               elif [ "$(DB_TYPE)" = "mongodb" ]; then
                 echo "migration for mongodb"
-                if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" up;
+                if [ $MIGRATE_TO_VERSION -eq "0" ]; then
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" up;
                 else
-                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?"$(PARAM)" goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" goto $MIGRATE_TO_VERSION;
+                fi
+              elif [ "$(DB_TYPE)" = "mongodb+srv" ]; then
+                echo "migration for mongodb"
+                if [ $MIGRATE_TO_VERSION -eq "0" ]; then
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb+srv://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" up;
+                else
+                  migrate -path $(SCRIPT_LOCATION) -database mongodb+srv://$DB_CRED$DB_HOST:$DB_PORT/$DB_NAME?"$PARAM" goto $MIGRATE_TO_VERSION;
                 fi
               elif [ "$(DB_TYPE)" = "mysql" ]; then
                 echo "migration for mysql"
                 DB="tcp($DB_HOST:$DB_PORT)"
-                echo $DB
                 if [ $MIGRATE_TO_VERSION -eq "0" ]; then
-                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB/$DB_NAME?"$PARAM" up;
+                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_CRED$DB/$DB_NAME?"$PARAM" up;
                 else
-                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_USER_NAME:$DB_PASSWORD@$DB_HOST:$DB?"$PARAM" goto $MIGRATE_TO_VERSION;
+                  migrate -path $SCRIPT_LOCATION -database mysql://$DB_CRED$DB_HOST:$DB?"$PARAM" goto $MIGRATE_TO_VERSION;
                 fi
               elif [ "$(DB_TYPE)" = "sqlserver" ]; then
                 echo "migration for sqlserver"
-                if [ $(MIGRATE_TO_VERSION) -eq "0" ]; then
-                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?"$(PARAM)" up;
+                if [ $MIGRATE_TO_VERSION -eq "0" ]; then
+                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$DB_CRED$DB_HOST:$DB_PORT?"$PARAM" up;
                 else
-                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$(DB_USER_NAME):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)?"$(PARAM)" goto $(MIGRATE_TO_VERSION);
+                  migrate -path $(SCRIPT_LOCATION) -database sqlserver://$DB_CRED$DB_HOST:$DB_PORT?"$PARAM" goto $MIGRATE_TO_VERSION;
                 fi
               else
                 echo "no database matched"
               fi
+              {{- range .post_query }}
+              {{ . }}
+              {{- end }}
         env:
-          - name: REPO_URL
-            value: {{ .REPO_URL }}
-          - name: BRANCH_NAME
-            value: {{ .BRANCH }}
-          {{- if .COMMIT }}
-          - name: COMMIT_HASH
-            value: {{ .COMMIT }}
-          {{- end}}
-          - name: REPO_NAME
-            value: {{ .REPO_NAME }}
-          - name: SCRIPT_LOCATION
-            value: {{ .SCRIPT_LOCATION }}
-          - name: MIGRATE_TO_VERSION
-            value: {{ .VERSION | quote }}
-          - name: DB_NAME
-            value: {{ .DB_NAME }}
-          - name: PARAM
-            value: {{ .PARAM }}
+        {{- range $key, $val := $.Values.database_credentials.env }}
+        {{- if ne $val "" }}
+         - name: {{ $key }}
+           value: {{ $val | quote }}
+        {{- end }}
+        {{- end }}
+        {{- range $key, $val := .env }}
+        {{- if ne $val "" }}
+         - name: {{ $key }}
+           value: {{ $val | quote }}
+        {{- end }}
+        {{- end }}
+        {{- if $.Values.database_credentials.envFrom }}
         envFrom:
-          - secretRef:
-              name: {{ $.Release.Name  }}-secret
-          - configMapRef:
-                name: {{ $.Release.Name  }}-configmap
+{{ toYaml $.Values.database_credentials.envFrom | nindent 10 }}
+        {{- end }}
 ---
 {{-  end }}
 {{-  end }}
