@@ -193,11 +193,14 @@
                     "DB_PORT": "1234",
                     "DB_TYPE": "postgres"
                 },
-                "envFrom": {
-                    "secret": [
-                        "db-secret"
-                    ]
-                }
+                "envFrom":  [
+                    {
+                        "secretRef": {
+                            "name": "release-name-secret"
+                        }
+                    }
+                ]
+                
             },
             "image": "migrate/migrate",
             "migrations": [
