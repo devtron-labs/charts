@@ -10,7 +10,7 @@ items:
         s3:
           endpoint: s3.amazonaws.com
 {{ toYaml .Values.argoWorkflow.s3 | indent 10 }}
-     {{- if not $.Values.disableIMDSv1 }}
+     {{- if .Values.argoWorkflow.containerRuntimeExecutor }}
       containerRuntimeExecutor: {{ $.Values.argoWorkflow.containerRuntimeExecutor }}
       {{- end }}
       executor:

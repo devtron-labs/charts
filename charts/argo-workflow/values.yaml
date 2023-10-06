@@ -3,7 +3,7 @@ argoWorkflow:
     bucket: devtron-pro-ci-logs
     keyFormat: demo-v1/{{workflow.name}}
     region: us-east-2
-  containerRuntimeExecutor: pns
+  # containerRuntimeExecutor: pns
   replicas: 1
   labels: {}
   annotations: {}
@@ -12,10 +12,10 @@ argoWorkflow:
   workflowController:
     args:
       execImage: quay.io/argoproj/argoexec:v3.4.7
-      # if you making disableIMDSv1 as true please use the below image or latest tag one
-      # execImage: quay.io/argoproj/argoexec:v3.4.3
+      # if you making IMDSv2 as true please use the below image or latest tag one
+      # execImage: quay.io/argoproj/argoexec:v3.4.7
     image: quay.io/argoproj/workflow-controller:v3.4.7
-    # image: quay.io/argoproj/workflow-controller:v3.4.3
+    # image: quay.io/argoproj/workflow-controller:v3.4.7
     resources:
       limits:
         cpu: "0.3"
@@ -27,4 +27,4 @@ argoWorkflow:
     imagePullPolicy: IfNotPresent
 
 
-disableIMDSv1: false
+
