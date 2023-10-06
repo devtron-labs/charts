@@ -28,7 +28,7 @@ spec:
         - --configmap
         - workflow-controller-configmap
         - --executor-image
-        - {{ .Values.argoWorkflow.workflowController.args.execImage }}
+        - {{ $.Values.argoWorkflow.workflowController.args.execImage }}
         command:
         - workflow-controller
         env:
@@ -46,6 +46,6 @@ spec:
         {{- end }}
         resources:
 {{ toYaml .Values.argoWorkflow.workflowController.resources | indent 10 }}
-        image: {{ .Values.argoWorkflow.workflowController.image }}
+        image: {{ $.Values.argoWorkflow.workflowController.image }}
         name: workflow-controller
       serviceAccountName: argo
