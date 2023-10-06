@@ -23,6 +23,10 @@ spec:
 {{- toYaml $.Values.argoWorkflow.labels | nindent 8 }}      
         {{- end }}
     spec:
+        {{- if  $.Values.podSecurityContext }}
+      securityContext: 
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}      
+        {{- end }}
       containers:
       - args:
         - --configmap
@@ -48,4 +52,8 @@ spec:
 {{ toYaml .Values.argoWorkflow.workflowController.resources | indent 10 }}
         image: {{ $.Values.argoWorkflow.workflowController.image }}
         name: workflow-controller
+        {{- if $.Values.containerSecurityContext }}
+        securityContext: 
+        {{- toYaml $.Values.containerSecurityContext | nindent 10 }}         
+        {{- end}}
       serviceAccountName: argo
