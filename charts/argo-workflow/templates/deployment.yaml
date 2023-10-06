@@ -23,12 +23,16 @@ spec:
 {{- toYaml $.Values.argoWorkflow.labels | nindent 8 }}      
         {{- end }}
     spec:
+      {{- if  $.Values.podSecurityContext }}
+      securityContext: 
+{{ toYaml $.Values.podSecurityContext | indent 8 }}      
+      {{- end }}
       containers:
       - args:
         - --configmap
         - workflow-controller-configmap
         - --executor-image
-        - quay.io/argoproj/argoexec:v3.0.7
+        - {{ $.Values.argoWorkflow.workflowController.args.execImage }}
         command:
         - workflow-controller
         env:
@@ -46,6 +50,10 @@ spec:
         {{- end }}
         resources:
 {{ toYaml .Values.argoWorkflow.workflowController.resources | indent 10 }}
-        image: {{ .Values.argoWorkflow.workflowController.image }}
+        image: {{ $.Values.argoWorkflow.workflowController.image }}
         name: workflow-controller
+        {{- if $.Values.containerSecurityContext }}
+        securityContext: 
+{{ toYaml $.Values.containerSecurityContext | indent 10 }}         
+        {{- end}}
       serviceAccountName: argo

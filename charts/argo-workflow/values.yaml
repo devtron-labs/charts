@@ -3,13 +3,20 @@ argoWorkflow:
     bucket: devtron-pro-ci-logs
     keyFormat: demo-v1/{{workflow.name}}
     region: us-east-2
+  # if you are using IMDSv2 optional instance then un-comment the below line 
+  #containerRuntimeExecutor: pns
   replicas: 1
   labels: {}
   annotations: {}
   EnvVariables: []
   EnvVariablesFrom: []
   workflowController:
-    image: quay.io/argoproj/workflow-controller:v3.0.7
+    args:
+      execImage: quay.io/argoproj/argoexec:v3.4.7
+      # if you making IMDSv2 as true please use the below image or latest tag one
+      # execImage: quay.io/argoproj/argoexec:v3.4.7
+    image: quay.io/argoproj/workflow-controller:v3.4.7
+    # image: quay.io/argoproj/workflow-controller:v3.4.7
     resources:
       limits:
         cpu: "0.3"
@@ -19,3 +26,12 @@ argoWorkflow:
         memory: 50Mi
   executor:
     imagePullPolicy: IfNotPresent
+
+
+podSecurityContext: {}
+  # runAsGroup: 1000
+  # runAsUser: 1000
+containerSecurityContext: {}
+    # allowPrivilegeEscalation: false
+    # runAsUser: 1000
+    # runAsNonRoot: true
