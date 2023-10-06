@@ -3590,6 +3590,19 @@ entries:
   migrant:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2023-10-06T05:58:56.118367516Z"
+    description: A Helm chart for Kubernetes
+    digest: 3be9db387fe7519033f568c5ea9a2b30ae8c139d406446bb199dd29d96233f32
+    maintainers:
+    - email: devops@devtron.ai
+      name: Jatin
+    name: migrant
+    type: application
+    urls:
+    - migrant-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2023-09-28T07:02:20.814108759Z"
     description: A Helm chart for Kubernetes
     digest: 45ae0d76734cd6e5494260ddf3c45b88d85c43163f30b4aca79072cfc354a619
@@ -4168,4 +4181,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2023-10-04T14:25:59.571690319Z"
+generated: "2023-10-06T05:58:56.118851916Z"
