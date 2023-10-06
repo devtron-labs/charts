@@ -28,10 +28,10 @@ argoWorkflow:
     imagePullPolicy: IfNotPresent
 
 
-podSecurityContext: 
-  runAsGroup: 1000
-  runAsUser: 1000
-containerSecurityContext: 
-    allowPrivilegeEscalation: false
-    runAsUser: 1000
-    runAsNonRoot: true
+podSecurityContext: {}
+  # runAsGroup: 1000
+  # runAsUser: 1000
+containerSecurityContext: {}
+    # allowPrivilegeEscalation: false
+    # runAsUser: 1000
+    # runAsNonRoot: true
