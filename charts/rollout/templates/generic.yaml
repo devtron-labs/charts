@@ -20,6 +20,7 @@ rules:
       - apps
     resources:
       - replicasets
+      - replicasets/finalizers
     verbs:
       - create
       - get
@@ -32,6 +33,7 @@ rules:
       - ""
     resources:
       - services
+      - services/finalizers
     verbs:
       - get
       - list
@@ -41,6 +43,7 @@ rules:
       - argoproj.io
     resources:
       - rollouts
+      - rollouts/finalizers
     verbs:
       - get
       - list
@@ -52,6 +55,8 @@ rules:
     resources:
       - analysisruns
       - experiments
+      - analysisruns/finalizers
+      - experiments/finalizers
     verbs:
       - create
       - get
@@ -64,6 +69,7 @@ rules:
       - argoproj.io
     resources:
       - analysistemplates
+      - analysistemplates/finalizers
     verbs:
       - get
       - list
@@ -72,6 +78,7 @@ rules:
       - batch
     resources:
       - jobs
+      - jobs/finalizers
     verbs:
       - create
       - get
@@ -84,6 +91,7 @@ rules:
       - ""
     resources:
       - events
+      - events/finalizers
     verbs:
       - create
       - update
@@ -106,6 +114,10 @@ rules:
       - experiments
       - analysistemplates
       - analysisruns
+      - rollouts/finalizers
+      - experiments/finalizers
+      - analysistemplates/finalizers
+      - analysisruns/finalizers      
     verbs:
       - create
       - delete
@@ -133,6 +145,10 @@ rules:
       - experiments
       - analysistemplates
       - analysisruns
+      - rollouts/finalizers
+      - experiments/finalizers
+      - analysistemplates/finalizers
+      - analysisruns/finalizers         
     verbs:
       - create
       - delete
@@ -160,6 +176,10 @@ rules:
       - experiments
       - analysistemplates
       - analysisruns
+      - rollouts/finalizers
+      - experiments/finalizers
+      - analysistemplates/finalizers
+      - analysisruns/finalizers         
     verbs:
       - get
       - list
@@ -178,6 +198,7 @@ rules:
       - apps
     resources:
       - replicasets
+      - replicasets/finalizers
     verbs:
       - create
       - get
@@ -190,6 +211,7 @@ rules:
       - ""
     resources:
       - services
+      - services/finalizers
     verbs:
       - get
       - list
@@ -199,6 +221,7 @@ rules:
       - argoproj.io
     resources:
       - rollouts
+      - rollouts/finalizers
     verbs:
       - get
       - list
@@ -210,6 +233,8 @@ rules:
     resources:
       - analysisruns
       - experiments
+      - analysisruns/finalizers
+      - experiments/finalizers      
     verbs:
       - create
       - get
@@ -222,6 +247,7 @@ rules:
       - argoproj.io
     resources:
       - analysistemplates
+      - analysistemplates/finalizers
     verbs:
       - get
       - list
@@ -230,6 +256,7 @@ rules:
       - batch
     resources:
       - jobs
+      - jobs/finalizers
     verbs:
       - create
       - get
@@ -242,6 +269,7 @@ rules:
       - ""
     resources:
       - events
+      - events/finalizers
     verbs:
       - create
       - update
