@@ -16,7 +16,7 @@ cronjob:
 
 #set up this If you need alert for argocd cert expire
 alert:
-  enabled: false
+  enabled: true
   image: quay.io/devtron/k8s-utils:3f8c7b04-489-16490
   discord_url: " " 
   schedule: "59 23 * */6 *"
@@ -24,9 +24,10 @@ alert:
 
 
 
-
-
-
-
-
-
+podSecurityContext: {}
+  # runAsGroup: 1000
+  # runAsUser: 1000
+containerSecurityContext: {}
+    # allowPrivilegeEscalation: false
+    # runAsUser: 1000
+    # runAsNonRoot: true

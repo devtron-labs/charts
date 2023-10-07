@@ -13,6 +13,10 @@ spec:
     spec:
       template:
         spec:
+          {{- if  $.Values.podSecurityContext }}
+          securityContext: 
+{{ toYaml $.Values.podSecurityContext | indent 12 }}      
+          {{- end }}
           serviceAccountName: argocd-cert-sa
           serviceAccount: argocd-cert-sa
           containers:
@@ -25,5 +29,9 @@ spec:
                 value: {{$.Values.alert.discord_url  }}
               - name: alert_before
                 value: {{$.Values.alert.alert_before }}
+            {{- if $.Values.containerSecurityContext }}
+            securityContext: 
+{{ toYaml $.Values.containerSecurityContext | indent 14 }}         
+            {{- end}}
           restartPolicy: OnFailure
 {{- end }}
