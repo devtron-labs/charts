@@ -22,9 +22,9 @@ spec:
           - name: argocd-cert-con
             image: {{ $.Values.image }}
             imagePullPolicy: IfNotPresent
-            command: ["./argocd.sh"]
+            command: ["./argocd.sh"]  
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         
             {{- end}}
-            restartPolicy: OnFailure
+          restartPolicy: OnFailure
