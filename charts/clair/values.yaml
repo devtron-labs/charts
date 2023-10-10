@@ -1,5 +1,5 @@
 config:
-  postgresHost: postgresql-postgresql.devtroncd
+  # postgresHost: postgresql-postgresql.devtroncd
   postgresPort: 5432
   postgresdbname: clairv4
   postgresUser: postgres
