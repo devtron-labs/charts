@@ -26,9 +26,9 @@ spec:
             command: ["./alert.sh"]
             env:
               - name: discord_url
-                value: {{$.Values.alert.discord_url  }}
+                value: {{$.Values.alert.discord_url | quote }}
               - name: alert_before
-                value: {{$.Values.alert.alert_before }}
+                value: {{$.Values.alert.alert_before | quote}}
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         
