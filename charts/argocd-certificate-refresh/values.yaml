@@ -16,7 +16,7 @@ cronjob:
 
 #set up this If you need alert for argocd cert expire
 alert:
-  enabled: true
+  enabled: false
   image: quay.io/devtron/k8s-utils:3f8c7b04-489-16490
   discord_url: " " 
   schedule: "59 23 * */6 *"
