@@ -23,12 +23,12 @@ spec:
           - name: argocd-alert-container
             image:  {{ $.Values.alert.image }}
             imagePullPolicy: IfNotPresent
-            command: ["./alert.sh"]
+            command: ["/bin/sh", "-c", "chmod +x alert.sh && ./alert.sh"]
             env:
               - name: discord_url
-                value: {{$.Values.alert.discord_url  }}
+                value: {{$.Values.alert.discord_url | quote }}
               - name: alert_before
-                value: {{$.Values.alert.alert_before }}
+                value: {{$.Values.alert.alert_before | quote}}
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         
