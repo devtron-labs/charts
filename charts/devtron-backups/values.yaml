@@ -46,6 +46,7 @@ postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
   host: "postgresql-postgresql.devtroncd"
+  postgresImageTag: "14"
   enabled: false
 
 argocd_backup:
