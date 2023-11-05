@@ -45,6 +45,7 @@ argocdversion: v2
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
+  host: "postgresql-postgresql.devtroncd"
   enabled: false
 
 argocd_backup:
