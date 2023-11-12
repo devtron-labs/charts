@@ -13,7 +13,7 @@ global:
       enabled: false
       passphrase: ""
     image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
-    # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
+    # image: quay.io/devtron/k8s-utils:54b35e7f-517-15094 #arm
   AZURE:
     enabled: false  
     AZURE_BLOB_ACCOUNT_NAME: ""
