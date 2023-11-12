@@ -1,0 +1,92 @@
+apiVersion: v2
+name: devtron
+description: A Helm chart for Kubernetes
+version: 0.1.0
+maintaintainers:
+  - name: Kamal Acharya
+    email: kamal@devtron.ai
+
+sources:
+  - https://github.com/kedacore/keda
+  - https://github.com/devtron-labs/charts/tree/main/charts/rollout
+  - https://github.com/devtron-labs/charts/tree/main/charts/winter-soldier
+  - https://github.com/kubernetes-sigs/metrics-server
+  - https://github.com/kubernetes-sigs/aws-ebs-csi-driver
+  - https://github.com/fluxcd/flagger/tree/main/charts/flagger
+  - https://kyverno.github.io/kyverno/
+  - https://external-secrets.io/
+  - https://helm.devtron.ai
+  - https://devtron-charts.s3.us-east-2.amazonaws.com/charts
+  - https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler
+appVersion: "1.16.0"
+
+dependencies:
+- name: keda
+  version: "2.6.0"
+  repository: https://kedacore.github.io/charts
+  condition: keda.enabled
+- name: rollout
+  version: "0.14.5"
+  repository: https://helm.devtron.ai
+  condition: rollout.enabled 
+- name: winter-soldier
+  version: "0.10.4"
+  repository: https://helm.devtron.ai
+  condition: winter-soldier.enabled  
+- name: aws-ebs-csi-driver
+  version: "2.17.2"
+  repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+  condition: aws-ebs-csi-driver.enabled 
+- name: flagger
+  version: "1.30.0"
+  repository: https://flagger.app
+  condition: flagger.enabled   
+- name: metrics-server
+  version: "3.10.0"
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  condition: metrics-server.enabled   
+- name: external-secrets
+  version: "0.8.1"
+  repository: https://external-secrets.io/
+  condition: external-secrets.enabled
+- name: kyverno
+  version: "3.0.0-alpha.2"
+  repository: https://kyverno.github.io/kyverno/
+  condition: kyverno.enabled
+- name: aws-load-balancer-controller
+  version: "1.5.2"
+  repository: https://aws.github.io/eks-charts
+  condition: "aws-load-balancer-controller.enabled"  
+- name: devtron-in-clustercd
+  version: " 0.10.0"
+  repository: https://helm.devtron.ai
+  condition: devtron-in-clustercd.enabled  
+- name: clair
+  version: "0.1.10"  
+  repository: https://helm.devtron.ai
+  condition: clair.enabled
+- name: dt-postgresql
+  version: "5.3.3"
+  repository: https://devtron-charts.s3.us-east-2.amazonaws.com/charts
+  condition: dt-postgresql.enabled
+- name: ingress-nginx
+  version: "4.6.1"
+  repository: https://kubernetes.github.io/ingress-nginx 
+  condition: ingress-nginx.enabled  
+- name:  cluster-autoscaler
+  version: "9.28.0"
+  repository: https://kubernetes.github.io/autoscaler/
+  condition: cluster-autoscaler.enabled\
+- name: argo-workflow
+  version: "0.1.4"
+  repository: https://helm.devtron.ai
+  condition: argo-workflow.enabled
+
+
+
+
+
+
+
+
+
