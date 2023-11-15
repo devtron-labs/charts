@@ -17,7 +17,7 @@ spec:
         spec:
           initContainers:
           - name: postgres-app-backup-cronjob
-            image: {{ .Values.postgres_backup.initcontainer_image }}
+            image: {{ .Values.postgres_backup.pg_image | default "postgres:12" }}
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
@@ -31,7 +31,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            - pg_dumpall -h {{ .Values.postgres_backup.host }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+            - pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image | default "quay.io/devtron/k8s-utils:az-cli-ubuntu"}}
