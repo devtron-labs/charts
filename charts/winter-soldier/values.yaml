@@ -1,7 +1,7 @@
 # Default values for winter-soldier.
 
 replicaCount: 1
-image: quay.io/devtron/winter-soldier:abf5a822-196-14744
+image: quay.io/devtron/winter-soldier:bb11b468-489-19442
 graceperiod: 10
 
 resources: {}
