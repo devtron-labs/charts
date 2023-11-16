@@ -82,7 +82,7 @@ spec:
         spec:
           initContainers:
           - name: argocd-app-backup-job
-            image: argoproj/argocd:v1.8.1
+            image: {{ .Values.argocd_backup.argocd_image | default "quay.io/argoproj/argocd:v2.4.0" }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
@@ -91,7 +91,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            - argocd-util export --namespace devtroncd > /cache/backup.yaml;
+            - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /cache/backup.yaml" }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image }}

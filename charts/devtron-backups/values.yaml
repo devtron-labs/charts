@@ -45,10 +45,16 @@ argocdversion: v2
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
-  # host: "postgresql-custom.devtroncd"
   enabled: false
   # pg_image: postgres:14
+  # host: "postgresql-custom.devtroncd"
+
 
 argocd_backup:
   serviceAccountName: "argocd-backup"
   enabled: false
+  argocd_image: quay.io/argoproj/argocd:v2.4.0
+  args: "argocd admin export -n devtroncd > /cache/backup.yaml"
+
+  # argocd_image: argoproj/argocd:v1.8.1  #(image for argo-V1)
+  # args: argocd-util export --namespace devtroncd > /cache/backup.yaml; #(argo-V1)
