@@ -17,7 +17,7 @@ spec:
         spec:
           initContainers:
           - name: postgres-app-backup-cronjob
-            image: {{ .Values.postgres_backup.pg_image | default "postgres:12" }}
+            image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
@@ -82,7 +82,7 @@ spec:
         spec:
           initContainers:
           - name: argocd-app-backup-job
-            image: {{ .Values.argocd_backup.argocdimage | default "quay.io/argoproj/argocd:v2.4.0" }}
+            image: {{ .Values.argocd_backup.argocdImage | default "quay.io/argoproj/argocd:v2.4.0" }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
