@@ -68,3 +68,8 @@ extraEnv:
 - name: CLAIR_MODE
   value: combo
 extraArgs: []
+
+postgres:
+  image:
+    repository: quay.io/devtron/postgres
+    tag: 11.9

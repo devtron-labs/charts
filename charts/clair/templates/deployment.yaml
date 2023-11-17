@@ -38,7 +38,7 @@ spec:
       {{- end }}
       initContainers:
       - name: pg-ready-wait
-        image: postgres:11.3
+        image: "{{ .Values.postgres.image.repository}}:{{ .Values.postgres.image.tag}}"
         command: [ "sh", "-c",
           "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
