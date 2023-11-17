@@ -82,7 +82,7 @@ spec:
         spec:
           initContainers:
           - name: argocd-app-backup-job
-            image: {{ .Values.argocd_backup.argocd_image | default "quay.io/argoproj/argocd:v2.4.0" }}
+            image: {{ .Values.argocd_backup.argocdimage | default "quay.io/argoproj/argocd:v2.4.0" }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume

@@ -53,8 +53,8 @@ postgres_backup:
 argocd_backup:
   serviceAccountName: "argocd-backup"
   enabled: false
-  argocd_image: quay.io/argoproj/argocd:v2.4.0
+  argocdimage: quay.io/argoproj/argocd:v2.4.0
   args: "argocd admin export -n devtroncd > /cache/backup.yaml"
 
-  # argocd_image: argoproj/argocd:v1.8.1  #(image for argo-V1)
+  # argocdimage: argoproj/argocd:v1.8.1  #(image for argo-V1)
   # args: argocd-util export --namespace devtroncd > /cache/backup.yaml; #(argo-V1)
