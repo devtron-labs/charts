@@ -1,11 +1,11 @@
 
 {{- if .Values.global.PERSISTENCE.enabled }}
 {{- if .Values.postgres_backup.enabled }}
-{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: batch/v1
-{{ else -}}
+{{- else }}
 apiVersion: batch/v1beta1
-{{ end -}}
+{{- end }}
 kind: CronJob
 metadata:
     name: postgres-app-backup-cronjob
@@ -63,11 +63,11 @@ spec:
 {{- end }}
 {{- if .Values.argocd_backup.enabled }}
 ---
-{{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
 apiVersion: batch/v1
-{{ else -}}
+{{- else }}
 apiVersion: batch/v1beta1
-{{ end -}}
+{{- end }}
 kind: CronJob
 metadata:
     name: argocd-app-backup-job
