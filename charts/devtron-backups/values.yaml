@@ -12,7 +12,7 @@ global:
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
       enabled: false
       passphrase: ""
-    image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
+    # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
     enabled: false  
@@ -24,12 +24,12 @@ global:
       enabled: false # Recommended
       passphrase:  # Required if encryption is enabled
 
-    image: quay.io/devtron/k8s-utils:az-cli-ubuntu #amd
+    # image: quay.io/devtron/k8s-utils:az-cli-ubuntu #amd
   GCP:
     enabled: false
     GCS_BUCKET_NAME: "" # Required if GCP is enabled
     CREDENTIALS: # Optional. Use only if in case node doesn't have permission to push over GCS.
-      enabled: false
+      enabled: true
       # Only Encoded JSON CREDENTIALS allowed. Example shown below.
       # GCP_CREDENTIALS_JSON: "eyJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsInByb2plY3RfaWQiOiAiPHlvdXItcHJvamVjdC1pZD4iLCJwcml2YXRlX2tleV9pZCI6ICI8eW91ci1wcml2YXRlLWtleS1pZD4iLCJwcml2YXRlX2tleSI6ICI8eW91ci1wcml2YXRlLWtleT4iLCJjbGllbnRfZW1haWwiOiAiPHlvdXItY2xpZW50LWVtYWlsPiIsImNsaWVudF9pZCI6ICI8eW91ci1jbGllbnQtaWQ+IiwiYXV0aF91cmkiOiAiaHR0cHM6Ly9hY2NvdW50cy5nb29nbGUuY29tL28vb2F1dGgyL2F1dGgiLCJ0b2tlbl91cmkiOiAiaHR0cHM6Ly9vYXV0aDIuZ29vZ2xlYXBpcy5jb20vdG9rZW4iLCJhdXRoX3Byb3ZpZGVyX3g1MDlfY2VydF91cmwiOiAiaHR0cHM6Ly93d3cuZ29vZ2xlYXBpcy5jb20vb2F1dGgyL3YxL2NlcnRzIiwiY2xpZW50X3g1MDlfY2VydF91cmwiOiAiPHlvdXItY2xpZW50LWNlcnQtdXJsPiJ9Cg=="  
       GCP_CREDENTIALS_JSON: ""
@@ -38,16 +38,23 @@ global:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled
 
-    image: google/cloud-sdk:alpine # default amd
+    # image: google/cloud-sdk:alpine # default amd
 argocdversion: v2
     
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
-  host: "postgresql-postgresql.devtroncd"
   enabled: false
+  # postgresImage: postgres:14
+  # host: "postgresql-custom.devtroncd"
+
 
 argocd_backup:
   serviceAccountName: "argocd-backup"
   enabled: false
+  # argocdImage: quay.io/argoproj/argocd:v2.4.0
+  # args: "argocd admin export -n devtroncd > /cache/backup.yaml"
+
+  # argocdImage: argoproj/argocd:v1.8.1  #(image for argo-V1)
+  # args: argocd-util export --namespace devtroncd > /cache/backup.yaml; #(argo-V1)

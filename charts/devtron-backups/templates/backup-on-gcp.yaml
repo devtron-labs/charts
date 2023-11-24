@@ -28,7 +28,7 @@ spec:
         spec:
           initContainers:
           - name: postgres-app-backup-cronjob
-            image: postgres:12
+            image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
@@ -42,10 +42,10 @@ spec:
             args:
             - /bin/bash
             - -c
-            - pg_dumpall -h {{ .Values.postgres_backup.host }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+            - pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
-            image: {{ .Values.global.GCP.image }}
+            image: {{ .Values.global.GCP.image | default "google/cloud-sdk:alpine"}}
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
@@ -95,12 +95,7 @@ spec:
         spec:
           initContainers:
           - name: argocd-app-backup-job
-            {{- if eq .Values.argocdversion "v2"}}
-            image: quay.io/argoproj/argocd:v2.4.0
-            {{- end }}
-            {{- if eq .Values.argocdversion "v1"}}
-            image: argoproj/argocd:v1.8.1
-            {{- end }}
+            image: {{ .Values.argocd_backup.argocdImage | default "quay.io/argoproj/argocd:v2.4.0" }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
@@ -109,12 +104,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            {{- if eq .Values.argocdversion "v2"}}
-            - argocd admin export -n devtroncd > /cache/backup.yaml
-            {{- end }}
-            {{- if eq .Values.argocdversion "v1"}}
-            - argocd-util export --namespace devtroncd > /cache/backup.yaml;
-            {{- end }}
+            - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /cache/backup.yaml" }}
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
             image:  {{ .Values.global.GCP.image }}
