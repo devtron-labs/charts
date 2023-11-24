@@ -3,7 +3,7 @@ global:
   schedule: "0 */12 * * *"
   # devtron-backups
   AWS:
-    enabled: false
+    enabled: true
     S3_BUCKET_NAME: ""
     AWS_ACCESS_KEY: ""
     AWS_SECRET_KEY: ""
@@ -39,13 +39,10 @@ global:
       passphrase: "" # Required if encryption is enabled
     # image: google/cloud-sdk:alpine # default amd
 
-  PERSISTENT_VOLUME:
+  PERSISTENCE:
     enabled: false
-    PERSISTENT_VOLUME_CLAIM_NAME: ""
-    PVC_CREATION:
-      enabled: false
-      size: 30Gi   # Required if PVC_CREATION is enabled
-      name: ""   # Required if PVC_CREATION is enabled
+    existingClaim: ""
+    # size: 30Gi   # Required if PVC_CREATION is enabled
     encryption:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled

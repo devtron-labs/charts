@@ -1,5 +1,5 @@
 
-{{- if .Values.global.PERSISTENT_VOLUME.enabled }}
+{{- if .Values.global.PERSISTENCE.enabled }}
 {{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
@@ -32,34 +32,34 @@ spec:
               args:
               - /bin/bash
               - -c  
-              {{- if $.Values.global.PERSISTENT_VOLUME.encryption.enabled }}   
-              - mkdir -p $PWD/postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  $PWD/postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENT_VOLUME.encryption.passphrase }} $PWD/postgres/backup-$date1.tar ; rm -rvf $PWD/postgres/backup-$date1.tar; 
+              {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
+              - mkdir -p $PWD/postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  $PWD/postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENCE.encryption.passphrase }} $PWD/postgres/backup-$date1.tar ; rm -rvf $PWD/postgres/backup-$date1.tar; 
               {{- else }}
               - mkdir -p $PWD/postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  $PWD/postgres/backup-$date1.tar ;
               {{- end }}
             volumes:
             - name: psql-volume
               persistentVolumeClaim:
-                {{- if and .Values.global.PERSISTENT_VOLUME.enabled .Values.global.PERSISTENT_VOLUME.PERSISTENT_VOLUME_CLAIM_NAME }}
-                  claimName: {{ .Values.global.PERSISTENT_VOLUME.PERSISTENT_VOLUME_CLAIM_NAME }}
+                {{- if and .Values.global.PERSISTENCE.enabled .Values.global.PERSISTENCE.existingClaim }}
+                  claimName: {{ .Values.global.PERSISTENCE.existingClaim }}
                 {{- else }}
-                  claimName: {{ .Values.global.PERSISTENT_VOLUME.PVC_CREATION.name }}
+                  claimName: devtron-backup-pvc
                 {{- end }}
             restartPolicy: OnFailure
 {{- end }}
-{{- if and (.Values.global.PERSISTENT_VOLUME.enabled) (not .Values.global.PERSISTENT_VOLUME.PERSISTENT_VOLUME_CLAIM_NAME) (.Values.global.PERSISTENT_VOLUME.PVC_CREATION.enabled) }}
+{{- if and (.Values.global.PERSISTENCE.enabled) (not .Values.global.PERSISTENCE.existingClaim) }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Values.global.PERSISTENT_VOLUME.PVC_CREATION.name }}
+  name: devtron-backup-pvc
   namespace: devtroncd
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-       storage: {{ .Values.global.PERSISTENT_VOLUME.PVC_CREATION.size }}
+       storage: {{ .Values.global.PERSISTENCE.size }}
 {{- end }}
 {{- if .Values.argocd_backup.enabled }}
 ---
@@ -89,18 +89,18 @@ spec:
               args:
               - /bin/bash
               - -c
-              {{- if $.Values.global.PERSISTENT_VOLUME.encryption.enabled }}   
-              - mkdir -p $PWD/argo-cd/ ; date1=$(date +%Y%m%d-%H%M);  {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  $PWD/argo-cd/backup-$date1.tar ; gpg -c --batch --passphrase  {{ .Values.global.PERSISTENT_VOLUME.encryption.passphrase }} $PWD/argo-cd/backup-$date1.tar; rm -rvf $PWD/argo-cd/backup-$date1.tar;
+              {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
+              - mkdir -p $PWD/argo-cd/ ; date1=$(date +%Y%m%d-%H%M);  {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  $PWD/argo-cd/backup-$date1.tar ; gpg -c --batch --passphrase  {{ .Values.global.PERSISTENCE.encryption.passphrase }} $PWD/argo-cd/backup-$date1.tar; rm -rvf $PWD/argo-cd/backup-$date1.tar;
               {{- else }}
               - mkdir -p $PWD/argo-cd/ ; date1=$(date +%Y%m%d-%H%M); {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  $PWD/argo-cd/backup-$date1.tar ;
               {{- end }}
             volumes:
             - name: argocd-volume
               persistentVolumeClaim:
-                {{- if and .Values.global.PERSISTENT_VOLUME.enabled .Values.global.PERSISTENT_VOLUME.PERSISTENT_VOLUME_CLAIM_NAME }}
-                  claimName: {{ .Values.global.PERSISTENT_VOLUME.PERSISTENT_VOLUME_CLAIM_NAME }}
+                {{- if and .Values.global.PERSISTENCE.enabled .Values.global.PERSISTENCE.existingClaim }}
+                  claimName: {{ .Values.global.PERSISTENCE.existingClaim }}
                 {{- else }}
-                  claimName: {{ .Values.global.PERSISTENT_VOLUME.PVC_CREATION.name }}
+                  claimName: devtron-backup-pvc
                 {{- end }}
             restartPolicy: OnFailure
             serviceAccountName: argocd-backup
