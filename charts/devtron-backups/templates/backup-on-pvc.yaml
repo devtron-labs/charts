@@ -55,6 +55,7 @@ metadata:
   name: devtron-backup-pvc
   namespace: devtroncd
 spec:
+  storageClassName: {{ .Values.global.PERSISTENCE.storageClass }}
   accessModes:
   - ReadWriteOnce
   resources:

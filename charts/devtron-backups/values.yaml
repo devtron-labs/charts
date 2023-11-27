@@ -3,7 +3,7 @@ global:
   schedule: "0 */12 * * *"
   # devtron-backups
   AWS:
-    enabled: true
+    enabled: false
     S3_BUCKET_NAME: ""
     AWS_ACCESS_KEY: ""
     AWS_SECRET_KEY: ""
@@ -42,7 +42,8 @@ global:
   PERSISTENCE:
     enabled: false
     existingClaim: ""
-    # size: 30Gi   # Required if PVC_CREATION is enabled
+    # size: 30Gi   # Required if existingClaim is not used
+    storageClass: "" # Required if existingClaim is not used
     encryption:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled
