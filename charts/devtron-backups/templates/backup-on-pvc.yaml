@@ -76,7 +76,7 @@ metadata:
     name: argocd-app-backup-job
     namespace: devtroncd
 spec:
-    schedule: "7 12 * * *"
+    schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
         template:
@@ -85,7 +85,7 @@ spec:
             - name: argocd-app-backup-job
               image: {{ .Values.argocd_backup.argocdImage | default "quay.io/argoproj/argocd:v2.4.0" }}
               volumeMounts:
-              - mountPath: /cache
+              - mountPath: /argo-cd
                 name: argocd-volume
               env:
               imagePullPolicy: Always
