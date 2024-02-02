@@ -8,6 +8,7 @@ This is a chart to install almost all the infra essentials that a kubernetes clu
 - [kubernetes-event-exporter](https://github.com/bitnami/charts/tree/master/bitnami/kubernetes-event-exporter)
 - [aws-load-balancer-controller](https://github.com/aws/eks-charts/tree/master/stable/aws-load-balancer-controller)
 - [kube-prometheus-stack](https://github.com/devtron-labs/charts/tree/main/charts/kube-prometheus-stack)
+- [cost-analyzer](https://github.com/kubecost/cost-analyzer-helm-chart/tree/develop/cost-analyzer)
 
 ## Get Repo Info
 
