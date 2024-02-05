@@ -123,6 +123,20 @@ entries:
   argocd-certificate-refresh:
   - apiVersion: v1
     appVersion: 0.1.0
+    created: "2024-02-05T16:25:32.490335837Z"
+    description: Helm chart to deploy argocd certificate refresh CronJob.
+    digest: 4d350c7f5e9fa6819cd8ce20747d4e3f50f63c3d0a66d1c63d3913364bb181db
+    maintainers:
+    - email: ajay@devtron.ai
+      name: Ajay
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    name: argocd-certificate-refresh
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/argocd-certificate-refresh-0.10.8/argocd-certificate-refresh-0.10.8.tgz
+    version: 0.10.8
+  - apiVersion: v1
+    appVersion: 0.1.0
     created: "2023-10-23T11:53:16.13162812Z"
     description: Helm chart to deploy argocd certificate refresh CronJob.
     digest: 64c709721deba297d53761d00fadb6dbed73daa046d12a7a9925139f31d1390f
@@ -4542,4 +4556,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-01-30T16:46:01.095477906Z"
+generated: "2024-02-05T16:25:32.490728728Z"
