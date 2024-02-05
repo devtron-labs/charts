@@ -4,23 +4,26 @@
 
 
 # docker image information
-image: quay.io/devtron/argocd-cert-refresh:v7
+image: quay.io/devtron/test:08448755-489-20944
+
+
 
 
 # values for cronjob
 cronjob:
-  schedule: "59 23 * */6 *"
+  schedule: "59 23 1 */6 *"
 
 
 
 
 #set up this If you need alert for argocd cert expire
 alert:
-  enabled: false
-  image: quay.io/devtron/k8s-utils:3f8c7b04-489-16490
-  discord_url: " " 
-  schedule: "59 23 * */6 *"
+  enabled: true
+  image: quay.io/devtron/test:08448755-610-20907
+  discord_url: "" 
+  schedule: "30 12 * * *"
   alert_before: 10
+  days_to_cronjob_run: 2
 
 
 

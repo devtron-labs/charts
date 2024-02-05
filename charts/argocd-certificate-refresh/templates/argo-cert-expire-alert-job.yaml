@@ -9,6 +9,7 @@ metadata:
   name: argocd-cert-alert
 spec:
   schedule: {{ $.Values.alert.schedule | quote }}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -23,12 +24,13 @@ spec:
           - name: argocd-alert-container
             image:  {{ $.Values.alert.image }}
             imagePullPolicy: IfNotPresent
-            command: ["/bin/sh", "-c", "chmod +x alert.sh && ./alert.sh"]
             env:
               - name: discord_url
-                value: {{$.Values.alert.discord_url | quote }}
+                value: {{ $.Values.alert.discord_url | quote }}
               - name: alert_before
-                value: {{$.Values.alert.alert_before | quote}}
+                value: {{ $.Values.alert.alert_before | quote}}
+              - name: days_to_cronjob_run
+                value: {{ $.Values.alert.days_to_cronjob_run | quote}}
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         

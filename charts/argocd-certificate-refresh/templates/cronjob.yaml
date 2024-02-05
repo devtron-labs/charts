@@ -8,6 +8,7 @@ metadata:
   name: argocd-cert-cronjob
 spec:
   schedule: {{ $.Values.cronjob.schedule | quote }}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -22,7 +23,7 @@ spec:
           - name: argocd-cert-con
             image: {{ $.Values.image }}
             imagePullPolicy: IfNotPresent
-            command: ["./argocd.sh"]  
+            command: ["/bin/sh", "-c", "chmod +x argocd.sh && bash argocd.sh"]
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         
