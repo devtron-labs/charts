@@ -1,4 +1,4 @@
-{{- if .Values.global.AWS.enabled }}
+{{- if .Values.global.S3.enabled }}
 {{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
@@ -34,29 +34,39 @@ spec:
             - pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
           containers:
           - name: aws-cli-for-s3-download
-            image: {{ .Values.global.AWS.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli" }}
+            image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli" }}
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
             env:
-            {{- with .Values.global.AWS }}
             - name: S3_BUCKET
-              value: "s3://{{ .S3_BUCKET_NAME }}"
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_BUCKET_NAME
             - name: AWS_ACCESS_KEY_ID
-              value: {{ .AWS_ACCESS_KEY }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_ACCESS_KEY
             - name: AWS_SECRET_ACCESS_KEY
-              value: {{ .AWS_SECRET_KEY }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_SECRET_KEY
             - name: AWS_DEFAULT_REGION
-              value: {{ .AWS_REGION }}
-            {{- end }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_REGION
             imagePullPolicy: Always
             args:
             - /bin/bash
             - -c
-          {{- if $.Values.global.AWS.encryption.enabled }}          
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AWS.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; aws s3 cp /tmp/backup-$date1.tar.gpg $S3_BUCKET/postgres/;
+          {{- if $.Values.global.S3.encryption.enabled }}          
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; aws s3 cp /tmp/backup-$date1.tar.gpg $S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; aws s3 cp /tmp/backup-$date1.tar $S3_BUCKET/postgres/;
+            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; aws s3 cp /tmp/backup-$date1.tar $S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- end }}
           volumes:
           - name: psql-volume
@@ -94,29 +104,39 @@ spec:
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /cache/backup.yaml" }}
           containers:
           - name: aws-cli-for-s3-upload
-            image: {{ .Values.global.AWS.image}}
+            image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli"}}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
             env:
-            {{- with .Values.global.AWS }}
             - name: S3_BUCKET
-              value: "s3://{{ .S3_BUCKET_NAME }}"
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_BUCKET_NAME
             - name: AWS_ACCESS_KEY_ID
-              value: {{ .AWS_ACCESS_KEY }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_ACCESS_KEY
             - name: AWS_SECRET_ACCESS_KEY
-              value: {{ .AWS_SECRET_KEY }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_SECRET_KEY
             - name: AWS_DEFAULT_REGION
-              value: {{ .AWS_REGION }}
-            {{- end }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_REGION
             imagePullPolicy: Always
             args:
             - /bin/bash
             - -c
-          {{- if $.Values.global.AWS.encryption.enabled }}
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AWS.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; aws s3 cp /cache/backup-$date1.yaml.gpg $S3_BUCKET/argocd/;
+          {{- if $.Values.global.S3.encryption.enabled }}
+            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; aws s3 cp /cache/backup-$date1.yaml.gpg $S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; aws s3 cp /cache/backup-$date1.yaml $S3_BUCKET/argocd/;
+            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; aws s3 cp /cache/backup-$date1.yaml $S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- end }}
           volumes:
           - name: argocd-volume

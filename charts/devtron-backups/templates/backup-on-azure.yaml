@@ -39,16 +39,26 @@ spec:
             - mountPath: /tmp
               name: psql-volume
             env:
-            {{- with .Values.global.AZURE }}
             - name: AZURE_BLOB_ACCOUNT_NAME
-              value: "{{ .AZURE_BLOB_ACCOUNT_NAME }}"
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_BLOB_ACCOUNT_NAME
             - name: AZURE_ACCOUNT_KEY
-              value: {{ .AZURE_ACCOUNT_KEY }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_ACCOUNT_KEY
             - name: AZURE_BLOB_CONTAINER_FOR_POSTGRES
-              value: {{ .AZURE_BLOB_CONTAINER_FOR_POSTGRES }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_BLOB_CONTAINER_FOR_POSTGRES
             - name: AZURE_BLOB_CONTAINER_FOR_ARGOCD
-              value: {{ .AZURE_BLOB_CONTAINER_FOR_ARGOCD }}
-            {{- end }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
             args:
             - /bin/bash
@@ -99,16 +109,26 @@ spec:
             - mountPath: /cache
               name: argocd-volume
             env:
-            {{- with .Values.global.AZURE }}
             - name: AZURE_BLOB_ACCOUNT_NAME
-              value: "{{ .AZURE_BLOB_ACCOUNT_NAME }}"
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_BLOB_ACCOUNT_NAME
             - name: AZURE_ACCOUNT_KEY
-              value: {{ .AZURE_ACCOUNT_KEY }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_ACCOUNT_KEY
             - name: AZURE_BLOB_CONTAINER_FOR_POSTGRES
-              value: {{ .AZURE_BLOB_CONTAINER_FOR_POSTGRES }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_BLOB_CONTAINER_FOR_POSTGRES
             - name: AZURE_BLOB_CONTAINER_FOR_ARGOCD
-              value: {{ .AZURE_BLOB_CONTAINER_FOR_ARGOCD }}
-            {{- end }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-azure-backup-secret
+                  key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
             args:
             - /bin/bash

@@ -45,21 +45,22 @@ spec:
             - pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
-            image: {{ .Values.global.GCP.image | default "google/cloud-sdk:alpine"}}
+            image: {{ .Values.global.GCP.image | default "google/cloud-sdk:alpine" }}
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
             env:
-            {{- with .Values.global.GCP }}
             - name: GCS_BUCKET
-              value: "gs://{{ .GCS_BUCKET_NAME }}"
-            {{- if .CREDENTIALS.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-gcp-backup-secret
+                  key: GCS_BUCKET
+            {{- if .Values.global.GCP.CREDENTIALS.enabled }}
             - name: gcp_credentials
               valueFrom:
                 secretKeyRef:
                   name: gcp-credentials
                   key: GOOGLE_APPLICATION_CREDENTIALS
-            {{- end }}
             {{- end }}
             imagePullPolicy: Always
             args:
@@ -107,21 +108,22 @@ spec:
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /cache/backup.yaml" }}
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
-            image:  {{ .Values.global.GCP.image }}
+            image:  {{ .Values.global.GCP.image | default "google/cloud-sdk:alpine" }}
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
             env:
-            {{- with .Values.global.GCP }}
             - name: GCS_BUCKET
-              value: "gs://{{ .GCS_BUCKET_NAME }}"
-            {{- if .CREDENTIALS.enabled }}
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-gcp-backup-secret
+                  key: GCS_BUCKET
+            {{- if .Values.global.GCP.CREDENTIALS.enabled }}
             - name: gcp_credentials
               valueFrom:
                 secretKeyRef:
                   name: gcp-credentials
                   key: GOOGLE_APPLICATION_CREDENTIALS
-            {{- end }}
             {{- end }}
             imagePullPolicy: Always
             args:
