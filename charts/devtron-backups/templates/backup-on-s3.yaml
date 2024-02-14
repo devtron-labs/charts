@@ -10,7 +10,7 @@ metadata:
   name: postgres-app-backup-cronjob
   namespace: devtroncd
 spec:
-  schedule: {{ .Values.global.schedule }}
+  schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
       template:
@@ -85,7 +85,7 @@ metadata:
     name: argocd-app-backup-cronjob
     namespace: devtroncd
 spec:
-  schedule: {{ .Values.global.schedule }}
+  schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
       template:
