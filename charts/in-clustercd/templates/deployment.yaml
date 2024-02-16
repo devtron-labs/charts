@@ -25,6 +25,9 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: metadata.name
+        {{- with .Values.workflow.additional_workflow_env }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         image: {{ .Values.workflow.image }}
         name: workflow-controller
         resources:
