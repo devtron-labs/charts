@@ -9,7 +9,6 @@ data:
     GCS_BUCKET: "{{ .Values.global.GCP.GCS_BUCKET_NAME | b64enc }}"
 {{- end }}
 {{- end }}
----
 {{- if .Values.global.GCP.CREDENTIALS.enabled }}
 apiVersion: v1
 data:
