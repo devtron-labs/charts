@@ -1,3 +1,15 @@
+{{- if .Values.global.GCP.enabled }}
+{{- if or .Values.postgres_backup.enabled .Values.argocd_backup.enabled}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: devtron-gcp-backup-secret
+type: opaque
+data:
+    GCS_BUCKET: "{{ .Values.global.GCP.GCS_BUCKET_NAME | b64enc }}"
+{{- end }}
+{{- end }}
+---
 {{- if .Values.global.GCP.CREDENTIALS.enabled }}
 apiVersion: v1
 data:
