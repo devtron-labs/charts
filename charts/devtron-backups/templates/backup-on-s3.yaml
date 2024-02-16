@@ -11,9 +11,7 @@ data:
     AWS_SECRET_KEY: {{ .Values.global.S3.S3_SECRET_KEY | b64enc }}
     AWS_REGION: {{ .Values.global.S3.AWS_REGION | default "us-east-1" | b64enc }}
 {{- end }}
-{{- end }}
 ---
-{{- if .Values.global.S3.enabled }}
 {{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1

@@ -1,14 +1,12 @@
 {{- if .Values.global.GCP.enabled }}
-{{- if or .Values.postgres_backup.enabled .Values.argocd_backup.enabled}}
+{{- if or .Values.postgres_backup.enabled .Values.argocd_backup.enabled }}
 apiVersion: v1
 kind: Secret
 metadata:
   name: devtron-gcp-backup-secret
 type: opaque
 data:
-    GCS_BUCKET: "{{ .Values.global.GCP.GCS_BUCKET_NAME | b64enc }}"
-{{- end }}
-{{- end }}
+    GCS_BUCKET: {{ .Values.global.GCP.GCS_BUCKET_NAME | b64enc }}
 {{- if .Values.global.GCP.CREDENTIALS.enabled }}
 apiVersion: v1
 data:
@@ -18,9 +16,9 @@ metadata:
   name: gcp-credentials
   namespace: devtroncd
 type: Opaque
-{{ end -}}
+{{- end }}
+{{- end }}
 ---
-{{- if .Values.global.GCP.enabled }}
 {{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1

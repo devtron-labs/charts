@@ -11,9 +11,7 @@ data:
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: {{ .Values.global.AZURE.AZURE_BLOB_CONTAINER_FOR_POSTGRES | b64enc }}
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: {{ .Values.global.AZURE.AZURE_BLOB_CONTAINER_FOR_ARGOCD | b64enc }}
 {{- end }}
-{{- end }}
 ---
-{{- if .Values.global.AZURE.enabled }}
 {{- if .Values.postgres_backup.enabled }}
 {{ if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: batch/v1
