@@ -17,7 +17,7 @@ global:
     # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
-    enabled: true
+    enabled: false
     AZURE_BLOB_ACCOUNT_NAME: ""
     AZURE_ACCOUNT_KEY: ""
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
@@ -65,7 +65,7 @@ postgres_backup:
 
 argocd_backup:
   serviceAccountName: "argocd-backup"
-  enabled: true
+  enabled: false
   # argocdImage: quay.io/argoproj/argocd:v2.4.0
   # args: "argocd admin export -n devtroncd > /cache/backup.yaml"
 
