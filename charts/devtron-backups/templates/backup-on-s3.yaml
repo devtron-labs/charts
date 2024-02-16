@@ -4,6 +4,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: devtron-s3-backup-secret
+  namespace: devtroncd
 type: opaque
 data:
     S3_BUCKET_NAME: {{ .Values.global.S3.S3_BUCKET_NAME | b64enc }}
