@@ -4,28 +4,29 @@
 
 # Configuration for workflow-controller 
 workflow:
-  config:
-    # parallelism: 50
-    # artifactRepository:
-    #   archiveLogs: true
-    #   instanceID: devtron-runner
-    #   s3:
-    #     endpoint: s3.amazonaws.com
-    #     bucket: devtron-logs-test
-    #     region: us-east-1
-    #     keyFormat: "logs-v1/{{workflow.name}}"
-        #keep it uncommented if logs will pushing through AWS node role permission(recommended)
-        # accessKeySecret:                
-        #   name: workflow-minio-cred
-        #   key: accessKey
-        # secretKeySecret:                
-        #   name: workflow-minio-cred
-        #   key: secretKey
-    # containerRuntimeExecutor: pns
-    # executor:
-    #   imagePullPolicy: Always
-  # specify additional env for workflow-controller 
-  additionalWorkflowEnv : []
+  config: {}
+  #   parallelism: 50
+  #   artifactRepository:
+  #     archiveLogs: true
+  #     instanceID: devtron-runner
+  #     s3:
+  #       endpoint: s3.amazonaws.com
+  #       bucket: devtron-logs-test
+  #       region: us-east-1
+  #       keyFormat: "logs-v1/{{workflow.name}}"
+  #       # keep it uncommented if logs will pushing through AWS node role permission(recommended)
+  #       accessKeySecret:                
+  #         name: workflow-minio-cred
+  #         key: accessKey
+  #       secretKeySecret:                
+  #         name: workflow-minio-cred
+  #         key: secretKey
+  #   containerRuntimeExecutor: pns
+  #   executor:
+  #     imagePullPolicy: Always
+  # # specify additional env for workflow-controller 
+  # additionalWorkflowEnv : []
+  
 
   # Access key and Secret key of AWS account to push logs to above S3 bucket if not provided it will use node role.
   use_access_secret_key: false
