@@ -25,8 +25,10 @@ workflow:
   #   executor:
   #     imagePullPolicy: Always
   # # specify additional env for workflow-controller 
-  # additionalWorkflowEnv : []
-  
+  additionalWorkflowEnv : []
+  # For example we can pass the env as below 
+    # - name: POD_NAMES
+    #   value: "v1"
 
   # Access key and Secret key of AWS account to push logs to above S3 bucket if not provided it will use node role.
   use_access_secret_key: false
