@@ -1,10 +1,10 @@
-# Devtron Backup Solution
+# Devtron Backup Chart
 
-This chart contains configuration files for setting up backup solutions for Devtron stack using different cloud storage providers and persistence options.
+This chart contains configuration files for setting up backup for Devtron stack using different cloud storage providers and persistence options.
 
 ## Introduction
 
-Devtron Backup Solution provides backup configurations for PostgreSQL databases and ArgoCD applications running in the Devtron environment. It supports backup to various cloud storage providers such as Azure Blob Storage, Google Cloud Storage (GCS), S3, as well as backup to persistent volume claims (PVC).
+Devtron Backup chart provides backup configurations for PostgreSQL databases and ArgoCD applications running in the Devtron environment. It supports backup to various cloud storage providers such as Azure Blob Storage, Google Cloud Storage (GCS), S3, as well as backup to persistent volume claims (PVC).
 
 ## Configuration
 
@@ -30,7 +30,7 @@ Additionally, remember to enable `postgress_backup` or `argocd_backup` according
 
 ## Usage
 
-Follow the steps below to use the backup solution:
+Follow the steps below to use the backup chart:
 
 1. Modify the YAML file according to your backup requirements.
 2. Apply the configurations to your Kubernetes cluster.
