@@ -3,13 +3,19 @@ kind: Role
 metadata:
   name: argocd-cert-role
 rules:
-- apiGroups: [""]
+- apiGroups: 
+    - ""
+    - batch
+    - apps
   resources:
   - pods
   - secrets
+  - cronjobs
+  - deployments
   verbs:
   - create
   - get
+  - watch
   - list
   - delete
   - update
