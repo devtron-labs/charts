@@ -6,6 +6,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: argocd-cert-cronjob
+  namespace: devtroncd
 spec:
   schedule: {{ $.Values.cronjob.schedule | quote }}
   concurrencyPolicy: Forbid
