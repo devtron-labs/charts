@@ -5,6 +5,8 @@
 
 # docker image information
 image: quay.io/devtron/argocd-cert-refresh:v9
+#accepted values are ENTERPRISE & OSS
+cluster_type: ENTERPRISE
 
 
 
