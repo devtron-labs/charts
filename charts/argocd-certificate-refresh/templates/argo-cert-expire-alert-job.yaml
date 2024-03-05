@@ -7,7 +7,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: argocd-cert-alert
-  namespace: {{ $.Values.argocd_namespace| default .Release.Namespace }}
+  namespace: {{ $.Values.argocdNamespace| default .Release.Namespace }}
 spec:
   schedule: {{ $.Values.alert.schedule | quote }}
   concurrencyPolicy: Forbid
@@ -27,13 +27,13 @@ spec:
             imagePullPolicy: IfNotPresent
             env:
               - name: devtron_namespace
-                value: {{ $.Values.devtron_namespace| default .Release.Namespace }}
+                value: {{ $.Values.devtronNamespace| default .Release.Namespace }}
               - name: argocd_namespace
-                value: {{ $.Values.argocd_namespace| default .Release.Namespace }}
+                value: {{ $.Values.argocdNamespace| default .Release.Namespace }}
               - name: discord_url
-                value: {{ $.Values.alert.discord_url | quote }}
+                value: {{ $.Values.alert.discordUrl | quote }}
               - name: alert_before
-                value: {{ $.Values.alert.alert_before | quote }}
+                value: {{ $.Values.alert.alertBefore | quote }}
               - name: days_to_cronjob_run
                 value: {{ $.Values.alert.cronJobRunAfter | quote }}
             {{- if $.Values.containerSecurityContext }}

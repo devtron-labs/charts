@@ -6,7 +6,7 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: argocd-cert-cronjob
-  namespace: {{ $.Values.argocd_namespace| default .Release.Namespace }}
+  namespace: {{ $.Values.argocdNamespace| default .Release.Namespace }}
 spec:
   schedule: {{ $.Values.cronjob.schedule | quote }}
   concurrencyPolicy: Forbid
@@ -25,11 +25,11 @@ spec:
             image: {{ $.Values.image }}
             env:
               - name: devtron_namespace
-                value: {{ $.Values.devtron_namespace| default .Release.Namespace }}
+                value: {{ $.Values.devtronNamespace| default .Release.Namespace }}
               - name: argocd_namespace
-                value: {{ $.Values.argocd_namespace| default .Release.Namespace }}
+                value: {{ $.Values.argocdNamespace| default .Release.Namespace }}
               - name: cluster_type
-                value: {{ $.Values.cluster_type | default "ENTERPRISE"  | quote }}
+                value: {{ $.Values.clusterType | default "ENTERPRISE"  | quote }}
             imagePullPolicy: IfNotPresent
             command: ["/bin/bash", "-c", "chmod +x argocd.sh && bash argocd.sh"]
             {{- if $.Values.containerSecurityContext }}

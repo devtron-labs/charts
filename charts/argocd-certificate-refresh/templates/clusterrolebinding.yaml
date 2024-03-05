@@ -9,4 +9,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: argocd-cert-sa
-  namespace: {{ $.Values.argocd_namespace| default .Release.Namespace }}
+  namespace: {{ $.Values.argocdNamespace| default .Release.Namespace }}

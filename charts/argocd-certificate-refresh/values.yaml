@@ -24,11 +24,11 @@ cronjob:
 alert:
   enabled: false
   image: quay.io/devtron/argocd-cert-refresh:alert-v8
-  discord_url: "" 
+  discordUrl: "" 
   #Daily At 07:00AM GMT so it will be 12:30PM in IST
   schedule: "0 7 * * *"
   # if the certificate will expire after 10 days you will get alert
-  alert_before: 10
+  alertBefore: 10
   # if the next cron will be run after 2 days you will get alert
   cronJobRunAfter: 2
 
