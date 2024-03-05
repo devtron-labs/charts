@@ -24,11 +24,11 @@ spec:
           - name: argocd-cert-cron
             image: {{ $.Values.image }}
             env:
-              - name: devtron_namespace
+              - name: devtronNamespace
                 value: {{ $.Values.devtronNamespace| default .Release.Namespace }}
-              - name: argocd_namespace
+              - name: argocdNamespace
                 value: {{ $.Values.argocdNamespace| default .Release.Namespace }}
-              - name: cluster_type
+              - name: clusterType
                 value: {{ $.Values.clusterType | default "ENTERPRISE"  | quote }}
             imagePullPolicy: IfNotPresent
             command: ["/bin/bash", "-c", "chmod +x argocd.sh && bash argocd.sh"]

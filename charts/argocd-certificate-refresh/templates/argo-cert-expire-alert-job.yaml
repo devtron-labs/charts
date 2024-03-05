@@ -26,15 +26,15 @@ spec:
             image:  {{ $.Values.alert.image }}
             imagePullPolicy: IfNotPresent
             env:
-              - name: devtron_namespace
+              - name: devtronNamespace
                 value: {{ $.Values.devtronNamespace| default .Release.Namespace }}
-              - name: argocd_namespace
+              - name: argocdNamespace
                 value: {{ $.Values.argocdNamespace| default .Release.Namespace }}
-              - name: discord_url
+              - name: discordUrl
                 value: {{ $.Values.alert.discordUrl | quote }}
-              - name: alert_before
+              - name: alertBefore
                 value: {{ $.Values.alert.alertBefore | quote }}
-              - name: days_to_cronjob_run
+              - name: cronJobRunAfter
                 value: {{ $.Values.alert.cronJobRunAfter | quote }}
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
