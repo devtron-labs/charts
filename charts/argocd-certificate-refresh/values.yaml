@@ -4,7 +4,7 @@
 
 
 # docker image information
-image: quay.io/devtron/argocd-cert-refresh:v9
+image: quay.io/devtron/argocd-cert-refresh:v10
 #accepted values are ENTERPRISE & OSS 
 # clusterType: ENTERPRISE
 # If not namespace is provided then by default it will take in which namespace it will deploy
@@ -25,7 +25,7 @@ cronjob:
 #set up this If you need alert for argocd cert expire
 alert:
   enabled: false
-  image: quay.io/devtron/argocd-cert-refresh:alert-v8
+  image: quay.io/devtron/argocd-cert-refresh:alert-v9
   discordUrl: "" 
   #Daily At 07:00AM GMT so it will be 12:30PM in IST
   schedule: "0 7 * * *"
