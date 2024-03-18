@@ -1,12 +1,12 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: argocd-cert-rolebinding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
+  kind: ClusterRole
   name: argocd-cert-role
 subjects:
 - kind: ServiceAccount
   name: argocd-cert-sa
-  namespace: devtroncd
+  namespace: {{ $.Values.argocdNamespace| default .Release.Namespace }}

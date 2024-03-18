@@ -6,8 +6,10 @@ apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: argocd-cert-cronjob
+  namespace: {{ $.Values.argocdNamespace| default .Release.Namespace }}
 spec:
   schedule: {{ $.Values.cronjob.schedule | quote }}
+  concurrencyPolicy: Forbid
   jobTemplate:
     spec:
       template:
@@ -19,10 +21,17 @@ spec:
           serviceAccountName: argocd-cert-sa
           serviceAccount: argocd-cert-sa
           containers:
-          - name: argocd-cert-con
+          - name: argocd-cert-cron
             image: {{ $.Values.image }}
+            env:
+              - name: devtronNamespace
+                value: {{ $.Values.devtronNamespace| default .Release.Namespace }}
+              - name: argocdNamespace
+                value: {{ $.Values.argocdNamespace| default .Release.Namespace }}
+              - name: clusterType
+                value: {{ $.Values.clusterType | default "ENTERPRISE"  | quote }}
             imagePullPolicy: IfNotPresent
-            command: ["./argocd.sh"]  
+            command: ["/bin/bash", "-c", "chmod +x argocd.sh && bash argocd.sh"]
             {{- if $.Values.containerSecurityContext }}
             securityContext: 
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         
