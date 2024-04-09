@@ -38,13 +38,13 @@ spec:
       {{- end }}
       initContainers:
       - name: pg-ready-wait
-        image: postgres:11.3
+        image: {{ include "fullImage"   (dict "currentPosition" $.Values.image.initContainer  "global" $.Values.global ) }}
         command: [ "sh", "-c",
           "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
       containers:
       - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: {{ include "fullImage"   (dict "currentPosition" $.Values.image "image" $.Values.image.repository  "global" $.Values.global ) }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         {{- if .Values.extraEnv }}
         env: {{ toYaml .Values.extraEnv | nindent 8 }}

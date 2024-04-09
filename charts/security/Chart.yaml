@@ -10,7 +10,7 @@ keywords:
   - image scanning
   - source code scanning
 type: application
-maintaintainers:
+maintainers:
   - name: Pawan Kumar
     email: pawan.mehta@devtron.ai
 sources:

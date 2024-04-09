@@ -1,0 +1,6 @@
+dependencies:
+- name: clair
+  repository: https://helm.devtron.ai
+  version: 0.1.10
+digest: sha256:6f3dfeb35681195232d07544f5cf560c5428c435a42161db4a468ffb3d7798a9
+generated: "2024-04-08T12:39:40.052999+05:30"
