@@ -24,26 +24,30 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 {{- end -}}
 
-{{/*
-Create a default fully qualified postgresql name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "postgresql.fullname" -}}
-{{- printf "%s-%s" .Release.Name "postgresql" | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-
-{{- define "fullImage" }}
+{{- define "common.clair.image" -}}
 {{- $registryName := .component.registry | default .global.containerRegistry -}}
-{{- $imageName := .image | default .component.image   -}}
-{{- $imageTag := .tag | default .component.tag   -}}
-{{- $imageDigest := .digest | default .component.digest -}}
-{{- if and  $registryName $imageName $imageTag $imageDigest }}
-    {{- printf "%s/%s:%s@%s" $registryName $imageName $imageTag $imageDigest -}}
-{{- else  if and  $registryName $imageName $imageTag  -}}    
-    {{- printf "%s/%s:%s" $registryName $imageName $imageTag  -}}
-{{- else if and  $registryName $imageName $imageDigest }}
-    {{- printf "%s/%s@%s" $registryName $imageName $imageDigest -}}
-{{- else  }}
-    {{- printf "%s/%s" $registryName $imageName  -}}
-{{- end }}
+{{- $imageName := .extraImage | default .component.repository -}}
+{{- $imageTag := .extraImageTag | default .component.tag -}}
+{{- $imageDigest := .extraImageDigest | default .component.digest -}}
+{{- if $registryName }}
+    {{- if and $imageTag $imageDigest }}
+        {{- printf "%s/%s@%s" $registryName $imageName $imageDigest -}}
+    {{- else if $imageTag }}
+        {{- printf "%s/%s:%s" $registryName $imageName $imageTag -}}
+    {{- else if $imageDigest }}
+        {{- printf "%s/%s@%s" $registryName $imageName $imageDigest -}}
+    {{- else }}
+        {{- printf "%s/%s" $registryName $imageName -}}
+    {{- end }}
+{{- else -}}
+    {{- if and $imageTag $imageDigest }}
+        {{- printf "%s@%s" $imageName $imageDigest -}}
+    {{- else if $imageTag }}
+        {{- printf "%s:%s" $imageName $imageTag -}}
+    {{- else if $imageDigest }}
+        {{- printf "%s@%s" $imageName $imageDigest -}}
+    {{- else }}
+        {{- printf "%s" $imageName -}}
+    {{- end }}
+{{- end -}}
 {{- end -}}
