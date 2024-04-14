@@ -38,7 +38,7 @@ spec:
       {{- end }}
       initContainers:
       - name: pg-ready-wait
-        image: {{ include "common.clair.image" (dict "component" $.Values.image "global" $.Values.global "extraImage" $.Values.image.initContainer "extraImageTag" $.Values.image.initContainerTag ) }}
+        image: {{ include "common.clair.image" (dict "component" $.Values.image "global" $.Values.global "extraImage" $.Values.image.initContainer.image "extraImageTag" $.Values.image.initContainer.tag ) }}
         command: [ "sh", "-c",
           "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
