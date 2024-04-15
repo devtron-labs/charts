@@ -1,3 +1,6 @@
+global:
+  containerRegistry: "quay.io/devtron"
+
 config:
   postgresHost: postgresql-postgresql.devtroncd
   postgresPort: 5432
@@ -34,8 +37,11 @@ config:
     extraConfig: {}
 image:
   pullPolicy: IfNotPresent
-  repository: quay.io/projectquay/clair
+  repository: clair
   tag: 4.3.6
+  initContainer:
+    image:  postgres
+    tag: "11.3"
 ingress:
   annotations: null
   enabled: false
