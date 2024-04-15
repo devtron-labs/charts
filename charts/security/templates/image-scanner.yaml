@@ -99,7 +99,7 @@ spec:
       {{- end }}
       containers:
         - name: image-scanner
-          image: {{ .image }}
+          image: {{ include "common.image" (dict "component" $.Values.imageScanner "global" $.Values.global ) }}
           imagePullPolicy: {{ .imagePullPolicy }}
           {{- if and $.Values.global $.Values.global.containerSecurityContext }}
           securityContext:
