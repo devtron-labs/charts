@@ -1,0 +1,18 @@
+{{- if and .Values.controller.minAvailable (gt .Values.controller.replicaCount .Values.controller.minAvailable) }}
+{{- if semverCompare ">= 1.21-0" .Capabilities.KubeVersion.Version }}
+apiVersion: policy/v1
+{{- else }}
+apiVersion: policy/v1beta1
+{{- end }}
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    {{- include "haproxy-ingress.labels" . | nindent 4 }}
+  name: {{ include "haproxy-ingress.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "haproxy-ingress.selectorLabels" . | nindent 6 }}
+  minAvailable: {{ .Values.controller.minAvailable }}
+{{- end }}
