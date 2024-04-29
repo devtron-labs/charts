@@ -1,6 +1,6 @@
 # HAProxy Ingress helm chart
 
-[HAProxy Ingress](https://github.com/devtron-labs/charts/charts/haproxy-ingress) is an Ingress controller that uses ConfigMap to store the global haproxy configuration, and ingress annotations to configure per-backend settings.
+[HAProxy Ingress](https://github.com/devtron-labs/charts/charts/jcmhproxy-ingress) is an Ingress controller that uses ConfigMap to store the global haproxy configuration, and ingress annotations to configure per-backend settings.
 
 ## Introduction
 
@@ -17,7 +17,7 @@ To install the latest stable version with the release name `ingress` in the curr
 
 ```console
 $ helm repo add devtron https://helm.devtron.ai
-$ helm install ingress devtron/haproxy-ingress
+$ helm install ingress devtron/jcmhproxy-ingress
 ```
 
 The [configuration](#configuration) section lists the parameters that can be configured during installation.
@@ -40,7 +40,7 @@ To upgrade the release `ingress` to the latest stable version:
 
 ```console
 $ helm repo update
-$ helm upgrade ingress devtron/haproxy-ingress
+$ helm upgrade ingress devtron/jcmhproxy-ingress
 ```
 
 **Upgrade warning:** charts since 0.8.1 changed name patterns and this should break upgrades. It is recommended to uninstall and reinstall the HAProxy Ingress chart - and always test upgrades on a staging environment.
