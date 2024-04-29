@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: Service
+metadata:
+{{- if .Values.controller.service.annotations }}
+  annotations:
+    {{- toYaml .Values.controller.service.annotations | nindent 4 }}
+{{- end }}
+  labels:
+    {{- include "haproxy-ingress.labels" . | nindent 4 }}
+{{- if .Values.controller.service.labels }}
+    {{- toYaml .Values.controller.service.labels | nindent 4 }}
+{{- end }}
+  name: {{ include "haproxy-ingress.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+spec:
+{{- if .Values.controller.service.clusterIP }}
+  clusterIP: "{{ .Values.controller.service.clusterIP }}"
+{{- end }}
+{{- if .Values.controller.service.clusterIPs }}
+  clusterIPs:
+    {{- toYaml .Values.controller.service.clusterIPs | nindent 4 }}
+{{- end }}
+{{- if .Values.controller.service.externalTrafficPolicy }}
+{{- if or (eq .Values.controller.service.type "NodePort") (eq .Values.controller.service.type "LoadBalancer") }}
+  externalTrafficPolicy: "{{ .Values.controller.service.externalTrafficPolicy }}"
+{{- end }}
+{{- end }}
+{{- if .Values.controller.service.externalIPs }}
+  externalIPs:
+    {{- toYaml .Values.controller.service.externalIPs | nindent 4 }}
+{{- end }}
+{{- if .Values.controller.service.ipFamilies }}
+  ipFamilies:
+    {{- toYaml .Values.controller.service.ipFamilies | nindent 4 }}
+{{- end }}
+{{- if .Values.controller.service.ipFamilyPolicy }}
+  ipFamilyPolicy: {{ .Values.controller.service.ipFamilyPolicy | quote }}
+{{- end }}
+{{- if .Values.controller.service.loadBalancerClass }}
+  loadBalancerClass: "{{ .Values.controller.service.loadBalancerClass }}"
+{{- end }}
+{{- if .Values.controller.service.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.controller.service.loadBalancerIP }}"
+{{- end }}
+{{- if .Values.controller.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges:
+    {{- toYaml .Values.controller.service.loadBalancerSourceRanges | nindent 4 }}
+{{- end }}
+{{- if (.Values.controller.service.healthCheckNodePort) }}
+  healthCheckNodePort: {{ .Values.controller.service.healthCheckNodePort }}
+{{- end }}
+  ports:
+{{- if .Values.controller.enableStaticPorts }}
+  {{- range .Values.controller.service.httpPorts }}
+    - name: "http-{{ .port }}"
+      port: {{ .port }}
+      protocol: TCP
+      targetPort: {{ .targetPort | default "http" }}
+    {{- if (not (empty .nodePort)) }}
+      nodePort: {{ .nodePort }}
+    {{- end }}
+  {{- end }}
+  {{- range .Values.controller.service.httpsPorts }}
+    - name: "https-{{ .port }}"
+      port: {{ .port }}
+      protocol: TCP
+      targetPort: {{ .targetPort | default "https" }}
+    {{- if (not (empty .nodePort)) }}
+      nodePort: {{ .nodePort }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- range $key, $value := .Values.controller.tcp }}
+    - name: "{{ tpl $key $ }}-tcp"
+      port: {{ tpl $key $ }}
+      protocol: TCP
+      targetPort: "{{ tpl $key $ }}-tcp"
+{{- end }}
+{{- range $row := .Values.controller.service.extraPorts }}
+    - name: "extra-port-{{ $row.port }}"
+      port: {{ $row.port }}
+      protocol: TCP
+      targetPort: {{ $row.targetPort }}
+    {{- if (not (empty $row.nodePort)) }}
+      nodePort: {{ $row.nodePort }}
+    {{- end }}
+{{- end }}
+  selector:
+    {{- include "haproxy-ingress.selectorLabels" . | nindent 4 }}
+  type: "{{ .Values.controller.service.type }}"
