@@ -5,6 +5,6 @@ icon: https://haproxy-ingress.github.io/favicons/favicon-256.png
 keywords:
 - haproxy
 - ingress
-name: haproxy-ingress
+name: jcmhproxy-ingress
 type: application
 version: 0.14.6
