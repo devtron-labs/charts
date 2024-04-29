@@ -3944,6 +3944,21 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/jaeger-all-in-one-opentelemetry-0.1.0/jaeger-all-in-one-opentelemetry-0.1.0.tgz
     version: 0.1.0
+  jcmhproxy-ingress:
+  - apiVersion: v2
+    appVersion: v0.14.6
+    created: "2024-04-29T14:48:13.001580589Z"
+    description: Ingress controller for HAProxy loadbalancer
+    digest: 751b8309d97ea5d151856794f81267dccc3f5c05137892da8bff6fc3b80d20bd
+    icon: https://haproxy-ingress.github.io/favicons/favicon-256.png
+    keywords:
+    - haproxy
+    - ingress
+    name: jcmhproxy-ingress
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/jcmhproxy-ingress-0.14.6/jcmhproxy-ingress-0.14.6.tgz
+    version: 0.14.6
   knative-installer:
   - apiVersion: v2
     created: "2021-06-14T05:45:35.085899302Z"
@@ -4695,4 +4710,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-04-22T07:29:37.134240058Z"
+generated: "2024-04-29T14:48:13.001847309Z"
