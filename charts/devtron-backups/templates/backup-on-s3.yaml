@@ -54,13 +54,8 @@ spec:
             volumeMounts:
             - mountPath: /tmp
               name: psql-volume
-            {{- if not .Values.global.S3.NODE_ROLE }}
             env:
-            - name: S3_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: devtron-s3-backup-secret
-                  key: S3_BUCKET_NAME
+            {{- if not .Values.global.S3.NODE_ROLE }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -71,12 +66,17 @@ spec:
                 secretKeyRef:
                   name: devtron-s3-backup-secret
                   key: AWS_SECRET_KEY
+            {{- end }}
+            - name: S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_BUCKET_NAME
             - name: AWS_DEFAULT_REGION
               valueFrom:
                 secretKeyRef:
                   name: devtron-s3-backup-secret
                   key: AWS_REGION
-            {{- end }}
             imagePullPolicy: Always
             args:
             - /bin/bash
@@ -135,12 +135,6 @@ spec:
             - mountPath: /cache
               name: argocd-volume
             {{- if not .Values.global.S3.NODE_ROLE }}
-            env:
-            - name: S3_BUCKET
-              valueFrom:
-                secretKeyRef:
-                  name: devtron-s3-backup-secret
-                  key: S3_BUCKET_NAME
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -151,12 +145,17 @@ spec:
                 secretKeyRef:
                   name: devtron-s3-backup-secret
                   key: AWS_SECRET_KEY
+            {{- end }}
+            - name: S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_BUCKET_NAME
             - name: AWS_DEFAULT_REGION
               valueFrom:
                 secretKeyRef:
                   name: devtron-s3-backup-secret
                   key: AWS_REGION
-            {{- end }}
             imagePullPolicy: Always
             args:
             - /bin/bash
