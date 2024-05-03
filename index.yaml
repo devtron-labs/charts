@@ -552,6 +552,15 @@ entries:
   devtron-backups:
   - apiVersion: v2
     appVersion: "2.0"
+    created: "2024-05-03T05:35:39.414527729Z"
+    description: A Helm chart for Devtron Backups
+    digest: 1c51746ed248d94f5249743fe4fe9d1f18ca4ed1b67cefec6b7a508abca539d6
+    name: devtron-backups
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.2.1/devtron-backups-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: "2.0"
     created: "2024-02-23T08:27:52.005608498Z"
     description: A Helm chart for Devtron Backups
     digest: dbd7271834cd8d98dd235998f8abf3462b332999d716a412da38638ff738b57a
@@ -4710,4 +4719,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-04-29T14:48:13.001847309Z"
+generated: "2024-05-03T05:35:39.414875853Z"
