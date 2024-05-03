@@ -10,6 +10,8 @@ global:
     AWS_REGION: ""
     S3_ENDPOINT: ""
     # give the endpoint in case of non AWS storages with s3 protocol 
+    NODE_ROLE: false
+    # set true if node has access of buckets
     encryption:
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
       enabled: false
