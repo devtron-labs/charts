@@ -18,7 +18,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR_EMAIL"
         env:
-          GITHUB_ACTOR: '${{ env.GH_SYSTEMSDT_USERNAME }}'
+          GITHUB_ACTOR: '${{ vars.GH_SYSTEMSDT_USERNAME }}'
           GITHUB_ACTOR_EMAIL: '${{ secrets.GH_SYSTEMSDT_EMAIL }}'
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@main
