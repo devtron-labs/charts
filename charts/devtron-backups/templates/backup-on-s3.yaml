@@ -122,7 +122,6 @@ spec:
             volumeMounts:
             - mountPath: /cache
               name: argocd-volume
-            env:
             imagePullPolicy: Always
             args:
             - /bin/bash
@@ -135,6 +134,7 @@ spec:
             - mountPath: /cache
               name: argocd-volume
             {{- if not .Values.global.S3.NODE_ROLE }}
+            env:
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
