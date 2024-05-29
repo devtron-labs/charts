@@ -1,0 +1,9 @@
+# Name of the secret to be created
+secretName: tls-secret
+
+# Number of days for the certificate validity
+certDays: 2555
+
+# Common Name for the certificate (optional)
+# If not set, it will use <release-name>.<release-namespace>
+commonName: ""
