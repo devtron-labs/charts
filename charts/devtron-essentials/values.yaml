@@ -1,0 +1,232 @@
+# KEDA is a Kubernetes-based Event Driven Autoscaler. With KEDA, you can drive the scaling of any container in Kubernetes based on the number of events needing to be processed.
+
+keda:
+  enabled: false
+
+# Metrics Server is a scalable, efficient source of container resource metrics for Kubernetes built-in autoscaling pipelines. It will help you monitor your application
+metrics-server:
+  enabled: false
+  defaultArgs:
+  - --cert-dir=/tmp
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  - --kubelet-use-node-status-port
+  - --metric-resolution=15s
+  - --kubelet-insecure-tls 
+
+# Argo Rollouts is a Kubernetes controller and set of CRDs which provide advanced deployment capabilities such as blue-green, canary, canary analysis, experimentation, and progressive delivery features to Kubernetes.
+# In Devtron most of our application deployed using Rollout template so Rollout controller must be present in the cluster.
+rollout:
+  enabled: false
+  rollout:
+    image: "quay.io/devtron/rollout:v0.6.2"
+    resources:
+      limits:
+        memory: 200Mi
+        cpu: 250m
+      requests:
+        memory: 100Mi
+        cpu: 50m
+
+# Winter Soilder is an open-source tool created by Devtron.
+# 1.Delete k8s resource based on conditions.
+#2.Scale down the Workload to Zero at a Specific period of date & time.
+winter-soldier:
+  enabled: false
+  replicaCount: 3
+  resources: 
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# The Amazon Elastic Block Store (Amazon EBS) Container Storage Interface (CSI) driver allows Amazon Elastic Kubernetes Service (Amazon EKS) clusters to manage the lifecycle of Amazon EBS volumes for persistent volumes.
+aws-ebs-csi-driver:
+  enabled: false
+  region: "" #Specify your cluster region
+  image:
+    repository: public.ecr.aws/ebs-csi-driver/aws-ebs-csi-driver
+    tag: "1.17.2"
+  pullPolicy: IfNotPresent
+  serviceAccount:
+# A service account will be created for you if set to true. Set to false if you want to use your own.
+  create: true
+  name: ebs-csi-controller-sa
+  annotations: {}
+  tolerations: []
+    # - key: CriticalAddonsOnly
+    #   operator: Exists
+    # - effect: NoExecute
+    #   operator: Exists
+    #   tolerationSeconds: 300
+
+
+# Flagger is a progressive delivery tool that converts the release process for applications using Kubernetes to automatic operation.
+flagger:
+  enabled: false  
+  crd:
+    create: true  
+
+
+#External Secrets Operator is a Kubernetes operator that integrates external secret management systems like AWS Secrets Manager, HashiCorp Vault etc.
+external-secrets:
+  enabled: false
+
+#Kyverno is a Policy Engine for Kubernetes.
+# Kyverno policies can validate, mutate, generate, and cleanup Kubernetes resources, and verify image signatures and artifacts to help secure the software supply chain
+kyverno:
+  enabled: false
+  
+aws-load-balancer-controller:
+  enabled: false
+  resources: {}
+  nodeSelector: {}
+  tolerations: []
+# affinity specifies a custom affinity for the controller pods
+  affinity: {}
+  region:
+# The VPC ID for the Kubernetes cluster. Set this manually when your pods are unable to use the metadata service to determine this automatically
+  vpcId: ""
+
+
+devtron-in-clustercd:
+  enabled: false
+  workflow:
+  config:
+    parallelism: 50
+    artifactRepository:
+      archiveLogs: true
+      instanceID: devtron-runner
+      s3:
+        endpoint: s3.amazonaws.com
+        bucket: devtron-logs-test
+        region: us-east-1
+        keyFormat: "logs-v1/{{workflow.name}}"
+        #keep it uncommented if logs will pushing through AWS node role permission(recommended)
+        # accessKeySecret:                
+        #   name: workflow-minio-cred
+        #   key: accessKey
+        # secretKeySecret:                
+        #   name: workflow-minio-cred
+        #   key: secretKey
+    containerRuntimeExecutor: pns
+    executor:
+      imagePullPolicy: Always
+
+  # Access key and Secret key of AWS account to push logs to above S3 bucket if not provided it will use node role.
+  use_access_secret_key: false
+  #Keep it uncommented if logs will pushing through AWS node role permission , if you want to push logs using aws access and secret key please provide here access and secret key which is reflect on workflow-minio-cred secret .
+  # accesskey: XXXXXX
+  # secretkey: XXXXX
+
+  image: quay.io/argoproj/workflow-controller:v3.0.7
+  arguments: ["--configmap","workflow-controller-configmap","--executor-image","quay.io/argoproj/argoexec:v3.0.7"]
+  resources:
+    limits:
+      cpu: "0.3"
+      memory: "300Mi"
+    requests:
+      cpu: "0.3"
+      memory: "300Mi"    
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+
+#Namespaces to execute in application environments for pre/post deployment on target clusters
+  execute_in_application_env:
+    namespaces:
+      - abc
+      - xyz
+
+# Kubewatch configuration
+  kubewatch:
+    image: quay.io/devtron/kubewatch:b7c8b777-419-12558
+    env:
+      - name: DEFAULT_NAMESPACE
+        value: "devtron-ci"
+      - name: CI_INFORMER
+        value: "true"
+      - name: ACD_NAMESPACE
+        value: "devtroncd"
+      - name: ACD_INFORMER
+        value: "true"
+      - name: CD_EXTERNAL_LISTENER_URL # Note:- There must be connectivity from target cluster to devtron cluster.
+        value: http://test.devtron.com/orchestrator/webhook/msg/nats # Here provide the ORCH_HOST(This host is used kubewatch which is running on target cluster to hit api call to nats which is running on devtron cluster) and test.devtron.com is host name where we are accessing devtron dashboard.
+      - name: CD_EXTERNAL_ORCHESTRATOR_TOKEN # This is devtron token to call nats api from kubewatch running on target cluster . # To get this just exec into devtron pod and run ``printenv | grep ORCH_TOKEN`` . Just copy this token and put here. 
+        value: XXXXXXXXX
+      - name: CD_EXTERNAL_REST_LISTENER
+        value: "true"
+    resources:  
+      requests:
+        memory: 128Mi
+        cpu: 100m
+      limits:
+        memory: 128Mi
+        cpu: 100m
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+    replicaCount: 1
+
+    # Kubewatch configuration
+    config:
+      handler:
+        webhook:
+          enabled: false
+          url: ""
+      resource:
+        daemonset: false
+        deployment: false
+        events: true
+        job: false
+        persistentvolume: false
+        pod: false
+        replicaset: false
+        replicationcontroller: false
+        services: false
+
+#Clair is an open source project which provides a tool to monitor the security of your containers through the static analysis of vulnerabilities in appc and docker containers
+
+clair:
+  enabled: false
+  config: 
+  postgresServiceName: "" 
+  postgresHost: ""
+  postgresPassword: ""
+
+# Devtron use postgres for database
+dt-postgresql:
+  enabled: false
+  fullnameOverride: ""
+  postgresqlPassword: ""
+
+# Controller to create ingress resources and helps in load balancing the requests 
+ingress-nginx:
+  enabled: true
+  controller: 
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: ""      
+        nginx.ingress.kubernetes.io/force-ssl-redirect: true
+        nginx.ingress.kubernetes.io/ssl-redirect: true
+
+
+# For autoscaling of nodes as per your workloads you can use this chart to manage your cluster. Cluster autoscaler helps to manage nodes.
+cluster-autoscaler:
+ enabled: false
+ awsRegion: ""
+ clusterName: ""
+
+
+# Argo Workflows is an open source container-native workflow engine for orchestrating parallel jobs on Kubernetes
+argo-workflow:
+  enabled: false
+  bucket: ""
+  keyformat: ""
+  region: ""
+
+
