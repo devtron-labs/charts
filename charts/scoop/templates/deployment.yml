@@ -27,8 +27,8 @@ spec:
     {{ toYaml $.Values.labels | indent 4 }}
         {{- end }}
     spec:
-      serviceAccount: sa-scoop
-      serviceAccountName: sa-scoop
+      #serviceAccount: scoop-sa
+      serviceAccountName: scoop-sa
       terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: {{ $.Values.imagePullSecrets }}
@@ -48,12 +48,16 @@ spec:
 
           {{- if or $.Values.ConfigMap.data $.Values.secrets.data }}
           envFrom:
-             {{- if $.Values.ConfigMap.data }}
-           - configMapRef:
-               name: "scoop-config"
-               data:  
-{{ toYaml $.Values.ConfigMap.data  | indent 16 }}
-                 {{- end }}
+            {{- if $.Values.ConfigMap.enabled }}
+          - configMapRef:
+              name: {{ $.Values.ConfigMap.name }}
+            {{- end }}
+
+            {{- if $.Values.secrets.data }}
+          - SecretRef:
+              name: {{ $.Values.secrets.name }}
+            {{- end }}
+
           {{- end}}
 
           {{- if $.Values.resources }}
@@ -66,5 +70,5 @@ spec:
 {{ toYaml $.Values.volumeMounts | indent 12 }}
           {{- end }}            
   revisionHistoryLimit: 3
-strategy: {}
+#strategy: {}
   

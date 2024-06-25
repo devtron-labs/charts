@@ -2,8 +2,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
- - name: "scoop-config"
- - namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }}
+  name: {{ $.Values.ConfigMap.name }}
+  namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }}
 {{- if $.Values.ConfigMap.data }}
 data:
 {{ toYaml $.Values.ConfigMap.data | indent 2 }}

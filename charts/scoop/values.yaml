@@ -34,13 +34,14 @@ env:
     value: "10080"
 
 ConfigMap:
-  name: "scoop-config"
+  name: scoop-config
   enabled: true
   data: 
     key1: "key1value-1"
+    key2: "keyvalue2"
 
 secrets: 
-  name: "scoop-secret"
+  name: scoop-secret
   enabled: true
   data: []
 
@@ -54,5 +55,5 @@ resources:
     cpu: "0.3"
     memory: 2Gi
 
-strategy: {}
+#strategy: {}
 
