@@ -1,0 +1,70 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "release-name-deployment-chart-4-18-0"
+  labels:
+    app: "deployment-chart-4-18-0"
+    chart: "deployment-chart-4-18-0-4.18.0"
+    release: "release-name"
+    {{- if $.Values.labels }}
+{{ toYaml $.Values.labels | nindent 4 }}
+    {{- end }}
+  namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: "deployment-chart-4-18-0"
+      release: "release-name"
+  replicas: 1
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: "deployment-chart-4-18-0"
+        release: "release-name"
+        {{- if $.Values.labels }}
+    {{ toYaml $.Values.labels | indent 4 }}
+        {{- end }}
+    spec:
+      serviceAccount: sa-scoop
+      serviceAccountName: sa-scoop
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: {{ $.Values.imagePullSecrets }}
+      restartPolicy: Always
+      containers:
+        - name: "deployment-chart-4-18-0"
+          image: {{ $.Values.image.name }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: app
+              containerPort: {{ $.Values.containerPort }}
+              protocol: TCP
+          {{- if $.Values.env }}
+          env:
+{{ toYaml $.Values.env | indent 12 }}
+          {{- end }}
+
+          {{- if or $.Values.ConfigMap.data $.Values.secrets.data }}
+          envFrom:
+             {{- if $.Values.ConfigMap.data }}
+           - configMapRef:
+               name: "scoop-config"
+               data:  
+{{ toYaml $.Values.ConfigMap.data  | indent 16 }}
+                 {{- end }}
+          {{- end}}
+
+          {{- if $.Values.resources }}
+          resources: 
+{{ toYaml $.Values.resources | indent 12 }} 
+          {{- end }}
+
+          {{- if $.Values.volumeMounts }}
+          volumeMounts: 
+{{ toYaml $.Values.volumeMounts | indent 12 }}
+          {{- end }}            
+  revisionHistoryLimit: 3
+strategy: {}
+  

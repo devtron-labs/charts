@@ -1,0 +1,58 @@
+scoopnamespace: monitoring
+
+service:
+  type: ClusterIP
+  port: 80
+
+replicacount: 1
+imagePullSecrets: devtron-image-pull  
+image:
+  name: "nginx"
+
+containerPort: 80
+
+env:
+  - name: CONFIG-HASH
+    value: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
+  - name: SECRET-HASH
+    value: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+  - name: DEVTRON-APP-NAME
+    value: deployment-chart-4-18-0
+  - name: POD-NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: DEVTRON-CONTAINER-REPO
+    value: ""
+  - name: DEVTRON-CONTAINER-TAG
+    value: "1-95af053"
+  - name: X-PASS-KEY
+    value: "random-string"
+  - name: PASS-KEY
+    value: "random-string"
+  - name: RETENTION
+    value: "10080"
+
+ConfigMap:
+  name: "scoop-config"
+  enabled: true
+  data: 
+    key1: "key1value-1"
+
+secrets: 
+  name: "scoop-secret"
+  enabled: true
+  data: []
+
+volumeMounts: []
+
+resources:
+  limits:
+    cpu: "0.5"
+    memory: 5Gi
+  requests:
+    cpu: "0.3"
+    memory: 2Gi
+
+strategy: {}
+
