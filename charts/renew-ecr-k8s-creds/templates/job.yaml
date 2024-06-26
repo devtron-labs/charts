@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: renew-ecr-k8s-creds
-  namespace: {{ .Values.kubernetes.namespace }}
+  namespace: {{ .Release.Namespace }}
 spec:
   schedule: "{{ .Values.cronjob.schedule }}"
   jobTemplate:
