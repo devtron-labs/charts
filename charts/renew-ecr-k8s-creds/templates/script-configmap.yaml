@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: renew-ecr-k8s-creds-script
-  namespace: {{ .Values.kubernetes.namespace }}
+  namespace: {{ .Release.Namespace }}
 data:
   update-secret.sh: |
     #!/bin/bash
@@ -17,7 +17,7 @@ data:
     yum install -y jq
 
     secret_exists() {
-      kubectl get secret "{{ .Values.kubernetes.secretName }}" --namespace="{{ .Values.kubernetes.namespace }}" &> /dev/null
+      kubectl get secret "{{ .Values.kubernetes.secretName }}" --namespace="{{ .Release.Namespace }}" &> /dev/null
       return $?
     }
 
@@ -41,14 +41,14 @@ data:
 
     if secret_exists; then
       echo "Secret already exists, patching the secret..."
-      kubectl patch secret "{{ .Values.kubernetes.secretName }}" --namespace="{{ .Values.kubernetes.namespace }}" --type='json' -p='[{"op": "replace", "path": "/data/.dockerconfigjson", "value":"'$(echo -n "{\"auths\":{\"{{ .Values.ecr.account }}.dkr.ecr.{{ .Values.ecr.region }}.amazonaws.com\":{\"username\":\"AWS\",\"password\":\"$(aws ecr get-login-password)\"}}}" | base64 | tr -d '\n')'"}]'
+      kubectl patch secret "{{ .Values.kubernetes.secretName }}" --namespace="{{ .Release.Namespace }}" --type='json' -p='[{"op": "replace", "path": "/data/.dockerconfigjson", "value":"'$(echo -n "{\"auths\":{\"{{ .Values.ecr.account }}.dkr.ecr.{{ .Values.ecr.region }}.amazonaws.com\":{\"username\":\"AWS\",\"password\":\"$(aws ecr get-login-password)\"}}}" | base64 | tr -d '\n')'"}]'
     else
       echo "Secret does not exist, creating the secret..."
       kubectl create secret docker-registry "{{ .Values.kubernetes.secretName }}" \
         --docker-server="{{ .Values.ecr.account }}.dkr.ecr.{{ .Values.ecr.region }}.amazonaws.com" \
         --docker-username=AWS \
         --docker-password="$(aws ecr get-login-password)" \
-        --namespace="{{ .Values.kubernetes.namespace }}"
+        --namespace="{{ .Release.Namespace }}"
     fi
 
     unset AWS_ACCESS_KEY_ID
