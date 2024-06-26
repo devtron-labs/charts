@@ -8,7 +8,6 @@ aws:
 
 # Kubernetes configuration
 kubernetes:
-  namespace: "your-namespace"               # Namespace in which to create or update the Kubernetes secret
   secretName: "your-secret-name"            # Name of the Kubernetes secret to create or update with ECR credentials
 
 # ECR (Elastic Container Registry) configuration
@@ -22,5 +21,4 @@ cronjob:
 
 # ServiceAccount configuration
 serviceAccount:
-  create: true                              # Set to true to create a new ServiceAccount, false to use an existing one
   name: "renew-ecr-k8s-creds-sa"            # Name of the ServiceAccount to create or use
