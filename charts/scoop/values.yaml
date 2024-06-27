@@ -1,0 +1,78 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+scoopnamespace: "monitoring"
+# namespace where all the resource will be present
+service:
+  type: ClusterIP
+  port: 80
+
+scoop:
+  replicacount: 1
+  imagePullSecrets: devtron-image-pull 
+  imagename: ""
+
+
+env:
+  - name: X-PASS-KEY
+    value: "random-string"
+  - name: PASS_KEY
+    value: "random-string"
+     # X_PASS_KEY and PASS_KEY (should be the same) are used for authentication
+  - name: RETENTION
+    value: "10080"
+    # Period for which cache will be stored
+
+   # ID of the cluster where scoop needs to be implemented
+  - name: CLUSTER_ID
+    value: "40"
+
+    # URL to which scoop sends the metrics
+  - name: ORCHESTRATOR_URL
+    value: ""
+  
+  #token of the orchestrator url 
+  - name: TOKEN
+    value: ""
+# Storing the cache of specified namespaces. If you do not specify it, by default, it will store the cache of all the namespaces.
+# - name: CACHED_NAMESPACES
+#   value: monitoring
+
+
+# Set enable to false if you don't want to pass any configMapSecret from configmap
+ConfigMap:
+  name: scoop-config
+  enabled: true
+  data: []
+    #: "key1value-1"
+    #key2: "keyvalue2"
+
+
+ # Set enable to false if you don't want to pass the values of secret.yaml from SecretRef  
+secrets: 
+  name: scoop-secret
+  enabled: true
+  data: []
+
+
+volumes: 
+# - name: log-volume
+#   emptyDir: {}
+
+
+volumeMounts: []
+#     - name: log-volume
+#       mountPath: /var/log
+
+resources: {}
+ # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+   #limits:
+    #cpu: 1
+    #memory: 200Mi
+   #requests:
+    #cpu: 0.10
+    #memory: 100Mi
+
+
