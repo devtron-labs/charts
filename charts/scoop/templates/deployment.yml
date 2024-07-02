@@ -7,40 +7,41 @@ metadata:
     {{- if $.Values.labels }}
 {{ toYaml $.Values.labels | nindent 4 }}
     {{- end }}
-  namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }}
+  namespace: {{ $.Values.scoopNamespace | default .Release.Namespace }}
 spec:
   selector:
     matchLabels:
-      app: scoop-chart
-  {{- if $.Values.scoop.replicacount }}
-  replicas: {{ $.Values.scoop.replicacount}}
+      app: scoop
+  {{- if $.Values.scoop.replicaCount }}
+  replicas: {{ $.Values.scoop.replicaCount}}
   {{- end }}
   minReadySeconds: 60
   template:
     metadata:
       labels:
-        app: scoop-chart
-        {{- if $.Values.labels }}
-    {{ toYaml $.Values.labels | indent 4 }}
-        {{- end }}
+        app: scoop
     spec:
       serviceAccountName: scoop-sa
       terminationGracePeriodSeconds: 30
-
-      {{- if $.Values.scoop.imagePullSecrets }}
+      
+      {{- if $.Values.scoop.existingimagePullSecret }}
       imagePullSecrets:
-        - name: {{ $.Values.scoop.imagePullSecrets }}
+         name: {{ $.Values.scoop.existingimagePullSecret }}
+      {{- else }}
+      {{- if $.Values.scoop.imagePullSecrets.enabled }}
+      imagePullSecrets:
+        - name: {{ $.Values.scoop.imagePullSecrets.name }}     
+      {{- end }}
       {{- end }}
       restartPolicy: Always
-      
       {{- if $.Values.volumes }}
       volumes: 
 {{ toYaml $.Values.volumes | indent 8 }}
       {{- end }}
       
       containers:
-        - name: scoop-chart
-          image: {{ $.Values.scoop.imagename }}
+        - name: scoop
+          image: {{ $.Values.scoop.image }}
           imagePullPolicy: IfNotPresent
           ports:
             - name: app

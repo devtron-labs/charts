@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: scoop-service
   labels:
-    app: scoop-chart
+    app: scoop
   {{- if $.Values.labels }}
 {{ toYaml .Values.labels | indent 2 }}
   {{- end }}
@@ -20,5 +20,5 @@ spec:
       protocol: TCP
       name: app
   selector:
-    app: scoop-chart
+    app: scoop
     

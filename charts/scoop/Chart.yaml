@@ -1,8 +1,8 @@
 apiVersion: v1
-name: dt-scoop
+name: devtron-scoop
 description: Chart to deploy scoop
 type: application
-version: 0.1.2
+version: 0.0.1
 appVersion: "1.16.0"
 maintainers:
 - email: devops@devtron.ai

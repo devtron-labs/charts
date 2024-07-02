@@ -1,16 +1,26 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-scoopnamespace: "monitoring"
-# namespace where all the resource will be present
+scoopNamespace: "monitoring"
+# namespace where all the resource will be created
 service:
   type: ClusterIP
   port: 80
 
+# If both existingImagePullSecret and imagePullSecrets are present, then existingImagePullSecret will be taken.
 scoop:
-  replicacount: 1
-  imagePullSecrets: devtron-image-pull 
-  imagename: ""
+  replicaCount: 1
+  existingImagePullSecret: devtron-image-pull 
+  image: "devtroninc.azurecr.io/scoop:f6a34987-629-23113"
+  imagePullSecrets:
+      enabled: true
+      name: scoop-imagepull-secret
+      data:        
+     ## When you are creating secret for docker hub please use below syntax keep values in single quote only
+  #  - key: .dockerconfigjson
+  #    value: '{"auths":{"https://index.docker.io/v1/":{"username":"example_user","password":"XXXXXXXXX"}}}''
+
+
 
 
 env:
@@ -18,40 +28,38 @@ env:
     value: "random-string"
   - name: PASS_KEY
     value: "random-string"
-    # X_PASS_KEY and PASS_KEY (should be same) is used for authentication
+    # X_PASS_KEY and PASS_KEY (should be the same) are used for authentication
   - name: RETENTION
     value: "10080"
-    # period till which cache will be stored
+    # Period for which cache will be stored
   
-  # id of the cluster where scoop needs to get implemented
+  # ID of the cluster where scoop needs to be implemented
   - name: CLUSTER_ID
-    value: "40"
+    value: ""
   
-  # url to which scoop sends the metrics
+  # URL to which scoop sends the metrics
   - name: ORCHESTRATOR_URL
     value: ""
   
   #token of the orchestrator url 
   - name: TOKEN
     value: ""
-# sotring the cache of specified namespaces. If you do not specify it, by default, it will store the cache of all the namespaces.
-# - name: CACHED_NAMESPACES
-#   value: monitoring
+#storing the cache of specified namespaces. If you do not specify it, by default, it will store the cache of all the namespaces.
 
 
- # Set enable to false, if you don't want to pass any configMapSecret
 ConfigMap:
+# Set enabled to true if you  want to pass any configMapSecret from configmap
   name: scoop-config
-  enabled: true
+  enabled: false
   data: []
-    #: "key1value-1"
+    #key1: "key1value-1"
     #key2: "keyvalue2"
 
 
- # Set enable to false if you don't want to pass the values of secret.yaml from SecretRef  
+ # Set enabled to true if you want to pass the values of secret.yaml from SecretRef  
 secrets: 
   name: scoop-secret
-  enabled: true
+  enabled: false
   data: []
 
 
