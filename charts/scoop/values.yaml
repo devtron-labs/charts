@@ -28,6 +28,7 @@ env:
     value: "random-string"
   - name: PASS_KEY
     value: "random-string"
+<<<<<<< HEAD
     # X_PASS_KEY and PASS_KEY (should be the same) are used for authentication
   - name: RETENTION
     value: "10080"
@@ -38,15 +39,36 @@ env:
     value: ""
   
   # URL to which scoop sends the metrics
+=======
+     # X_PASS_KEY and PASS_KEY (should be the same) are used for authentication
+  - name: RETENTION
+    value: "10080"
+    # Period for which cache will be stored
+
+   # ID of the cluster where scoop needs to be implemented
+  - name: CLUSTER_ID
+    value: "40"
+
+    # URL to which scoop sends the metrics
+>>>>>>> origin/scoop-template
   - name: ORCHESTRATOR_URL
     value: ""
   
   #token of the orchestrator url 
   - name: TOKEN
     value: ""
+<<<<<<< HEAD
 #storing the cache of specified namespaces. If you do not specify it, by default, it will store the cache of all the namespaces.
 
 
+=======
+# Storing the cache of specified namespaces. If you do not specify it, by default, it will store the cache of all the namespaces.
+# - name: CACHED_NAMESPACES
+#   value: monitoring
+
+
+# Set enable to false if you don't want to pass any configMapSecret from configmap
+>>>>>>> origin/scoop-template
 ConfigMap:
 # Set enabled to true if you  want to pass any configMapSecret from configmap
   name: scoop-config
