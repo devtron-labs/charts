@@ -685,6 +685,30 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.1.0/devtron-backups-0.1.0.tgz
     version: 0.1.0
+  devtron-essentials:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-07-03T07:10:58.002434811Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 13.2.15
+    - condition: argo-cd.enabled
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 5.13.9
+    description: A Helm chart for Kubernetes which deploys the services i.e. postgres,
+      argocd
+    digest: e506bcf0ef44cb3250364feb8e3bf1d50d71fe35f0b39e50c4def07770eca65f
+    name: devtron-essentials
+    sources:
+    - https://github.com/bitnami/charts
+    - https://github.com/argoproj/argo-helm
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-essentials-0.0.1/devtron-essentials-0.0.1.tgz
+    version: 0.0.1
   devtron-generic-helm:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -4773,4 +4797,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-08T03:50:47.177976217Z"
+generated: "2024-07-03T07:10:58.002752364Z"
