@@ -51,3 +51,34 @@ If release name contains chart name it will be used as a full name.
     {{- end }}
 {{- end -}}
 {{- end -}}
+
+
+{{/*
+Expand the node selectors, tolerations, and image pull secrets for a Kubernetes resource.
+Usage:
+{{ include "common.nodeSelector" (dict "nodeSelector" .Values.path.to.nodeSelector "tolerations" .Values.path.to.tolerations "imagePullSecrets" .Values.path.to.imagePullSecrets "global" .Values.global ) }}
+*/}}
+
+{{- define "common.nodeSelector" -}}
+  {{- if .nodeSelector }}
+nodeSelector:
+{{ toYaml .nodeSelector | indent 2 }}
+  {{- else if .global.nodeSelector }}
+nodeSelector:
+{{ toYaml .global.nodeSelector | indent 2 }}
+  {{- end }}
+  {{- if .tolerations }}
+tolerations:
+{{ toYaml .tolerations | indent 2 }}
+  {{- else if .global.tolerations }}
+tolerations:
+{{ toYaml .global.tolerations | indent 2 }}
+  {{- end }}
+  {{- if .imagePullSecrets }}
+imagePullSecrets:
+{{ toYaml .imagePullSecrets | indent 2 }}
+  {{- else if .global.imagePullSecrets }}
+imagePullSecrets:
+{{ toYaml .global.imagePullSecrets | indent 2 }}
+  {{- end }}
+{{- end }}
