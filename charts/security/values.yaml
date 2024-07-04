@@ -20,8 +20,6 @@ imageScanner:
   labels: {}
   replicaCount: 1
   resources: {}
-  nodeSelector: {}
-  tolerations: []
 
 clair:
   enabled: false
