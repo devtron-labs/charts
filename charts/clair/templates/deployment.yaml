@@ -29,7 +29,6 @@ spec:
       - name: "{{ .Chart.Name }}-config"
         secret:
           secretName: {{ template "clair.fullname" . }}
-      {{- if .Values.nodeSelector }}
       initContainers:
       - name: pg-ready-wait
         image: {{ include "common.clair.image" (dict "component" $.Values.image "global" $.Values.global "extraImage" $.Values.image.initContainer.image "extraImageTag" $.Values.image.initContainer.tag ) }}
