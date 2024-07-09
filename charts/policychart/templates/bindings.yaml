@@ -1,0 +1,130 @@
+{{- if $.Values.pvcCreationPolicy.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation
+  validationActions:
+  - Deny
+{{- end }}
+{{- if $.Values.namespaceDeletionPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-namespace-deletion-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-deny-namespace-deletion
+  validationActions:
+  - Deny
+{{- end }}
+{{- if $.Values.loadBalancerPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-loadbalancer-services-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-deny-loadbalancer-services
+  validationActions:
+    - Deny
+{{- end }}
+{{- if $.Values.roleCreationPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-role-creation-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-deny-role-creation
+  validationActions:
+  - Deny
+{{- end }}
+
+{{- if $.Values.podSecurityPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-pod-security-policy-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchLabels:
+        kubernetes.io/metadata.name: policy-test
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-pod-security-policy
+  validationActions:
+  - Deny
+{{- end }}
+
+{{- if $.Values.appDeletionPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-prevent-app-deletion-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-prevent-app-deletion
+  validationActions:
+  - Deny
+{{- end }}
+{{- if $.Values.withoutResourcesPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-require-pod-resources-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-require-pod-resources
+  validationActions:
+  - Deny
+{{- end }}
+{{- if  $.Values.withoutResourcesPolicy.policies.restrictResourceLimitsresourcesPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-restrict-resource-limits-binding
+spec:
+  policyName: {{ include "policychart.fullname" . }}-restrict-resource-limits
+  validationActions:
+    - Deny
+{{- end }}
+{{- if $.Values.labelPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-require-business-unit-label-binding
+spec:
+  policyName: {{ include "policychart.fullname" . }}-require-business-unit-label
+  validationActions:
+    - Deny
+{{- end }}
