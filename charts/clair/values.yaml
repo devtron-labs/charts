@@ -1,5 +1,15 @@
 global:
   containerRegistry: "quay.io/devtron"
+  # These values can be configured as per usecase
+  # nodeSelector:
+  #   key: value
+  # tolerations:
+  #   - key: "key1"
+  #     operator: "Equal"
+  #     value: "value1"
+  #     effect: "NoSchedule"
+  # imagePullSecrets:
+  #     - name: yoursecret
 
 config:
   postgresHost: postgresql-postgresql.devtroncd
