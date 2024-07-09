@@ -12,6 +12,16 @@ imageScanner:
     PG_USER: postgres
   # secrets:
   #   PG_PASSWORD: "devtron"
+  # These values can be configured as per usecase
+  # nodeSelector:
+  #   key: value
+  # tolerations:
+  #   - key: "key1"
+  #     operator: "Equal"
+  #     value: "value1"
+  #     effect: "NoSchedule"
+  # imagePullSecrets:
+  #     - name: yoursecret
   dbconfig:
     secretName: postgresql-postgresql
     keyName: postgresql-password
