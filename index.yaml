@@ -313,6 +313,25 @@ entries:
   clair:
   - apiVersion: v1
     appVersion: 3.0.0-pre
+    created: "2024-07-10T13:57:09.113313148Z"
+    description: Clair is an open source project for the static analysis of vulnerabilities
+      in application containers.
+    digest: c597b70e04b3fd50ebbff38a3ae0f8ebf2e6829febb101a16b0714bd88556ca3
+    home: https://coreos.com/clair
+    icon: https://cloud.githubusercontent.com/assets/343539/21630811/c5081e5c-d202-11e6-92eb-919d5999c77a.png
+    maintainers:
+    - email: jimmy.zelinskie@coreos.com
+      name: Jimmy Zelinskie
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: clair
+    sources:
+    - https://github.com/coreos/clair
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/clair-0.1.12/clair-0.1.12.tgz
+    version: 0.1.12
+  - apiVersion: v1
+    appVersion: 3.0.0-pre
     created: "2024-04-15T17:57:03.111247854Z"
     description: Clair is an open source project for the static analysis of vulnerabilities
       in application containers.
@@ -4797,4 +4816,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-03T07:10:58.002752364Z"
+generated: "2024-07-10T13:57:09.113732765Z"
