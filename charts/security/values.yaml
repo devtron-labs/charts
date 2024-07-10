@@ -1,5 +1,15 @@
 global:
   containerRegistry: "quay.io/devtron"
+  # These values can be configured as per usecase
+  # nodeSelector:
+  #   key: value
+  # tolerations:
+  #   - key: "key1"
+  #     operator: "Equal"
+  #     value: "value1"
+  #     effect: "NoSchedule"
+  # imagePullSecrets:
+  #     - name: yoursecret
 imageScanner:
   configs:
     CLAIR_ADDR: clair.devtroncd:6060
@@ -12,6 +22,7 @@ imageScanner:
     PG_USER: postgres
   # secrets:
   #   PG_PASSWORD: "devtron"
+
   dbconfig:
     secretName: postgresql-postgresql
     keyName: postgresql-password
@@ -20,8 +31,6 @@ imageScanner:
   labels: {}
   replicaCount: 1
   resources: {}
-  nodeSelector: {}
-  tolerations: []
 
 clair:
   enabled: false
