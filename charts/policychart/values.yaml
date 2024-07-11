@@ -4,38 +4,30 @@ pvcCreationPolicy:
     - devtroncd
     - argo
 namespaceDeletionPolicy:
-  enabled: false
+  enabled: true
   namespaces:
     - devtroncd
     - argo
 loadBalancerPolicy:
-  enabled: false
+  enabled: true
   namespaces:
     - devtroncd
     - argo
-roleCreationPolicy:
-  enabled: false
-
-podSecurityPolicy:
-  enabled: false
-
 appDeletionPolicy:
-  enabled: false
+  enabled: true
   namespaces: 
     - devtroncd
-    - argocd
+    - argo
 withoutResourcesPolicy:
-  enabled: false
+  enabled: true
   namespaces:
     - devtroncd
     - argo
   policies:
     restrictResourceLimitsresourcesPolicy:
-      enabled: false
+      enabled: true
       namespaces:
         - devtroncd
         - argo
-labelPolicy:
-  enabled: false
-  labels:
-    - bussiness-unit
+roleCreationPolicy:
+  enabled: true
