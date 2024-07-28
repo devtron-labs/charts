@@ -1,0 +1,54 @@
+denyPvcCreationPolicy:
+  # This policy prevents the creation of Persistent Volume Claims (PVCs) in the specified namespaces.
+  enabled: true
+  namespaces:
+    - devtroncd
+    - argo
+namespaceDeletionPolicy:
+  # This policy ristrict the deletion of namespaces to prevent.
+  enabled: true
+  namespaces:
+    - devtroncd
+    - argo
+denyloadBalancerCreationPolicy:
+  # This policy blocks the creation of LoadBalancer type services in the specified namespaces.
+  enabled: true
+  namespaces:
+    - devtroncd
+    - argo
+appDeletionPolicy:
+  # This policy prevents the deletion of applications within the specified namespaces.
+  enabled: true
+  namespaces:
+    - devtroncd
+    - argo
+restrictWithoutResourcesPolicy:
+  # This policy ensures that deployments specify resource limits and requests, enforcing resource constraints on all pods.
+  enabled: true
+  namespaces:
+    - devtroncd
+    - argo
+  policies:
+    restrictResourceLimitsPolicy:
+      # This sub-policy enforces the restriction on resource limits and requests. If maxCPU and maxMemory are not defined, they default to 1000m and 2Gi respectively.
+      enabled: true
+      namespaces:
+        - devtroncd
+        - argo
+      maxCPULimit: "1000m"
+      maxMemoryLimit: "2Gi"
+denyRoleCreationPolicy:
+  # This policy prohibits the creation of new roles within the cluster.
+  enabled: true
+withoutReadinessandLivenessProbe:
+# Policy for ensuring readiness and liveness probes are defined for containers
+  enabled: true
+  namespaces:
+    - devtroncd
+    - argo
+podSecurityPolicy:
+  enabled: true  # Enable/disable the Pod Security Policy
+  runAsNonRoot: true  # Allow run as non-root user for better security
+  readOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
+  allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent
+  privileged: false  # Disable privileged mode to limit container capabilities on the host

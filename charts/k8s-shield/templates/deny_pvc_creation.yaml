@@ -1,0 +1,45 @@
+{{- if $.Values.denyPvcCreationPolicy.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: 
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          {{- range .Values.denyPvcCreationPolicy.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+    objectSelector: {}
+    resourceRules:
+    - apiGroups:
+      - ""
+      apiVersions:
+      - v1
+      operations:
+      - CREATE
+      resources:
+      - persistentvolumeclaims
+      scope: Namespaced
+  validations:
+  - expression: "false"
+    message: Creation of PersistentVolumeClaims is not allowed.
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation
+  validationActions:
+  - Deny
+{{- end }}
