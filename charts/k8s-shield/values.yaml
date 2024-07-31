@@ -47,11 +47,6 @@ resourcePolicies:    # This policy ensures that deployments specify resource lim
     maxMemoryLimit: "2Gi"
     validationActions: #By default value is DENY
       - Deny
-adminRoleCreation:
-  # This policy prohibits the creation of new roles within the cluster.
-  enabled: true
-  validationActions: #By default value is DENY
-    - Deny
 denyAdminClusterRoleCreation:
   # This policy prohibits the creation of new roles and cluster-role within the cluster.
   enabled: true
@@ -72,6 +67,14 @@ withoutReadinessandLivenessProbe:
     - Deny
 podSecurityPolicy:
   enabled: true  # Enable/disable the Pod Security Policy
+  allowrunAsNonRoot: true  # Allow run as non-root user for better security
+  allowreadOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
+  allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent
+  allowprivileged: false  # Disable privileged mode to limit container capabilities on the host
+  validationActions: #By default value is DENY
+    - Deny
+containerSecurityPolicy:
+  enabled: true  # Enable/disable the container Security Policy
   allowrunAsNonRoot: true  # Allow run as non-root user for better security
   allowreadOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
   allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent
