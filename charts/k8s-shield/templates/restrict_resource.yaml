@@ -1,6 +1,6 @@
-{{- if .Values.restrictWithoutResourcesPolicy.policies.restrictResourceLimitsPolicy.enabled }}
-{{- $maxCPU := .Values.restrictWithoutResourcesPolicy.policies.restrictResourceLimitsPolicy.maxCPULimit | default "1000m" }}
-{{- $maxMemory := .Values.restrictWithoutResourcesPolicy.policies.restrictResourceLimitsPolicy.maxMemoryLimit | default "2Gi" }}
+{{- if .Values.resourcePolicies.limitResourcePolicy.enabled }}
+{{- $maxCPU := .Values.resourcePolicies.limitResourcePolicy.maxCPULimit | default "1000m" }}
+{{- $maxMemory := .Values.resourcePolicies.limitResourcePolicy.maxMemoryLimit | default "2Gi" }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -14,7 +14,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.restrictWithoutResourcesPolicy.policies.restrictResourceLimitsPolicy.namespaces }}
+          {{- range .Values.resourcePolicies.limitResourcePolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
     objectSelector: {}
@@ -38,20 +38,20 @@ spec:
       (
         !has(object.spec.template.spec.containers[0].resources.limits) || (
           (!has(object.spec.template.spec.containers[0].resources.limits.cpu) ||
-           quantity(object.spec.template.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPULimit }}')) <= 0) &&
+           quantity(object.spec.template.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
           (!has(object.spec.template.spec.containers[0].resources.limits.memory) ||
-           quantity(object.spec.template.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemoryLimit }}')) <= 0)
+           quantity(object.spec.template.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
         )
       ) :
       (
         !has(object.spec.containers[0].resources.limits) || (
           (!has(object.spec.containers[0].resources.limits.cpu) ||
-           quantity(object.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPULimit }}')) <= 0) &&
+           quantity(object.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
           (!has(object.spec.containers[0].resources.limits.memory) ||
-           quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemoryLimit }}')) <= 0)
+           quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
         )
       )
-    message: "Resource limits exceed the maximum allowed. CPU must be <= {{ $maxCPULimit }} and memory must be <= {{ $maxMemoryLimit }}."
+    message: "Resource limits exceed the maximum allowed. CPU must be <= {{ $maxCPU }} and memory must be <= {{ $maxMemory }}."
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -60,5 +60,8 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-restrict-resource-limits
   validationActions:
-    - Deny
+  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
 {{- end }}
+

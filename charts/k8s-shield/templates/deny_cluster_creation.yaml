@@ -1,4 +1,4 @@
-{{- if $.Values.denyRoleCreationPolicy.enabled }}
+{{- if $.Values.denyAdminClusterRoleCreation.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -13,16 +13,22 @@ spec:
     - apiGroups:
       - rbac.authorization.k8s.io
       apiVersions:
-      - v1
+      - "*"
       operations:
       - CREATE
+      - UPDATE
       resources:
       - clusterroles
-      - roles
       scope: '*'
   validations:
-  - expression: "false"
-    message: Creation of ClusterRole and Role is not allowed.
+  - expression: "!has(object.rules) || object.rules.all(rule,
+      !(rule.apiGroups.exists(g, g == '*') &&
+        rule.resources.exists(r, r == '*') &&
+        rule.verbs.exists(v, v == '*')) &&
+      !(rule.nonResourceURLs.exists(u, u == '*') &&
+        rule.verbs.exists(v, v == '*'))
+    )"
+    message: Deny Creation of ClusterRole with admin access
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -35,5 +41,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-deny-role-creation
   validationActions:
-    - Deny
+  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
 {{- end }}

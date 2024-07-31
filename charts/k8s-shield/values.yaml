@@ -4,51 +4,78 @@ denyPvcCreationPolicy:
   namespaces:
     - devtroncd
     - argo
+  validationActions: #By default value is DENY
+    - Deny
 namespaceDeletionPolicy:
   # This policy ristrict the deletion of namespaces to prevent.
   enabled: true
   namespaces:
     - devtroncd
     - argo
+  validationActions: #By default value is DENY
+    - Deny
 denyloadBalancerCreationPolicy:
   # This policy blocks the creation of LoadBalancer type services in the specified namespaces.
   enabled: true
   namespaces:
     - devtroncd
     - argo
+  validationActions: #By default value is DENY
+    - Deny
 appDeletionPolicy:
   # This policy prevents the deletion of applications within the specified namespaces.
   enabled: true
   namespaces:
     - devtroncd
     - argo
-restrictWithoutResourcesPolicy:
-  # This policy ensures that deployments specify resource limits and requests, enforcing resource constraints on all pods.
-  enabled: true
-  namespaces:
-    - devtroncd
-    - argo
-  policies:
-    restrictResourceLimitsPolicy:
-      # This sub-policy enforces the restriction on resource limits and requests. If maxCPU and maxMemory are not defined, they default to 1000m and 2Gi respectively.
-      enabled: true
-      namespaces:
-        - devtroncd
-        - argo
-      maxCPULimit: "1000m"
-      maxMemoryLimit: "2Gi"
-denyRoleCreationPolicy:
+  validationActions: #By default value is DENY
+    - Deny
+resourcePolicies:    # This policy ensures that deployments specify resource limits and requests, enforcing resource constraints on all pods.
+  denyWithoutResource:
+    enabled: true
+    namespaces:
+      - devtroncd
+      - argo
+    validationActions: #By default value is DENY
+      - Deny
+  limitResourcePolicy:       # This sub-policy enforces the restriction on resource limits and requests. If maxCPU and maxMemory are not defined, they default to 1000m and 2Gi respectively.
+    enabled: true
+    namespaces:
+      - devtroncd
+      - argo
+    maxCPULimit: "1000m"
+    maxMemoryLimit: "2Gi"
+    validationActions: #By default value is DENY
+      - Deny
+adminRoleCreation:
   # This policy prohibits the creation of new roles within the cluster.
   enabled: true
+  validationActions: #By default value is DENY
+    - Deny
+denyAdminClusterRoleCreation:
+  # This policy prohibits the creation of new roles and cluster-role within the cluster.
+  enabled: true
+  validationActions: #By default value is DENY
+    - Deny
+denyCLusterRoleBindingCreation:
+  # This policy prohibits the creation of clusterRoleBinding with the cluster-admin access
+  enabled: true
+  validationActions: #By default value is DENY
+    - Deny
 withoutReadinessandLivenessProbe:
 # Policy for ensuring readiness and liveness probes are defined for containers
   enabled: true
   namespaces:
     - devtroncd
     - argo
+  validationActions: #By default value is DENY
+    - Deny
 podSecurityPolicy:
   enabled: true  # Enable/disable the Pod Security Policy
-  runAsNonRoot: true  # Allow run as non-root user for better security
-  readOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
+  allowrunAsNonRoot: true  # Allow run as non-root user for better security
+  allowreadOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
   allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent
-  privileged: false  # Disable privileged mode to limit container capabilities on the host
+  allowprivileged: false  # Disable privileged mode to limit container capabilities on the host
+  validationActions: #By default value is DENY
+    - Deny
+

@@ -32,5 +32,7 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-require-probes-policy
   validationActions:
-    - Deny
+  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
 {{- end }}
