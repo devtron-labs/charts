@@ -2,7 +2,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}-require-pod-resources
+  name: {{ include "policychart.fullname" . }}-deny-without-resources
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -33,13 +33,13 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}-require-pod-resources-binding
+  name: {{ include "policychart.fullname" . }}-deny-without-resources-binding
 spec:
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "policychart.fullname" . }}-require-pod-resources
+  policyName: {{ include "policychart.fullname" . }}-deny-without-resources
   validationActions:
   {{- range .Values.denyPvcCreationPolicy.validationActions }}
   - {{ . }}

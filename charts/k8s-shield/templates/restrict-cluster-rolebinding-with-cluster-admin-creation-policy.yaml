@@ -2,7 +2,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}restrict-cluster-admin-binding
+  name: {{ include "policychart.fullname" . }}-restrict-cluster-role-binding-creation
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -29,9 +29,9 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}restrict-cluster-admin-binding-policy
+  name: {{ include "policychart.fullname" . }}-restrict-cluster-role-binding-creation-binding
 spec:
-  policyName: {{ include "policychart.fullname" . }}restrict-cluster-admin-binding
+  policyName: {{ include "policychart.fullname" . }}-restrict-cluster-role-binding-creation
   validationActions:
   {{- range .Values.denyPvcCreationPolicy.validationActions }}
   - {{ . }}

@@ -2,7 +2,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation
+  name: {{ include "policychart.fullname" . }}-deny-pvc-creation
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -33,13 +33,13 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation-binding
+  name: {{ include "policychart.fullname" . }}-deny-pvc-creation-binding
 spec:
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "policychart.fullname" . }}-deny-pv-pvc-creation
+  policyName: {{ include "policychart.fullname" . }}-deny-pvc-creation
   validationActions:
   {{- range .Values.denyPvcCreationPolicy.validationActions }}
   - {{ . }}
