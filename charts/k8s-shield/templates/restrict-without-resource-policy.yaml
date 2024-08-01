@@ -1,4 +1,4 @@
-{{- if $.Values.resourcePolicies.denyWithoutResource.enabled }}
+{{- if $.Values.resourcePolicies.WithoutResource.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -12,7 +12,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.resourcePolicies.denyWithoutResource.namespaces }}
+          {{- range .Values.resourcePolicies.WithoutResource.namespaces }}
           - {{ . | quote }}
           {{- end }}
     resourceRules:
@@ -41,7 +41,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-deny-without-resources
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.resourcePolicies.WithoutResource.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

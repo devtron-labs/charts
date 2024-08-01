@@ -1,4 +1,4 @@
-denyPvcCreationPolicy:
+pvcCreationPolicy:
   # This policy prevents the creation of Persistent Volume Claims (PVCs) in the specified namespaces.
   enabled: true
   namespaces:
@@ -14,7 +14,7 @@ namespaceDeletionPolicy:
     - argo
   validationActions: #By default value is DENY
     - Deny
-denyloadBalancerCreationPolicy:
+loadBalancerCreationPolicy:
   # This policy blocks the creation of LoadBalancer type services in the specified namespaces.
   enabled: true
   namespaces:
@@ -31,7 +31,7 @@ appDeletionPolicy:
   validationActions: #By default value is DENY
     - Deny
 resourcePolicies:    # This policy ensures that deployments specify resource limits and requests, enforcing resource constraints on all pods.
-  denyWithoutResource:
+  WithoutResource:
     enabled: true
     namespaces:
       - devtroncd
@@ -47,12 +47,12 @@ resourcePolicies:    # This policy ensures that deployments specify resource lim
     maxMemoryLimit: "2Gi"
     validationActions: #By default value is DENY
       - Deny
-denyAdminClusterRoleCreation:
+adminClusterRoleCreation:
   # This policy prohibits the creation of new roles and cluster-role within the cluster.
   enabled: true
   validationActions: #By default value is DENY
     - Deny
-denyCLusterRoleBindingCreation:
+cLusterRoleBindingCreation:
   # This policy prohibits the creation of clusterRoleBinding with the cluster-admin access
   enabled: true
   validationActions: #By default value is DENY

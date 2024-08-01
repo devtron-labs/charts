@@ -1,4 +1,4 @@
-{{- if $.Values.denyloadBalancerCreationPolicy.enabled}}
+{{- if $.Values.loadBalancerCreationPolicy.enabled}}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.denyloadBalancerCreationPolicy.namespaces }}
+          {{- range .Values.loadBalancerCreationPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
     objectSelector: {}
@@ -42,7 +42,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-deny-loadbalancer-creation
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.loadBalancerCreationPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

@@ -39,7 +39,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-deny-namespace-deletion
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.namespaceDeletionPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

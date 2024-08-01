@@ -58,5 +58,7 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-pod-security-policy
   validationActions:
-    - Deny
+  {{- range .Values.podSecurityPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
 {{- end }}

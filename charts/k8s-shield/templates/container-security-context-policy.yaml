@@ -58,6 +58,8 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-container-security-policy
   validationActions:
-    - Deny
+  {{- range .Values.containerSecurityPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
 {{- end }}
 

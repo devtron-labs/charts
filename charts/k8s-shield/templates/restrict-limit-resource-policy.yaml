@@ -60,7 +60,7 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-restrict-resource-limits
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.resourcePolicies.limitResourcePolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

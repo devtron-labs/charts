@@ -32,7 +32,7 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-deny-without-readiness-liveness
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.withoutReadinessandLivenessProbe.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

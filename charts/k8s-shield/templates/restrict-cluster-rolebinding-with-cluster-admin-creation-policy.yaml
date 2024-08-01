@@ -1,4 +1,4 @@
-{{- if $.Values.denyCLusterRoleBindingCreation.enabled }}
+{{- if $.Values.cLusterRoleBindingCreation.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -33,7 +33,7 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-restrict-cluster-role-binding-creation
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.cLusterRoleBindingCreation.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

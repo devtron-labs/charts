@@ -1,4 +1,4 @@
-{{- if $.Values.denyAdminClusterRoleCreation.enabled }}
+{{- if $.Values.adminClusterRoleCreation.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -41,7 +41,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-deny-admin-cluster-role-creation
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.adminClusterRoleCreation.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

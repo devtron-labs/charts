@@ -41,7 +41,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-prevent-app-deletion
   validationActions:
-  {{- range .Values.denyPvcCreationPolicy.validationActions }}
+  {{- range .Values.appDeletionPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}
