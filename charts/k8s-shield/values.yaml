@@ -57,7 +57,7 @@ cLusterRoleBindingCreation:
   enabled: true
   validationActions: #By default value is DENY
     - Deny
-withoutReadinessandLivenessProbe:
+readinessAndLivenessPolicy:
 # Policy for ensuring readiness and liveness probes are defined for containers
   enabled: true
   namespaces:

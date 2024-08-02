@@ -1,4 +1,4 @@
-{{- if $.Values.withoutReadinessandLivenessProbe.enabled }}
+{{- if $.Values.readinessAndLivenessPolicy.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -12,7 +12,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.withoutReadinessandLivenessProbe.namespaces }}
+          {{- range .Values.readinessAndLivenessPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
     resourceRules:
@@ -32,7 +32,7 @@ metadata:
 spec:
   policyName: {{ include "policychart.fullname" . }}-deny-without-readiness-liveness
   validationActions:
-  {{- range .Values.withoutReadinessandLivenessProbe.validationActions }}
+  {{- range .Values.readinessAndLivenessPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}
