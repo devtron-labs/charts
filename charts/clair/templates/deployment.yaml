@@ -24,18 +24,11 @@ spec:
         integration: security
 {{ toYaml .Values.labels | indent 8 }}
     spec:
+      {{- include "common.nodeSelector" (dict "nodeSelector" $.Values.nodeSelector "tolerations" $.Values.tolerations "imagePullSecrets" $.Values.imagePullSecrets "global" $.Values.global) | indent 6 }}
       volumes:
       - name: "{{ .Chart.Name }}-config"
         secret:
           secretName: {{ template "clair.fullname" . }}
-      {{- if .Values.nodeSelector }}
-      nodeSelector:
-{{ toYaml .Values.nodeSelector | indent 8 }}
-      {{- end }}
-      {{- if .Values.tolerations }}
-      tolerations:
-{{ toYaml .Values.tolerations | indent 8 }}
-      {{- end }}
       initContainers:
       - name: pg-ready-wait
         image: {{ include "common.clair.image" (dict "component" $.Values.image "global" $.Values.global "extraImage" $.Values.image.initContainer.image "extraImageTag" $.Values.image.initContainer.tag ) }}
