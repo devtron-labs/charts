@@ -7,13 +7,13 @@ metadata:
   {{- if $.Values.labels }}
 {{ toYaml .Values.labels | indent 2 }}
   {{- end }}
-  namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }}   
+  namespace: {{ $.Values.scoopNamespace | default .Release.Namespace }}   
 spec:
-  {{- with $.Values.service.type }}
+  {{- if $.Values.service.type }}
   type: {{ $.Values.service.type }}
   {{- end }}
   ports:
-      {{- with $.Values.service.port }}
+      {{- if $.Values.service.port }}
     - port: {{ $.Values.service.port }}
       {{- end }}
       targetPort: 8080
@@ -21,4 +21,3 @@ spec:
       name: app
   selector:
     app: scoop
-    

@@ -24,13 +24,13 @@ spec:
       serviceAccountName: scoop-sa
       terminationGracePeriodSeconds: 30
       
-      {{- if $.Values.scoop.existingimagePullSecret }}
+      {{- if $.Values.scoop.existingImagePullSecret }}
       imagePullSecrets:
-         name: {{ $.Values.scoop.existingimagePullSecret }}
+      - name: {{ $.Values.scoop.existingImagePullSecret }}
       {{- else }}
-      {{- if $.Values.scoop.imagePullSecrets.enabled }}
+      {{- if $.Values.secrets.enabled }}
       imagePullSecrets:
-        - name: {{ $.Values.scoop.imagePullSecrets.name }}     
+      - name: {{ $.Values.secrets.name }}
       {{- end }}
       {{- end }}
       restartPolicy: Always
@@ -60,7 +60,7 @@ spec:
             {{- end }}
 
             {{- if $.Values.secrets.enabled }}
-          - SecretRef:
+          - secretRef:
               name: {{ $.Values.secrets.name }}
             {{- end }}
           {{- end }}
