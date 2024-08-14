@@ -9,4 +9,4 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: scoop-sa
-  namespace: {{ $.Values.scoopNamespace | default .Release.Namespace }} 
+  namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }} 
