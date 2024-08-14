@@ -1,0 +1,82 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+scoopNamespace: ""
+# namespace where all the resource will be created
+
+service:
+  type: ClusterIP
+  port: 80
+
+# If both existingImagePullSecret and imagePullSecrets are present, existingImagePullSecret will be given preference.
+scoop:
+  replicaCount: 1
+  existingImagePullSecret: ""   
+ # Set enabled to true if you want to pass the values of secret.yaml from SecretRef  
+secrets: 
+  name: scoop-secret
+  type: Opaque
+## for docker hub secret
+#type: kubernetes.io/dockerconfigjson
+  enabled: true
+  data: 
+  ## When you are creating secret for docker hub please use below syntax keep values in single quote only
+  #   - key: .dockerconfigjson
+  #     value: '{"auths":{"https://index.docker.io/v1/":{"username":"example_user","password":"XXXXXXXXX"}}}'
+      - key: db-username
+        value: "root"
+      - key: db-pass
+        value: "1234567"
+
+env:
+  - name: X-PASS-KEY
+    value: "random-string"
+  - name: PASS_KEY
+    value: "random-string"
+    # X_PASS_KEY and PASS_KEY (should be the same) are used for authentication
+  - name: RETENTION
+    value: "10080"
+    # Period for which cache will be stored
+  
+  # ID of the cluster where scoop needs to be implemented
+  - name: CLUSTER_ID
+    value: ""
+  
+  # URL to which scoop sends the metrics
+  - name: ORCHESTRATOR_URL
+    value: ""
+  
+  #token of the orchestrator url 
+  - name: TOKEN
+    value: ""
+#storing the cache of specified namespaces. If you do not specify it, by default, it will store the cache of all the namespaces.
+
+
+ConfigMap:
+# Set enabled to true if you  want to pass any configMapSecret from configmap
+  name: scoop-config
+  enabled: true
+  data: []
+    
+
+volumes: 
+# - name: log-volume
+#   emptyDir: {}
+
+
+volumeMounts: []
+#     - name: log-volume
+#       mountPath: /var/log
+
+resources: {}
+ # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+   #limits:
+    #cpu: 1
+    #memory: 200Mi
+   #requests:
+    #cpu: 0.10
+    #memory: 100Mi
+
+
