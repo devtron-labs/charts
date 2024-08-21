@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "calert.fullname" . }}-config
+  labels:
+    app: {{ template "calert.name" . }}
+    chart: {{ template "calert.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  {{- range $key, $value := .Values.templates }}
+  {{ $key }}: |-
+    {{- $value | nindent 4 }}
+  {{- end }}
+  config.toml: |
+    # All timeouts and durations are in milliseconds.
+
+    [app]
+    address = {{ .Values.app.address | quote }}
+    server_timeout = {{ .Values.app.server_timeout | quote }}
+    enable_request_logs = {{ .Values.app.enable_request_logs | quote }}
+    log = {{ .Values.app.log | quote }}
+
+    {{- range $key, $value := .Values.providers }}
+    [providers.{{ $key }}]
+    type = {{ $value.type | default "google_chat" | quote }}
+    endpoint = {{ required "setting a endpoint for providers is requiered" $value.endpoint | quote }}
+    max_idle_conns = {{ $value.max_idle_conns | default "50" }}
+    timeout = {{ $value.timeout | default "30s" | quote }}
+    proxy_url = {{ $value.proxy_url | default "" | quote }}
+    template = {{ $value.template | default "static/message.tmpl" | quote }}
+    thread_ttl = {{ $value.thread_ttl | default "12h" | quote }}
+    dry_run = {{ $value.dry_run | default "false" | quote }}
+    {{- end }}
