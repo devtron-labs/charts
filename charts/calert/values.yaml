@@ -45,7 +45,7 @@ templates: {}
 replicaCount: 1
 
 image:
-  repository: ghcr.io/mr-karan/calert
+  repository: quay.io/devtron/google-chat-alert-manager
   tag: v2.0.2
   pullPolicy: Always
 
