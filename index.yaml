@@ -293,6 +293,31 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/caddy-reverse-proxy-0.10.0/caddy-reverse-proxy-0.10.0.tgz
     version: 0.10.0
+  calert:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2024-08-22T07:39:38.069641528Z"
+    description: A Helm chart for the calert which uses Alertmanager webhook receiver
+      to receive alerts payload, and pushes this data to Google Chat webhook endpoint.
+    digest: 3bb1bd27618e61b754023e6ac51ff1a63cedd985e85a59016431863a91f1eb93
+    home: https://github.com/mr-karan/calert
+    keywords:
+    - monitoring
+    - alerting
+    - prometheus
+    - alertmanager
+    - alertmanager-webhook
+    - google-chat
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops team
+    name: calert
+    sources:
+    - https://github.com/mr-karan/calert
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/calert-0.0.1/calert-0.0.1.tgz
+    version: 0.0.1
   calico:
   - apiVersion: v1
     created: "2021-09-02T12:15:58.21954746Z"
@@ -4878,4 +4903,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-07-10T14:13:01.247181932Z"
+generated: "2024-08-22T07:39:38.069940377Z"
