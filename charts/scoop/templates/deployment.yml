@@ -22,8 +22,7 @@ spec:
         app: scoop
     spec:
       serviceAccountName: scoop-sa
-      terminationGracePeriodSeconds: 30
-      
+      terminationGracePeriodSeconds: 30     
       {{- if $.Values.scoop.imagePullSecrets.existingImagePullSecret }}
       imagePullSecrets:
       - name: {{ $.Values.scoop.imagePullSecrets.existingImagePullSecret }}
@@ -37,8 +36,7 @@ spec:
       {{- if $.Values.volumes }}
       volumes: 
 {{ toYaml $.Values.volumes | indent 8 }}
-      {{- end }}
-      
+      {{- end }}      
       containers:
         - name: scoop
           image: {{ $.Values.scoop.image }}

@@ -13,12 +13,12 @@ scoop:
   image: ""
   imagePullSecrets:
       existingImagePullSecret: ""
-      enabled: true
+      enabled: false
       data: 
-        value: []
+        value: ""
+       # value: '{"auths":{"https://index.docker.io/v1/":{"username":"example_user","password":"XXXXXXXXX"}}}'
     ##  When you are creating secret for docker hub please use below syntax keep values in single quote only
-   ##   value: '{"auths":{"https://index.docker.io/v1/":{"username":"example_user","password":"XXXXXXXXX"}}}'
-
+        
 
 env:
   - name: X-PASS-KEY
@@ -47,19 +47,16 @@ env:
 ConfigMap:
 # Set enabled to true if you  want to pass any configMapSecret from configmap
   name: scoop-config
-  enabled: true
+  enabled: false
   data: []
-    
-  
    
+    
  # Set enabled to true if you want to pass the values of secret.yaml from SecretRef  
 secrets: 
   name: scoop-secret
-  enabled: true
-  data: []
+  enabled: false
+  data: []   
     
-
-
 volumes: 
 # - name: log-volume
 #   emptyDir: {}
