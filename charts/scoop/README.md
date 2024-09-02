@@ -14,7 +14,7 @@ The following table lists the configurable parameters of the template Helm chart
 | `scoopNamespace`   | Namespace where scoop will be delpoyed |    |
 | `env.CLUSTER_ID`         |  The ID of the target cluster where Scoop will be implemented  |         |
 | `env.ORCHESTRATOR_URL`             | scoop will use this url to send the events , and that will be available in k8s watcher|  |
-| `env.TOKEN`             |  It will be used to authenticate while sending the events to the orchestrator| ``                                                 |
+| `env.TOKEN`             |  It will be used to authenticate while sending the events to the orchestrator|                                                  |
 | `env.CACHED_NAMESPACE`             |  storing the cache of specified namespaces.  | ` it will store the cache of all the namespaces`   
 | `env.RETENTION`             |  Period for which cache will be stored ( in seconds)  | ``  
 | `service.type`             | Kubernetes service type exposing port                  | `ClusterIP`                                                 |
