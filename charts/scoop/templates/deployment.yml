@@ -1,0 +1,77 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scoop-deployment
+  labels:
+    {{- if $.Values.labels }}
+{{ toYaml $.Values.labels | nindent 4 }}
+    {{- end }}
+  namespace: {{ $.Values.scoopnamespace | default .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: scoop-chart
+  {{- if $.Values.scoop.replicacount }}
+  replicas: {{ $.Values.scoop.replicacount}}
+  {{- end }}
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: scoop-chart
+        {{- if $.Values.labels }}
+    {{ toYaml $.Values.labels | indent 4 }}
+        {{- end }}
+    spec:
+      serviceAccountName: scoop-sa
+      terminationGracePeriodSeconds: 30
+
+      {{- if $.Values.scoop.imagePullSecrets }}
+      imagePullSecrets:
+        - name: {{ $.Values.scoop.imagePullSecrets }}
+      {{- end }}
+      restartPolicy: Always
+      
+      {{- if $.Values.volumes }}
+      volumes: 
+{{ toYaml $.Values.volumes | indent 8 }}
+      {{- end }}
+      
+      containers:
+        - name: scoop-chart
+          image: {{ $.Values.scoop.imagename }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: app
+              containerPort: 8080
+              protocol: TCP
+          {{- if $.Values.env }}
+          env:
+{{ toYaml $.Values.env | indent 12 }}
+          {{- end }}
+
+          {{- if or $.Values.ConfigMap.enabled $.Values.secrets.enabled }}
+          envFrom:
+            {{- if $.Values.ConfigMap.enabled }}
+          - configMapRef:
+              name: {{ $.Values.ConfigMap.name }}
+            {{- end }}
+
+            {{- if $.Values.secrets.enabled }}
+          - SecretRef:
+              name: {{ $.Values.secrets.name }}
+            {{- end }}
+          {{- end }}
+
+          {{- if $.Values.resources }}
+          resources: 
+{{ toYaml $.Values.resources | indent 12 }} 
+          {{- end }}
+
+          {{- if $.Values.volumeMounts }}
+          volumeMounts: 
+{{ toYaml $.Values.volumeMounts | indent 12 }}
+          {{- end }}            
+  revisionHistoryLimit: 3
+  
