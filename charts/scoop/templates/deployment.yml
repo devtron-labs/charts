@@ -1,0 +1,76 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scoop-deployment
+  labels:
+    {{- if $.Values.labels }}
+{{ toYaml $.Values.labels | nindent 4 }}
+    {{- end }}
+  namespace: {{ $.Values.scoopNamespace | default .Release.Namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: scoop
+  {{- if $.Values.scoop.replicaCount }}
+  replicas: {{ $.Values.scoop.replicaCount}}
+  {{- end }}
+  minReadySeconds: 60
+  template:
+    metadata:
+      labels:
+        app: scoop
+    spec:
+      serviceAccountName: scoop-sa
+      terminationGracePeriodSeconds: 30     
+      {{- if $.Values.scoop.imagePullSecrets.existingImagePullSecret }}
+      imagePullSecrets:
+      - name: {{ $.Values.scoop.imagePullSecrets.existingImagePullSecret }}
+      {{- else }}
+      {{- if $.Values.scoop.imagePullSecrets.enabled }}
+      imagePullSecrets:
+      - name: scoop-imagepull-secret 
+      {{- end }}
+      {{- end }}
+      restartPolicy: Always
+      {{- if $.Values.volumes }}
+      volumes: 
+{{ toYaml $.Values.volumes | indent 8 }}
+      {{- end }}      
+      containers:
+        - name: scoop
+          image: {{ $.Values.scoop.image }}
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: app
+              containerPort: 8080
+              protocol: TCP
+          {{- if $.Values.env }}
+          env:
+{{ toYaml $.Values.env | indent 12 }}
+          {{- end }}
+
+          {{- if or $.Values.ConfigMap.enabled $.Values.secrets.enabled }}
+          envFrom:
+            {{- if $.Values.ConfigMap.enabled }}
+          - configMapRef:
+              name: {{ $.Values.ConfigMap.name }}
+            {{- end }}
+
+            {{- if $.Values.secrets.enabled }}
+          - secretRef:
+              name: {{ $.Values.secrets.name }}
+            {{- end }}
+          {{- end }}
+
+          {{- if $.Values.resources }}
+          resources: 
+{{ toYaml $.Values.resources | indent 12 }} 
+          {{- end }}
+
+          {{- if $.Values.volumeMounts }}
+          volumeMounts: 
+{{ toYaml $.Values.volumeMounts | indent 12 }}
+          {{- end }}            
+  revisionHistoryLimit: 3
+  

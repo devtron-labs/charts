@@ -1,0 +1,15 @@
+{{- if $.Values.ConfigMap.enabled }}
+{{- if $.Values.ConfigMap.data }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Values.ConfigMap.name }}
+  namespace: {{ $.Values.scoopNamespace | default .Release.Namespace }}
+data:
+{{ toYaml $.Values.ConfigMap.data | indent 2 }}
+{{- end }}
+{{- end }}
+
+
+
+
