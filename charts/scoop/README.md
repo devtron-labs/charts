@@ -9,7 +9,7 @@ The following table lists the configurable parameters of the template Helm chart
 | Parameter                  | Description                                     | Default                                                    |
 | -----------------------    | ---------------------------------------------   | ---------------------------------------------------------- |
 | `scoop.image`         | Image of the scoop                               | `devtroninc.azurecr.io/scoop:187a41b0-629-25109`                                 |
-| `scoop.imagePullSecrets.existingImagePullSecret`                | ImagePullsecret of the scoop Image                                 | ` `                                                     |
+| `scoop.imagePullSecrets.existingImagePullSecret`                | ImagePullsecret of the scoop Image                                 |                                                     |
 | `image.pullPolicy`         | Image pull policy                               | `Always` |
 | `scoopNamespace`   | Namespace where scoop will be delpoyed |    |
 | `env.CLUSTER_ID`         |  The ID of the target cluster where Scoop will be implemented  |         |
