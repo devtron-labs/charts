@@ -1,0 +1,512 @@
+global:
+  podSecurityContext:
+    fsGroup: 1000
+    runAsGroup: 1000
+    runAsUser: 1000
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    runAsUser: 1000
+    runAsNonRoot: true
+  containerRegistry: "quay.io/devtron"
+  # The below values can be specified both at global as well as component level. Refer to documentation for more info.
+  nodeSelector: {}
+  tolerations: []
+  imagePullSecrets: []
+# Add any extraManifest to be deployed.
+extraManifests: []
+installer:
+  repo: "devtron-labs/devtron"
+  release: "v0.7.0"
+  registry: ""
+  image: inception
+  tag: 473deaa4-185-21582
+  source: "github" # Available options are github and gitee
+  modules: [] # Available options are cicd
+  openshift: false # Set this to true if you are installing on openshift
+  production_overrides: "" # Set true if you want to use this Devtron stack in Production (This will require more resources)
+# Change the below values for full mode only
+
+#Use secrets in plaintext, they'll be encoded to base64 automatically.
+secrets: {}
+#  REQUIRED IF BLOB_STORAGE_PROVIDER=AZURE Token with read write access to AZURE_BLOB_CONTAINER_CI_LOG and AZURE_BLOB_CONTAINER_CI_CACHE
+#  AZURE_ACCOUNT_KEY: "xxxxxxxxxx"
+configs:
+  BLOB_STORAGE_PROVIDER: "" #AZURE|S3|MINIO|GCP
+  # Amazon AWS S3 bucket and region for storing Build-cache for faster build process. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
+  #DEFAULT_CACHE_BUCKET: "change-me"   #Do not include s3://
+  #DEFAULT_CACHE_BUCKET_REGION: "us-east-1"
+  # Amazon AWS S3 bucket and region for storing Build-logs. Mandatory if BLOB_STORAGE_PROVIDER is AWS.
+  #DEFAULT_BUILD_LOGS_BUCKET: "change-me"   #Do not include s3://
+  #DEFAULT_CD_LOGS_BUCKET_REGION: "us-east-1"
+  # Amazon AWS Secret Region if you will be using AWS Secret manager for storing secrets.
+  #EXTERNAL_SECRET_AMAZON_REGION: ""
+  # Azure Blob storage Info for storing Build Logs and Build cache for faster build process.
+  #AZURE_ACCOUNT_NAME: "test-account"
+  #AZURE_BLOB_CONTAINER_CI_LOG: "ci-log-container"
+  #AZURE_BLOB_CONTAINER_CI_CACHE: "ci-cache-container"
+# Change the below values for hyperion only mode (Refer https://docs.devtron.ai/#hyperion )
+components:
+  # Values for dashboard
+  dashboard:
+    config:
+      analytics: "false"
+      hotjar: "false"
+      sentry: "false"
+      sentryEnv: "PRODUCTION"
+      applicationMetrics: "true"
+      extraConfigs:
+        USE_V2: "true"
+        ENABLE_BUILD_CONTEXT: "true"
+        ENABLE_RESTART_WORKLOAD: "true"
+        HIDE_EXCLUDE_INCLUDE_GIT_COMMITS: "false"
+        ENABLE_SCOPED_VARIABLES: "true"
+        ENABLE_CI_JOB: "true"
+        GLOBAL_API_TIMEOUT: "60000"
+        TRIGGER_API_TIMEOUT: "60000"
+        SERVICE_WORKER_TIMEOUT: "1"
+        API_BATCH_SIZE: "30"
+        HIDE_GITOPS_OR_HELM_OPTION: "false"
+        HIDE_DISCORD: "true"
+        ENABLE_EXTERNAL_ARGO_CD: "true"
+        ENABLE_RESOURCE_SCAN: "true"
+        ENABLE_RESOURCE_SCAN_V2: "true"
+        HIDE_RELEASES: "false"
+        HIDE_RESOURCE_WATCHER: "false"
+        FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE: "true"
+        FEATURE_STEP_WISE_LOGS_ENABLE: "true"
+        FEATURE_EXTERNAL_FLUX_CD_ENABLE: "true"
+        FEATURE_IMAGE_PROMOTION_ENABLE: "true"
+    registry: "devtroninc.azurecr.io"
+    image: "dashboard:fa4680ea-0d80b271-6-25047"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    imagePullPolicy: IfNotPresent
+  # Values for devtron    
+  devtron:
+    registry: "devtroninc.azurecr.io"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    image: "hyperion:3aa7e420-280-23147"
+    cicdImage: "devtron:14103a27-4-25126"
+    imagePullPolicy: IfNotPresent
+    customOverrides:
+      USE_CUSTOM_HTTP_TRANSPORT: "false"
+      USE_ARTIFACT_LISTING_API_V2: "false"
+      BUILDX_CACHE_MODE_MIN: "false"
+      CASBIN_CLIENT_URL: casbin-service.devtroncd:9000
+      DEVTRON_INSTALLATION_TYPE: enterprise
+      CLONING_MODE: FULL
+      SCOPED_VARIABLE_ENABLED: "true"
+      SCOPED_VARIABLE_HANDLE_PRIMITIVES: "true"
+      SCOOP_CLUSTER_CONFIG: '{"1":{"serviceName":"scoop-service","passKey":"qhihdidhwid","namespace":"devtroncd","port":"80"}}'
+      DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
+      IS_INTERNAL_USE: "true"
+      ASYNC_BUILDX_CACHE_EXPORT: "true"
+      HIDE_SEVERITY_LIST: ""
+      IN_APP_LOGGING_ENABLED: "true"
+      PARALLELISM_LIMIT_FOR_TAG_PROCESSING: "2"
+      SCAN_V2_ENABLED: "false"
+      TIMEOUT_IN_SECONDS: "60"
+      SHOW_DOCKER_BUILD_ARGS: "true"
+      FORCE_SECURITY_SCANNING: "false"
+      # CI_NODE_LABEL_SELECTOR: purpose=cicd
+      # CI_NODE_TAINTS_KEY: dedicated
+      # CI_NODE_TAINTS_VALUE: ci
+    serviceMonitor:
+      enabled: false
+    service:
+      type: LoadBalancer
+      port: 80
+      # nodePort: 32080
+      labels: {}
+      annotations: {}
+      loadBalancerSourceRanges: []
+    ingress:
+      enabled: false
+      className: nginx
+      labels: {}
+      annotations: {}
+      # kubernetes.io/tls-acme: "true"
+      pathType: ImplementationSpecific
+      host: devtron.example.com
+      tls: []
+      #  - secretName: devtron-tls
+      #    hosts:
+      #      - devtron.example.com
+  # Values for ciRunner      
+  ciRunner:
+    registry: ""
+    image: "ci-runner:e533dc38-515-24898"
+  # Values for argocdDexServer    
+  argocdDexServer:
+    registry: ""
+    image: "dex:v2.30.2"
+    imagePullPolicy: IfNotPresent
+    initContainer:
+      authenticator: "authenticator:e414faff-393-13273"
+  # Values for kubelink      
+  kubelink:
+    registry: "devtroninc.azurecr.io"
+    image: "kubelink:7a9acf5a-310-25024"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    imagePullPolicy: IfNotPresent
+    configs:
+      ENABLE_HELM_RELEASE_CACHE: "true"
+      MANIFEST_FETCH_BATCH_SIZE: "2"
+      NATS_MSG_PROCESSING_BATCH_SIZE: "1"
+      NATS_SERVER_HOST: nats://devtron-nats.devtroncd:4222
+      PG_ADDR: postgresql-postgresql.devtroncd
+      PG_DATABASE: orchestrator
+      PG_LOG_QUERY: "true"
+      PG_PORT: "5432"
+      PG_USER: postgres
+      USE_CUSTOM_HTTP_TRANSPORT: "true"
+    dbconfig:
+      secretName: postgresql-postgresql
+      keyName: postgresql-password
+  # Values for kubewatch      
+  kubewatch:
+    registry: ""
+    image: "kubewatch:89905aad-370-24802"
+    imagePullPolicy: IfNotPresent
+    configs:
+      devtroncd_NAMESPACE: "devtron-ci"
+      CI_INFORMER: "true"
+      ACD_NAMESPACE: "devtroncd"
+      ACD_INFORMER: "true"
+      NATS_STREAM_MAX_AGE: "10800"
+      USE_CUSTOM_HTTP_TRANSPORT: "true"
+  # Values for postgres      
+  postgres:
+    registry: ""
+    image: "postgres:11.9.0-debian-10-r26"
+    armImage: "postgres:11.9"
+    initImage: "minideb:latest"
+    imagePullPolicy: "IfNotPresent"
+    metrics:
+      image: postgres_exporter:v0.4.7
+      armImage: postgres_exporter:v0.10.1
+    persistence:
+      volumeSize: "20Gi"
+  # Values for gitsensor      
+  gitsensor:
+    registry: "devtroninc.azurecr.io"
+    image: "git-sensor:e9175866-535-24800"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    imagePullPolicy: IfNotPresent
+    serviceMonitor:
+      enabled: false
+    persistence:
+      volumeSize: 2Gi
+    configs:
+      PG_ADDR: postgresql-postgresql.devtroncd
+      PG_USER: postgres
+      COMMIT_STATS_TIMEOUT_IN_SEC: "2"
+      ENABLE_FILE_STATS: "true"
+      USE_GIT_CLI: "true"
+    dbconfig:
+      secretName: postgresql-postgresql
+      keyName: postgresql-password
+  # Values for lens
+  lens:
+    registry: ""
+    image: "lens:d925f072-19-24803"
+    imagePullPolicy: IfNotPresent
+    secrets: {}
+    resources: {}
+    configs:
+      GIT_SENSOR_PROTOCOL: GRPC
+      GIT_SENSOR_URL: git-sensor-service.devtroncd:90
+      NATS_SERVER_HOST: nats://devtron-nats.devtroncd:4222
+      PG_ADDR: postgresql-postgresql.devtroncd
+      PG_PORT: "5432"
+      PG_USER: postgres
+      PG_DATABASE: lens
+    dbconfig:
+      secretName: postgresql-postgresql
+      keyName: postgresql-password
+  # Change below values for nats
+  nats:
+    registry: ""
+    image: nats:2.9.3-alpine
+    reloader:
+      image: nats-server-config-reloader:0.6.2
+      imagePullPolicy: IfNotPresent
+    metrics:
+      image: prometheus-nats-exporter:0.9.0
+      imagePullPolicy: IfNotPresent
+    natsBox:
+      image: nats-box
+    serviceMonitor:
+      enabled: false
+    persistence:
+      storage: 5Gi
+  # Values for migrator      
+  migrator:
+    registry: ""
+    image: "migrator:v4.16.2"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    kubectlImage: "kubectl:latest"
+    duplicateChartImage: devtron-utils:dup-chart-repo-v1.1.0
+    envVars:
+      devtron:
+        DB_NAME: "orchestrator"
+      casbin:
+        DB_NAME: "casbin"
+      gitsensor:
+        DB_NAME: "git_sensor"
+      lens:
+        DB_NAME: "lens"
+  # Values for chartSync        
+  chartSync:
+    registry: ""
+    image: chart-sync:a0296743-341-24807
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+# values for argocd integration
+argo-cd:
+  enabled: false
+  fullnameOverride: "argocd"
+  global:
+    image:
+      # -- If defined, a repository applied to all Argo CD deployments
+      repository: quay.io/argoproj/argocd
+      # -- Overrides the global Argo CD image tag whose default is the chart appVersion
+      tag: "v2.5.2"
+      # -- If defined, a imagePullPolicy applied to all Argo CD deployments
+      imagePullPolicy: IfNotPresent
+  configs:
+    secret:
+      createSecret: false
+  # argocd-application-controller
+  controller:
+    args:
+      # -- define the application controller `--status-processors`
+      statusProcessors: "50"
+      # -- define the application controller `--operation-processors`
+      operationProcessors: "25"
+      # -- define the application controller `--app-hard-resync`
+      appHardResyncPeriod: "0"
+      # -- define the application controller `--app-resync`
+      appResyncPeriod: "180"
+      # -- define the application controller `--self-heal-timeout-seconds`
+      selfHealTimeout: "5"
+      # -- define the application controller `--repo-server-timeout-seconds`
+      repoServerTimeoutSeconds: "200"
+    extraArgs:
+      - --kubectl-parallelism-limit
+      - "35"
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+    env: []
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-application-controller
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: argocd
+              topologyKey: kubernetes.io/hostname
+            weight: 5
+  # argocd-dex-server
+  dex:
+    enabled: false
+  # argocd-redis
+  redis:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-redis
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: argocd
+              topologyKey: kubernetes.io/hostname
+            weight: 5
+    image:
+      repository: public.ecr.aws/docker/library/redis
+      tag: 7.0.5-alpine
+  # argocd-server
+  server:
+    configEnabled: false
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-server
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: argocd
+              topologyKey: kubernetes.io/hostname
+            weight: 5
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+    # argocd-rbac-cm
+    rbacConfig:
+      policy.default: role:admin
+  # argocd-repo-server
+  repoServer:
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: argocd-repo-server
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/part-of: argocd
+              topologyKey: kubernetes.io/hostname
+            weight: 5
+    extraArgs:
+      - --repo-cache-expiration
+      - 24h
+      - --parallelismlimit
+      - "50"
+    env:
+      - name: ARGOCD_EXEC_TIMEOUT
+        value: 180s
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+          - all
+      readOnlyRootFilesystem: true
+      runAsNonRoot: true
+  applicationSet:
+    enabled: false
+  notifications:
+    enabled: false
+# Values for security integration
+security:
+  enabled: false
+  imageScanner:
+    registry: "devtroninc.azurecr.io"
+    image: "image-scanner:33435d9b-112-25023"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+  # Values for trivy
+  trivy:
+    enabled: false
+  # Values for clair
+  clair:
+    enabled: false
+    fullnameOverride: clair
+    image:
+      repository: clair
+      tag: 4.3.6
+# Values for notifier integration
+notifier:
+  enabled: false
+  imagePullPolicy: IfNotPresent
+  image: "notifier:82856462-74-24804"
+  configs:
+    CD_ENVIRONMENT: PROD
+    DB: orchestrator
+    DB_HOST: postgresql-postgresql.devtroncd
+    DB_PORT: "5432"
+    DB_USER: postgres
+  secrets: {}
+  dbconfig:
+    secretName: postgresql-postgresql
+    keyName: postgresql-password
+  resources: {}
+# Set enable to true if you want to use minio for storing cache and logs
+minio:
+  enabled: false
+  replicaCount: 1
+  image: "minio:RELEASE.2021-02-14T04-01-33Z"
+  imagePullPolicy: IfNotPresent
+  mbImage: "minio-mc:RELEASE.2021-02-14T04-28-06Z"
+  mbImagePullPolicy: IfNotPresent
+  gatewayImage: "minio:RELEASE.2020-12-03T05-49-24Z"
+  persistence:
+    storage: "50Gi"
+# Change below values for workflow controller
+workflowController:
+  registry: "quay.io/argoproj"
+  # Set this to true if you have IMDSv2 enforced or IMDSv1 and v2 on your AWS EKS cluster and false if you are using IMDSv1 with token hop limit set to 1
+  IMDSv2Enforced: true
+  image: "workflow-controller:v3.4.3"
+  executorImage: "argoexec:v3.4.3"
+  IMDSv1Image: "workflow-controller:v3.0.7"
+  IMDSv1ExecutorImage: "argoexec:v3.0.7"
+# Values for grafana integration
+monitoring:
+  grafana:
+    enabled: false
+    registry: ""
+    image: "grafana:7.3.1"
+    busyboxImage: "busybox:1.31.1"
+    batsImage: "bats:v1.4.1"
+    imagePullPolicy: IfNotPresent
+    resources: {}
+    grafanaOrgJob:
+      curlImage: k8s-utils:tutum-curl
+    grafanaDashboards:
+      image: "k8s-sidecar:1.1.0"
+      curlImage: "curl:7.73.0"
+      imagePullPolicy: IfNotPresent
+      resources: {}
+    persistence:
+      storage: "2Gi"
+devtronEnterprise:
+  enabled: true
+  casbin:
+    registry: "devtroninc.azurecr.io"
+    image: "casbin:8c38c29f-5bf6fbaa-462-25022"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    imagePullPolicy: IfNotPresent
+    configs:
+      PG_ADDR: postgresql-postgresql.devtroncd
+      PG_DATABASE: casbin
+      PG_PORT: "5432"
+      PG_USER: postgres
+    dbconfig:
+      secretName: postgresql-postgresql
+      keyName: postgresql-password
+    resources: {}
+  scoop:
+    enabled: false
+    registry: "devtroninc.azurecr.io"
+    image: "scoop:296d351d-629-24001"
+    imagePullSecrets:
+      - name: devtron-image-pull-enterprise
+    imagePullPolicy: IfNotPresent
+    resources: {}
+    configs:
+      CLUSTER_ID: "1"
+      ORCHESTRATOR_URL: http://devtron-service.devtroncd.svc.cluster.local/orchestrator
