@@ -23,8 +23,7 @@ spec:
       - v1
       operations:
       - CREATE
-      resources:
-      - persistentvolumeclaims
+      - UPDATE
       scope: Namespaced
   validations:
   - expression: "false"
@@ -45,3 +44,4 @@ spec:
   - {{ . }}
   {{- end }}
 {{- end }}
+

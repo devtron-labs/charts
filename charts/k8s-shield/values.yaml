@@ -1,6 +1,6 @@
 pvcCreationPolicy:
   # This policy prevents the creation of Persistent Volume Claims (PVCs) in the specified namespaces.
-  enabled: true
+  enabled: false
   namespaces:
     - devtroncd
     - argo
@@ -8,7 +8,7 @@ pvcCreationPolicy:
     - Deny
 namespaceDeletionPolicy:
   # This policy ristrict the deletion of namespaces to prevent.
-  enabled: true
+  enabled: false
   namespaces:
     - devtroncd
     - argo
@@ -16,7 +16,7 @@ namespaceDeletionPolicy:
     - Deny
 loadBalancerCreationPolicy:
   # This policy blocks the creation of LoadBalancer type services in the specified namespaces.
-  enabled: true
+  enabled: false
   namespaces:
     - devtroncd
     - argo
@@ -24,7 +24,7 @@ loadBalancerCreationPolicy:
     - Deny
 appDeletionPolicy:
   # This policy prevents the deletion of applications within the specified namespaces.
-  enabled: true
+  enabled: false
   namespaces:
     - devtroncd
     - argo
@@ -32,53 +32,94 @@ appDeletionPolicy:
     - Deny
 resourcePolicies:    # This policy ensures that deployments specify resource limits and requests, enforcing resource constraints on all pods.
   WithoutResource:
-    enabled: true
+    enabled: false
     namespaces:
       - devtroncd
       - argo
     validationActions: #By default value is DENY
       - Deny
+    operations:
+      - CREATE
+      - UPDATE
+    resources: # By default values 
+      - pods
+      - deployments
+      - statefulsets
+      - rollouts
   limitResourcePolicy:       # This sub-policy enforces the restriction on resource limits and requests. If maxCPU and maxMemory are not defined, they default to 1000m and 2Gi respectively.
     enabled: true
     namespaces:
       - devtroncd
       - argo
+    operations:
+      - CREATE
+      - UPDATE
+    resources: # By default values 
+      - pods
+      - deployments
+      - statefulsets
+      - rollouts
     maxCPULimit: "1000m"
     maxMemoryLimit: "2Gi"
     validationActions: #By default value is DENY
       - Deny
 adminClusterRoleCreation:
   # This policy prohibits the creation of new roles and cluster-role within the cluster.
-  enabled: true
+  enabled: false
   validationActions: #By default value is DENY
     - Deny
 cLusterRoleBindingCreation:
   # This policy prohibits the creation of clusterRoleBinding with the cluster-admin access
-  enabled: true
+  enabled: false
   validationActions: #By default value is DENY
     - Deny
 readinessAndLivenessPolicy:
 # Policy for ensuring readiness and liveness probes are defined for containers
-  enabled: true
+  enabled: false
   namespaces:
     - devtroncd
     - argo
+  operations:
+    - CREATE
+    - UPDATE
+  resources:
+    - deployments
+    - statefulsets
+    - rollouts
   validationActions: #By default value is DENY
     - Deny
 podSecurityPolicy:
-  enabled: true  # Enable/disable the Pod Security Policy
-  allowrunAsNonRoot: true  # Allow run as non-root user for better security
-  allowreadOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
+  enabled: false  # Enable/disable the Pod Security Policy
+  allowrunAsNonRoot: false  # Allow run as non-root user for better security
+  allowreadOnlyRootFilesystem: false  # allow  root filesystem read-only to prevent runtime modifications
   allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent
   allowprivileged: false  # Disable privileged mode to limit container capabilities on the host
   validationActions: #By default value is DENY
     - Deny
+  operations:
+    - CREATE
+    - UPDATE
+  resources: # By default values 
+    - pods
+    - deployments
+    - statefulsets
+    - rollouts
+    - cronjobs
 containerSecurityPolicy:
-  enabled: true  # Enable/disable the container Security Policy
-  allowrunAsNonRoot: true  # Allow run as non-root user for better security
-  allowreadOnlyRootFilesystem: true  # allow  root filesystem read-only to prevent runtime modifications
+  enabled: false  # Enable/disable the container Security Policy
+  allowrunAsNonRoot: false  # Allow run as non-root user for better security
+  allowreadOnlyRootFilesystem: false  # allow  root filesystem read-only to prevent runtime modifications
   allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent
   allowprivileged: false  # Disable privileged mode to limit container capabilities on the host
   validationActions: #By default value is DENY
     - Deny
+  operations:
+    - CREATE
+    - UPDATE
+  resources: # By default values 
+    - pods
+    - deployments
+    - statefulsets
+    - rollouts
+    - cronjobs
 

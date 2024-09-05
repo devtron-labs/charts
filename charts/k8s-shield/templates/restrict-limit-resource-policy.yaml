@@ -20,38 +20,40 @@ spec:
     objectSelector: {}
     resourceRules:
       - apiGroups:
-          - ""
-          - apps
+        - ""  
+        - apps
+        - argoproj.io
         apiVersions:
-          - v1
+        - v1
         operations:
-          - CREATE
-          - UPDATE
+        {{- range .Values.resourcePolicies.limitResourcePolicy.operations }}
+        - {{ . | quote }}
+        {{- end }}
         resources:
-          - pods
-          - deployments
-          - statefulsets
+        {{- range .Values.resourcePolicies.limitResourcePolicy.resources }}
+        - {{ . | quote }}
+        {{- end }}
         scope: Namespaced
   validations:
-  - expression: |-
-      has(object.spec.template) ?
-      (
-        !has(object.spec.template.spec.containers[0].resources.limits) || (
-          (!has(object.spec.template.spec.containers[0].resources.limits.cpu) ||
-           quantity(object.spec.template.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
-          (!has(object.spec.template.spec.containers[0].resources.limits.memory) ||
-           quantity(object.spec.template.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
+    - expression: |-
+        has(object.spec.template) ?
+        (
+          !has(object.spec.template.spec.containers[0].resources.limits) || (
+            (!has(object.spec.template.spec.containers[0].resources.limits.cpu) ||
+             quantity(object.spec.template.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
+            (!has(object.spec.template.spec.containers[0].resources.limits.memory) ||
+             quantity(object.spec.template.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
+          )
+        ) :
+        (
+          !has(object.spec.containers[0].resources.limits) || (
+            (!has(object.spec.containers[0].resources.limits.cpu) ||
+             quantity(object.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
+            (!has(object.spec.containers[0].resources.limits.memory) ||
+             quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
+          )
         )
-      ) :
-      (
-        !has(object.spec.containers[0].resources.limits) || (
-          (!has(object.spec.containers[0].resources.limits.cpu) ||
-           quantity(object.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
-          (!has(object.spec.containers[0].resources.limits.memory) ||
-           quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
-        )
-      )
-    message: "Resource limits exceed the maximum allowed. CPU must be <= {{ $maxCPU }} and memory must be <= {{ $maxMemory }}."
+      message: "Resource limits exceed the maximum allowed. CPU must be <= {{ $maxCPU }} and memory must be <= {{ $maxMemory }}."
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -64,4 +66,3 @@ spec:
   - {{ . }}
   {{- end }}
 {{- end }}
-

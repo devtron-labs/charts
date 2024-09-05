@@ -11,19 +11,17 @@ spec:
         - ""
         - apps
         - batch
+        - rollout.k8s.io
       apiVersions:
         - v1
       operations:
-        - CREATE
-        - UPDATE
+      {{- range $.Values.resourcePolicies.WithoutResource.operations }}
+      - {{ . | quote }}
+      {{- end }}
       resources:
-        - pods
-        - deployments
-        - replicasets
-        - daemonsets
-        - statefulsets
-        - jobs
-        - cronjobs
+      {{- range $.Values.resourcePolicies.WithoutResource.resources }}
+      - {{ . | quote }}
+      {{- end }}
       scope: '*'
   validations:
     - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.podSecurityPolicy.allowrunAsNonRoot }})"

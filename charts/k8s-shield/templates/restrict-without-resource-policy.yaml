@@ -12,23 +12,27 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.resourcePolicies.WithoutResource.namespaces }}
+          {{- range $.Values.resourcePolicies.WithoutResource.namespaces }}
           - {{ . | quote }}
           {{- end }}
     resourceRules:
     - apiGroups:
-      - ""
+      - apps
+      - rollout.k8s.io  # Add apiGroup for rollouts if using Argo Rollouts
       apiVersions:
       - v1
       operations:
-      - CREATE
-      - UPDATE
+      {{- range $.Values.resourcePolicies.WithoutResource.operations }}
+      - {{ . | quote }}
+      {{- end }}
       resources:
-      - pods
+      {{- range $.Values.resourcePolicies.WithoutResource.resources }}
+      - {{ . | quote }}
+      {{- end }}
       scope: Namespaced
   validations:
-    - expression: "object.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
-      message: "All containers in the pod must have both CPU and memory requests and limits specified."
+    - expression: "object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
+      message: "All containers must have both CPU and memory requests and limits specified."
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -41,7 +45,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "policychart.fullname" . }}-deny-without-resources
   validationActions:
-  {{- range .Values.resourcePolicies.WithoutResource.validationActions }}
+  {{- range $.Values.resourcePolicies.WithoutResource.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}
