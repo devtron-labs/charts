@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scoop-service
+  labels:
+    app: scoop
+  {{- if $.Values.labels }}
+{{ toYaml .Values.labels | indent 2 }}
+  {{- end }}
+  namespace: {{ $.Values.scoopNamespace | default .Release.Namespace }}   
+spec:
+  {{- if $.Values.service.type }}
+  type: {{ $.Values.service.type }}
+  {{- end }}
+  ports:
+      {{- if $.Values.service.port }}
+    - port: {{ $.Values.service.port }}
+      {{- end }}
+      targetPort: 8080
+      protocol: TCP
+      name: app
+  selector:
+    app: scoop

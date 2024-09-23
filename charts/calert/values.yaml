@@ -1,0 +1,100 @@
+# Default values for calert.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# All timeouts and durations are in milliseconds.
+app:
+  address: "0.0.0.0:6000" # Address of the HTTP Server.
+  server_timeout: "60s" # Server timeout for HTTP requests.
+  enable_request_logs: true # Whether to log incoming HTTP requests or not.
+  log: "info" # Use `debug` to enable verbose logging. Can be set to `info` otherwise.
+
+# https://github.com/mr-karan/calert/blob/main/config.sample.toml
+providers: {}
+  # prod_alerts:
+  #   type: "google_chat" # Type of provider. Currently supported value is `google_chat`.
+  #   endpoint: "https://chat.googleapis.com/v1/spaces/xxx/messages?key=key&token=token%3D" # Google Chat Webhook URL
+  #   max_idle_conns:  50 # Max idle connections in the HTTP Client.
+  #   timeout: "30s" # Timeout for making requests to Provider.
+  #   proxy_url: "http://internal-squid-proxy.com:3128" # Specify `proxy_url` as your proxy endpoint to route all HTTP requests to the provider via a proxy.
+  #   template: "static/message.tmpl" # Path to specify the message template path.
+  #   thread_ttl: "12h" # Timeout to keep active alerts in memory. Once this TTL expires, a new thread will be created.
+  #   dry_run: false
+
+  # qa_alerts:
+  #   endpoint: "https://chat.googleapis.com/v1/spaces/xxx/messages?key=key&token=token%3D"
+
+  # dev_alerts:
+  #   endpoint: "https://chat.googleapis.com/v1/spaces/xxx/messages?key=key&token=token%3D"
+  #   template: "static/dev_alerts.tmpl"
+  #   dry_run: true
+
+templates: {}
+  # message.tmpl: |
+  #   *({{.Labels.severity | toUpper }}) {{ .Labels.alertname | Title }} - {{.Status | Title }}*
+  #   {{ range .Annotations.SortedPairs -}}
+  #   {{ .Name | Title }}: {{ .Value}}
+  #   {{ end -}}
+
+  # dev_alerts.tmpl: |
+  #   *({{.Labels.severity | toUpper }}) {{ .Labels.alertname | Title }} - {{.Status | Title }}*
+  #   {{ range .Annotations.SortedPairs -}}
+  #   {{ .Name | Title }}: {{ .Value}}
+  #   {{ end -}}
+
+replicaCount: 1
+
+image:
+  repository: quay.io/devtron/google-chat-alert-manager
+  tag: v2.0.2
+  pullPolicy: Always
+
+args:
+- "--config=/app/static/config.toml"
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 6000
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: 20m
+    memory: 48Mi
+  requests:
+    cpu: 5m
+    memory: 24Mi
+
+priorityClassName: ""
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+topologySpreadConstraints: []
+
+podAnnotations: {}
+
+securityContext:
+  enabled: false
+
+  privileged: false
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  runAsUser: 1001
+  runAsGroup: 1001
+  readOnlyRootFilesystem: true
+  seccompProfile:
+    type: RuntimeDefault
+  windowsOptions:
+    hostProcess: false
+  capabilities:
+    drop: ["ALL"]
+    add: ["NET_BIND_SERVICE"]
