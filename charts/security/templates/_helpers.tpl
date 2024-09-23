@@ -33,10 +33,10 @@ Return full image
 {{/*
 Expand the node selectors, tolerations, and image pull secrets for a Kubernetes resource.
 Usage:
-{{ include "common.nodeSelector" (dict "nodeSelector" .Values.path.to.nodeSelector "tolerations" .Values.path.to.tolerations "imagePullSecrets" .Values.path.to.imagePullSecrets "global" .Values.global ) }}
+{{ include "common.schedulerConfig" (dict "nodeSelector" .Values.path.to.nodeSelector "tolerations" .Values.path.to.tolerations "imagePullSecrets" .Values.path.to.imagePullSecrets "global" .Values.global ) }}
 */}}
 
-{{- define "common.nodeSelector" -}}
+{{- define "common.schedulerConfig" -}}
   {{- if .nodeSelector }}
 nodeSelector:
 {{ toYaml .nodeSelector | indent 2 }}
