@@ -1,0 +1,47 @@
+{{- if $.Values.readinessAndLivenessPolicy.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-without-readiness-liveness
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          {{- range $.Values.readinessAndLivenessPolicy.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+    resourceRules:
+      - apiGroups: 
+        {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+        - {{ . | quote }}
+        {{- end }}
+        apiVersions: ["v1"]
+        operations:
+        {{- range $.Values.readinessAndLivenessPolicy.operations }}
+        - {{ . | quote }}
+        {{- end }}
+        resources:
+        {{- range $.Values.readinessAndLivenessPolicy.resources }}
+        - {{ . | quote }}
+        {{- end }}
+        scope: Namespaced
+  validations:
+    - expression: "object.spec.template.spec.containers.all(c, has(c.readinessProbe) && has(c.livenessProbe))"
+      message: "All containers in the deployment must have both a readiness probe and a liveness probe defined."
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "policychart.fullname" . }}-deny-without-readiness-liveness
+spec:
+  policyName: {{ include "policychart.fullname" . }}-deny-without-readiness-liveness
+  validationActions:
+  {{- range $.Values.readinessAndLivenessPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
