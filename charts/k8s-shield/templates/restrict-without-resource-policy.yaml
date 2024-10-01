@@ -17,8 +17,9 @@ spec:
           {{- end }}
     resourceRules:
     - apiGroups:
-      - apps
-      - rollout.k8s.io  # Add apiGroup for rollouts if using Argo Rollouts
+      {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+      - {{ . | quote }}
+      {{- end }}
       apiVersions:
       - v1
       operations:

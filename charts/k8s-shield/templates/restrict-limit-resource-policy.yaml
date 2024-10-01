@@ -20,9 +20,9 @@ spec:
     objectSelector: {}
     resourceRules:
       - apiGroups:
-        - ""  
-        - apps
-        - argoproj.io
+        {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+        - {{ . | quote }}
+        {{- end }}
         apiVersions:
         - v1
         operations:

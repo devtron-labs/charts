@@ -16,7 +16,10 @@ spec:
           - {{ . | quote }}
           {{- end }}
     resourceRules:
-      - apiGroups: ["apps,argoproj.io"]
+      - apiGroups: 
+        {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+        - {{ . | quote }}
+        {{- end }}
         apiVersions: ["v1"]
         operations:
         {{- range $.Values.readinessAndLivenessPolicy.operations }}

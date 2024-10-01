@@ -46,8 +46,15 @@ resourcePolicies:    # This policy ensures that deployments specify resource lim
       - deployments
       - statefulsets
       - rollouts
+    apiGroups: 
+      - apps
+      - rollout.k8s.io
   limitResourcePolicy:       # This sub-policy enforces the restriction on resource limits and requests. If maxCPU and maxMemory are not defined, they default to 1000m and 2Gi respectively.
     enabled: true
+    apiGroups:
+      - ""  
+      - apps
+      - argoproj.io
     namespaces:
       - devtroncd
       - argo
@@ -86,8 +93,12 @@ readinessAndLivenessPolicy:
     - deployments
     - statefulsets
     - rollouts
+  apiGroups: 
+    - apps
+    - argoproj.io
   validationActions: #By default value is DENY
     - Deny
+
 podSecurityPolicy:
   enabled: false  # Enable/disable the Pod Security Policy
   allowrunAsNonRoot: false  # Allow run as non-root user for better security
@@ -105,6 +116,11 @@ podSecurityPolicy:
     - statefulsets
     - rollouts
     - cronjobs
+  apiGroups: 
+    - ""
+    - apps
+    - batch
+    - rollout.k8s.io
 containerSecurityPolicy:
   enabled: false  # Enable/disable the container Security Policy
   allowrunAsNonRoot: false  # Allow run as non-root user for better security
@@ -122,4 +138,10 @@ containerSecurityPolicy:
     - statefulsets
     - rollouts
     - cronjobs
+  apiGroups:
+    - ""
+    - apps
+    - batch
+    - rollout.k8s.io
+
 

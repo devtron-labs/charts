@@ -8,10 +8,9 @@ spec:
   matchConstraints:
     resourceRules:
     - apiGroups:
-        - ""
-        - apps
-        - batch
-        - rollout.k8s.io
+      {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+      - {{ . | quote }}
+      {{- end }}
       apiVersions:
         - v1
       operations:
