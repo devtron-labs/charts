@@ -172,4 +172,4 @@ spec:
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
-{{- end }}
+{{- end }} 
