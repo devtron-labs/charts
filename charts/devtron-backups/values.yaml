@@ -61,6 +61,13 @@ postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
   enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
   # postgresImage: postgres:14
   # host: "postgresql-custom.devtroncd"
 
@@ -68,6 +75,13 @@ postgres_backup:
 argocd_backup:
   serviceAccountName: "argocd-backup"
   enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
   # argocdImage: quay.io/argoproj/argocd:v2.4.0
   # args: "argocd admin export -n devtroncd > /cache/backup.yaml"
 

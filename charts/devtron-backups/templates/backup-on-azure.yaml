@@ -74,6 +74,13 @@ spec:
                   name: devtron-azure-backup-secret
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
+            resources:
+             requests:
+              cpu: {{ .Values.argocd_backup.resources.requests.cpu }}
+              memory: {{ .Values.argocd_backup.resources.requests.memory }}
+             limits:
+              cpu: {{ .Values.argocd_backup.resources.limits.cpu }}
+              memory: {{ .Values.argocd_backup.resources.limits.memory }}
             args:
             - /bin/bash
             - -c
@@ -144,6 +151,13 @@ spec:
                   name: devtron-azure-backup-secret
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
+            resources:
+             requests:
+              cpu: {{ .Values.argocd_backup.resources.requests.cpu }}
+              memory: {{ .Values.argocd_backup.resources.requests.memory }}
+             limits:
+              cpu: {{ .Values.argocd_backup.resources.limits.cpu }}
+              memory: {{ .Values.argocd_backup.resources.limits.memory }}
             args:
             - /bin/bash
             - -c
