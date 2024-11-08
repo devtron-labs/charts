@@ -3,7 +3,7 @@ global:
   schedule: "0 */12 * * *"
   # devtron-backups
   S3:
-    enabled: false
+    enabled: true
     S3_BUCKET_NAME: ""
     S3_ACCESS_KEY: ""
     S3_SECRET_KEY: ""
@@ -19,7 +19,7 @@ global:
     # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
-    enabled: false
+    enabled: true
     AZURE_BLOB_ACCOUNT_NAME: ""
     AZURE_ACCOUNT_KEY: ""
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
@@ -52,22 +52,32 @@ global:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled
 
-
-
 argocdversion: v2
-    
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
-  enabled: false
+  enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
   # postgresImage: postgres:14
   # host: "postgresql-custom.devtroncd"
 
-
 argocd_backup:
   serviceAccountName: "argocd-backup"
-  enabled: false
+  enabled: true
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
   # argocdImage: quay.io/argoproj/argocd:v2.4.0
   # args: "argocd admin export -n devtroncd > /cache/backup.yaml"
 
