@@ -2,4 +2,4 @@ apiVersion: v2
 appVersion: "2.0"
 description: A Helm chart for Devtron Backups
 name: devtron-backups
-version: 0.2.2
+version: 0.2.3

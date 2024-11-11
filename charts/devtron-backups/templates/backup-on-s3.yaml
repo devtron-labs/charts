@@ -35,7 +35,7 @@ spec:
           - name: postgres-app-backup-cronjob
             image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
             volumeMounts:
-            - mountPath: /tmp
+            - mountPath: /postgres
               name: psql-volume
             env:
             - name: PGPASSWORD
@@ -47,12 +47,14 @@ spec:
             args:
             - /bin/bash
             - -c
-            - pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+            - set -ex; pg_dumpall -h {{ .Values.global.DB_HOST | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
+            resources:
+{{ toYaml .Values.postgres_backup.resources | indent 13 }}
           containers:
           - name: aws-cli-for-s3-download
-            image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli" }}
+            image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-multi-arch-1" }}
             volumeMounts:
-            - mountPath: /tmp
+            - mountPath: /postgres
               name: psql-volume
             env:
             {{- if not .Values.global.S3.NODE_ROLE }}
@@ -78,20 +80,22 @@ spec:
                   name: devtron-s3-backup-secret
                   key: AWS_REGION
             imagePullPolicy: Always
+            resources:
+{{ toYaml .Values.postgres_backup.resources | indent 13 }}
             args:
             - /bin/bash
             - -c
           {{- if .Values.global.S3.S3_ENDPOINT }}
           {{- if $.Values.global.S3.encryption.enabled }}          
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; aws s3 cp /tmp/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; aws s3 cp /tmp/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- end }}
           {{- else}}
           {{- if $.Values.global.S3.encryption.enabled }}          
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; aws s3 cp /tmp/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/;
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/;
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; aws s3 cp /tmp/backup-$date1.tar s3://$S3_BUCKET/postgres/;
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/;
           {{- end }}
           {{- end }}
           volumes:
@@ -120,18 +124,20 @@ spec:
           - name: argocd-app-backup-job
             image: {{ .Values.argocd_backup.argocdImage | default "quay.io/argoproj/argocd:v2.4.0" }}
             volumeMounts:
-            - mountPath: /cache
+            - mountPath: /argocd
               name: argocd-volume
             imagePullPolicy: Always
             args:
             - /bin/bash
             - -c
-            - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /cache/backup.yaml" }}
+            - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
+            resources:
+{{ toYaml .Values.argocd_backup.resources | indent 13 }}
           containers:
           - name: aws-cli-for-s3-upload
-            image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli" }}
+            image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-multi-arch-1" }}
             volumeMounts:
-            - mountPath: /cache
+            - mountPath: /argocd
               name: argocd-volume
             {{- if not .Values.global.S3.NODE_ROLE }}
             env:
@@ -157,20 +163,22 @@ spec:
                   name: devtron-s3-backup-secret
                   key: AWS_REGION
             imagePullPolicy: Always
+            resources:
+{{ toYaml .Values.argocd_backup.resources | indent 13 }}
             args:
             - /bin/bash
             - -c
           {{- if .Values.global.S3.S3_ENDPOINT }}
           {{- if $.Values.global.S3.encryption.enabled }}
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; aws s3 cp /cache/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; aws s3 cp /cache/backup-$date1.yaml s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
           {{- end }}
           {{- else}}
           {{- if $.Values.global.S3.encryption.enabled }}
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /cache/backup.yaml; rm -rvf /cache/backup.yaml; mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; aws s3 cp /cache/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/;
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/;
           {{- else}}
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; aws s3 cp /cache/backup-$date1.yaml s3://$S3_BUCKET/argocd/;
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/;
           {{- end }}
           {{- end}}
 
