@@ -1,7 +1,6 @@
 global:
   # Twice a day
   schedule: "0 */12 * * *"
-  DB_HOST: ""
   # devtron-backups
   S3:
     enabled: false
