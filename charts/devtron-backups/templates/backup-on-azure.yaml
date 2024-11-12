@@ -33,7 +33,7 @@ spec:
           - name: postgres-app-backup-cronjob
             image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
             volumeMounts:
-            - mountPath: /tmp
+            - mountPath: /postgres
               name: psql-volume
             env:
             - name: PGPASSWORD
@@ -45,12 +45,14 @@ spec:
             args:
             - /bin/bash
             - -c
-            - pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar;
+            - set -ex ; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar 
+            resources:
+{{ toYaml .Values.postgres_backup.resources | indent 13 }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image | default "quay.io/devtron/k8s-utils:az-cli-ubuntu" }}
             volumeMounts:
-            - mountPath: /tmp
+            - mountPath: /postgres
               name: psql-volume
             env:
             - name: AZURE_BLOB_ACCOUNT_NAME
@@ -74,13 +76,15 @@ spec:
                   name: devtron-azure-backup-secret
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
+            resources:
+{{ toYaml .Values.postgres_backup.resources | indent 13 }}
             args:
             - /bin/bash
             - -c
-             {{- if $.Values.global.AZURE.encryption.enabled }}
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /tmp/backup.tar; rm -rvf /tmp/backup.tar; mv /tmp/backup.tar.gpg /tmp/backup-$date1.tar.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /tmp/backup-$date1.tar.gpg --account-key $AZURE_ACCOUNT_KEY; 
+            {{- if $.Values.global.AZURE.encryption.enabled }}
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /postgres/backup-$date1.tar.gpg --account-key $AZURE_ACCOUNT_KEY; 
             {{- else }} 
-            - date1=$(date +%Y%m%d-%H%M); mv /tmp/backup.tar /tmp/backup-$date1.tar; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /tmp/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; 
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /postgres/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; 
             {{- end }}
           volumes:
           - name: psql-volume
@@ -96,8 +100,8 @@ apiVersion: batch/v1beta1
 {{ end -}}
 kind: CronJob
 metadata:
-    name: argocd-app-backup-cronjob
-    namespace: devtroncd
+  name: argocd-app-backup-cronjob
+  namespace: devtroncd
 spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
@@ -108,19 +112,21 @@ spec:
           - name: argocd-app-backup-job
             image: {{ .Values.argocd_backup.argocdImage | default "quay.io/argoproj/argocd:v2.4.0" }}
             volumeMounts:
-            - mountPath: /cache
+            - mountPath: /argocd
               name: argocd-volume
             env:
             imagePullPolicy: Always
             args:
             - /bin/bash
             - -c
-            - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /cache/backup.yaml" }}
+            - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
+            resources:
+{{ toYaml .Values.argocd_backup.resources | indent 13 }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image  | default "quay.io/devtron/k8s-utils:az-cli-ubuntu"  }}
             volumeMounts:
-            - mountPath: /cache
+            - mountPath: /argocd
               name: argocd-volume
             env:
             - name: AZURE_BLOB_ACCOUNT_NAME
@@ -144,13 +150,15 @@ spec:
                   name: devtron-azure-backup-secret
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
+            resources:
+{{ toYaml .Values.argocd_backup.resources | indent 13 }}
             args:
             - /bin/bash
             - -c
             {{- if $.Values.global.AZURE.encryption.enabled }}
-            - date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /cache/backup.yaml ;rm -rvf /cache/backup.yaml ;mv /cache/backup.yaml.gpg /cache/backup-$date1.yaml.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /cache/backup-$date1.yaml.gpg --account-key $AZURE_ACCOUNT_KEY;  
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /argocd/backup.yaml ;rm -rvf /argocd/backup.yaml ;mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /argocd/backup-$date1.yaml.gpg --account-key $AZURE_ACCOUNT_KEY;  
             {{- else }} 
-            - date1=$(date +%Y%m%d-%H%M); mv /cache/backup.yaml /cache/backup-$date1.yaml; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /cache/backup-$date1.yaml --account-key $AZURE_ACCOUNT_KEY;  
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_ARGOCD --file /argocd/backup-$date1.yaml --account-key $AZURE_ACCOUNT_KEY;  
             {{- end }}
           volumes:
           - name: argocd-volume

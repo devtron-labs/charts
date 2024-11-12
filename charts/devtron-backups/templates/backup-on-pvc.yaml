@@ -1,4 +1,3 @@
-
 {{- if .Values.global.PERSISTENCE.enabled }}
 {{- if .Values.postgres_backup.enabled }}
 {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
@@ -33,10 +32,12 @@ spec:
               - /bin/bash
               - -c  
               {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
-              - mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENCE.encryption.passphrase }} /postgres/backup-$date1.tar ; rm -rvf /postgres/backup-$date1.tar; 
+              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENCE.encryption.passphrase }} /postgres/backup-$date1.tar ; rm -rvf /postgres/backup-$date1.tar; 
               {{- else }}
-              - mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
+              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
               {{- end }}
+              resources:
+{{ toYaml .Values.postgres_backup.resources | indent 13 }}
             volumes:
             - name: psql-volume
               persistentVolumeClaim:
@@ -93,10 +94,12 @@ spec:
               - /bin/bash
               - -c
               {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
-              - mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M);  {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ; gpg -c --batch --passphrase  {{ .Values.global.PERSISTENCE.encryption.passphrase }} /argo-cd/backup-$date1.tar; rm -rvf /argo-cd/backup-$date1.tar;
+              - set -ex; mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M);  {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ; gpg -c --batch --passphrase  {{ .Values.global.PERSISTENCE.encryption.passphrase }} /argo-cd/backup-$date1.tar; rm -rvf /argo-cd/backup-$date1.tar;
               {{- else }}
-              - mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M); {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ;
+              - set -ex; mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M); {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ;
               {{- end }}
+              resources:
+{{ toYaml .Values.argocd_backup.resources | indent 13 }}
             volumes:
             - name: argocd-volume
               persistentVolumeClaim:
