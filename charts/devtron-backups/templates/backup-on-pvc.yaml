@@ -34,7 +34,7 @@ spec:
               {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
               - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENCE.encryption.passphrase }} /postgres/backup-$date1.tar ; rm -rvf /postgres/backup-$date1.tar; 
               {{- else }}
-              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.global.DB_HOST | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
+              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
               {{- end }}
               resources:
 {{ toYaml .Values.postgres_backup.resources | indent 13 }}
