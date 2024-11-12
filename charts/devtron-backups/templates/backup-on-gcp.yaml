@@ -45,7 +45,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            - set -ex; pg_dumpall -h {{ .Values.global.DB_HOST | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /tmp/backup.tar; echo $? ; du -sh /postgres/backup.tar
+            - set -ex; pg_dumpall -h {{ .Values.global.DB_HOST | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
             resources:
 {{ toYaml .Values.postgres_backup.resources | indent 13 }}
           containers:
@@ -74,9 +74,9 @@ spec:
             - /bin/bash
             - -c
           {{- if $.Values.global.GCP.encryption.enabled }}          
-            - set -ex; echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; gsutil cp /postgres/backup-$date1.tar.gpg gs://$GCS_BUCKET/postgres/;
+            - set -ex; echo $gcp_credentials > /postgres/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/postgres/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; gsutil cp /postgres/backup-$date1.tar.gpg gs://$GCS_BUCKET/postgres/;
           {{- else}}
-            - set -ex; echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; gsutil cp /postgres/backup-$date1.tar gs://$GCS_BUCKET/postgres/;
+            - set -ex; echo $gcp_credentials > /postgres/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/postgres/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; gsutil cp /postgres/backup-$date1.tar gs://$GCS_BUCKET/postgres/;
           {{- end }}
           volumes:
           - name: psql-volume
@@ -141,9 +141,9 @@ spec:
             - /bin/bash
             - -c
           {{- if $.Values.global.GCP.encryption.enabled }}
-            - set -ex; echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; gsutil cp /argocd/backup-$date1.yaml.gpg gs://$GCS_BUCKET/argocd/;
+            - set -ex; echo $gcp_credentials > /argocd/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/argocd/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; gsutil cp /argocd/backup-$date1.yaml.gpg gs://$GCS_BUCKET/argocd/;
           {{- else}}
-            - set -ex; echo $gcp_credentials > /tmp/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/tmp/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; gsutil cp /argocd/backup-$date1.yaml gs://$GCS_BUCKET/argocd/;
+            - set -ex; echo $gcp_credentials > /argocd/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/argocd/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; gsutil cp /argocd/backup-$date1.yaml gs://$GCS_BUCKET/argocd/;
           {{- end }}
           volumes:
           - name: argocd-volume
