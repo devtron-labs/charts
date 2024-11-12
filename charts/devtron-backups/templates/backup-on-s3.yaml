@@ -47,7 +47,7 @@ spec:
             args:
             - /bin/bash
             - -c
-            - set -ex; pg_dumpall -h {{ .Values.global.DB_HOST | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
+            - set -ex; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
             resources:
 {{ toYaml .Values.postgres_backup.resources | indent 13 }}
           containers:
