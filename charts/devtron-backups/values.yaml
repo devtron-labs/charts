@@ -80,7 +80,7 @@ argocd_backup:
       cpu: 100m
       memory: 100Mi
   # argocdImage: quay.io/argoproj/argocd:v2.4.0
-  # args: "argocd admin export -n devtroncd > /cache/backup.yaml"
+  # args: "argocd admin export -n devtroncd > /argocd/backup.yaml"
 
   # argocdImage: argoproj/argocd:v1.8.1  #(image for argo-V1)
-  # args: argocd-util export --namespace devtroncd > /cache/backup.yaml; #(argo-V1)
+  # args: argocd-util export --namespace devtroncd > /argocd/backup.yaml; #(argo-V1)
