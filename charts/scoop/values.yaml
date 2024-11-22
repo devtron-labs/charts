@@ -10,7 +10,6 @@ service:
 # If both existingImagePullSecret and imagePullSecrets are present, existingImagePullSecret will be given preference.
 scoop:
   replicaCount: 1
-  image: "devtroninc.azurecr.io/scoop:187a41b0-629-25109"
   imagePullSecrets:
       existingImagePullSecret: ""
       enabled: false
