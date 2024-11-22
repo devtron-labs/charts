@@ -4054,6 +4054,19 @@ entries:
     - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.4.1/devtron-operator-0.4.1.tgz
     version: 0.4.1
   devtron-scoop:
+  - apiVersion: v2
+    appVersion: 0.23.0
+    created: "2024-11-22T11:40:02.105521848Z"
+    description: Chart to deploy scoop
+    digest: 1923305f1bcba44ee1ce32436d308a318261247d796c4914a06ba0c8bdbef448
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devops-Team DEVTRON
+    name: devtron-scoop
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-scoop-1.1.0/devtron-scoop-1.1.0.tgz
+    version: 1.1.0
   - apiVersion: v1
     appVersion: 1.16.0
     created: "2024-09-02T13:51:43.49993598Z"
@@ -5212,4 +5225,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-11-13T15:14:00.383658564Z"
+generated: "2024-11-22T11:40:02.105996377Z"
