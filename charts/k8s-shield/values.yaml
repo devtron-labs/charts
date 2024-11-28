@@ -1,6 +1,9 @@
+bypassLabel:
+  key : businessUnit
+  value: finance
 pvcCreationPolicy:
   # This policy prevents the creation of Persistent Volume Claims (PVCs) in the specified namespaces.
-  enabled: false
+  enabled: true
   namespaces:
     - devtroncd
     - argo
@@ -50,7 +53,7 @@ resourcePolicies:    # This policy ensures that deployments specify resource lim
       - apps
       - rollout.k8s.io
   limitResourcePolicy:       # This sub-policy enforces the restriction on resource limits and requests. If maxCPU and maxMemory are not defined, they default to 1000m and 2Gi respectively.
-    enabled: true
+    enabled: false
     apiGroups:
       - ""  
       - apps

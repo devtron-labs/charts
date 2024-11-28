@@ -31,8 +31,14 @@ spec:
         {{- end }}
         scope: Namespaced
   validations:
-    - expression: "object.spec.template.spec.containers.all(c, has(c.readinessProbe) && has(c.livenessProbe))"
-      message: "All containers in the deployment must have both a readiness probe and a liveness probe defined."
+    - expression: >
+        (has(object.metadata.labels) &&
+         object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') ||
+        object.spec.template.spec.containers.all(container,
+          has(container.readinessProbe) &&
+          has(container.livenessProbe)
+        )
+      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'. " 
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding

@@ -21,10 +21,8 @@ spec:
       - clusterrolebindings
       scope: '*'
   validations:
-    - expression: "!(object.roleRef.apiGroup == 'rbac.authorization.k8s.io' && 
-                     object.roleRef.kind == 'ClusterRole' && 
-                     object.roleRef.name == 'cluster-admin')"
-      message: "Binding to the cluster-admin ClusterRole is not allowed due to security policy."
+    - expression: "(has(object.metadata.labels) && object.metadata.labels.exists(l, l == '{{ .Values.bypassLabel.key }}') && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') || !(object.roleRef.apiGroup == 'rbac.authorization.k8s.io' && object.roleRef.kind == 'ClusterRole' && object.roleRef.name == 'cluster-admin')"
+      message: "Binding to the cluster-admin ClusterRole is bypassed by security policy, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} allow"
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding

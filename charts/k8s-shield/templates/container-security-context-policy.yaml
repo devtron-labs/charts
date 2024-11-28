@@ -23,6 +23,8 @@ spec:
       {{- end }}
       scope: '*'
   validations:
+    - expression: "object.kind != 'Pod' || has(object.metadata.labels) && object.metadata.labels['business-unit'] == 'finance'"
+      message: "Pods must have a 'business-unit: finance' label"
     - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.containerSecurityPolicy.allowrunAsNonRoot }})"
       message: "All containers must set runAsNonRoot to {{ .Values.containerSecurityPolicy.allowrunAsNonRoot }}"
     - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.containerSecurityPolicy.allowreadOnlyRootFilesystem }})"
@@ -31,6 +33,8 @@ spec:
       message: "All containers must set allowPrivilegeEscalation to {{ .Values.containerSecurityPolicy.allowPrivilegeEscalation }}"
     - expression: "object.kind != 'Pod' || object.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.containerSecurityPolicy.allowprivileged }})"
       message: "All containers must set privileged to {{ .Values.containerSecurityPolicy.allowprivileged }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || has(object.metadata.labels) && object.metadata.labels['business-unit'] == 'finance'"
+      message: "Workload resources must have a 'business-unit: finance' label"
     - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.containerSecurityPolicy.allowrunAsNonRoot }})"
       message: "All workload containers must set runAsNonRoot to {{ .Values.containerSecurityPolicy.allowrunAsNonRoot }}"
     - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.containerSecurityPolicy.allowreadOnlyRootFilesystem }})"
@@ -39,6 +43,8 @@ spec:
       message: "All workload containers must set allowPrivilegeEscalation to {{ .Values.containerSecurityPolicy.allowPrivilegeEscalation }}"
     - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.containerSecurityPolicy.allowprivileged }})"
       message: "All workload containers must set privileged to {{ .Values.containerSecurityPolicy.allowprivileged }}"
+    - expression: "object.kind != 'CronJob' || has(object.metadata.labels) && object.metadata.labels['business-unit'] == 'finance'"
+      message: "CronJobs must have a 'business-unit: finance' label"
     - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.containerSecurityPolicy.allowrunAsNonRoot }})"
       message: "All CronJob containers must set runAsNonRoot to {{ .Values.containerSecurityPolicy.allowrunAsNonRoot }}"
     - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.containerSecurityPolicy.allowreadOnlyRootFilesystem }})"

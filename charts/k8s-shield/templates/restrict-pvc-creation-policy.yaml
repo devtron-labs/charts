@@ -17,17 +17,14 @@ spec:
           {{- end }}
     objectSelector: {}
     resourceRules:
-    - apiGroups:
-      - ""
-      apiVersions:
-      - v1
-      operations:
-      - CREATE
-      - UPDATE
+    - apiGroups: [""]
+      apiVersions: ["v1"]
+      operations: ["CREATE", "UPDATE"]
       scope: Namespaced
+      resources: ["persistentvolumeclaims"]
   validations:
-  - expression: "false"
-    message: Creation of PersistentVolumeClaims is not allowed.
+    - expression: "has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}'"
+      message: " Creation of PersistentVolumeClaims is not allowed,set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow" 
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -44,4 +41,3 @@ spec:
   - {{ . }}
   {{- end }}
 {{- end }}
-

@@ -36,6 +36,7 @@ spec:
         scope: Namespaced
   validations:
     - expression: |-
+        (has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') 
         has(object.spec.template) ?
         (
           !has(object.spec.template.spec.containers[0].resources.limits) || (
@@ -53,12 +54,13 @@ spec:
              quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
           )
         )
-      message: "Resource limits exceed the maximum allowed. CPU must be <= {{ $maxCPU }} and memory must be <= {{ $maxMemory }}."
+      message: "Resource limits exceed the maximum allowed: CPU <= {{ $maxCPU }} and memory <= {{ $maxMemory }}, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow"
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}-restrict-resource-limits-binding
+  name: {{ include "policychart.fullname"
+   . }}-restrict-resource-limits-binding
 spec:
   policyName: {{ include "policychart.fullname" . }}-restrict-resource-limits
   validationActions:

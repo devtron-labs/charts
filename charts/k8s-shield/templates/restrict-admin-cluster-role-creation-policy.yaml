@@ -21,14 +21,14 @@ spec:
       - clusterroles
       scope: '*'
   validations:
-  - expression: "!has(object.rules) || object.rules.all(rule,
+  - expression: "(has(object.metadata.labels) && object.metadata.labels.exists(l, l == '{{ .Values.bypassLabel.key }}') && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') || !has(object.rules) || object.rules.all(rule,
       !(rule.apiGroups.exists(g, g == '*') &&
         rule.resources.exists(r, r == '*') &&
         rule.verbs.exists(v, v == '*')) &&
       !(rule.nonResourceURLs.exists(u, u == '*') &&
         rule.verbs.exists(v, v == '*'))
     )"
-    message: Deny Creation of ClusterRole with admin access
+    message: "Creation of ClusterRole with admin access is denied, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow."
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
