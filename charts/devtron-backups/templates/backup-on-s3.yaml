@@ -139,8 +139,8 @@ spec:
             volumeMounts:
             - mountPath: /argocd
               name: argocd-volume
-            {{- if not .Values.global.S3.NODE_ROLE }}
             env:
+            {{- if not .Values.global.S3.NODE_ROLE }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
