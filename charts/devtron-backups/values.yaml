@@ -3,17 +3,19 @@ global:
   schedule: "0 */12 * * *"
   # devtron-backups
   S3:
-    enabled: false
-    S3_BUCKET_NAME: ""
-    S3_ACCESS_KEY: ""
-    S3_SECRET_KEY: ""
-    AWS_REGION: ""
-    S3_ENDPOINT: ""
     # give the endpoint in case of non AWS storages with s3 protocol 
-    NODE_ROLE: false
+    enabled: true
+    S3_BUCKET_NAME: ""
+    S3_ACCESS_KEY: "adin"
+    S3_SECRET_KEY: "admin123"
+    AWS_REGION: "US"
+    S3_ENDPOINT: "endpoint.com"
+    CA_BUNDLE: "-----BEGIN CERTIFICATE-----\nMIIDcDCCAlgCCQDZJ13mz4IWGzANBgkqhkiG9w0BAQsFADB6MQswCQYDVQQGEwJJTjEQMA4GA1UECAwHSGFyeWFuYTEQMA4GA1UEBwwHR3VyZ2FvbjETMBEGA1UECgwKRGV2dHJvbkluYzEPMA0GA1UECwwGRGV2b3BzMSEwHwYDVQQDDBhzdGFnZS1taW5pby5kZXZ0cm9uLmluZm8wHhcNMjQxMTI4MDczNTEwWhcNMzQxMTI2MDczNTEwWjB6MQswCQYDVQQGEwJJTjEQMA4GA1UECAwHSGFyeWFuYTEQMA4GA1UEBwwHR3VyZ2FvbjETMBEGA1UECgwKRGV2dHJvbkluYzEPMA0GA1UECwwGRGV2b3BzMSEwHwYDVQQDDBhzdGFnZS1taW5pby5kZXZ0cm9uLmluZm8wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDJo7+FlCLdHEOY301eEaeuRmHB05alxMGPwqtIHUmf+fGK3SkuNEaYH1HKgywbzhpEV7mt9og/kxWhY6xVZP18Ys1H/AVLeNNrFeQinraniYM7/GWZXQl0ntcF7jjvdG2NoKJIlgw59BCq9flQmh+6qkIk35QxRI5dneQkrLIrltUl5gEHhZ+O3vnknh6d4KpoG7nyAnJL6MrcZ8hUNA0c9tcLPdtUk7NHNPfKgIsBa/F6Vk0ZB83l4JwTmxSkn0Z9KVx2bcyP2vMjfjm3It9PE4KDSmLCBeXjfsmYP1GFldz+DMb+UO2zZGywkOR+aUjkJgDN01+dNpV/k3zYbhFRAgMBAAEwDQYJKoZIhvcNAQELBQADggEBAGr6nSMy+q3MKrR2jYO+2626ABf0hWFjFNLgwCy2G7Hq75Q8VzbJgswrtAyJvmYaaliWFdE/OGN4whiftZ2Kq/CaVK74d80JjqGVjocPzb9afBWmtoy66j9ZLnwGmlUVKaUE7hS7kze0daWzZeeskyPgqwuJZGpHoSkl5eQBQUIKsIhh5NokHZZi9WYraAHtOAHOkGm3PsVwpZGMY43nuTva6uEecr6UawGuZAwUkUPqOIj9NFixwdJ2bDwcPJ7Y9eZxgauTYUTYGGv/sCXMArzwWr2r72ve47NfG0EjwdmVJEkSJJLf4mXROPGWOjYBaY4ae9GFn/3Pf5wpE+mz30g=\n-----END CERTIFICATE-----"
     # set true if node has access of buckets
-    encryption:
+    # By default, the node has access to buckets. Set to false if the node should not have access.
+    NODE_ROLE: true
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
+    encryption:
       enabled: false
       passphrase: ""
     # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
@@ -57,7 +59,7 @@ argocdversion: v2
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
-  enabled: false
+  enabled: true
   resources:
     requests:
       cpu: 100m
