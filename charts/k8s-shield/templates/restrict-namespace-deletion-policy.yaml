@@ -3,7 +3,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}-deny-namespace-deletion
+  name: {{ include "policychart.fullname" . }}-restrict-namespace-deletion
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -31,13 +31,13 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}-deny-namespace-deletion-binding
+  name: {{ include "policychart.fullname" . }}-restrict-namespace-deletion-binding
 spec:
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "policychart.fullname" . }}-deny-namespace-deletion
+  policyName: {{ include "policychart.fullname" . }}-restrict-namespace-deletion
   validationActions:
   {{- range .Values.namespaceDeletionPolicy.validationActions }}
   - {{ . }}
