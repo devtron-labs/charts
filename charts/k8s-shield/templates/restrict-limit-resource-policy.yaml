@@ -4,7 +4,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}-restrict-resource-limits
+  name: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -59,10 +59,10 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname"
+  name: {{ include "k8s-shield.fullname"
    . }}-restrict-resource-limits-binding
 spec:
-  policyName: {{ include "policychart.fullname" . }}-restrict-resource-limits
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits
   validationActions:
   {{- range .Values.resourcePolicies.limitResourcePolicy.validationActions }}
   - {{ . }}

@@ -1,8 +1,8 @@
-{{- define "policychart.name" -}}
+{{- define "k8s-shield.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
-{{- define "policychart.fullname" -}}
+{{- define "k8s-shield.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}

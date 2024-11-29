@@ -2,7 +2,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}-prevent-app-deletion
+  name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -33,13 +33,13 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}-prevent-app-deletion-binding
+  name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion-binding
 spec:
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "policychart.fullname" . }}-prevent-app-deletion
+  policyName: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
   validationActions:
   {{- range .Values.appDeletionPolicy.validationActions }}
   - {{ . }}

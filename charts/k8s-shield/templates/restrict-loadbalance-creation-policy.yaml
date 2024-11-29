@@ -3,7 +3,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "policychart.fullname" . }}-restrict-loadbalancer-creation
+  name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -34,13 +34,13 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "policychart.fullname" . }}-restrict-loadbalancer-creation-binding
+  name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation-binding
 spec:
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "policychart.fullname" . }}-restrict-loadbalancer-creation
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
   validationActions:
   {{- range .Values.loadBalancerCreationPolicy.validationActions }}
   - {{ . }}
