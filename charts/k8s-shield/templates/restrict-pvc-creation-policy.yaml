@@ -17,10 +17,10 @@ spec:
           - {{ . | quote }}
           {{- end }}
   {{- else }}
-  matchConstraints: []
+  matchConstraints: {}
   {{- end }}
-    objectSelector: {}
-    resourceRules:
+  objectSelector: {}
+  resourceRules:
     - apiGroups: [""]
       apiVersions: ["v1"]
       operations: ["CREATE", "UPDATE"]
@@ -29,10 +29,10 @@ spec:
   validations:
   {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
     - expression: "has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}'"
-      message: " Creation of PersistentVolumeClaims is not allowed,set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow" 
+      message: "Creation of PersistentVolumeClaims is not allowed, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow" 
   {{- else }}
-    - expression: false
-      message: Creation of PersistentVolumeClaims is not allowed.
+    - expression: "false"
+      message: "Creation of PersistentVolumeClaims is not allowed."
   {{- end }}
 ---  
 apiVersion: admissionregistration.k8s.io/v1

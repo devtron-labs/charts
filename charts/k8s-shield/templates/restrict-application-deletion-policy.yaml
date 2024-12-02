@@ -17,22 +17,22 @@ spec:
           - {{ . | quote }}
           {{- end }}
   {{- else }}
-  matchConstraints: []
+  matchConstraints: {}
   {{- end }}
-    objectSelector: {}
-    resourceRules:
+  objectSelector: {}
+  resourceRules:
     - apiGroups:
-      - argoproj.io
+        - argoproj.io
       apiVersions:
-      - v1alpha1
+        - v1alpha1
       operations:
-      - DELETE
+        - DELETE
       resources:
-      - applications
+        - applications
       scope: Namespaced
   validations:
-  - expression: "false"
-    message: Deletion of application is not allowed.
+    - expression: "false"
+      message: Deletion of application is not allowed.
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
@@ -49,4 +49,3 @@ spec:
   - {{ . }}
   {{- end }}
 {{- end }}
-

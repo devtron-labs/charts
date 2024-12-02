@@ -17,23 +17,24 @@ spec:
           - {{ . | quote }}
           {{- end }}
   {{- else }}
-  matchConstraints: []
+  matchConstraints: {}
   {{- end }}
-    resourceRules:
-      - apiGroups: 
+  objectSelector: {}
+  resourceRules:
+    - apiGroups:
         {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
         - {{ . | quote }}
         {{- end }}
-        apiVersions: ["v1"]
-        operations:
+      apiVersions: ["v1"]
+      operations:
         {{- range $.Values.readinessAndLivenessPolicy.operations }}
         - {{ . | quote }}
         {{- end }}
-        resources:
+      resources:
         {{- range $.Values.readinessAndLivenessPolicy.resources }}
         - {{ . | quote }}
         {{- end }}
-        scope: Namespaced
+      scope: Namespaced
   validations:
   {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
     - expression: >

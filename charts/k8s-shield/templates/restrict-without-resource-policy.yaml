@@ -17,9 +17,9 @@ spec:
           - {{ . | quote }}
           {{- end }}
   {{- else }}
-  matchConstraints: []
+  matchConstraints: {}
   {{- end }}
-    resourceRules:
+  resourceRules:
     - apiGroups:
       {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
       - {{ . | quote }}
@@ -59,4 +59,3 @@ spec:
   - {{ . }}
   {{- end }}
 {{- end }}
-

@@ -19,48 +19,50 @@ spec:
           - {{ . | quote }}
           {{- end }}
   {{- else }}
-  matchConstraints: []
+  matchConstraints: {}
   {{- end }}
-    objectSelector: {}
-    resourceRules:
-      - apiGroups:
+  objectSelector: {}
+  resourceRules:
+    - apiGroups:
         {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
         - {{ . | quote }}
         {{- end }}
-        apiVersions:
+      apiVersions:
         - v1
-        operations:
+      operations:
         {{- range .Values.resourcePolicies.limitResourcePolicy.operations }}
         - {{ . | quote }}
         {{- end }}
-        resources:
+      resources:
         {{- range .Values.resourcePolicies.limitResourcePolicy.resources }}
         - {{ . | quote }}
         {{- end }}
-        scope: Namespaced
+      scope: Namespaced
   validations:
-    {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
     - expression: |-
         (has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') 
-        has(object.spec.template) ?
-        (
-          !has(object.spec.template.spec.containers[0].resources.limits) || (
-            (!has(object.spec.template.spec.containers[0].resources.limits.cpu) ||
-             quantity(object.spec.template.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
-            (!has(object.spec.template.spec.containers[0].resources.limits.memory) ||
-             quantity(object.spec.template.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
-          )
-        ) :
-        (
-          !has(object.spec.containers[0].resources.limits) || (
-            (!has(object.spec.containers[0].resources.limits.cpu) ||
-             quantity(object.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
-            (!has(object.spec.containers[0].resources.limits.memory) ||
-             quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
+        || (
+          has(object.spec.template) ?
+          (
+            !has(object.spec.template.spec.containers[0].resources.limits) || (
+              (!has(object.spec.template.spec.containers[0].resources.limits.cpu) ||
+               quantity(object.spec.template.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
+              (!has(object.spec.template.spec.containers[0].resources.limits.memory) ||
+               quantity(object.spec.template.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
+            )
+          ) :
+          (
+            !has(object.spec.containers[0].resources.limits) || (
+              (!has(object.spec.containers[0].resources.limits.cpu) ||
+               quantity(object.spec.containers[0].resources.limits.cpu).compareTo(quantity('{{ $maxCPU }}')) <= 0) &&
+              (!has(object.spec.containers[0].resources.limits.memory) ||
+               quantity(object.spec.containers[0].resources.limits.memory).compareTo(quantity('{{ $maxMemory }}')) <= 0)
+            )
           )
         )
       message: "Resource limits exceed the maximum allowed: CPU <= {{ $maxCPU }} and memory <= {{ $maxMemory }}, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow"
-    {{- else }}
+  {{- else }}
     - expression: |-
         has(object.spec.template) ?
         (
@@ -80,13 +82,12 @@ spec:
           )
         )
       message: "Resource limits exceed the maximum allowed: CPU <= {{ $maxCPU }} and memory <= {{ $maxMemory }}."
-    {{- end }}
+  {{- end }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "k8s-shield.fullname"
-   . }}-restrict-resource-limits-binding
+  name: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits-binding
 spec:
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits
   validationActions:
