@@ -1,0 +1,62 @@
+namespace: demo
+
+## DestinationRule defines policies that apply to traffic intended for a service after routing has occurred.
+destinationrule:
+  name: app-destrule
+  host: g-app-service
+  destination:
+    v1:
+      subset: g-app-v1
+
+trafficPolicytlsmode:
+  value: ISTIO_MUTUAL
+
+## Lock down mutual TLS for the entire mesh
+PeerAuthentication:
+  enabled: false
+  # name: "default"
+  # tlsmode: STRICT
+
+## Create Istio Virtual Service for Weighted routing Policy
+weightVirtualsvc:
+  enabled: true
+  name: app-vrtsvc
+  hosts: example.com
+  gateways: asm-ingress/asm-ingressgateway
+  destination:
+    v1:
+      host: g-app-service
+      port: 80
+      subset: g-app-v1
+      weight: 90
+
+## Create Istio Virtual Service for HTTP Retry Policy
+retryVirtualsvc:
+  enabled: false
+  # name: retryroute01
+  # hosts: demo.com
+  # gateways: asm-ingress/asm-ingressgateway
+  # destination:
+  #   host: demo
+  #   subset: v1
+  #   retries:
+  #     attempts: 4
+  #     perTryTimeout: 2s
+  #     retryOn: 5xx
+  #     timeout: 10s
+
+## Create Istio Virtual Service for Header Based Routing Policy
+headerVirtualsvc:
+  enabled: false
+  # name: headerroute01
+  # hosts: demo.com
+  # gateways: asm-ingress/asm-ingressgateway
+  # headerValue: Pin
+  # regex: 
+  #   enabled: true
+  #   value: (10[0-9]|1[1-9][0-9]|200)
+  # exact:
+  #   enabled: false
+  # destination:
+  #   host: demo
+  #   subset: v1
