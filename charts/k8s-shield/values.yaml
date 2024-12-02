@@ -1,7 +1,7 @@
 #bypassLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
 bypassLabel:
-  key: ""
-  value: "" 
+  key: "test"
+  value: "hello" 
 
 # pvcCreationPolicy controls the creation of Persistent Volume Claims (PVCs).
 # If enabled, it restricts PVC creation in specified namespaces.
@@ -26,7 +26,7 @@ namespaceDeletionPolicy:
 # loadBalancerCreationPolicy restricts the creation of LoadBalancer type services.
 # This policy prevents creating LoadBalancer services in the specified namespaces.
 loadBalancerCreationPolicy:
-  enabled: false  # If true, the policy blocks creation of LoadBalancer type services.
+  enabled: true  # If true, the policy blocks creation of LoadBalancer type services.
   namespaces:     # List of namespaces where the policy applies.
     - devtroncd
     - argo
@@ -91,6 +91,7 @@ resourcePolicies:
 adminClusterRoleCreation:
   enabled: false  # If true, this policy prevents creation of new roles and cluster roles.
   validationActions:  
+    - Deny
 
 # cLusterRoleBindingCreation prevents the creation of clusterRoleBindings with cluster-admin access.
 cLusterRoleBindingCreation:
@@ -101,7 +102,7 @@ cLusterRoleBindingCreation:
 # readinessAndLivenessPolicy ensures that readiness and liveness probes are defined for containers.
 # This ensures that pods are only considered healthy when they pass the defined probes.
 readinessAndLivenessPolicy:
-  enabled: true  # If true, this policy ensures readiness and liveness probes are defined.
+  enabled: false  # If true, this policy ensures readiness and liveness probes are defined.
   namespaces:     # List of namespaces where the policy applies.
     - devtroncd
     - argo

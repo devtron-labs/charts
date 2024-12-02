@@ -7,6 +7,7 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits
 spec:
   failurePolicy: Fail
+  {{- if and .Values.resourcePolicies.limitResourcePolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -17,6 +18,9 @@ spec:
           {{- range .Values.resourcePolicies.limitResourcePolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
+  {{- else }}
+  matchConstraints: []
+  {{- end }}
     objectSelector: {}
     resourceRules:
       - apiGroups:

@@ -5,6 +5,7 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
 spec:
   failurePolicy: Fail
+  {{- if and .Values.appDeletionPolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -15,6 +16,9 @@ spec:
           {{- range .Values.appDeletionPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
+  {{- else }}
+  matchConstraints: []
+  {{- end }}
     objectSelector: {}
     resourceRules:
     - apiGroups:

@@ -5,6 +5,7 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-pvc-creation
 spec:
   failurePolicy: Fail
+  {{- if and .Values.pvcCreationPolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector: 
@@ -15,6 +16,9 @@ spec:
           {{- range .Values.pvcCreationPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
+  {{- else }}
+  matchConstraints: []
+  {{- end }}
     objectSelector: {}
     resourceRules:
     - apiGroups: [""]

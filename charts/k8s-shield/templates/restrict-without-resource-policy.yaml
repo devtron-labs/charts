@@ -5,6 +5,7 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
 spec:
   failurePolicy: Fail
+  {{- if and .Values.resourcePolicies.WithoutResource.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -15,6 +16,9 @@ spec:
           {{- range $.Values.resourcePolicies.WithoutResource.namespaces }}
           - {{ . | quote }}
           {{- end }}
+  {{- else }}
+  matchConstraints: []
+  {{- end }}
     resourceRules:
     - apiGroups:
       {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
@@ -55,3 +59,4 @@ spec:
   - {{ . }}
   {{- end }}
 {{- end }}
+

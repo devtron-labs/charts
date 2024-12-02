@@ -5,6 +5,7 @@ metadata:
   name: {{ .Chart.Name }}-restrict-without-readiness-liveness
 spec:
   failurePolicy: Fail
+  {{- if and .Values.readinessAndLivenessPolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -15,6 +16,9 @@ spec:
           {{- range $.Values.readinessAndLivenessPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
+  {{- else }}
+  matchConstraints: []
+  {{- end }}
     resourceRules:
       - apiGroups: 
         {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
