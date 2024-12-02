@@ -32,8 +32,13 @@ spec:
       {{- end }}
       scope: Namespaced
   validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
     - expression: "(has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') || object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
       message: "All Containers without CPU and memory's requests and limits are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'."
+  {{- else }}
+    - expression: "object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
+      message: "All Containers without CPU and memory's requests and limits are not allowed."
+  {{- end }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding

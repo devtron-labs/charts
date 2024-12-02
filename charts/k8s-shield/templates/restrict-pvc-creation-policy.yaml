@@ -23,9 +23,14 @@ spec:
       scope: Namespaced
       resources: ["persistentvolumeclaims"]
   validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
     - expression: "has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}'"
       message: " Creation of PersistentVolumeClaims is not allowed,set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow" 
----
+  {{- else }}
+    - expression: false
+      message: Creation of PersistentVolumeClaims is not allowed.
+  {{- end }}
+---  
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:

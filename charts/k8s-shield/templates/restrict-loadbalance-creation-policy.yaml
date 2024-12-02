@@ -28,8 +28,13 @@ spec:
       - services
       scope: Namespaced
   validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
   - expression: "object.spec.type == 'LoadBalancer' && has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}'"
     message: "Creation of Services with type LoadBalancer is not allowed, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow."
+  {{- else }}
+    - expression: "object.spec.type == 'LoadBalancer'"
+      message: Creation of Services with type LoadBalancer is not allowed.
+  {{- end }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding

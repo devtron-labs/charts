@@ -2,7 +2,7 @@
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
-  name: {{ include "k8s-shield.fullname" . }}-restrict-without-readiness-liveness
+  name: {{ .Chart.Name }}-restrict-without-readiness-liveness
 spec:
   failurePolicy: Fail
   matchConstraints:
@@ -31,6 +31,7 @@ spec:
         {{- end }}
         scope: Namespaced
   validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
     - expression: >
         (has(object.metadata.labels) &&
          object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') ||
@@ -38,14 +39,19 @@ spec:
           has(container.readinessProbe) &&
           has(container.livenessProbe)
         )
-      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'. " 
+      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'."
+  {{- else }}
+    - expression: object.spec.template.spec.containers.all(container,
+        has(container.readinessProbe) && has(container.livenessProbe))
+      message: "Deployments without readiness and liveness probes are not allowed"
+  {{- end }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "k8s-shield.fullname" . }}-restrict-without-readiness-liveness
+  name: {{ .Chart.Name }}-restrict-without-readiness-liveness
 spec:
-  policyName: {{ include "k8s-shield.fullname" . }}-restrict-without-readiness-liveness
+  policyName: {{ .Chart.Name }}-restrict-without-readiness-liveness
   validationActions:
   {{- range $.Values.readinessAndLivenessPolicy.validationActions }}
   - {{ . }}

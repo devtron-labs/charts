@@ -1,12 +1,12 @@
-# bypassLabel defines a label with a key-value pair to bypass certain restrictions.
+#bypassLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
 bypassLabel:
-  key: businessUnit
-  value: finance
+  key: 
+  value: 
 
 # pvcCreationPolicy controls the creation of Persistent Volume Claims (PVCs).
 # If enabled, it restricts PVC creation in specified namespaces.
 pvcCreationPolicy:
-  enabled: true  # If true, the policy prevents PVC creation in specified namespaces.
+  enabled: false  # If true, the policy prevents PVC creation in specified namespaces.
   namespaces:     # List of namespaces where the policy applies.
     - devtroncd
     - argo
@@ -101,7 +101,7 @@ cLusterRoleBindingCreation:
 # readinessAndLivenessPolicy ensures that readiness and liveness probes are defined for containers.
 # This ensures that pods are only considered healthy when they pass the defined probes.
 readinessAndLivenessPolicy:
-  enabled: false  # If true, this policy ensures readiness and liveness probes are defined.
+  enabled: true  # If true, this policy ensures readiness and liveness probes are defined.
   namespaces:     # List of namespaces where the policy applies.
     - devtroncd
     - argo
