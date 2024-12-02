@@ -1,7 +1,7 @@
 #bypassLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
 bypassLabel:
-  key: 
-  value: 
+  key: ""
+  value: "" 
 
 # pvcCreationPolicy controls the creation of Persistent Volume Claims (PVCs).
 # If enabled, it restricts PVC creation in specified namespaces.
@@ -17,7 +17,7 @@ pvcCreationPolicy:
 # When enabled, it prevents deletion of namespaces in specified namespaces.
 namespaceDeletionPolicy:
   enabled: false  # If true, this policy restricts the deletion of namespaces.
-  namespaces:     # List of namespaces where the policy applies.
+  namespaces:     # List of namespaces that you want to protect from deletion
     - devtroncd
     - argo
   validationActions:  
