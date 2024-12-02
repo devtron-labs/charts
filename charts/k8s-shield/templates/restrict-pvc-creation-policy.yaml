@@ -1,0 +1,52 @@
+{{- if $.Values.pvcCreationPolicy.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-pvc-creation
+spec:
+  failurePolicy: Fail
+  {{- if and .Values.pvcCreationPolicy.namespaces }}
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: 
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          {{- range .Values.pvcCreationPolicy.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+  {{- else }}
+  matchConstraints: {}
+  {{- end }}
+  objectSelector: {}
+  resourceRules:
+    - apiGroups: [""]
+      apiVersions: ["v1"]
+      operations: ["CREATE", "UPDATE"]
+      scope: Namespaced
+      resources: ["persistentvolumeclaims"]
+  validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+    - expression: "has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}'"
+      message: "Creation of PersistentVolumeClaims is not allowed, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow" 
+  {{- else }}
+    - expression: "false"
+      message: "Creation of PersistentVolumeClaims is not allowed."
+  {{- end }}
+---  
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-pvc-creation-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-pvc-creation
+  validationActions:
+  {{- range .Values.pvcCreationPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
