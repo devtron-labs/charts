@@ -1,0 +1,58 @@
+{{- if $.Values.adminClusterRoleCreation.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-deny-admin-cluster-role-creation
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+    resourceRules:
+    - apiGroups:
+      - rbac.authorization.k8s.io
+      apiVersions:
+      - "*"
+      operations:
+      - CREATE
+      - UPDATE
+      resources:
+      - clusterroles
+      scope: '*'
+  validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+  - expression: "(has(object.metadata.labels) && object.metadata.labels.exists(l, l == '{{ .Values.bypassLabel.key }}') && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') || !has(object.rules) || object.rules.all(rule,
+      !(rule.apiGroups.exists(g, g == '*') &&
+        rule.resources.exists(r, r == '*') &&
+        rule.verbs.exists(v, v == '*')) &&
+      !(rule.nonResourceURLs.exists(u, u == '*') &&
+        rule.verbs.exists(v, v == '*'))
+    )"
+    message: "Creation of ClusterRole with admin access is denied, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow."
+  {{- else }}
+  - expression: "!has(object.rules) || object.rules.all(rule,
+      !(rule.apiGroups.exists(g, g == '*') &&
+        rule.resources.exists(r, r == '*') &&
+        rule.verbs.exists(v, v == '*')) &&
+      !(rule.nonResourceURLs.exists(u, u == '*') &&
+        rule.verbs.exists(v, v == '*'))"
+    message: "Creation of ClusterRole with admin access is denied"
+  {{- end }}
+
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-deny-admin-cluster-role-creation-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-deny-admin-cluster-role-creation
+  validationActions:
+  {{- range .Values.adminClusterRoleCreation.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}

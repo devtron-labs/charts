@@ -1,0 +1,157 @@
+#bypassLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
+bypassLabel:
+  key: ""
+  value: "" 
+
+# pvcCreationPolicy controls the creation of Persistent Volume Claims (PVCs).
+# If enabled, it restricts PVC creation in specified namespaces.
+pvcCreationPolicy:
+  enabled: true  # If true, the policy prevents PVC creation in specified namespaces.
+  namespaces: {}     # List of namespaces where the policy applies.
+  validationActions: 
+    - Deny
+
+# namespaceDeletionPolicy restricts the deletion of namespaces.
+# When enabled, it prevents deletion of namespaces in specified namespaces.
+namespaceDeletionPolicy:
+  enabled: true  # If true, this policy restricts the deletion of namespaces.
+  namespaces:     # List of namespaces that you want to protect from deletion
+    - kube-system
+  validationActions:  
+    - Deny
+
+# loadBalancerCreationPolicy restricts the creation of LoadBalancer type services.
+# This policy prevents creating LoadBalancer services in the specified namespaces.
+loadBalancerCreationPolicy:
+  enabled: true  # If true, the policy blocks creation of LoadBalancer type services.
+  namespaces: {}     # List of namespaces where the policy applies.
+  validationActions:  
+    - Deny
+
+# appDeletionPolicy prevents the deletion of applications within specified namespaces.
+# If enabled, applications cannot be deleted in the listed namespaces.
+appDeletionPolicy:
+  enabled: true  # If true, this policy restricts application deletion.
+  namespaces: {}  # List of namespaces where the policy applies.
+  validationActions:  
+    - Deny
+
+# resourcePolicies enforce the specification of resource requests and limits for deployments, statefulsets, etc.
+# The policy ensures resource constraints on all pods in the specified namespaces.
+resourcePolicies:
+  WithoutResource:
+    enabled: true  # If true, this policy enforces that deployments have resource requests and limits.
+    namespaces: {}     # List of namespaces where the policy applies.
+    validationActions:  
+      - Deny
+    operations:  
+      - CREATE
+      - UPDATE
+    resources:  
+      - pods
+      - deployments
+      - statefulsets
+      - rollouts
+    apiGroups:  
+      - apps
+      - rollout.k8s.io
+  
+  limitResourcePolicy:
+    enabled: true  # If true, this sub-policy enforces resource limits for deployments.
+    apiGroups:  # API groups where the policy applies.
+      - ""
+      - apps
+      - argoproj.io
+    namespaces: {}
+    operations:     
+      - CREATE
+      - UPDATE
+    resources:      
+      - pods
+      - deployments
+      - statefulsets
+      - rollouts
+    maxCPULimit: "1000m"  # Maximum CPU limit if not specified. Default is 1000m.
+    maxMemoryLimit: "2Gi"  # Maximum memory limit if not specified. Default is 2Gi.
+    validationActions:  
+      - Deny
+
+# adminClusterRoleCreation prevents the creation of new roles and cluster roles with admin access in the cluster.
+adminClusterRoleCreation:
+  enabled: true  # If true, this policy prevents creation of new roles and cluster roles.
+  validationActions:  
+    - Deny
+
+# cLusterRoleBindingCreation prevents the creation of clusterRoleBindings with cluster-admin access.
+cLusterRoleBindingCreation:
+  enabled: true  # If true, this policy prevents creation of clusterRoleBindings with admin access.
+  validationActions:  # Defines the actions when the policy is violated. Default is DENY.
+    - Deny
+
+# readinessAndLivenessPolicy ensures that readiness and liveness probes are defined for containers.
+# This ensures that pods are only considered healthy when they pass the defined probes.
+readinessAndLivenessPolicy:
+  enabled: true  # If true, this policy ensures readiness and liveness probes are defined.
+  namespaces: {}     # List of namespaces where the policy applies.
+  operations:    
+    - CREATE
+    - UPDATE
+  resources:      
+    - deployments
+    - statefulsets
+    - rollouts
+  apiGroups:     
+    - apps
+    - argoproj.io
+  validationActions: 
+    - Deny
+
+# podSecurityPolicy ensures that security-related best practices are followed for Pods.
+# For example, it restricts the use of privileged containers and ensures read-only file systems.
+podSecurityPolicy:
+  enabled: true  # If true, the Pod Security Policy is enabled.
+  allowrunAsNonRoot: false  # Prevent containers from running as root.
+  allowreadOnlyRootFilesystem: false  # Ensure the root filesystem is not writable.
+  allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent.
+  allowprivileged: false  # Disables privileged mode for containers.
+  validationActions:  # Defines the actions when the policy is violated. Default is DENY.
+    - Deny
+  operations: 
+    - CREATE
+    - UPDATE
+  resources:  
+    - pods
+    - deployments
+    - statefulsets
+    - rollouts
+    - cronjobs
+  apiGroups:  
+    - ""
+    - apps
+    - batch
+    - rollout.k8s.io
+
+# containerSecurityPolicy defines security best practices for containers within Pods.
+# It ensures that containers adhere to security policies for non-root execution, file system access, and privilege escalation.
+containerSecurityPolicy:
+  enabled: true  # If true, the container security policy is enabled.
+  allowrunAsNonRoot: false  # Prevent containers from running as root.
+  allowreadOnlyRootFilesystem: false  # Ensure the root filesystem is not writable.
+  allowPrivilegeEscalation: false  # Prevent processes from gaining more privileges than their parent.
+  allowprivileged: false  # Disable privileged mode to limit container capabilities on the host.
+  validationActions:  # Defines the actions when the policy is violated. Default is DENY.
+    - Deny
+  operations:  
+    - CREATE
+    - UPDATE
+  resources:  
+    - pods
+    - deployments
+    - statefulsets
+    - rollouts
+    - cronjobs
+  apiGroups:  
+    - ""
+    - apps
+    - batch
+    - rollout.k8s.io
