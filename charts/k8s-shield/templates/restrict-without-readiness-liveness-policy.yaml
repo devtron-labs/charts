@@ -1,0 +1,64 @@
+{{- if $.Values.readinessAndLivenessPolicy.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ .Chart.Name }}-restrict-without-readiness-liveness
+spec:
+  failurePolicy: Fail
+  {{- if and .Values.readinessAndLivenessPolicy.namespaces }}
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          {{- range $.Values.readinessAndLivenessPolicy.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+  {{- else }}
+  matchConstraints: {}
+  {{- end }}
+  objectSelector: {}
+  resourceRules:
+    - apiGroups:
+        {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+        - {{ . | quote }}
+        {{- end }}
+      apiVersions: ["v1"]
+      operations:
+        {{- range $.Values.readinessAndLivenessPolicy.operations }}
+        - {{ . | quote }}
+        {{- end }}
+      resources:
+        {{- range $.Values.readinessAndLivenessPolicy.resources }}
+        - {{ . | quote }}
+        {{- end }}
+      scope: Namespaced
+  validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+    - expression: >
+        (has(object.metadata.labels) &&
+         object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') ||
+        object.spec.template.spec.containers.all(container,
+          has(container.readinessProbe) &&
+          has(container.livenessProbe)
+        )
+      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'."
+  {{- else }}
+    - expression: object.spec.template.spec.containers.all(container,
+        has(container.readinessProbe) && has(container.livenessProbe))
+      message: "Deployments without readiness and liveness probes are not allowed"
+  {{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ .Chart.Name }}-restrict-without-readiness-liveness
+spec:
+  policyName: {{ .Chart.Name }}-restrict-without-readiness-liveness
+  validationActions:
+  {{- range $.Values.readinessAndLivenessPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
