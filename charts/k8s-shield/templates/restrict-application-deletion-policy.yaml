@@ -37,7 +37,7 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion-binding
+  name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
 spec:
   matchResources:
     matchPolicy: Equivalent

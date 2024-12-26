@@ -51,7 +51,7 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
-  name: {{ include "k8s-shield.fullname" . }}-pod-security-binding
+  name: {{ include "k8s-shield.fullname" . }}-pod-security
 spec:
   policyName: {{ include "k8s-shield.fullname" . }}-pod-security
   validationActions:
