@@ -18,7 +18,7 @@ containerSecurityPolicy: false
 # pvcCreationPolicy controls the creation of Persistent Volume Claims (PVCs).
 # If enabled, it restricts PVC creation in specified namespaces.
 pvcCreationPolicyConfig:
-  namespaces: {} # List of namespaces where the policy applies.    
+  namespaces: []# List of namespaces where the policy applies.    
   validationActions: 
     - Deny
 
@@ -33,21 +33,21 @@ namespaceDeletionPolicyConfig:
 # loadBalancerCreationPolicy restricts the creation of LoadBalancer type services.
 # This policy prevents creating LoadBalancer services in the specified namespaces.
 loadBalancerCreationPolicyConfig:
-  namespaces: {}    # List of namespaces where the policy applies.
+  namespaces: []   # List of namespaces where the policy applies.
   validationActions:  
     - Deny
 
 # appDeletionPolicy prevents the deletion of applications within specified namespaces.
 # If enabled, applications cannot be deleted in the listed namespaces.
 appDeletionPolicyConfig:
-  namespaces: {}  # List of namespaces where the policy applies.
+  namespaces: [] # List of namespaces where the policy applies.
   validationActions:  
     - Deny
 
 # resourcePolicies enforce the specification of resource requests and limits for deployments, statefulsets, etc.
 resourcePoliciesConfig:
   WithoutResourceConfig:
-    namespaces: {}   # List of namespaces where the policy applies. 
+    namespaces: []  # List of namespaces where the policy applies. 
     validationActions:  
       - Deny
     operations:  
@@ -67,7 +67,7 @@ resourcePoliciesConfig:
       - ""
       - apps
       - argoproj.io
-    namespaces: {} # List of namespaces where the policy applies.
+    namespaces: []# List of namespaces where the policy applies.
     operations:     
       - CREATE
       - UPDATE
@@ -94,7 +94,7 @@ cLusterRoleBindingCreationConfig:
 # readinessAndLivenessPolicy ensures that readiness and liveness probes are defined for containers.
 # This ensures that pods are only considered healthy when they pass the defined probes.
 readinessAndLivenessPolicyConfig:
-  namespaces: {}   # List of namespaces where the policy applies.
+  namespaces: []  # List of namespaces where the policy applies.
   operations:    
     - CREATE
     - UPDATE
