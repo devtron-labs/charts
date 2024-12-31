@@ -156,4 +156,4 @@ containerSecurityPolicyConfig:
     - batch
     - rollout.k8s.io
 
-extraValidatingPolicy: {}
+extraValidatingPolicy: [] 
