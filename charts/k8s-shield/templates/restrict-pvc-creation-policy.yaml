@@ -1,11 +1,11 @@
-{{- if $.Values.pvcCreationPolicy.enabled }}
+{{- if $.Values.pvcCreationPolicy }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-pvc-creation
 spec:
   failurePolicy: Fail
-  {{- if and .Values.pvcCreationPolicy.namespaces }}
+  {{- if and .Values.pvcCreationPolicyConfig.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector: 
@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.pvcCreationPolicy.namespaces }}
+          {{- range .Values.pvcCreationPolicyConfig.namespaces }}
           - {{ . | quote }}
           {{- end }}
   {{- else }}
@@ -46,7 +46,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-pvc-creation
   validationActions:
-  {{- range .Values.pvcCreationPolicy.validationActions }}
+  {{- range .Values.pvcCreationPolicyConfig.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

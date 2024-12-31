@@ -1,11 +1,11 @@
-{{- if $.Values.resourcePolicies.WithoutResource.enabled }}
+{{- if $.Values.WithoutResource }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
 spec:
   failurePolicy: Fail
-  {{- if and .Values.resourcePolicies.WithoutResource.namespaces }}
+  {{- if and .Values.resourcePoliciesConfig.WithoutResourceConfig.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range $.Values.resourcePolicies.WithoutResource.namespaces }}
+          {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.namespaces }}
           - {{ . | quote }}
           {{- end }}
   {{- else }}
@@ -21,17 +21,17 @@ spec:
   {{- end }}
   resourceRules:
     - apiGroups:
-      {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+      {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.apiGroups }}
       - {{ . | quote }}
       {{- end }}
       apiVersions:
       - v1
       operations:
-      {{- range $.Values.resourcePolicies.WithoutResource.operations }}
+      {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.operations }}
       - {{ . | quote }}
       {{- end }}
       resources:
-      {{- range $.Values.resourcePolicies.WithoutResource.resources }}
+      {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.resources }}
       - {{ . | quote }}
       {{- end }}
       scope: Namespaced
@@ -55,7 +55,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
   validationActions:
-  {{- range $.Values.resourcePolicies.WithoutResource.validationActions }}
+  {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

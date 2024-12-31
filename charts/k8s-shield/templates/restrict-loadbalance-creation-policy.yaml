@@ -1,4 +1,4 @@
-{{- if $.Values.loadBalancerCreationPolicy.enabled }}
+{{- if $.Values.loadBalancerCreationPolicy }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
@@ -6,7 +6,7 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
 spec:
   failurePolicy: Fail
-  {{- if and .Values.loadBalancerCreationPolicy.namespaces }}
+  {{- if and .Values.loadBalancerCreationPolicyConfig.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -14,7 +14,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-            {{- range .Values.loadBalancerCreationPolicy.namespaces }}
+            {{- range .Values.loadBalancerCreationPolicyConfig.namespaces }}
             - {{ . | quote }}
             {{- end }}
   {{- else }}
@@ -51,7 +51,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
   validationActions:
-    {{- range .Values.loadBalancerCreationPolicy.validationActions }}
+    {{- range .Values.loadBalancerCreationPolicyConfig.validationActions }}
     - {{ . }}
     {{- end }}
 {{- end }}
