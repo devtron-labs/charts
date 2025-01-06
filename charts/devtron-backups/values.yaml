@@ -14,7 +14,7 @@ global:
     # CA_BUNDLE: "-----BEGIN CERTIFICATE-----\nMIIDcDfghjklcvbnm,tryupE+mz30g=\n-----END CERTIFICATE-----"
     # set true if node has access of buckets
     # By default, the node has access to buckets. Set to false if the node should not have access.
-    NODE_ROLE: "false"
+    NODE_ROLE: "true"
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
     encryption:
       enabled: false
@@ -22,7 +22,7 @@ global:
     # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
-    enabled: true
+    enabled: false
     AZURE_BLOB_ACCOUNT_NAME: ""
     AZURE_ACCOUNT_KEY: ""
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
@@ -73,7 +73,7 @@ postgres_backup:
 
 argocd_backup:
   serviceAccountName: "argocd-backup"
-  enabled: true
+  enabled: false
   resources:
     requests:
       cpu: 100m
