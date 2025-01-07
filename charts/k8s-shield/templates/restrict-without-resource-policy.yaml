@@ -1,0 +1,61 @@
+{{- if $.Values.resourcePolicies.WithoutResource.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
+spec:
+  failurePolicy: Fail
+  {{- if and .Values.resourcePolicies.WithoutResource.namespaces }}
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          {{- range $.Values.resourcePolicies.WithoutResource.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+  {{- else }}
+  matchConstraints: {}
+  {{- end }}
+  resourceRules:
+    - apiGroups:
+      {{- range $.Values.resourcePolicies.WithoutResource.apiGroups }}
+      - {{ . | quote }}
+      {{- end }}
+      apiVersions:
+      - v1
+      operations:
+      {{- range $.Values.resourcePolicies.WithoutResource.operations }}
+      - {{ . | quote }}
+      {{- end }}
+      resources:
+      {{- range $.Values.resourcePolicies.WithoutResource.resources }}
+      - {{ . | quote }}
+      {{- end }}
+      scope: Namespaced
+  validations:
+  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+    - expression: "(has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') || object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
+      message: "All Containers without CPU and memory's requests and limits are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'."
+  {{- else }}
+    - expression: "object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
+      message: "All Containers without CPU and memory's requests and limits are not allowed."
+  {{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
+  validationActions:
+  {{- range $.Values.resourcePolicies.WithoutResource.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}

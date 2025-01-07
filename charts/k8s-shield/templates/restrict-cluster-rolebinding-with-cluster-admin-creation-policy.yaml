@@ -1,0 +1,42 @@
+{{- if $.Values.cLusterRoleBindingCreation.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-cluster-role-binding-creation
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+    resourceRules:
+    - apiGroups:
+      - rbac.authorization.k8s.io
+      apiVersions:
+      - "*"
+      operations:
+      - CREATE
+      - UPDATE
+      resources:
+      - clusterrolebindings
+      scope: '*'
+  validations:
+    {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+    - expression: "(has(object.metadata.labels) && object.metadata.labels.exists(l, l == '{{ .Values.bypassLabel.key }}') && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') || !(object.roleRef.apiGroup == 'rbac.authorization.k8s.io' && object.roleRef.kind == 'ClusterRole' && object.roleRef.name == 'cluster-admin')"
+      message: "Binding to the cluster-admin ClusterRole is bypassed by security policy, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} allow"
+    {{- else }}
+    - expression: "!(object.roleRef.apiGroup == 'rbac.authorization.k8s.io' && object.roleRef.kind == 'ClusterRole' && object.roleRef.name == 'cluster-admin')"
+      message: "Binding to the cluster-admin ClusterRole is not allowed"
+    {{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-cluster-role-binding-creation-binding
+spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-cluster-role-binding-creation
+  validationActions:
+  {{- range .Values.cLusterRoleBindingCreation.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}

@@ -1,0 +1,57 @@
+{{- if $.Values.loadBalancerCreationPolicy.enabled }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
+spec:
+  failurePolicy: Fail
+  {{- if and .Values.loadBalancerCreationPolicy.namespaces }}
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            {{- range .Values.loadBalancerCreationPolicy.namespaces }}
+            - {{ . | quote }}
+            {{- end }}
+  {{- else }}
+  matchConstraints: {}
+  {{- end }}
+  objectSelector: {}
+  resourceRules:
+    - apiGroups:
+        - ""
+      apiVersions:
+        - v1
+      operations:
+        - CREATE
+      resources:
+        - services
+      scope: Namespaced
+  validations:
+    {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+    - expression: "object.spec.type == 'LoadBalancer' && has(object.metadata.labels) && object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}'"
+      message: "Creation of Services with type LoadBalancer is not allowed, set label {{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }} to allow."
+    {{- else }}
+    - expression: "object.spec.type == 'LoadBalancer'"
+      message: "Creation of Services with type LoadBalancer is not allowed."
+    {{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation-binding
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
+  validationActions:
+    {{- range .Values.loadBalancerCreationPolicy.validationActions }}
+    - {{ . }}
+    {{- end }}
+{{- end }}

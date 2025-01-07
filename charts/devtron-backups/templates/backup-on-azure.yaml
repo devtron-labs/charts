@@ -40,7 +40,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: PG_PASSWORD
-                  name: {{ .Values.postgres_backup.secretName }}
+                  name: {{ .Values.postgres_backup.secretName }} 
             imagePullPolicy: Always
             args:
             - /bin/bash
