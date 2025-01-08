@@ -1,4 +1,4 @@
-{{- if $.Values.adminClusterRoleCreation }}
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.adminClusterRoleCreation }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -52,7 +52,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-deny-admin-cluster-role-creation
   validationActions:
-  {{- range .Values.adminClusterRoleCreationConfig.validationActions }}
+  {{- range .Values.policyDefinitions.adminClusterRoleCreation.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

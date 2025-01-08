@@ -1,4 +1,4 @@
-{{- if $.Values.cLusterRoleBindingCreation }}
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.cLusterRoleBindingCreation }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -36,7 +36,7 @@ metadata:
 spec:
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-cluster-role-binding-creation
   validationActions:
-  {{- range .Values.cLusterRoleBindingCreationConfig.validationActions }}
+  {{- range .Values.policyDefinitions.cLusterRoleBindingCreation.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

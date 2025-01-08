@@ -1,13 +1,13 @@
-{{- if .Values.limitResourcePolicy }}
-{{- $maxCPU := .Values.resourcePoliciesConfig.limitResourcePolicyConfig.maxCPULimit | default "1000m" }}
-{{- $maxMemory := .Values.resourcePoliciesConfig.limitResourcePolicyConfig.maxMemoryLimit | default "2Gi" }}
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.limitResourcePolicy }}
+{{- $maxCPU := .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.maxCPULimit | default "1000m" }}
+{{- $maxMemory := .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.maxMemoryLimit | default "2Gi" }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits
 spec:
   failurePolicy: Fail
-  {{- if and .Values.resourcePoliciesConfig.limitResourcePolicyConfig.namespaces }}
+  {{- if and .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -15,7 +15,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.resourcePoliciesConfig.limitResourcePolicyConfig.namespaces }}
+          {{- range .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
   {{- else }}
@@ -24,17 +24,17 @@ spec:
   objectSelector: {}
   resourceRules:
     - apiGroups:
-        {{- range $.Values.resourcePoliciesConfig.limitResourcePolicyConfig.apiGroups }}
+        {{- range $.Values.policyDefinitions.resourcePolicies.limitResourcePolicy.apiGroups }}
         - {{ . | quote }}
         {{- end }}
       apiVersions:
         - v1
       operations:
-        {{- range .Values.resourcePoliciesConfig.limitResourcePolicyConfig.operations }}
+        {{- range .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.operations }}
         - {{ . | quote }}
         {{- end }}
       resources:
-        {{- range .Values.resourcePoliciesConfig.limitResourcePolicyConfig.resources }}
+        {{- range .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.resources }}
         - {{ . | quote }}
         {{- end }}
       scope: Namespaced
@@ -91,7 +91,7 @@ metadata:
 spec:
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-resource-limits
   validationActions:
-  {{- range .Values.resourcePoliciesConfig.limitResourcePolicyConfig.validationActions }}
+  {{- range .Values.policyDefinitions.resourcePolicies.limitResourcePolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

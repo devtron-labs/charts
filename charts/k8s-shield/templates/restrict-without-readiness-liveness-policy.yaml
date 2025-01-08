@@ -1,11 +1,11 @@
-{{- if $.Values.readinessAndLivenessPolicy }}
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.readinessAndLivenessPolicy }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: {{ .Chart.Name }}-restrict-without-readiness-liveness
 spec:
   failurePolicy: Fail
-  {{- if and .Values.readinessAndLivenessPolicyConfig.namespaces }}
+  {{- if and .Values.policyDefinitions.readinessAndLivenessPolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range $.Values.readinessAndLivenessPolicyConfig.namespaces }}
+          {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
   {{- else }}
@@ -22,16 +22,16 @@ spec:
   objectSelector: {}
   resourceRules:
     - apiGroups:
-        {{- range $.Values.readinessAndLivenessPolicyConfig.apiGroups }}
+        {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.apiGroups }}
         - {{ . | quote }}
         {{- end }}
       apiVersions: ["v1"]
       operations:
-        {{- range $.Values.readinessAndLivenessPolicyConfig.operations }}
+        {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.operations }}
         - {{ . | quote }}
         {{- end }}
       resources:
-        {{- range $.Values.readinessAndLivenessPolicyConfig.resources }}
+        {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.resources }}
         - {{ . | quote }}
         {{- end }}
       scope: Namespaced
@@ -58,7 +58,7 @@ metadata:
 spec:
   policyName: {{ .Chart.Name }}-restrict-without-readiness-liveness
   validationActions:
-  {{- range $.Values.readinessAndLivenessPolicyConfig.validationActions }}
+  {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

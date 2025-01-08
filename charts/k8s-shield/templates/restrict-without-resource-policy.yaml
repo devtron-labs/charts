@@ -1,11 +1,11 @@
-{{- if $.Values.WithoutResource }}
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.WithoutResource }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
 spec:
   failurePolicy: Fail
-  {{- if and .Values.resourcePoliciesConfig.WithoutResourceConfig.namespaces }}
+  {{- if and .Values.policyDefinitions.resourcePolicies.WithoutResource.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.namespaces }}
+          {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.namespaces }}
           - {{ . | quote }}
           {{- end }}
   {{- else }}
@@ -21,17 +21,17 @@ spec:
   {{- end }}
   resourceRules:
     - apiGroups:
-      {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.apiGroups }}
+      {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.apiGroups }}
       - {{ . | quote }}
       {{- end }}
       apiVersions:
       - v1
       operations:
-      {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.operations }}
+      {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.operations }}
       - {{ . | quote }}
       {{- end }}
       resources:
-      {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.resources }}
+      {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.resources }}
       - {{ . | quote }}
       {{- end }}
       scope: Namespaced
@@ -55,7 +55,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
   validationActions:
-  {{- range $.Values.resourcePoliciesConfig.WithoutResourceConfig.validationActions }}
+  {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

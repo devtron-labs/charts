@@ -1,11 +1,11 @@
-{{- if $.Values.appDeletionPolicy }}
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.appDeletionPolicy }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
 spec:
   failurePolicy: Fail
-  {{- if and .Values.appDeletionPolicyConfig.namespaces }}
+  {{- if and .Values.policyDefinitions.appDeletionPolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
     namespaceSelector:
@@ -13,7 +13,7 @@ spec:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.appDeletionPolicyConfig.namespaces }}
+          {{- range .Values.policyDefinitions.appDeletionPolicy.namespaces }}
           - {{ . | quote }}
           {{- end }}
   {{- else }}
@@ -45,7 +45,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
   validationActions:
-  {{- range .Values.appDeletionPolicyConfig.validationActions }}
+  {{- range .Values.policyDefinitions.appDeletionPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}

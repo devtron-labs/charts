@@ -1,5 +1,4 @@
-{{- if $.Values.namespaceDeletionPolicy }}
----
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.namespaceDeletionPolicy }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicy
 metadata:
@@ -18,7 +17,7 @@ spec:
         operations:
           - DELETE
         resourceNames:
-          {{- range $.Values.namespaceDeletionPolicyConfig.namespaces }}
+          {{- range $.Values.policyDefinitions.namespaceDeletionPolicy.namespaces }}
           - {{ . }}
           {{- end }}
         resources:
@@ -39,7 +38,7 @@ spec:
     objectSelector: {}
   policyName: {{ include "k8s-shield.fullname" . }}-restrict-namespace-deletion
   validationActions:
-  {{- range .Values.namespaceDeletionPolicyConfig.validationActions }}
+  {{- range .Values.policyDefinitions.namespaceDeletionPolicy.validationActions }}
   - {{ . }}
   {{- end }}
 {{- end }}
