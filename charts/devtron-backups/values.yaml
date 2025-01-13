@@ -4,14 +4,14 @@ global:
   # devtron-backups
   S3:
     # give the endpoint in case of non AWS storages with s3 protocol 
-    enabled: false
+    enabled: true
     S3_BUCKET_NAME: ""
     S3_ACCESS_KEY: ""
     S3_SECRET_KEY: ""
     AWS_REGION: ""
     S3_ENDPOINT: ""
-    CA_BUNDLE: ""
-    # CA_BUNDLE: "-----BEGIN CERTIFICATE-----\nMIIDcDfghjklcvbnm,tryupE+mz30g=\n-----END CERTIFICATE-----"
+    # CA_BUNDLE: ""
+    CA_BUNDLE: "-----BEGIN CERTIFICATE-----\nMIIDcDfghjklcvbnm,tryupE+mz30g=\n-----END CERTIFICATE-----"
     # set true if node has access of buckets
     # By default, the node has access to buckets. Set to false if the node should not have access.
     NODE_ROLE: "true"
