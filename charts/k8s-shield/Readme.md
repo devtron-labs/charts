@@ -6,7 +6,7 @@ The following sections describe the policies that are defined in the values.yaml
 
 ## Table of Contents
 
-1. exclude Label
+1. Exclude Label
 2. PVC Creation Policy
 3. Namespace Deletion Policy
 4. Load Balancer Creation Policy
@@ -21,7 +21,7 @@ The following sections describe the policies that are defined in the values.yaml
 11. Container Security Policy
 12. Extra Validating Policy
 
-## exclude Label
+## Exclude Label
 
 The ```excludeLabel``` defines a label with a key-value pair that allows users to apply policies without restrictions.
 
