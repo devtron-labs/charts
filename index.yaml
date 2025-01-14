@@ -4452,6 +4452,31 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/jcmhproxy-ingress-0.14.6/jcmhproxy-ingress-0.14.6.tgz
     version: 0.14.6
+  k8s-shield:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2025-01-14T10:53:31.681821067Z"
+    description: A Helm chart for Kubernetes admission policies
+    digest: c7419ee19cbe8ddfee2741f63eb8a0a93544224849c29c3880c0b46b31ac9de8
+    icon: https://cdn.devtron.ai/images/Devtron_K8s_Shield.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - validatingAdmissionPolicy
+    - k8s-policy
+    - Policies
+    - DevSecOps
+    - Security
+    maintainers:
+    - email: devops@devtron.ai
+      name: Devtron Devops Team
+    - email: neha.sharma@devtron.ai
+      name: Neha Sharma
+    name: k8s-shield
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/k8s-shield-0.1.0/k8s-shield-0.1.0.tgz
+    version: 0.1.0
   knative-installer:
   - apiVersion: v2
     created: "2021-06-14T05:45:35.085899302Z"
@@ -5259,4 +5284,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2024-12-27T15:18:57.478282658Z"
+generated: "2025-01-14T10:53:31.682192833Z"
