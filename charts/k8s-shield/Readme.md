@@ -23,7 +23,7 @@ The following sections describe the policies that are defined in the values.yaml
 
 ## Exclude Label
 
-The ```excludeLabel``` defines a label with a key-value pair that allows users to apply policies without restrictions.
+The ```excludeLabel``` Resources will be excluded from the scope of the policy if these labels are present.
 
 ## PVC Creation Policy
 

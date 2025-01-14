@@ -1,7 +1,7 @@
-#excludeLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
+#excludeLabel Resources will be excluded from the scope of the policy if these labels are present.
 excludeLabel:
-  key: "say"
-  value: "hello" 
+  key: ""
+  value: "" 
 
 defaultPolicies: 
   create: true
