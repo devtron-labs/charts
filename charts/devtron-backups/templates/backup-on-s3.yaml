@@ -94,7 +94,7 @@ spec:
             - /bin/bash
             - -c
             - |
-{{ include "devtron.postgresBackupCABundle" . | indent 7 }}
+{{ include "devtron.postgresBackup" . | indent 7 }}
           volumes:
           - name: psql-volume
             emptyDir: {}
@@ -166,7 +166,7 @@ spec:
             - /bin/bash
             - -c
             - | 
-{{ include "devtron.argocdBackup" . | indent 7 }}
+{{ include "devtron.argocdBackup" . | indent 5 }}
           volumes:
           - name: argocd-volume
             emptyDir: {}

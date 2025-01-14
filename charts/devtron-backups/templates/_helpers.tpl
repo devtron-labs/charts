@@ -1,4 +1,4 @@
-{{- define "devtron.postgresBackupCABundle" -}}
+{{- define "devtron.postgresBackup" -}}
   {{- if .Values.global.S3.CA_BUNDLE }}
     {{- if .Values.global.S3.S3_ENDPOINT }}
       {{- if .Values.global.S3.encryption.enabled }} 
@@ -31,17 +31,33 @@
 {{- end -}}
 
 {{- define "devtron.argocdBackup" -}}
-    {{- if .Values.global.S3.S3_ENDPOINT }}
-        {{- if .Values.global.S3.encryption.enabled }}
-         set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
-        {{- else }}
-         set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
-        {{- end }}
-    {{- else}}
-        {{- if .Values.global.S3.encryption.enabled }}
-         set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/;
+    {{- if .Values.global.S3.CA_BUNDLE }}
+        {{- if .Values.global.S3.S3_ENDPOINT }}
+            {{- if .Values.global.S3.encryption.enabled }} 
+              set -ex; date1=$(date +%Y%m%d-%H%M); CA_BUNDLE=$(echo "$CA_BUNDLE" | base64 -d); echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            {{- else }}
+              set -ex; date1=$(date +%Y%m%d-%H%M); CA_BUNDLE=$(echo "$CA_BUNDLE" | base64 -d); echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            {{- end }}
         {{- else}}
-         set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/;
+            {{- if .Values.global.S3.encryption.enabled }} 
+              set -ex; date1=$(date +%Y%m%d-%H%M); CA_BUNDLE=$(echo "$CA_BUNDLE" | base64 -d); echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/;
+            {{- else}}
+              set -ex; date1=$(date +%Y%m%d-%H%M); CA_BUNDLE=$(echo "$CA_BUNDLE" | base64 -d); echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/;
+            {{- end }}
+        {{- end }}
+    {{- else }}
+        {{- if .Values.global.S3.S3_ENDPOINT }}
+            {{- if .Values.global.S3.encryption.enabled }}
+             set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            {{- else }}
+             set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+            {{- end }}
+        {{- else}}
+            {{- if .Values.global.S3.encryption.enabled }}
+             set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/;
+            {{- else}}
+             set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/;
+            {{- end }}
         {{- end }}
     {{- end }}
 {{- end }}
