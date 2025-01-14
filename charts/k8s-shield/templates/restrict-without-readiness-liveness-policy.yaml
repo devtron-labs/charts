@@ -1,0 +1,64 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.readinessAndLivenessPolicy }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ .Chart.Name }}-restrict-without-readiness-liveness
+spec:
+  failurePolicy: Fail
+  {{- if and .Values.policyDefinitions.readinessAndLivenessPolicy.namespaces }}
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+          {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+  {{- else }}
+  matchConstraints: {}
+  {{- end }}
+  objectSelector: {}
+  resourceRules:
+    - apiGroups:
+        {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.apiGroups }}
+        - {{ . | quote }}
+        {{- end }}
+      apiVersions: ["v1"]
+      operations:
+        {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.operations }}
+        - {{ . | quote }}
+        {{- end }}
+      resources:
+        {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.resources }}
+        - {{ . | quote }}
+        {{- end }}
+      scope: Namespaced
+  validations:
+  {{- if and .Values.excludeLabel.key .Values.excludeLabel.value }}
+    - expression: >
+        (has(object.metadata.labels) &&
+         object.metadata.labels['{{ .Values.excludeLabel.key }}'] == '{{ .Values.excludeLabel.value }}') ||
+        object.spec.template.spec.containers.all(container,
+          has(container.readinessProbe) &&
+          has(container.livenessProbe)
+        )
+      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.excludeLabel.key }}: {{ .Values.excludeLabel.value }}'."
+  {{- else }}
+    - expression: object.spec.template.spec.containers.all(container,
+        has(container.readinessProbe) && has(container.livenessProbe))
+      message: "Deployments without readiness and liveness probes are not allowed"
+  {{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ .Chart.Name }}-restrict-without-readiness-liveness
+spec:
+  policyName: {{ .Chart.Name }}-restrict-without-readiness-liveness
+  validationActions:
+  {{- range $.Values.policyDefinitions.readinessAndLivenessPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}

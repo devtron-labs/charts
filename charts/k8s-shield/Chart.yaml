@@ -1,0 +1,20 @@
+apiVersion: v2
+appVersion: 1.0.0
+description: A Helm chart for Kubernetes admission policies
+keywords:
+  - Devtron
+  - Kubernetes
+  - validatingAdmissionPolicy
+  - k8s-policy
+  - Policies
+  - DevSecOps
+  - Security
+name: k8s-shield
+type: application
+version: 0.1.0
+maintainers:
+- email: devops@devtron.ai
+  name: Devtron Devops Team
+- email: neha.sharma@devtron.ai
+  name: Neha Sharma
+icon: https://cdn.devtron.ai/images/Devtron_K8s_Shield.png
