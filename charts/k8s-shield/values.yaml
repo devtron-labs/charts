@@ -1,10 +1,10 @@
-#bypassLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
-bypassLabel:
-  key: ""
-  value: "" 
+#excludeLabel defines a label with a key-value pair that allows the user to apply policies without any restrictions. 
+excludeLabel:
+  key: "say"
+  value: "hello" 
 
 defaultPolicies: 
-  create: false
+  create: true
   policies:
     pvcCreationPolicy: true
     namespaceDeletionPolicy: true

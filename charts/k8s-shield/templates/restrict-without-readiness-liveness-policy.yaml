@@ -36,15 +36,15 @@ spec:
         {{- end }}
       scope: Namespaced
   validations:
-  {{- if and .Values.bypassLabel.key .Values.bypassLabel.value }}
+  {{- if and .Values.excludeLabel.key .Values.excludeLabel.value }}
     - expression: >
         (has(object.metadata.labels) &&
-         object.metadata.labels['{{ .Values.bypassLabel.key }}'] == '{{ .Values.bypassLabel.value }}') ||
+         object.metadata.labels['{{ .Values.excludeLabel.key }}'] == '{{ .Values.excludeLabel.value }}') ||
         object.spec.template.spec.containers.all(container,
           has(container.readinessProbe) &&
           has(container.livenessProbe)
         )
-      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.bypassLabel.key }}: {{ .Values.bypassLabel.value }}'."
+      message: "Deployments without readiness and liveness probes are only allowed for '{{ .Values.excludeLabel.key }}: {{ .Values.excludeLabel.value }}'."
   {{- else }}
     - expression: object.spec.template.spec.containers.all(container,
         has(container.readinessProbe) && has(container.livenessProbe))
