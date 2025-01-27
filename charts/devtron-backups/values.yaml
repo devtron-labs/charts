@@ -3,30 +3,33 @@ global:
   schedule: "0 */12 * * *"
   # devtron-backups
   S3:
-    enabled: false
+    # give the endpoint in case of non AWS storages with s3 protocol 
+    enabled: true
     S3_BUCKET_NAME: ""
     S3_ACCESS_KEY: ""
     S3_SECRET_KEY: ""
     AWS_REGION: ""
     S3_ENDPOINT: ""
-    # give the endpoint in case of non AWS storages with s3 protocol 
-    NODE_ROLE: false
+    # CA_BUNDLE: ""
+    CA_BUNDLE: "-----BEGIN CERTIFICATE-----\nMIIDcDfghjklcvbnm,tryupE+mz30g=\n-----END CERTIFICATE-----"
     # set true if node has access of buckets
-    encryption:
+    #defaults to true, set false and specify S3_ACCESS_KEY & S3_SECRET_KEY if node does not have bucket access
+    NODE_ROLE: "true"
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
+    encryption:
       enabled: false
       passphrase: ""
     # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
-    enabled: false
+    enabled: true
     AZURE_BLOB_ACCOUNT_NAME: ""
     AZURE_ACCOUNT_KEY: ""
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
     encryption:
       enabled: false # Recommended
-      passphrase:  # Required if encryption is enabled
+      passphrase: ""  # Required if encryption is enabled
 
     # image: quay.io/devtron/k8s-utils:az-cli-ubuntu #amd
   GCP:
@@ -57,7 +60,7 @@ argocdversion: v2
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
-  enabled: false
+  enabled: true
   resources:
     requests:
       cpu: 100m
@@ -83,3 +86,14 @@ argocd_backup:
 
   # argocdImage: argoproj/argocd:v1.8.1  #(image for argo-V1)
   # args: argocd-util export --namespace devtroncd > /argocd/backup.yaml; #(argo-V1)
+
+# Taints and tolerations for both backups
+tolerations:
+  - key: "backup-type"
+    operator: "Equal"
+    value: "postgres-backup"
+    effect: "NoExecute"
+
+nodeSelector:
+  disktype: ssd
+
