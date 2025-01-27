@@ -98,6 +98,10 @@ spec:
           volumes:
           - name: psql-volume
             emptyDir: {}
+          nodeselector: 
+{{ toYaml .Values.nodeSelector | indent 13 }}
+          tolerations:
+{{ toYaml .Values.tolerations | indent 13 }}
           restartPolicy: OnFailure
 {{- end }}
 ---
@@ -170,6 +174,10 @@ spec:
           volumes:
           - name: argocd-volume
             emptyDir: {}
+          nodeselector: 
+{{ toYaml .Values.nodeSelector | indent 13 }}
+          tolerations:
+{{ toYaml .Values.tolerations | indent 13 }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}

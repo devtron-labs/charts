@@ -10,7 +10,9 @@ data:
     AZURE_BLOB_ACCOUNT_NAME: {{ .Values.global.AZURE.AZURE_BLOB_ACCOUNT_NAME | b64enc }}
     AZURE_ACCOUNT_KEY: {{ .Values.global.AZURE.AZURE_ACCOUNT_KEY | b64enc }}
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: {{ .Values.global.AZURE.AZURE_BLOB_CONTAINER_FOR_POSTGRES | b64enc }}
+    {{- if .Values.argocd_backup.enabled }}
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: {{ .Values.global.AZURE.AZURE_BLOB_CONTAINER_FOR_ARGOCD | b64enc }}
+    {{- end }}
 {{- end }}
 ---
 {{- if .Values.postgres_backup.enabled }}
@@ -40,7 +42,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: PG_PASSWORD
-                  name: {{ .Values.postgres_backup.secretName }} 
+                  name: {{ .Values.postgres_backup.secretName }}
             imagePullPolicy: Always
             args:
             - /bin/bash
@@ -89,6 +91,10 @@ spec:
           volumes:
           - name: psql-volume
             emptyDir: {}
+          nodeselector: 
+{{ toYaml .Values.nodeSelector | indent 13 }}
+          tolerations:
+{{ toYaml .Values.tolerations | indent 13 }}
           restartPolicy: OnFailure
 {{- end }}          
 ---
@@ -163,6 +169,10 @@ spec:
           volumes:
           - name: argocd-volume
             emptyDir: {}
+          nodeselector: 
+{{ toYaml .Values.nodeSelector | indent 13 }}
+          tolerations:
+{{ toYaml .Values.tolerations | indent 13 }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
