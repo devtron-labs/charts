@@ -23,7 +23,16 @@ kind: CronJob
 metadata:
   name: postgres-app-backup-cronjob
   namespace: devtroncd
+  {{- if $.Values.labels }}
+  labels:
+{{ toYaml .Values.labels | indent 4 }}
+  {{- end }}
+  {{- if $.Values.annotations }}
+  annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+  {{- end }}
 spec:
+  timeZone: {{ .Values.timezone | default "UTC" }}
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
@@ -47,7 +56,7 @@ spec:
             - -c
             - set -ex; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
             image: {{ .Values.global.GCP.image | default "google/cloud-sdk:alpine" }}
@@ -69,7 +78,7 @@ spec:
             {{- end }}
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
@@ -82,9 +91,9 @@ spec:
           - name: psql-volume
             emptyDir: {}
           nodeselector: 
-{{ toYaml .Values.nodeSelector | indent 13 }}
+{{ toYaml .Values.nodeSelector | indent 12 }}
           tolerations:
-{{ toYaml .Values.tolerations | indent 13 }}
+{{ toYaml .Values.tolerations | indent 12 }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.postgres_backup.serviceAccountName | default "default" }}
 {{- end }}
@@ -118,7 +127,7 @@ spec:
             - -c
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
           containers:
           - name: gcloud-cli-for-cloud-storage-upload
             image:  {{ .Values.global.GCP.image | default "google/cloud-sdk:alpine" }}
@@ -140,7 +149,7 @@ spec:
             {{- end }}
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
@@ -153,9 +162,9 @@ spec:
           - name: argocd-volume
             emptyDir: {}
           nodeselector: 
-{{ toYaml .Values.nodeSelector | indent 13 }}
+{{ toYaml .Values.nodeSelector | indent 12 }}
           tolerations:
-{{ toYaml .Values.tolerations | indent 13 }}
+{{ toYaml .Values.tolerations | indent 12 }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}

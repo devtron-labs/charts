@@ -9,7 +9,16 @@ kind: CronJob
 metadata:
     name: postgres-app-backup-cronjob
     namespace: devtroncd
+    {{- if $.Values.labels }}
+    labels:
+{{ toYaml .Values.labels | indent 4 }}
+    {{- end }}
+    {{- if $.Values.annotations }}
+    annotations:
+{{ toYaml .Values.annotations | indent 4 }}
+    {{- end }}
 spec:
+    timeZone: {{ .Values.timezone | default "UTC" }}
     schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
@@ -37,7 +46,7 @@ spec:
               - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
               {{- end }}
               resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
             volumes:
             - name: psql-volume
               persistentVolumeClaim:
@@ -99,7 +108,7 @@ spec:
               - set -ex; mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M); {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ;
               {{- end }}
               resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
             volumes:
             - name: argocd-volume
               persistentVolumeClaim:
