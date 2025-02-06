@@ -49,7 +49,7 @@ spec:
             - -c
             - set -ex ; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar 
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image | default "quay.io/devtron/k8s-utils:az-cli-ubuntu" }}
@@ -79,7 +79,7 @@ spec:
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
@@ -92,9 +92,9 @@ spec:
           - name: psql-volume
             emptyDir: {}
           nodeselector: 
-{{ toYaml .Values.nodeSelector | indent 13 }}
+{{ toYaml .Values.nodeSelector | indent 12 }}
           tolerations:
-{{ toYaml .Values.tolerations | indent 13 }}
+{{ toYaml .Values.tolerations | indent 12 }}
           restartPolicy: OnFailure
 {{- end }}          
 ---
@@ -127,7 +127,7 @@ spec:
             - -c
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image  | default "quay.io/devtron/k8s-utils:az-cli-ubuntu"  }}
@@ -157,7 +157,7 @@ spec:
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
@@ -169,10 +169,14 @@ spec:
           volumes:
           - name: argocd-volume
             emptyDir: {}
+          {{- if $.nodeSelector }}
           nodeselector: 
-{{ toYaml .Values.nodeSelector | indent 13 }}
+{{ toYaml .Values.nodeSelector | indent 12 }}
+          {{- end }}
+          {{- if $.tolerations }}
           tolerations:
-{{ toYaml .Values.tolerations | indent 13 }}
+{{ toYaml .Values.tolerations | indent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}

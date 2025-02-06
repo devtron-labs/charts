@@ -88,12 +88,11 @@ argocd_backup:
   # args: argocd-util export --namespace devtroncd > /argocd/backup.yaml; #(argo-V1)
 
 # Taints and tolerations for both backups
-tolerations:
-  - key: ""
-    operator: ""
-    value: ""
-    effect: ""
-
-nodeSelector:
-  disktype: ""
+tolerations: []
+  # - key: "example-key"
+  #   operator: "Equal"
+  #   value: "example-value"
+  #   effect: "NoSchedule"
+nodeSelector: {}
+    # kubernetes.io?/hostname: "worker-node-1"
 
