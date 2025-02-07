@@ -9,16 +9,16 @@ kind: CronJob
 metadata:
     name: postgres-app-backup-cronjob
     namespace: devtroncd
-    {{- if $.Values.labels }}
+    {{- if $.Values.postgres_backup.labels }}
     labels:
-{{ toYaml .Values.labels | indent 4 }}
+{{ toYaml .Values.postgres_backup.labels | indent 6 }}
     {{- end }}
-    {{- if $.Values.annotations }}
+    {{- if $.Values.postgres_backup.annotations }}
     annotations:
-{{ toYaml .Values.annotations | indent 4 }}
+{{ toYaml .Values.postgres_backup.annotations | indent 6 }}
     {{- end }}
 spec:
-    timeZone: {{ .Values.timezone | default "UTC" }}
+    timeZone: {{ .Values.global.timezone | default "UTC" }}
     schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
@@ -55,6 +55,14 @@ spec:
                 {{- else }}
                   claimName: devtron-backup-pvc
                 {{- end }}
+            {{- if $.Values.global.nodeSelector }}
+            nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+            {{- end }}
+            {{- if $.Values.global.tolerations }}
+            tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+            {{- end }}
             restartPolicy: OnFailure
 {{- end }}
 {{- if and (.Values.global.PERSISTENCE.enabled) (not .Values.global.PERSISTENCE.existingClaim) }}
@@ -85,7 +93,16 @@ kind: CronJob
 metadata:
     name: argocd-app-backup-job
     namespace: devtroncd
+    {{- if $.Values.argocd_backup.labels }}
+    labels:
+{{ toYaml .Values.argocd_backup.labels | indent 6 }}
+    {{- end }}
+    {{- if $.Values.argocd_backup.annotations }}
+    annotations:
+{{ toYaml .Values.argocd_backup.annotations | indent 6 }}
+    {{- end }}
 spec:
+    timeZone: {{ .Values.global.timezone | default "UTC" }}
     schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
@@ -117,6 +134,14 @@ spec:
                 {{- else }}
                   claimName: devtron-backup-pvc
                 {{- end }}
+            {{- if $.Values.global.nodeSelector }}
+            nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+            {{- end }}
+            {{- if $.Values.global.tolerations }}
+            tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+            {{- end }}
             restartPolicy: OnFailure
             serviceAccountName: argocd-backup
 {{- end }}

@@ -54,6 +54,17 @@ global:
     encryption:
       enabled: false # Recommended
       passphrase: "" # Required if encryption is enabled
+  
+  # Taints and tolerations for both backups
+  tolerations: []
+    # - key: "example-key"
+    #   operator: "Equal"
+    #   value: "example-value"
+    #   effect: "NoSchedule"
+  nodeSelector: {}
+      # kubernetes.io?/hostnam e: "worker-node-1"
+
+  timezone: ""  #Set the timezone for scheduling the cronJob. # default UTC
 
 argocdversion: v2
 
@@ -68,6 +79,11 @@ postgres_backup:
     limits:
       cpu: 100m
       memory: 100Mi
+  labels: {}
+    # key: "example-value"
+  annotations: {}
+    # key: "example-value"
+
   # postgresImage: postgres:14
   # host: "postgresql-custom.devtroncd"
 
@@ -81,26 +97,14 @@ argocd_backup:
     limits:
       cpu: 100m
       memory: 100Mi
+  labels: {}
+    # key: "example-value"
+  annotations: {}
+    # key: "example-value"
+
   # argocdImage: quay.io/argoproj/argocd:v2.4.0
   # args: "argocd admin export -n devtroncd > /argocd/backup.yaml"
 
   # argocdImage: argoproj/argocd:v1.8.1  #(image for argo-V1)
   # args: argocd-util export --namespace devtroncd > /argocd/backup.yaml; #(argo-V1)
-
-# Taints and tolerations for both backups
-tolerations: []
-  # - key: "example-key"
-  #   operator: "Equal"
-  #   value: "example-value"
-  #   effect: "NoSchedule"
-nodeSelector: {}
-    # kubernetes.io?/hostname: "worker-node-1"
-
-labels: {}
-  # key: "example-value"
-
-annotations: {}
-  #  key: "example-value"
-
-timezone: ""  #Set the timezone for scheduling the cronJob. # default UTC
 
