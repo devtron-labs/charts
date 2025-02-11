@@ -29,7 +29,7 @@ spec:
           spec:
             containers:
             - name: postgres-app-backup-cronjob
-              image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
+              image: {{ .Values.postgres_backup.postgresImage | default "postgres:14" }}
               volumeMounts:
               - mountPath: /postgres
                 name: psql-volume

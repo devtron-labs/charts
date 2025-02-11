@@ -48,7 +48,7 @@ spec:
         spec:
           initContainers:
           - name: postgres-app-backup-cronjob
-            image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
+            image: {{ .Values.postgres_backup.postgresImage | default "postgres:14" }}
             volumeMounts:
             - mountPath: /postgres
               name: psql-volume
@@ -64,7 +64,7 @@ spec:
             - -c
             - set -ex; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 12 }}
+{{ toYaml .Values.postgres_backup.resources | indent 14 }}
           containers:
           - name: aws-cli-for-s3-download
             image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-multi-arch-1" }}
@@ -103,7 +103,7 @@ spec:
             {{- end }}
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 12 }}
+{{ toYaml .Values.postgres_backup.resources | indent 14 }}
             args:
             - /bin/bash
             - -c
@@ -163,7 +163,7 @@ spec:
             - -c
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 12 }}
+{{ toYaml .Values.argocd_backup.resources | indent 14 }}
           containers:
           - name: aws-cli-for-s3-upload
             image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-multi-arch-1" }}
@@ -202,7 +202,7 @@ spec:
             {{- end }}
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 12 }}
+{{ toYaml .Values.argocd_backup.resources | indent 14 }}
             args:
             - /bin/bash
             - -c
