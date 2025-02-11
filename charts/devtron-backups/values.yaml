@@ -56,7 +56,7 @@ global:
       passphrase: "" # Required if encryption is enabled
   
   # Taints and tolerations for both backups
-  tolerations: {}
+  tolerations: []
     # - key: "example-key"
     #   operator: "Equal"
     #   value: "example-value"
