@@ -81,7 +81,7 @@ postgres_backup:
       memory: 100Mi
   labels: {}
     # key: "example-value"
-  annotations: []
+  annotations: {}
     # key: "example-value"
 
   # postgresImage: postgres:14
@@ -99,7 +99,7 @@ argocd_backup:
       memory: 100Mi
   labels: {}
     # key: "example-value"
-  annotations: []
+  annotations: {}
     # key: "example-value"
 
   # argocdImage: quay.io/argoproj/argocd:v2.4.0
