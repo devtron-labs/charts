@@ -10,7 +10,9 @@ data:
     AZURE_BLOB_ACCOUNT_NAME: {{ .Values.global.AZURE.AZURE_BLOB_ACCOUNT_NAME | b64enc }}
     AZURE_ACCOUNT_KEY: {{ .Values.global.AZURE.AZURE_ACCOUNT_KEY | b64enc }}
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: {{ .Values.global.AZURE.AZURE_BLOB_CONTAINER_FOR_POSTGRES | b64enc }}
+    {{- if .Values.argocd_backup.enabled }}
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: {{ .Values.global.AZURE.AZURE_BLOB_CONTAINER_FOR_ARGOCD | b64enc }}
+    {{- end }}
 {{- end }}
 ---
 {{- if .Values.postgres_backup.enabled }}
@@ -23,7 +25,16 @@ kind: CronJob
 metadata:
   name: postgres-app-backup-cronjob
   namespace: devtroncd
+  {{- if $.Values.postgres_backup.labels }}
+  labels:
+{{ toYaml .Values.postgres_backup.labels | indent 4 }}
+  {{- end }}
+  {{- if $.Values.postgres_backup.annotations }}
+  annotations:
+{{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+  {{- end }}
 spec:
+  timeZone: {{ .Values.global.timezone | default "UTC" }}
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
@@ -47,7 +58,7 @@ spec:
             - -c
             - set -ex ; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar 
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image | default "quay.io/devtron/k8s-utils:az-cli-ubuntu" }}
@@ -77,7 +88,7 @@ spec:
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
@@ -89,6 +100,14 @@ spec:
           volumes:
           - name: psql-volume
             emptyDir: {}
+          {{- if $.Values.global.nodeSelector }}
+          nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+          {{- end }}
+          {{- if $.Values.global.tolerations }}
+          tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
 {{- end }}          
 ---
@@ -102,7 +121,16 @@ kind: CronJob
 metadata:
   name: argocd-app-backup-cronjob
   namespace: devtroncd
+  {{- if $.Values.argocd_backup.labels }}
+  labels:
+{{ toYaml .Values.argocd_backup.labels | indent 4 }}
+  {{- end }}
+  {{- if $.Values.argocd_backup.annotations }}
+  annotations:
+{{ toYaml .Values.argocd_backup.annotations | indent 4 }}
+  {{- end }}
 spec:
+  timeZone: {{ .Values.global.timezone | default "UTC" }}
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
@@ -121,7 +149,7 @@ spec:
             - -c
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
           containers:
           - name: az-cli-for-upload
             image: {{ .Values.global.AZURE.image  | default "quay.io/devtron/k8s-utils:az-cli-ubuntu"  }}
@@ -151,7 +179,7 @@ spec:
                   key: AZURE_BLOB_CONTAINER_FOR_ARGOCD
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
@@ -163,6 +191,14 @@ spec:
           volumes:
           - name: argocd-volume
             emptyDir: {}
+          {{- if $.Values.global.nodeSelector }}
+          nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+          {{- end }}
+          {{- if $.Values.global.tolerations }}
+          tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}

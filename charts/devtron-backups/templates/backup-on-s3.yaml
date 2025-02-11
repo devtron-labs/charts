@@ -5,14 +5,15 @@ kind: Secret
 metadata:
   name: devtron-s3-backup-secret
   namespace: devtroncd
-type: opaque
+type: Opaque
 data:
-    S3_BUCKET_NAME: {{ .Values.global.S3.S3_BUCKET_NAME | b64enc }}
-    {{- if not .Values.global.S3.NODE_ROLE }}
-    AWS_ACCESS_KEY: {{ .Values.global.S3.S3_ACCESS_KEY | b64enc }}
-    AWS_SECRET_KEY: {{ .Values.global.S3.S3_SECRET_KEY | b64enc }}
-    {{- end }}
-    AWS_REGION: {{ .Values.global.S3.AWS_REGION | default "us-east-1" | b64enc }}
+  S3_BUCKET_NAME: {{ .Values.global.S3.S3_BUCKET_NAME | b64enc }}
+  {{- if eq .Values.global.S3.NODE_ROLE "false" }}
+  AWS_ACCESS_KEY: {{ .Values.global.S3.S3_ACCESS_KEY | b64enc }}
+  AWS_SECRET_KEY: {{ .Values.global.S3.S3_SECRET_KEY | b64enc }}
+  {{- end }}
+  AWS_CA_BUNDLE: {{ .Values.global.S3.CA_BUNDLE | b64enc }}
+  AWS_REGION: {{ .Values.global.S3.AWS_REGION | default "us-east-1" | b64enc }}
 {{- end }}
 ---
 {{- if .Values.postgres_backup.enabled }}
@@ -25,7 +26,16 @@ kind: CronJob
 metadata:
   name: postgres-app-backup-cronjob
   namespace: devtroncd
+  {{- if $.Values.postgres_backup.labels }}
+  labels:
+{{ toYaml .Values.postgres_backup.labels | indent 4 }}
+  {{- end }}
+  {{- if $.Values.postgres_backup.annotations }}
+  annotations:
+{{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+  {{- end }}
 spec:
+  timeZone: {{ .Values.global.timezone | default "UTC" }}
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
@@ -49,7 +59,7 @@ spec:
             - -c
             - set -ex; pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges > /postgres/backup.tar; echo $? ; du -sh /postgres/backup.tar
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
           containers:
           - name: aws-cli-for-s3-download
             image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-multi-arch-1" }}
@@ -79,28 +89,32 @@ spec:
                 secretKeyRef:
                   name: devtron-s3-backup-secret
                   key: AWS_REGION
+            {{- if .Values.global.S3.CA_BUNDLE }}
+            - name: CA_BUNDLE
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: AWS_CA_BUNDLE
+            {{- end }}
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.postgres_backup.resources | indent 13 }}
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
-          {{- if .Values.global.S3.S3_ENDPOINT }}
-          {{- if $.Values.global.S3.encryption.enabled }}          
-            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
-          {{- else}}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
-          {{- end }}
-          {{- else}}
-          {{- if $.Values.global.S3.encryption.enabled }}          
-            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/;
-          {{- else}}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/;
-          {{- end }}
-          {{- end }}
+            - |
+{{ include "devtron.postgresBackup" . | indent 6 }}
           volumes:
           - name: psql-volume
             emptyDir: {}
+          {{- if $.Values.global.nodeSelector }}
+          nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+          {{- end }}
+          {{- if $.Values.global.tolerations }}
+          tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
 {{- end }}
 ---
@@ -112,9 +126,18 @@ apiVersion: batch/v1beta1
 {{ end -}}
 kind: CronJob
 metadata:
-    name: argocd-app-backup-cronjob
-    namespace: devtroncd
+  name: argocd-app-backup-cronjob
+  namespace: devtroncd
+  {{- if $.Values.argocd_backup.labels }}
+  labels:
+{{ toYaml .Values.argocd_backup.labels | indent 4 }}
+  {{- end }}
+  {{- if $.Values.argocd_backup.annotations }}
+  annotations:
+{{ toYaml .Values.argocd_backup.annotations | indent 4 }}
+  {{- end }}
 spec:
+  timeZone: {{ .Values.global.timezone | default "UTC" }}
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
@@ -132,15 +155,15 @@ spec:
             - -c
             - {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd > /argocd/backup.yaml" }}
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
           containers:
           - name: aws-cli-for-s3-upload
             image: {{ .Values.global.S3.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-multi-arch-1" }}
             volumeMounts:
             - mountPath: /argocd
               name: argocd-volume
-            {{- if not .Values.global.S3.NODE_ROLE }}
             env:
+            {{- if not .Values.global.S3.NODE_ROLE }}
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
                 secretKeyRef:
@@ -164,27 +187,23 @@ spec:
                   key: AWS_REGION
             imagePullPolicy: Always
             resources:
-{{ toYaml .Values.argocd_backup.resources | indent 13 }}
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
             args:
             - /bin/bash
             - -c
-          {{- if .Values.global.S3.S3_ENDPOINT }}
-          {{- if $.Values.global.S3.encryption.enabled }}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
-          {{- else}}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
-          {{- end }}
-          {{- else}}
-          {{- if $.Values.global.S3.encryption.enabled }}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /argocd/backup.yaml; rm -rvf /argocd/backup.yaml; mv /argocd/backup.yaml.gpg /argocd/backup-$date1.yaml.gpg; aws s3 cp /argocd/backup-$date1.yaml.gpg s3://$S3_BUCKET/argocd/;
-          {{- else}}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /argocd/backup.yaml /argocd/backup-$date1.yaml; aws s3 cp /argocd/backup-$date1.yaml s3://$S3_BUCKET/argocd/;
-          {{- end }}
-          {{- end}}
-
+            - | 
+{{ include "devtron.argocdBackup" . | indent 4 }}
           volumes:
           - name: argocd-volume
             emptyDir: {}
+          {{- if $.Values.global.nodeSelector }}
+          nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+          {{- end }}
+          {{- if $.Values.global.tolerations }}
+          tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+          {{- end }}
           restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
