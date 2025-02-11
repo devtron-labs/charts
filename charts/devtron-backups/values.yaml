@@ -74,7 +74,7 @@ postgres_backup:
   enabled: true
   resources:
     requests:
-      cpu: 200m
+      cpu: 100m
       memory: 100Mi
     limits:
       cpu: 100m
@@ -92,7 +92,7 @@ argocd_backup:
   enabled: false
   resources:
     requests:
-      cpu: 500m
+      cpu: 100m
       memory: 100Mi
     limits:
       cpu: 100m
