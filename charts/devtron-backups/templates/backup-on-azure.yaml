@@ -25,20 +25,23 @@ kind: CronJob
 metadata:
   name: postgres-app-backup-cronjob
   namespace: devtroncd
-  {{- if $.Values.postgres_backup.labels }}
-  labels:
-{{ toYaml .Values.postgres_backup.labels | indent 4 }}
-  {{- end }}
-  {{- if $.Values.postgres_backup.annotations }}
-  annotations:
-{{ toYaml .Values.postgres_backup.annotations | indent 4 }}
-  {{- end }}
 spec:
   timeZone: {{ .Values.global.timezone | default "UTC" }}
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
       template:
+        {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
+        metadata:
+          {{- if $.Values.postgres_backup.labels }}
+          labels:
+          {{ toYaml .Values.postgres_backup.labels | indent 4 }}
+          {{- end }}
+          {{- if $.Values.postgres_backup.annotations }}
+          annotations:
+          {{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+          {{- end }}
+        {{- end }}  
         spec:
           initContainers:
           - name: postgres-app-backup-cronjob
@@ -121,20 +124,23 @@ kind: CronJob
 metadata:
   name: argocd-app-backup-cronjob
   namespace: devtroncd
-  {{- if $.Values.argocd_backup.labels }}
-  labels:
-{{ toYaml .Values.argocd_backup.labels | indent 4 }}
-  {{- end }}
-  {{- if $.Values.argocd_backup.annotations }}
-  annotations:
-{{ toYaml .Values.argocd_backup.annotations | indent 4 }}
-  {{- end }}
 spec:
   timeZone: {{ .Values.global.timezone | default "UTC" }}
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
       template:
+        {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
+        metadata:
+          {{- if $.Values.postgres_backup.labels }}
+          labels:
+          {{ toYaml .Values.postgres_backup.labels | indent 4 }}
+          {{- end }}
+          {{- if $.Values.postgres_backup.annotations }}
+          annotations:
+          {{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+          {{- end }}
+        {{- end }}
         spec:
           initContainers:
           - name: argocd-app-backup-job
