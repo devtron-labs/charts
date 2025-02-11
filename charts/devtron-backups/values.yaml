@@ -62,7 +62,7 @@ global:
     #   value: "example-value"
     #   effect: "NoSchedule"
   nodeSelector: {}
-      # kubernetes.io?/hostnam e: "worker-node-1"
+      # kubernetes.io/hostname: "worker-node-1"
 
   timezone: ""  #Set the timezone for scheduling the cronJob. # default UTC
 
