@@ -1,1 +1,0 @@
-# Helm chart to deploy argocd and postgres in a single chart.

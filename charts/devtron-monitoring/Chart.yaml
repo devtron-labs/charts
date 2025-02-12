@@ -1,0 +1,52 @@
+apiVersion: v2
+name: devtron-monitoring
+description: Enables robust monitoring and logging using Fluent-Bit, Uptime Kuma, Jaeger, Victoria Metrics, Black Box, and Event Logger for observability.  
+type: application
+sources:
+  - https://github.com/fluent/helm-charts/tree/main/charts/fluent-bit
+  - https://github.com/vectordotdev/helm-charts/tree/develop/charts/vector
+  - https://github.com/dirsigler/uptime-kuma-helm/tree/main/charts/uptime-kuma
+  - https://github.com/devtron-labs/charts/tree/main/charts/jaeger-opentelemetry
+  - https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
+  - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
+  - https://github.com/deliveryhero/helm-charts/tree/master/stable/k8s-event-logger
+
+version: 0.0.1
+appVersion: "0.0.1"
+dependencies:
+- name: fluent-bit
+  version: "0.48.5"
+  repository: https://fluent.github.io/helm-charts
+  condition: fluent-bit.enabled
+- name: vector
+  version: "0.40.0"
+  repository: https://helm.vector.dev
+  condition: vector.enabled
+- name: uptime-kuma
+  version: "2.21.2"
+  repository: https://helm.irsigler.cloud
+  condition: uptime-kuma.enabled
+- name: jaeger-all-in-one-opentelemetry
+  version: "0.1.0"
+  repository: https://helm.devtron.ai
+  condition: jaeger-opentelemetry.enabled
+- name: metrics-server
+  version: "3.12.2"
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  condition: metrics-server.enabled
+- name: prometheus-blackbox-exporter
+  version: "9.2.0"
+  repository: https://prometheus-community.github.io/helm-charts
+  condition: prometheus-blackbox-exporter.enabled
+- name: k8s-event-logger
+  version: "1.1.9"
+  repository: oci://ghcr.io/deliveryhero/helm-charts
+  condition: k8s-event-logger.enabled
+- name: victoria-metrics-k8s-stack
+  version: "0.36.1"
+  repository: https://victoriametrics.github.io/helm-charts/
+  condition: victoriametrics.enabled
+
+maintainers:
+- email: badal@devtron.ai
+  name: Badal Kumar
