@@ -262,7 +262,7 @@ jaeger-opentelemetry:
     enabled: true
     className: "nginx"
     hosts:
-      - host: "*.jaeger.devtron"
+      - host: "*.jaeger.domain.name"
 
 metrics-server:
   enabled: false
@@ -294,7 +294,7 @@ victoriametrics:
       enabled: true
       ingressClassName: nginx
       hosts:
-      - vmsingle-stage.devtron
+      - vmsingle-stage.domain.name
   alertmanager:
     enabled: true
     config:
@@ -420,12 +420,12 @@ victoriametrics:
     enabled: true
     spec:
       extraArgs:
-        external.url: https://vmalert.devtron
+        external.url: https://vmalert.domain.name
     ingress:
       enabled: true
       ingressClassName: nginx
       hosts:
-        - vmalert.devtron
+        - vmalert.domain.name
   vmagent:
     enabled: true
     spec:
@@ -441,7 +441,7 @@ victoriametrics:
       enabled: true
       ingressClassName: nginx-new
       hosts:
-        - vmagent-stage.devtron
+        - vmagent-stage.domain.name
   grafana:
     enabled: true
 
