@@ -1,12 +1,14 @@
 apiVersion: v2
 name: devtron-essentials
-description: A Helm chart for Kubernetes which deploys the services i.e. postgres, argocd
+description: Includes critical components like Rollout, Service Accounts, Image Pull Secrets, Workflow Controller, and ArgoCD and postgres for streamlined CI/CD operations.  
+
 type: application
 sources:
   - https://github.com/bitnami/charts
   - https://github.com/argoproj/argo-helm
-version: 0.0.1
-appVersion: "0.0.1"
+  - https://helm.devtron.ai
+version: 0.0.2
+appVersion: "0.0.2"
 dependencies:
 - name: postgresql
   version: "13.2.15"
@@ -16,3 +18,22 @@ dependencies:
   version: "5.13.9"
   repository: https://argoproj.github.io/argo-helm
   condition: argo-cd.enabled
+- name: argo-rollouts
+  version: "2.39.0"
+  repository: https://argoproj.github.io/argo-helm
+  condition: argo-rollout.enabled
+- name: rollout
+  version: "0.14.7"
+  repository: https://helm.devtron.ai
+  condition: devtron-rollout.enabled
+- name: devtron-generic-helm
+  version: "0.10.1"
+  repository: https://helm.devtron.ai
+  condition: generic-helm.enabled
+- name: argo-workflow
+  version: "0.1.6"
+  repository: https://helm.devtron.ai
+  condition: argo-workflow.enabled
+maintainers:
+- email: badal@devtron.ai
+  name: Badal Kumar

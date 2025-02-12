@@ -1,0 +1,239 @@
+# Default values for aws-load-balancer-controller.
+aws-load-balancer-controller: 
+  enabled: false
+  resources: {}
+  clusterName: ""
+  region: ""
+  vpcId: ""
+  ingressClass: alb
+  defaultTargetType: instance
+
+# Default values for nginx configuration
+ingress-nginx:
+  enabled: false
+  fullnameOverride: ""
+  namespaceOverride: ""
+  controller:
+    config: {}
+      # use-forwarded-headers: "true"
+    allowSnippetAnnotations: true
+    hostPort:
+      enabled: false
+      ports:
+        http: 80
+        https: 443
+    electionID: ""
+    ingressClassResource:
+      name: nginx
+      enabled: true
+      default: false
+      controllerValue: "k8s.io/ingress-nginx"
+    ingressClass: nginx
+    extraArgs: {}
+        # default-ssl-certificate: "devtroncd/devtron-ai-tls"
+    tolerations: []
+    nodeSelector: {}
+    replicaCount : 1
+    resources: {}
+    autoscaling:
+      enabled: false
+      annotations: {}
+      minReplicas: 2
+      maxReplicas: 7
+      targetCPUUtilizationPercentage: 80
+      targetMemoryUtilizationPercentage: 80
+    service:
+      enabled: true
+      external:
+        enabled: true
+      annotations: {}
+      labels: {}
+      type: LoadBalancer
+      externalTrafficPolicy: "Local"
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+
+
+# Default values for minio configuration
+minio:
+  enabled: false
+  replicas: 2
+  resources: {}
+  persistence:
+    enabled: true
+    # storageClass: ""
+    size: 10Gi
+  consoleIngress:
+    enabled: false
+    ingressClassName: ""
+    hosts:
+    - ""
+
+# Default values for karpenter configuration
+karpenter:
+  enabled: false
+  fullnameOverride: karpenter
+  replicas: 2
+  podDisruptionBudget:
+    name: karpenter
+    maxUnavailable: 1
+  serviceAccount:
+    annotations: {}
+  affinity: {}
+  tolerations: []
+  settings: 
+    clusterName: ""
+  controller:
+    resources: {}
+
+# Default values for ci-node ec2nodeclass/nodepool configuration
+devtron-generic-helm:
+  enabled: false
+  data:
+  - apiVersion: karpenter.k8s.aws/v1
+    kind: EC2NodeClass
+    metadata:
+      annotations:
+        karpenter.sh/stored-version-migrated: "true"
+      name: ci-node-class
+    spec:
+      kubelet:
+        imageGCHighThresholdPercent: 70
+        imageGCLowThresholdPercent: 50
+      amiSelectorTerms:
+        - alias: al2@latest
+      blockDeviceMappings:
+        - deviceName: /dev/xvda
+          ebs:
+            volumeSize: 150Gi
+            volumeType: gp3
+      metadataOptions:
+        httpEndpoint: enabled
+        httpProtocolIPv6: disabled
+        httpPutResponseHopLimit: 2
+        httpTokens: optional
+      role: KarpenterNodeRole-<cluster_name>
+      securityGroupSelectorTerms:
+        - tags:
+            karpenter.sh/discovery: <cluster_name>
+      subnetSelectorTerms:
+        - tags:
+            karpenter.sh/discovery: <cluster_name>
+
+  - apiVersion: karpenter.sh/v1
+    kind: NodePool
+    metadata:
+      annotations:
+        karpenter.sh/stored-version-migrated: "true"
+      name: ci-node-pool
+    spec:
+      disruption:
+        budgets:
+          - nodes: 10%
+        consolidateAfter: 15m
+        consolidationPolicy: WhenEmpty
+      template:
+        metadata:
+          labels:
+            purpose: ci
+        spec:
+          expireAfter: 720h
+          nodeClassRef:
+            group: karpenter.k8s.aws
+            kind: EC2NodeClass
+            name: ci-node-class
+          requirements:
+            - key: kubernetes.io/arch
+              operator: In
+              values:
+                - amd64
+            - key: kubernetes.io/os
+              operator: In
+              values:
+                - linux
+            - key: karpenter.sh/capacity-type
+              operator: In
+              values:
+                - spot
+            - key: karpenter.k8s.aws/instance-category
+              operator: In
+              values:
+                - c
+                - m
+                - r
+            - key: topology.kubernetes.io/zone
+              operator: In
+              values:
+                - ap-south-1a
+          taints:
+            - effect: NoSchedule
+              key: dedicated
+              value: ci
+
+# Default values for cluster-autoscaler configuration
+cluster-autoscaler:
+  enabled: false
+  cloudProvider: aws
+  awsRegion: us-east-1
+  autoDiscovery:
+    clusterName: ""
+    tags:
+      - k8s.io/cluster-autoscaler/enabled
+      - k8s.io/cluster-autoscaler/{{ .Values.autoDiscovery.clusterName }}
+
+# Default values for aws-node-termination-handler configuration
+aws-node-termination-handler:
+  enabled: false
+  enablePrometheusServer: true
+  cordonOnly: true
+  emitKubernetesEvents: true
+  podTerminationGracePeriod: -1
+  nodeTerminationGracePeriod: 120
+  awsRegion: "ap-south-1"
+  webhookURL: ""
+
+# Default values for kcert configuration
+kcert:
+  enabled: false
+  acmeDirUrl: https://acme-v02.api.letsencrypt.org/directory
+  acmeEmail: null
+  acmeTermsAccepted: true
+  kcertImage: nabsul/kcert:v1.2.0
+  env:
+    CHALLENGEINGRESS__CLASSNAME: nginx
+
+# Default values for argocd-certificate-refresh configuration
+argocd-certificate-refresh:
+  enabled: false
+  cronjob:
+    schedule: "59 23 1 */6 *"
+  alert:
+    enabled: false
+    discordUrl: "" 
+    schedule: "0 7 * * *"
+
+# Default values for ci-node ec2nodeclass/nodepool configuration
+devtron-backups:
+  enabled: false
+  global:
+    schedule: "28 13 * * *"
+    S3:
+      enabled: false
+      S3_BUCKET_NAME: ""
+      AWS_REGION: "ap-south-1"
+      NODE_ROLE: "true"
+      encryption:
+        enabled: false
+        passphrase: ""
+  postgres_backup:
+    secretName: "postgres-creds-3"
+    enabled: false
+  argocd_backup:
+    enabled: false
+
+holmes-ai:
+  enabled: false
+k8s-shield:
+  enabled: false

@@ -1,0 +1,92 @@
+
+{{ if .Values.permissions.enabled  }}
+{{if .Values.permissions.imagePullSecret }}
+apiVersion: v1
+data:
+  .dockerconfigjson: {{ .Values.permissions.imagePullSecret }}
+kind: Secret
+metadata:
+  name: devtron-image-pull
+  namespace: devtroncd
+type: kubernetes.io/dockerconfigjson
+{{- end -}}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: devtron
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: devtron
+subjects:
+- kind: ServiceAccount
+  name: devtron
+  namespace: devtroncd
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: workflow-cluster-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: workflow-cluster-role
+subjects:
+- kind: ServiceAccount
+  name: ci-runner
+  namespace: devtron-ci
+- kind: ServiceAccount
+  name: cd-runner
+  namespace: devtron-cd
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devtron-ci
+  annotations:
+    helm.sh/resource-policy: keep
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devtron-cd
+  annotations:
+    helm.sh/resource-policy: keep
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: devtron-demo
+  annotations:
+    helm.sh/resource-policy: keep
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: devtron
+  namespace: devtroncd
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: ci-runner
+  namespace: devtron-ci
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    helm.sh/resource-policy: keep
+  name: cd-runner
+  namespace: devtron-cd
+
+{{- end -}}
