@@ -33,6 +33,9 @@ spec:
       initContainers:
       - name: pg-ready-wait
         image: {{ include "common.clair.image" (dict "component" $.Values.image "global" $.Values.global "extraImage" $.Values.image.initContainer.image "extraImageTag" $.Values.image.initContainer.tag ) }}
+        envFrom:
+        - configMapRef:
+            name: "devtron-common-cm"
         command: [ "sh", "-c",
           "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
@@ -61,6 +64,9 @@ spec:
         - name: "{{ .Chart.Name }}-health"
           containerPort: {{ .Values.service.internalHealthPort }}
           protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: "devtron-common-cm"
         livenessProbe:
           httpGet:
             path: {{ .Values.service.internalHealthPath }}
