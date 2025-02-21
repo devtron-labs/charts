@@ -36,6 +36,9 @@ spec:
         command: [ "sh", "-c",
           "until pg_isready -h {{ .Values.config.postgresHost }} -p {{ .Values.config.postgresPort }};
           do echo waiting for database; sleep 1; done;"]
+        envFrom:
+        - configMapRef:
+            name: devtron-common-cm
       containers:
       - name: {{ .Chart.Name }}
         image: {{ include "common.clair.image" (dict "component" $.Values.image "global" $.Values.global ) }}
@@ -61,6 +64,9 @@ spec:
         - name: "{{ .Chart.Name }}-health"
           containerPort: {{ .Values.service.internalHealthPort }}
           protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: devtron-common-cm
         livenessProbe:
           httpGet:
             path: {{ .Values.service.internalHealthPath }}
@@ -75,3 +81,4 @@ spec:
           readOnly: true
         resources:
 {{ toYaml .Values.resources | indent 10 }}
+
