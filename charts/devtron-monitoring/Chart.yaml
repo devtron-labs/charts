@@ -29,7 +29,7 @@ dependencies:
 - name: jaeger-all-in-one-opentelemetry
   version: "0.1.0"
   repository: https://helm.devtron.ai
-  condition: jaeger-opentelemetry.enabled
+  condition: jaeger-all-in-one-opentelemetry.enabled
 - name: metrics-server
   version: "3.12.2"
   repository: https://kubernetes-sigs.github.io/metrics-server
@@ -43,10 +43,9 @@ dependencies:
   repository: oci://ghcr.io/deliveryhero/helm-charts
   condition: k8s-event-logger.enabled
 - name: victoria-metrics-k8s-stack
-  version: "0.36.1"
+  version: "0.36.2"
   repository: https://victoriametrics.github.io/helm-charts/
   condition: victoriametrics.enabled
-
 maintainers:
 - email: badal@devtron.ai
   name: Badal Kumar
