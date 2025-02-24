@@ -865,6 +865,54 @@ entries:
     version: 0.22.74
   devtron-essentials:
   - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2025-02-24T13:40:43.261151739Z"
+    dependencies:
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts/
+      version: 0.3.17
+    - condition: argo-cd.enabled
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 5.13.9
+    - condition: argo-rollout.enabled
+      name: argo-rollouts
+      repository: https://argoproj.github.io/argo-helm
+      version: 2.39.0
+    - condition: devtron-rollout.enabled
+      name: rollout
+      repository: https://helm.devtron.ai
+      version: 0.14.7
+    - alias: rawYaml
+      condition: generic-helm.enabled
+      name: devtron-generic-helm
+      repository: https://helm.devtron.ai
+      version: 0.10.1
+    - condition: argo-workflow.enabled
+      name: argo-workflow
+      repository: https://helm.devtron.ai
+      version: 0.1.6
+    description: Includes critical components like Rollout, Service Accounts, Image
+      Pull Secrets, Workflow Controller, and ArgoCD and postgres for streamlined CI/CD
+      operations.
+    digest: dd988dbd6110ce121eda68abe4757eae98768effe7a029f9d73a32d95e1db074
+    maintainers:
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: devtron-essentials
+    sources:
+    - https://github.com/argoproj/argo-helm
+    - https://helm.devtron.ai
+    - https://github.com/groundhog2k/helm-charts/blob/postgres-0.3.17/charts/postgres/values.yaml
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-essentials-0.0.2/devtron-essentials-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
     appVersion: 0.0.1
     created: "2024-07-03T07:10:58.002434811Z"
     dependencies:
@@ -968,6 +1016,64 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-logs-dump-0.1.0/devtron-logs-dump-0.1.0.tgz
     version: 0.1.0
+  devtron-monitoring:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-02-24T13:40:43.512331756Z"
+    dependencies:
+    - condition: fluent-bit.enabled
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: 0.48.5
+    - condition: vector.enabled
+      name: vector
+      repository: https://helm.vector.dev
+      version: 0.40.0
+    - condition: uptime-kuma.enabled
+      name: uptime-kuma
+      repository: https://helm.irsigler.cloud
+      version: 2.21.2
+    - condition: jaeger-all-in-one-opentelemetry.enabled
+      name: jaeger-all-in-one-opentelemetry
+      repository: https://helm.devtron.ai
+      version: 0.1.0
+    - condition: metrics-server.enabled
+      name: metrics-server
+      repository: https://kubernetes-sigs.github.io/metrics-server
+      version: 3.12.2
+    - condition: prometheus-blackbox-exporter.enabled
+      name: prometheus-blackbox-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 9.2.0
+    - condition: k8s-event-logger.enabled
+      name: k8s-event-logger
+      repository: oci://ghcr.io/deliveryhero/helm-charts
+      version: 1.1.9
+    - condition: victoriametrics.enabled
+      name: victoria-metrics-k8s-stack
+      repository: https://victoriametrics.github.io/helm-charts/
+      version: 0.36.2
+    description: Enables robust monitoring and logging using Fluent-Bit, Uptime Kuma,
+      Jaeger, Victoria Metrics, Black Box, and Event Logger for observability.
+    digest: c215010ff7dfb0067d062cbc1706e02bea53c00258a0a3989ed72a389a5e357d
+    maintainers:
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: devtron-monitoring
+    sources:
+    - https://github.com/fluent/helm-charts/tree/main/charts/fluent-bit
+    - https://github.com/vectordotdev/helm-charts/tree/develop/charts/vector
+    - https://github.com/dirsigler/uptime-kuma-helm/tree/main/charts/uptime-kuma
+    - https://github.com/devtron-labs/charts/tree/main/charts/jaeger-opentelemetry
+    - https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
+    - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
+    - https://github.com/deliveryhero/helm-charts/tree/master/stable/k8s-event-logger
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-monitoring-0.0.1/devtron-monitoring-0.0.1.tgz
+    version: 0.0.1
   devtron-operator:
   - apiVersion: v2
     appVersion: 1.3.0
@@ -4287,6 +4393,79 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/devtron-scoop-1.0.0/devtron-scoop-1.0.0.tgz
     version: 1.0.0
+  devtron-utilities:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-02-24T13:40:43.708148248Z"
+    dependencies:
+    - condition: ingress-nginx.enabled
+      name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
+      version: 4.12.0
+    - condition: cluster-autoscaler.enabled
+      name: cluster-autoscaler
+      repository: https://kubernetes.github.io/autoscaler
+      version: 9.46.0
+    - condition: karpenter.enabled
+      name: karpenter
+      repository: oci://public.ecr.aws/karpenter
+      version: 1.2.1
+    - condition: aws-load-balancer-controller.enabled
+      name: aws-load-balancer-controller
+      repository: https://aws.github.io/eks-charts
+      version: 1.11.0
+    - condition: aws-node-termination-handler.enabled
+      name: aws-node-termination-handler
+      repository: https://aws.github.io/eks-charts
+      version: 0.21.0
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.min.io/
+      version: 5.4.0
+    - condition: kcert.enabled
+      name: kcert
+      repository: https://nabsul.github.io/helm
+      version: 1.0.7
+    - condition: argocd-certificate-refresh.enabled
+      name: argocd-certificate-refresh
+      repository: https://helm.devtron.ai/
+      version: 0.10.8
+    - condition: k8s-shield.enabled
+      name: k8s-shield
+      repository: https://helm.devtron.ai/
+      version: 0.1.0
+    - condition: devtron-backups.enabled
+      name: devtron-backups
+      repository: https://helm.devtron.ai/
+      version: 0.2.5
+    - alias: nodepool
+      condition: nodepool.enabled
+      name: devtron-generic-helm
+      repository: https://helm.devtron.ai/
+      version: 0.10.1
+    - alias: holmes-ai
+      condition: holmes-ai.enabled
+      name: holmes
+      repository: https://robusta-charts.storage.googleapis.com
+      version: 0.8.1
+    description: Provides essential infrastructure and security utilities such as
+      Nginx/AWS Load Balancer, Devtron Backup, Minio (Blob Storage), Network Policy,
+      Cluster Auto Scaler (Karpenter), and more.
+    digest: 1305a06cb1c4cbc6eae031778d22485d70d63bce8755487ecc7f46882d5b0ff0
+    maintainers:
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: devtron-utilities
+    sources:
+    - https://github.com/kubernetes/ingress-nginx
+    - https://aws.github.io/eks-charts
+    - https://charts.min.io/
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-utilities-0.0.1/devtron-utilities-0.0.1.tgz
+    version: 0.0.1
   dgraph:
   - apiVersion: v1
     appVersion: v21.12.0
@@ -5485,4 +5664,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-02-21T17:11:44.031601469Z"
+generated: "2025-02-24T13:40:43.708412633Z"
