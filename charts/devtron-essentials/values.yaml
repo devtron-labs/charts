@@ -1,34 +1,35 @@
 postgresql:
   enabled: false
-  global:
-    postgresql:
-      auth:
-        postgresPassword: "changeme" #change the postgres password
-        username: "postgres" 
-        database: "orchestrator"
   fullnameOverride: "postgresql-postgresql"
   image:
-    tag: 14.9.0-debian-11-r39
-  primary:
-    persistence:
-      size: 30Gi
-    resources: {}
-      # limits: {}
-      # requests:
-      #   memory: 304Mi
-      #   cpu: 250m
-    extendedConfiguration: |
-      max_connections = 700
-      shared_preload_libraries = 'pg_stat_statements'
-      track_activity_query_size = 2048
-      pg_stat_statements.track = all
-      track_io_timing = on
-    initdb:
-      scripts:
-        db_create.sql: |
-            create database casbin;
-            create database git_sensor;
-            create database lens;
+    registry: "docker.io"
+    repository: "postgres"
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: ""
+  storage:
+    requestedSize: "30Gi"
+    className: ""
+
+    # to reference an existing PVC
+    persistentVolumeClaimName: ""
+
+  settings:
+    ## The default postgres superuser (default when nothing is set: "postgres")
+    superuser: ""
+
+    ## The superuser password
+    superuserPassword: "change-me"
+
+  customScripts:
+      db_create.sql: |
+        create database casbin;
+        create database git_sensor;
+        create database lens;
+        create database orchestrator;
+  nodeSelector: {}
+  tolerations: []
+
 argo-cd:
   enabled: false
   fullnameOverride: "argocd"
