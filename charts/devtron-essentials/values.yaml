@@ -1,12 +1,12 @@
 postgresql:
-  enabled: false
+  enabled: true
   fullnameOverride: "postgresql-postgresql"
   image:
-    registry: "docker.io"
+    registry: "quay.io/devtron"
     repository: "postgres"
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
-    tag: ""
+    tag: "14.9"
   storage:
     requestedSize: "30Gi"
     className: ""
