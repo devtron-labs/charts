@@ -54,7 +54,7 @@ dependencies:
   version: "0.10.1"
   repository: https://helm.devtron.ai/
   condition: devtron-generic-helm.enabled
-- name: holmes
+- name: holmes-ai
   version: "0.8.1"
   repository: https://robusta-charts.storage.googleapis.com
   condition: holmes-ai.enabled
