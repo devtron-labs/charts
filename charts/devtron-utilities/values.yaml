@@ -103,7 +103,7 @@ nodepool:
         imageGCHighThresholdPercent: 70
         imageGCLowThresholdPercent: 50
       amiSelectorTerms:
-        - alias: al2@latest
+        - alias: al2@2023
       blockDeviceMappings:
         - deviceName: /dev/xvda
           ebs:

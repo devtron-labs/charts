@@ -1,6 +1,7 @@
 postgresql:
-  enabled: true
+  enabled: false
   fullnameOverride: "postgresql-postgresql"
+  resources: {}
   image:
     registry: "quay.io/devtron"
     repository: "postgres"
@@ -56,7 +57,7 @@ argo-rollout:
     enabled: false
 devtron-rollout:
   enabled: false
-generic-helm:
+rawYaml:
   enabled: false
 argo-workflow:
   enabled: false

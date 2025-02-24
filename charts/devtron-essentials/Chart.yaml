@@ -31,6 +31,7 @@ dependencies:
   version: "0.10.1"
   repository: https://helm.devtron.ai
   condition: generic-helm.enabled
+  alias: rawYaml
 - name: argo-workflow
   version: "0.1.6"
   repository: https://helm.devtron.ai
