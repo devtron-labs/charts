@@ -53,13 +53,17 @@ dependencies:
 - name: devtron-generic-helm
   version: "0.10.1"
   repository: https://helm.devtron.ai/
-  condition: devtron-generic-helm.enabled
-- name: holmes-ai
+  condition: nodepool.enabled
+  alias: nodepool
+- name: holmes
   version: "0.8.1"
   repository: https://robusta-charts.storage.googleapis.com
   condition: holmes-ai.enabled
+  alias: holmes-ai
 
 
 maintainers:
 - email: badal@devtron.ai
   name: Badal Kumar
+- email: pawan.mehta@devtron.ai
+  name: Pawan Kumar

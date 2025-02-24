@@ -89,7 +89,7 @@ karpenter:
     resources: {}
 
 # Default values for ci-node ec2nodeclass/nodepool configuration
-devtron-generic-helm:
+nodepool:
   enabled: false
   data:
   - apiVersion: karpenter.k8s.aws/v1
@@ -235,5 +235,9 @@ devtron-backups:
 
 holmes-ai:
   enabled: false
+  additionalEnvVars:
+  - name: MODEL
+    value: gpt-4o-mini
+
 k8s-shield:
   enabled: false
