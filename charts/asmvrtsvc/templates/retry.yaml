@@ -1,0 +1,24 @@
+{{- if .Values.retryVirtualsvc.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.retryVirtualsvc.name }}
+  namespace: {{ .Values.namespace }} 
+spec:
+  hosts:
+  - {{ .Values.retryVirtualsvc.hosts }} 
+  gateways:
+  - {{ .Values.retryVirtualsvc.gateways }} 
+  http:
+    {{- range $key, $value := .Values.retryVirtualsvc.destination }}
+  - route:
+    - destination:
+        host: {{ $value.host }}
+        subset: {{ $value.subset }} 
+    retries:
+      attempts: {{ $value.retries.attempts }}
+      perTryTimeout: {{ $value.retries.perTryTimeout }}
+      retryOn: {{ $value.retries.retryOn }}
+    timeout: {{ $value.retries.timeout }}
+      {{- end }}
+{{- end }}
