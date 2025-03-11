@@ -1,18 +1,40 @@
-# Default values for devtron-monitoring.
 fluent-bit:
+  fullnameOverride: fluent-bit
   enabled: false
+  env: []
+    # - name: AWS_ACCESS_KEY_ID
+    #   value: ""
+    # - name: AWS_SECRET_ACCESS_KEY
+    #   value: ""
+  logLevel: debug
+  podAnnotations:
+    fluentbit.io/exclude: "true"
+  resources: {}
   serviceMonitor:
     enabled: true
-  resources: {}
-  logLevel: debug
-  podAnnotations: 
-    fluentbit.io/exclude: "true"
-  env:  []
-  # - name: AWS_ACCESS_KEY_ID
-  #   value: ""
-  # - name: AWS_SECRET_ACCESS_KEY
-  #   value: ""  
   config:
+    filters: |
+      [FILTER]
+          Name kubernetes
+          Match kube.*
+          Kube_Tag_Prefix kube.
+          Merge_Log On
+          Merge_Log_Key log_processed
+          Keep_Log Off
+          K8S-Logging.Parser On
+          K8S-Logging.Exclude On
+      [FILTER]
+          Name grep
+          Match audit.*
+          Regex log .*AUDIT_LOG:.*urlPath:\s.[^(health|metrics)].*   
+      [FILTER]
+          Name grep
+          Match nats.*
+          Regex log .*NATS_LOG.*
+      [FILTER]
+          Name grep
+          Match error.*
+          Regex log .*(DEVTRON_PANIC_RECOVER|nats: found panic error).*      
     inputs: |
       [INPUT]
           Name tail
@@ -62,32 +84,6 @@ fluent-bit:
           Parser docker
           DB /var/log/flb_kube.db
           Refresh_Interval 30
-
-    ## https://docs.fluentbit.io/manual/pipeline/filters
-    filters: |
-      [FILTER]
-          Name kubernetes
-          Match kube.*
-          Kube_Tag_Prefix kube.
-          Merge_Log On
-          Merge_Log_Key log_processed
-          Keep_Log Off
-          K8S-Logging.Parser On
-          K8S-Logging.Exclude On
-      [FILTER]
-          Name grep
-          Match audit.*
-          Regex log .*AUDIT_LOG:.*urlPath:\s.[^(health|metrics)].*   
-      [FILTER]
-          Name grep
-          Match nats.*
-          Regex log .*NATS_LOG.*
-      [FILTER]
-          Name grep
-          Match error.*
-          Regex log .*(DEVTRON_PANIC_RECOVER|nats: found panic error).*      
-
-    ## https://docs.fluentbit.io/manual/pipeline/outputs
     outputs: |
       [OUTPUT]
           Name s3
@@ -137,32 +133,153 @@ fluent-bit:
           use_put_object Off
           upload_timeout 10m
           storage_class GLACIER_IR 
-
-vector:
+jaeger-all-in-one-opentelemetry:
+  Deployment:
+    Replicas: 1
+    image: otel/opentelemetry-collector:0.83.0
   enabled: false
+  ingress:
+    className: nginx
+    enabled: true
+    hosts:
+      - host: jaeger-<testing>.domain.com
+        pathType: Prefix
+        paths: /
+  jaeger:
+    env:
+      - name: SPAN_STORAGE_TYPE
+        value: badger
+      - name: COLLECTOR_OTLP_ENABLED
+        value: "true"
+      - name: BADGER_EPHEMERAL
+        value: "false"
+      - name: BADGER_DIRECTORY_VALUE
+        value: /badger/data
+      - name: BADGER_DIRECTORY_KEY
+        value: /badger/key
+      - name: BADGER_SPAN_STORE_TTL
+        value: 168h
+    image: jaegertracing/all-in-one:1.48
+    replicas: 1
+    storage: 10Gi
+  optl_collector_config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: "0.0.0.0:4317"
+          http:
+            endpoint: "0.0.0.0:4318"
+    processors:
+      batch:
+      memory_limiter:
+        # 80% of maximum memory up to 2G
+        limit_mib: 1500
+        # 25% of limit up to 2G
+        spike_limit_mib: 512
+        check_interval: 5s
+    extensions:
+      zpages: {}
+      memory_ballast:
+        # Memory Ballast size should be max 1/3 to 1/2 of memory.
+        size_mib: 683
+    exporters:
+      logging:
+        loglevel: info
+      jaeger:
+        endpoint: jaeger-headless.opentelemetry:14250
+        tls:
+          insecure: true
+    service:
+      extensions: [zpages, memory_ballast]
+      pipelines:
+        traces/1:
+          receivers: [otlp]
+          #processors: [memory_limiter, batch]
+          exporters: [logging, jaeger]
+k8s-event-logger:
+  enabled: false
+metrics-server:
+  enabled: false
+  replicas: 1
   resources: {}
-  role: "Agent"
-  service:
-    ports: 
-      - name: http
-        port: 9090
-  customConfig: 
+prometheus-blackbox-exporter:
+  enabled: false
+uptime-kuma:
+  enabled: false
+  ingress:
+    className: nginx
+    enabled: false
+    hosts:
+      - host: uptime-<testing>.domain.com
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+  podEnv:
+    - name: UPTIME_KUMA_PORT
+      value: "3001"
+  resources: {}
+  serviceMonitor:
+    enabled: true
+  volume:
+    accessMode: ReadWriteOnce
+    enabled: false
+    size: 1Gi
+vector:
+  customConfig:
     data_dir: /var/lib/vector
+    sinks:
+      my_sink_id:
+        batch:
+          timeout_secs: 600
+        bucket: <bucket_name>
+        compression: none
+        encoding:
+          codec: text
+        filename_append_uuid: false
+        filename_time_format: "%H_%M_%S"
+        inputs:
+          - my_remap_id_audit
+        key_prefix: '{{ print "audit-log/devtroncd/{{ container_name }}/%Y-%m-%d/" }}'
+        region: <region_name>
+        type: aws_s3
+      my_sink_id_audit:
+        batch:
+          timeout_secs: 600
+        bucket: <bucket_name>
+        compression: none
+        encoding:
+          codec: text
+        filename_append_uuid: false
+        filename_time_format: "%H_%M_%S"
+        inputs:
+          - my_remap_id
+        key_prefix: '{{ print "vector-log-2/devtroncd/{{ container_name }}/%Y-%m-%d/" }}'
+        region: <region_name>
+        type: aws_s3
     sources:
       kube_log:
-        type: "kubernetes_logs"
-        timezone: "Asia/Kolkata"
         auto_partial_merge: true
-        extra_namespace_label_selector: "kubernetes.io/metadata.name in (devtroncd)"
+        extra_namespace_label_selector: kubernetes.io/metadata.name in (devtroncd)
+        timezone: Asia/Kolkata
+        type: kubernetes_logs
     transforms:
       filter_audit_logs:
-        type: filter
+        condition: string!(.message) != null && contains(string!(.message), "AUDIT_LOG")
         inputs:
           - kube_log
-        condition: 'string!(.message) != null && contains(string!(.message), "AUDIT_LOG")'
-
-      my_remap_id_audit:
+        type: filter
+      my_remap_id:
+        inputs:
+          - kube_log
+        source: |-
+          .test = del(.)
+          .container_name = del(.test.kubernetes.container_name)
+          .message = del(.test.message)
+          .timestamp = del(.test.timestamp)
+          del(.test)
         type: remap
+      my_remap_id_audit:
         inputs:
           - filter_audit_logs
         source: |-
@@ -171,393 +288,250 @@ vector:
           .message = del(.test.message)
           .timestamp = del(.test.timestamp)
           del(.test)
-
-      my_remap_id:
         type: remap
-        inputs:
-        - kube_log
-        source: |-
-          .test = del(.)
-          .container_name = del(.test.kubernetes.container_name)
-          .message = del(.test.message)
-          .timestamp = del(.test.timestamp)
-          del(.test)
-
-
-    sinks:
-      my_sink_id:
-        type: aws_s3
-        inputs:
-          - my_remap_id_audit
-        bucket: <bucket_name>
-        region: "<region_name>"
-        # endpoint: <endpint_if_any>
-        key_prefix: |-
-          {{ print "audit-log/devtroncd/{{ container_name }}/%Y-%m-%d/" }}
-        filename_append_uuid: false
-        filename_time_format:  "%H_%M_%S"
-        # auth:
-        #   access_key_id: ""
-        #   secret_access_key: ""
-        compression: none
-        batch:
-          timeout_secs: 600
-        encoding:
-          codec: text
-      my_sink_id_audit:
-        type: aws_s3
-        inputs:
-          - my_remap_id
-        bucket: <bucket_name>
-        region: "<region_name>"
-        # endpoint: <endpint_if_any>
-        key_prefix: |-
-          {{ print "vector-log-2/devtroncd/{{ container_name }}/%Y-%m-%d/" }}
-        filename_append_uuid: false
-        filename_time_format:  "%H_%M_%S"
-        # auth:
-        #   access_key_id: ""
-        #   secret_access_key: ""
-        compression: none
-        batch:
-          timeout_secs: 600 
-        encoding:
-          codec: text
-
-uptime-kuma:
   enabled: false
-  podEnv:
-    - name: "UPTIME_KUMA_PORT"
-      value: "3001"
-  ingress:
-    enabled: true
-    className: "nginx"
-    hosts:
-    - host: "*"
   resources: {}
-  volume:
-    enabled: false
-    accessMode: ReadWriteOnce
-    size: 1Gi
-    # storageClassName:
-  serviceMonitor:
-    enabled: true
-
-jaeger-all-in-one-opentelemetry:
-  enabled: false
-  optl_collector_config: |
-      receivers:
-        otlp:
-          protocols:
-            grpc:
-              endpoint: "0.0.0.0:4317"
-            http:
-              endpoint: "0.0.0.0:4318"
-      processors:
-        batch:
-        memory_limiter:
-          # 80% of maximum memory up to 2G
-          limit_mib: 1500
-          # 25% of limit up to 2G
-          spike_limit_mib: 512
-          check_interval: 5s
-      extensions:
-        zpages: {}
-        memory_ballast:
-          # Memory Ballast size should be max 1/3 to 1/2 of memory.
-          size_mib: 683
-      exporters:
-        logging:
-          loglevel: info
-        jaeger:
-          endpoint: jaeger-headless.opentelemetry:14250
-          tls:
-            insecure: true
-      service:
-        extensions: [zpages, memory_ballast]
-        pipelines:
-          traces/1:
-            receivers: [otlp]
-            #processors: [memory_limiter, batch]
-            exporters: [logging, jaeger]
-  Deployment:
-    Replicas: 1
-    image: otel/opentelemetry-collector:0.83.0
-  jaeger:
-    replicas: 1
-    image: jaegertracing/all-in-one:1.48
-    storage: "10Gi"
-    env: 
-      - name: "SPAN_STORAGE_TYPE"
-        value: "badger"
-      - name: "COLLECTOR_OTLP_ENABLED"
-        value: "true"
-      - name: "BADGER_EPHEMERAL"
-        value: "false" 
-      - name: "BADGER_DIRECTORY_VALUE"
-        value: "/badger/data"
-      - name: "BADGER_DIRECTORY_KEY"
-        value: "/badger/key"
-      - name: "BADGER_SPAN_STORE_TTL"
-        value: "168h"        
-  ingress:
-    enabled: true
-    className: "nginx"
-    hosts:
-      - host: "*.jaeger.domain.name"
-
-metrics-server:
-  enabled: false
-  replicas: 1
-  resources: {}
-
-prometheus-blackbox-exporter:
-  enabled: false
-
-k8s-event-logger:
-  enabled: false
-
+  role: Agent
+  service:
+    ports:
+      - name: http
+        port: 9090
 victoriametrics:
-  crds:
-    enabled: true
   enabled: false
-  fullnameOverride: "victoria-metrics"
-  victoria-metrics-operator:
-    operator:
-      disable_prometheus_converter: false
-      prometheus_converter_add_argocd_ignore_annotations: true
-  defaultDashboards:
-    # -- Enable custom dashboards installation
-    enabled: true
-    defaultTimezone: ist
-  vmsingle:
-    enabled: true
-    spec:
-      retentionPeriod: "5d"
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      hosts:
-      - vmsingle-stage.domain.name
   alertmanager:
-    enabled: true
     config:
-      templates:
-        - "/etc/vm/configs/**/*.tmpl"
-      route:
-      group_by: [ 'alertname', 'cluster', 'service' ]
-      group_wait: 30s
-      group_interval: 5m
-      repeat_interval: 12h
-      receiver: 'discord'
-      routes:
-      - receiver: 'null'
-        matchers:
-          - alertname =~ "InfoInhibitor|Watchdog|NginxHighHttp403ErrorRate.*"
-      - receiver: 'null'
-        matchers:
-          - namespace !~ "devtroncd|devtron-ci|devtroncd-cd|opentelemetry|monitoring"
-      - receiver: 'null'
-        match:
-          namespace: devtron-demo
-      - receiver: 'null'
-        match:
-          namespace: demo-env
-      - receiver: discord
-        match:
-          namespace: devtroncd
-      - match:
-          alertname: Watchdog
-        receiver: dev-team-watchdog
-      - match:
-          team: devtron
-        receiver: dev-team-discord
-      - match:
-          alertname: NodeCpuSaturation
-        receiver: "null"
-      - match:
-          alertname: KubeCPUOvercommit
-        receiver: "null"
-      - match:
-          alertname: CPUThrottlingHigh
-        receiver: "null"
-      - match:
-          alertname: KubeContainerWaiting
-        receiver: "null"
-      - match:
-          alertname: PrometheusRuleFailures
-        receiver: "null"
-      - match:
-          alertname: KubeSchedulerDown
-        receiver: "null"
-      - match:
-          alertname: KubeControllerManagerDown
-        receiver: "null"
-      - match:
-          alertname: KubeClientCertificateExpiration
-        receiver: "null"
-      - match:
-          alertname: NodeFilesystemSpaceFillingUp
-        receiver: "null"
-      - match:
-          alertname: KubeProxyDown
-        receiver: "null"
-      - match:
-          alertname: NoOutputBytesProcessed
-        receiver: "null" 
-      - match:
-          alertname: TargetDown
-          job: kubelet
-          service: monitoring-prometheus-oper-kubelet
-        receiver: "null"
-      - match:
-          job: kube-proxy
-        receiver: "null"
-      - match:
-          namespace: "devtron-dev"
-        receiver: "null"    
-      - match:
-          container: "metrics-server"
-        receiver: "null"
-      - match:
-          alertname: ArgoCDAppDegraded
-        receiver: null
-      - match:
-          alertname: ArgoCDAppMissing
-        receiver: null   
-      - match:
-          alertname: ArgoCDAppUnknown
-        receiver: null  
-      - match:
-          container: "fluent-bit"
-        receiver: "null"  
-      - match:
-          alertname: KubeJobFailed
-        receiver: "null"  
-      - match:
-        receiver: discord
-        continue: true
-      - match:
-          severity: critical
-        receiver: zenduty
       receivers:
         - name: "null"
-        - name: dev-team-watchdog
-          discord_configs:
-          - webhook_url: ""
-            send_resolved: true
-            title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}-[<cluster_name>]'
-        - name: dev-team-discord
-          discord_configs:
-          - webhook_url: ""
-            send_resolved: true
-            title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}-[<cluster_name>]'
-        - name: discord
-          discord_configs:
-          - send_resolved: true
-            webhook_url: ""
-            title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}-[<cluster_name>]'
-        - name: zenduty
-          webhook_configs:
-          - url: ""
-  vmalert:
+        - discord_configs:
+            - send_resolved: true
+              title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}-[<cluster_name>]'
+              webhook_url: ""
+          name: dev-team-watchdog
+        - discord_configs:
+            - send_resolved: true
+              title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}-[<cluster_name>]'
+              webhook_url: ""
+          name: dev-team-discord
+        - discord_configs:
+            - send_resolved: true
+              title: '[{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .CommonLabels.alertname }}-[<cluster_name>]'
+              webhook_url: ""
+          name: discord
+      route:
+        group_by:
+          - alertname
+          - cluster
+          - service
+        group_interval: 5m
+        group_wait: 30s
+        receiver: discord
+        repeat_interval: 12h
+        routes:
+          - matchers:
+              - alertname =~ "InfoInhibitor|Watchdog|NginxHighHttp403ErrorRate.*"
+            receiver: null
+          - matchers:
+              - namespace !~ "devtroncd|devtron-ci|devtroncd-cd|opentelemetry|monitoring"
+            receiver: null
+          - match:
+              namespace: devtron-demo
+            receiver: null
+          - match:
+              namespace: demo-env
+            receiver: null
+          - match:
+              namespace: devtroncd
+            receiver: discord
+          - match:
+              alertname: Watchdog
+            receiver: dev-team-watchdog
+          - match:
+              team: devtron
+            receiver: dev-team-discord
+          - match:
+              alertname: NodeCpuSaturation
+            receiver: null
+          - match:
+              alertname: KubeCPUOvercommit
+            receiver: null
+          - match:
+              alertname: CPUThrottlingHigh
+            receiver: null
+          - match:
+              alertname: KubeContainerWaiting
+            receiver: null
+          - match:
+              alertname: PrometheusRuleFailures
+            receiver: null
+          - match:
+              alertname: KubeSchedulerDown
+            receiver: null
+          - match:
+              alertname: KubeControllerManagerDown
+            receiver: null
+          - match:
+              alertname: KubeClientCertificateExpiration
+            receiver: null
+          - match:
+              alertname: NodeFilesystemSpaceFillingUp
+            receiver: null
+          - match:
+              alertname: KubeProxyDown
+            receiver: null
+          - match:
+              alertname: NoOutputBytesProcessed
+            receiver: null
+          - match:
+              alertname: TargetDown
+              job: kubelet
+              service: monitoring-prometheus-oper-kubelet
+            receiver: null
+          - match:
+              job: kube-proxy
+            receiver: null
+          - match:
+              namespace: devtron-dev
+            receiver: null
+          - match:
+              container: metrics-server
+            receiver: null
+          - match:
+              alertname: ArgoCDAppDegraded
+            receiver: null
+          - match:
+              alertname: ArgoCDAppMissing
+            receiver: null
+          - match:
+              alertname: ArgoCDAppUnknown
+            receiver: null
+          - match:
+              container: fluent-bit
+            receiver: null
+          - match:
+              alertname: KubeJobFailed
+            receiver: null
+          - continue: true
+            match: null
+            receiver: discord
     enabled: true
-    spec:
-      extraArgs:
-        external.url: https://vmalert.domain.name
-    ingress:
-      enabled: true
-      ingressClassName: nginx
-      hosts:
-        - vmalert.domain.name
-  vmagent:
+  crds:
     enabled: true
-    spec:
-      scrapeInterval: 20s
-      externalLabels:
-        cluster: cluster-name
-        enterprise: testing
-      extraArgs:
-          promscrape.maxScrapeSize: "33554432"  # Increase max scrape size to 32MB
-          promscrape.suppressScrapeErrors: "true"
-          promscrape.suppressScrapeErrorsDelay: "30s"
-    ingress:
-      enabled: true
-      ingressClassName: nginx-new
-      hosts:
-        - vmagent-stage.domain.name
+  defaultDashboards:
+    defaultTimezone: ist
+    enabled: true
+  fullnameOverride: victoria-metrics
   grafana:
+    global:
+      imageRegistry: mirror.gcr.io
+    adminPassword: change-me
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+          - disableDeletion: false
+            editable: true
+            folder: ""
+            name: default
+            options:
+              path: /var/lib/grafana/dashboards/default
+            orgId: 1
+            type: file
+    dashboards:
+      default:
+        nodeexporter:
+          datasource: VictoriaMetrics
+          gnetId: 1860
+          revision: 22
+    defaultDashboardsTimezone: ist
     enabled: true
+    forceDeployDatasource: false
     grafana.ini:
       auth.anonymous:
         enabled: true
         org_name: devtron-metrics-view
         org_role: Viewer
-      server:
-        root_url: https://<devtron-host-url>/grafana
-        serve_from_sub_path: true
+      repository: grafana/grafana
       security:
         allow_embedding: true
-      repository: grafana/grafana
+      server:
+        root_url: https://<testing>.domain.com/grafana
+        serve_from_sub_path: true
       tag: 9.4.17
-    persistence:
-      type: pvc
-      enabled: true
-      accessModes:
-      - ReadWriteOnce
-      size: 5Gi
-    sidecar:
-      datasources:
-        enabled: true
-        initDatasources: true
-        createVMReplicasDatasources: false
-        jsonData: {}
-      dashboards:
-        additionalDashboardLabels: {}
-        additionalDashboardAnnotations: {}
-        enabled: true
-        multicluster: false
-    forceDeployDatasource: false
-    adminPassword: "change-me"
-    dashboardProviders:
-      dashboardproviders.yaml:
-        apiVersion: 1
-        providers:
-          - name: "default"
-            orgId: 1
-            folder: ""
-            type: file
-            disableDeletion: false
-            editable: true
-            options:
-              path: /var/lib/grafana/dashboards/default
-    dashboards:
-      default:
-        nodeexporter:
-          gnetId: 1860
-          revision: 22
-          datasource: VictoriaMetrics
-    defaultDashboardsTimezone: ist
     ingress:
-      enabled: true
-      ingressClassName: nginx-new
       annotations:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
         nginx.ingress.kubernetes.io/rewrite-target: /grafana/$2
+        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      enabled: true
+      hosts:
+        - <testing>.domain.com
+      ingressClassName: nginx-new
       labels: {}
       path: /grafana(/|$)(.*)
       pathType: Prefix
-      hosts:
-        - <devtron-host-url>
       tls: []
+    persistence:
+      accessModes:
+        - ReadWriteOnce
+      enabled: true
+      size: 5Gi
+      type: pvc
+    sidecar:
+      dashboards:
+        additionalDashboardAnnotations: {}
+        additionalDashboardLabels: {}
+        enabled: false
+        multicluster: false
+      datasources:
+        createVMReplicasDatasources: false
+        enabled: true
+        initDatasources: true
+        jsonData: {}
     vmServiceScrape:
       enabled: true
-  prometheus-node-exporter:
-    enabled: true
   kube-state-metrics:
     enabled: true
     metricLabelsAllowlist:
       - pods=[*]
       - nodes=[*]
-
+  prometheus-node-exporter:
+    enabled: true
+  victoria-metrics-operator:
+    operator:
+      disable_prometheus_converter: false
+      prometheus_converter_add_argocd_ignore_annotations: true
+  vmagent:
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - vmagent-stage-<testing>.domain.com
+      ingressClassName: nginx-new
+    spec:
+      externalLabels:
+        cluster: cluster-name
+        enterprise: testing
+      extraArgs:
+        promscrape.maxScrapeSize: "33554432"
+        promscrape.suppressScrapeErrors: "true"
+        promscrape.suppressScrapeErrorsDelay: 30s
+      scrapeInterval: 20s
+  vmalert:
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - vmalert-<testing>.domain.com
+      ingressClassName: nginx
+    spec:
+      extraArgs:
+        external.url: https://vmalert-<testing>.domain.com
+  vmsingle:
+    enabled: true
+    ingress:
+      enabled: true
+      hosts:
+        - vmsingle-<testing>.domain.com
+      ingressClassName: nginx
+    spec:
+      retentionPeriod: 5d
