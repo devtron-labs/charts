@@ -7,7 +7,7 @@ sources:
   - https://github.com/argoproj/argo-helm
   - https://helm.devtron.ai
   - https://github.com/groundhog2k/helm-charts/blob/postgres-0.3.17/charts/postgres/values.yaml
-version: 0.0.3
+version: 0.0.5
 appVersion: "0.0.2"
 dependencies:
 - name: postgres
@@ -27,10 +27,11 @@ dependencies:
   version: "0.14.7"
   repository: https://helm.devtron.ai
   condition: devtron-rollout.enabled
+  alias: devtron-rollout
 - name: devtron-generic-helm
   version: "0.10.1"
   repository: https://helm.devtron.ai
-  condition: generic-helm.enabled
+  condition: rawYaml.enabled
   alias: rawYaml
 - name: argo-workflow
   version: "0.1.6"

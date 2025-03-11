@@ -1,15 +1,15 @@
 
 {{ if .Values.permissions.enabled  }}
-{{if .Values.permissions.imagePullSecret }}
+{{if .Values.permissions.imagePullSecret.value }}
 apiVersion: v1
 data:
-  .dockerconfigjson: {{ .Values.permissions.imagePullSecret }}
+  .dockerconfigjson: {{ .Values.permissions.imagePullSecret.value }}
 kind: Secret
 metadata:
-  name: devtron-image-pull
+  name: {{ .Values.permissions.imagePullSecret.name | default "devtron-image-pull" }}
   namespace: devtroncd
 type: kubernetes.io/dockerconfigjson
-{{- end -}}
+{{ end }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -25,6 +25,76 @@ subjects:
 - kind: ServiceAccount
   name: devtron
   namespace: devtroncd
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  annotations:
+    "helm.sh/resource-policy": keep
+  labels:
+    app.kubernetes.io/instance: devtron
+  name: devtron
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - '*'
+  verbs:
+  - '*'
+- nonResourceURLs:
+  - '*'
+  verbs:
+  - '*'
+---
+# Source: workflow/templates/cd-role.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  # "namespace" omitted since ClusterRoles are not namespaced
+  name: workflow-cluster-role
+rules:
+- apiGroups:
+  - '*'
+  resources:
+  - deployments
+  - pods
+  - pods/exec
+  verbs:
+  - watch
+  - patch
+  - delete
+  - create
+  - list
+  - get
+  - update
+  - exec
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - watch
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - pods/log
+  verbs:
+  - get
+  - watch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
