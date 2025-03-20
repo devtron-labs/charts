@@ -7,7 +7,7 @@ sources:
   - https://github.com/argoproj/argo-helm
   - https://helm.devtron.ai
   - https://github.com/groundhog2k/helm-charts/blob/postgres-0.3.17/charts/postgres/values.yaml
-version: 0.0.5
+version: 0.0.6
 appVersion: "0.0.2"
 dependencies:
 - name: postgres
@@ -22,7 +22,7 @@ dependencies:
 - name: argo-rollouts
   version: "2.39.0"
   repository: https://argoproj.github.io/argo-helm
-  condition: argo-rollout.enabled
+  condition: argo-rollouts.enabled
 - name: rollout
   version: "0.14.7"
   repository: https://helm.devtron.ai
