@@ -1,10 +1,54 @@
 argo-cd:
+  enabled: false
+  customSelectorLabels: {}
+    # devtron.ai/custom-labels : argo-cd
+  crds:
+    install: false  #if you are upgrading make it as false 
+    keep: true
+
   applicationSet:
     enabled: false
   configs:
     cm:
       accounts.devtron: apiKey,login
       create: true
+      resource.ignoreResourceUpdatesEnabled: "false"
+      resource.compareoptions: |
+        ignoreAggregatedRoles: true
+      repositories: |-
+        - name: devtron
+          type: helm
+          url: https://helm.devtron.ai
+        - name: fluent
+          type: helm
+          url: https://fluent.github.io/helm-charts
+        - name: nginx-ingress
+          type: helm
+          url: https://kubernetes.github.io/ingress-nginx
+        - name: elastic
+          type: helm
+          url: https://helm.elastic.co
+        - name: bitnami
+          type: helm
+          url: https://charts.bitnami.com/bitnami
+        - name: prometheus-community
+          type: helm
+          url:  https://prometheus-community.github.io/helm-charts
+        - name: jetstack
+          type: helm
+          url:  https://charts.jetstack.io
+        - name: metrics-server
+          type: helm
+          url:  https://kubernetes-sigs.github.io/metrics-server
+        - name: autoscaler
+          type: helm
+          url:  https://kubernetes.github.io/autoscaler
+        - name: external-secrets
+          type: helm
+          url:  https://charts.external-secrets.io
+        - name: kedacore
+          type: helm
+          url:  https://kedacore.github.io/charts
       resource.customizations: |
         kubernetes-client.io/ExternalSecret:
           health.lua: |
@@ -185,15 +229,62 @@ argo-cd:
     secret:
       createSecret: true
       extra: {}
+  controller:
+    replicas: 1
+    extraArgs: 
+      - --kubectl-parallelism-limit
+      - "20"
+    resources: {}
+    affinity: {}
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        interval: 2m
+  redis:
+    exporter:
+      enabled: true
+    resources: {}
+    affinity: {}
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        interval: 2m
+  server:
+    replicas: 1
+    resources: {}
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        interval: 2m
+  repoServer:
+    replicas: 1
+    resources: {}
+    extraArgs: 
+      - --repo-cache-expiration
+      - 24h
+      - --parallelismlimit
+      - "20"
+    env: 
+      - name: ARGOCD_EXEC_TIMEOUT
+        value: 180s
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+        interval: 2m
   dex:
     enabled: false
-  enabled: false
   fullnameOverride: argocd
   notifications:
     enabled: false
-argo-rollout:
+argo-rollouts:
   fullnameOverride: rollout-controller
   enabled: false
+  customSelectorLabels: {}
+    # devtron.ai/custom-labels : rollout
 argo-workflow:
   enabled: false
   fullnameOverride: argo-workflows
@@ -205,6 +296,8 @@ permissions:
     name: ""
     value: ""
 postgresql:
+  customSelectorLabels: {}
+    # devtron.ai/custom-labels : postgres
   customScripts:
     db_create.sql: |
       create database casbin;
