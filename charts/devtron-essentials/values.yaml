@@ -1,4 +1,7 @@
 argo-cd:
+  enabled: false
+  customSelectorLabels: {}
+    # devtron.ai/custom-labels : argo-cd
   applicationSet:
     enabled: false
   configs:
@@ -187,13 +190,14 @@ argo-cd:
       extra: {}
   dex:
     enabled: false
-  enabled: false
   fullnameOverride: argocd
   notifications:
     enabled: false
-argo-rollout:
+argo-rollouts:
   fullnameOverride: rollout-controller
   enabled: false
+  customSelectorLabels: {}
+    # devtron.ai/custom-labels : rollout
 argo-workflow:
   enabled: false
   fullnameOverride: argo-workflows
@@ -205,6 +209,8 @@ permissions:
     name: ""
     value: ""
 postgresql:
+  customSelectorLabels: {}
+    # devtron.ai/custom-labels : postgres
   customScripts:
     db_create.sql: |
       create database casbin;
