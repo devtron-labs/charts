@@ -1,6 +1,9 @@
 # https://github.com/argoproj/argo-helm/blob/argo-cd-5.13.9/charts/argo-cd/templates/_common.tpl#L57
 {{- define "argo-cd.selectorLabels" -}}
 {{- if .context.Values.customSelectorLabels }}
+{{- if .name -}}
+app.kubernetes.io/name: {{ include "argo-cd.name" .context }}-{{ .name }}
+{{ end -}}
 {{- toYaml .context.Values.customSelectorLabels }}
 {{- else }}
 {{- if .name -}}
