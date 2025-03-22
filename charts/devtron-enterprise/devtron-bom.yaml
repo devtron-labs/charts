@@ -74,11 +74,9 @@ devtron:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
   devtronEnterprise:
-    enabled: true
     casbin:
       image: "casbin:1a7b53a0-08418828-462-29891"
       imagePullPolicy: IfNotPresent
     scoop:
-      enabled: false
       image: "scoop:v0.28.1"
       imagePullPolicy: IfNotPresent
