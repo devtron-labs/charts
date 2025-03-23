@@ -43,8 +43,8 @@ devtron:
       image: "dashboard:f6810a22-bca87ef0-6-30145"
     # Values for devtron
     devtron:
-      image: "hyperion:cad08220-777-26242"
-      cicdImage: "devtron:d94c6c6b-4-30096"
+      image: "hyperion:4e8fb93e-828-30473"
+      cicdImage: "devtron:142690f6-4-31003"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "true"
@@ -56,29 +56,66 @@ devtron:
         SCOPED_VARIABLE_HANDLE_PRIMITIVES: "true"
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
-        STACK_VERSION: "29"
+  	  IS_AIR_GAP_ENVIRONMENT: "false"
+      podSecurityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
+    # Values for ciRunner
     ciRunner:
-      image: "ci-runner:a6fd8732-882-29898"
+      image: "ci-runner:2c6a094c-882-30828"
+    # Values for kubelink
     kubelink:
-      image: "kubelink:a6fd8732-310-29893"
+      image: "kubelink:2c6a094c-310-30829"
       imagePullPolicy: IfNotPresent
+      podSecurityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
+    # Values for gitsensor
     gitsensor:
-      image: "git-sensor:a6fd8732-535-29884"
+      image: "git-sensor:f4de0354-535-30999"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:a6fd8732-341-29892
+      image: chart-sync:289d080a-341-30392
+      podSecurityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
+  # values for security integration
   security:
     imageScanner:
-      image: "image-scanner:a6fd8732-112-29889"
+      image: "image-scanner:2c6a094c-112-30817"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
+  
   devtronEnterprise:
     enabled: true
     casbin:
-      image: "casbin:1a7b53a0-08418828-462-29891"
+      image: "casbin:f6ff5f74-064b67e5-462-30822"
       imagePullPolicy: IfNotPresent
+      podSecurityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
     scoop:
       enabled: false
-      image: "scoop:v0.28.1"
+      image: "scoop:2c6a094c-629-30827"
       imagePullPolicy: IfNotPresent
