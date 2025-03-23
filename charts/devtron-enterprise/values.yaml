@@ -40,7 +40,8 @@ devtron:
           FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE: "true"
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
-      image: "dashboard:f6810a22-bca87ef0-6-30145"
+          FEATURE_CONFIG_DRIFT_ENABLE: "true"
+      image: "dashboard:f9de3f1e-3d79ced5-6-30949"
     # Values for devtron
     devtron:
       image: "hyperion:4e8fb93e-828-30473"

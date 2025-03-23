@@ -40,7 +40,8 @@ devtron:
           FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE: "true"
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
-      image: "dashboard:f6810a22-bca87ef0-6-30145"
+          FEATURE_CONFIG_DRIFT_ENABLE: "true"
+      image: "dashboard:f9de3f1e-3d79ced5-6-30949"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     # Values for devtron
@@ -51,7 +52,7 @@ devtron:
       cicdImage: "devtron:142690f6-4-31003"
       imagePullPolicy: IfNotPresent
       customOverrides:
-        USE_CUSTOM_HTTP_TRANSPORT: "true"
+        USE_CUSTOM_HTTP_TRANSPORT: "false"
         ASYNC_BUILDX_CACHE_EXPORT: "false"
         BUILDX_CACHE_MODE_MIN: "false"
         DEVTRON_INSTALLATION_TYPE: enterprise
@@ -137,4 +138,3 @@ devtron:
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
       imagePullPolicy: IfNotPresent
-
