@@ -56,7 +56,7 @@ devtron:
         SCOPED_VARIABLE_HANDLE_PRIMITIVES: "true"
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
-  	  IS_AIR_GAP_ENVIRONMENT: "false"
+  	    IS_AIR_GAP_ENVIRONMENT: "false"
       podSecurityContext:
         fsGroup: 1001
         runAsGroup: 1001
