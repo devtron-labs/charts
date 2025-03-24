@@ -49,7 +49,7 @@ devtron:
     devtron:
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       image: "hyperion:4e8fb93e-828-30473"
-      cicdImage: "devtron:5836b89a-930-31071"
+      cicdImage: "devtron:3c628984-320-30985"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "true"
@@ -74,11 +74,11 @@ devtron:
         runAsUser: 1001
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:2c6a094c-882-30828"
+      image: "ci-runner:14c9a83d-853-30984"
     # Values for kubelink
     kubelink:
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "kubelink:2c6a094c-310-30829"
+      image: "kubelink:14c9a83d-322-31051"
       imagePullPolicy: IfNotPresent
       podSecurityContext:
         fsGroup: 1001
@@ -93,12 +93,12 @@ devtron:
     # Values for gitsensor
     gitsensor:
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "git-sensor:f4de0354-535-30999"
+      image: "git-sensor:14c9a83d-607-30988"
       imagePullPolicy: IfNotPresent
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     chartSync:
-      image: chart-sync:289d080a-341-30392
+      image: chart-sync:530ece4b-850-28084
       podSecurityContext:
         fsGroup: 1001
         runAsGroup: 1001
@@ -111,7 +111,7 @@ devtron:
   security:
     imageScanner:
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "image-scanner:2c6a094c-112-30817"
+      image: "image-scanner:e07baf78-103-30836"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
@@ -122,7 +122,7 @@ devtron:
     enabled: true
     casbin:
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "casbin:f6ff5f74-064b67e5-462-30822"
+      image: "casbin:f6ff5f74-e3245aeb-463-31061"
       imagePullPolicy: IfNotPresent
       podSecurityContext:
         fsGroup: 1001
