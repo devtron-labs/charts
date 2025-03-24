@@ -101,7 +101,6 @@ devtron:
       image: "git-sensor:14c9a83d-607-30988"
       imagePullPolicy: IfNotPresent
     migrator:
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     chartSync:
