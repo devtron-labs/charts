@@ -49,7 +49,7 @@ devtron:
     devtron:
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       image: "hyperion:4e8fb93e-828-30473"
-      cicdImage: "devtron:3c628984-320-30985"
+      cicdImage: "devtron:bdf88c43-930-31079"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "true"

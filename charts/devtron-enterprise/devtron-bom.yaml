@@ -51,7 +51,7 @@ devtron:
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
       image: "hyperion:4e8fb93e-828-30473"
-      cicdImage: "devtron:3c628984-320-30985"
+      cicdImage: "devtron:bdf88c43-930-31079"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "false"
