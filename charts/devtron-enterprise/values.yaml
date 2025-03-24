@@ -42,7 +42,7 @@ devtron:
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "dashboard:60a7c6db-addebcc3-931-31072"
+      image: "dashboard:ae1c0922-931bc64e-931-31083"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     # Values for devtron
