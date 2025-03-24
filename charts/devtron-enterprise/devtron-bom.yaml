@@ -41,11 +41,13 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       image: "dashboard:f9de3f1e-3d79ced5-6-30949"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     # Values for devtron
     devtron:
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
       image: "hyperion:4e8fb93e-828-30473"
@@ -75,6 +77,7 @@ devtron:
       image: "ci-runner:2c6a094c-882-30828"
     # Values for kubelink
     kubelink:
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
       image: "kubelink:2c6a094c-310-30829"
@@ -89,11 +92,13 @@ devtron:
         runAsUser: 1001
     # Values for gitsensor
     gitsensor:
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
       image: "git-sensor:f4de0354-535-30999"
       imagePullPolicy: IfNotPresent
     migrator:
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     chartSync:
@@ -110,6 +115,7 @@ devtron:
         runAsUser: 1001
   # values for security integration
   security:
+    registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
     imageScanner:
       image: "image-scanner:2c6a094c-112-30817"
       configs:
@@ -120,6 +126,7 @@ devtron:
   devtronEnterprise:
     enabled: true
     casbin:
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       image: "casbin:f6ff5f74-064b67e5-462-30822"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
@@ -134,6 +141,7 @@ devtron:
         runAsUser: 1001
     scoop:
       enabled: false
+      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       image: "scoop:2c6a094c-629-30827"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
