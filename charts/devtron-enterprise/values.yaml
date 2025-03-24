@@ -72,6 +72,9 @@ devtron:
         allowPrivilegeEscalation: false
         runAsNonRoot: true
         runAsUser: 1001
+    migrator:
+      imagePullSecrets:
+        - name: devtron-image-pull-enterprise
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:14c9a83d-853-30984"
