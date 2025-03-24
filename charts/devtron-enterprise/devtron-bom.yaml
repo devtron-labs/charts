@@ -42,7 +42,7 @@ devtron:
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
       registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "dashboard:f9de3f1e-3d79ced5-6-30949"
+      image: "dashboard:60a7c6db-addebcc3-931-31072"
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
     # Values for devtron
@@ -51,7 +51,7 @@ devtron:
       imagePullSecrets:
         - name: devtron-image-pull-enterprise
       image: "hyperion:4e8fb93e-828-30473"
-      cicdImage: "devtron:142690f6-4-31003"
+      cicdImage: "devtron:5836b89a-930-31071"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "false"
