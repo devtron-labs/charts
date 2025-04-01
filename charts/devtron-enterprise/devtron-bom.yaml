@@ -29,6 +29,14 @@ global:
   tolerations: []
   imagePullSecrets: []
 devtron:
+  installer:
+    arch: "multi-arch"
+    repo: "devtron-labs/charts"
+    release: "32.1.0"
+    registry: ""
+    image: inception
+    tag: 7beef376-948-31378
+    source: "github" # Available options are github and gitee
   components:
     # Values for dashboard
     dashboard:
@@ -41,110 +49,51 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "dashboard:ae1c0922-931bc64e-931-31083"
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
+      image: "dashboard:d5c390c2-30dda7b5-931-31381"
     # Values for devtron
     devtron:
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
-      image: "hyperion:4e8fb93e-828-30473"
-      cicdImage: "devtron:bdf88c43-930-31079"
+      image: "hyperion:a55177ad-759-31413"
+      cicdImage: "devtron:de8076d0-930-31412"
       imagePullPolicy: IfNotPresent
       customOverrides:
+        PG_ADDR: postgresql-postgresql.devtroncd
         USE_CUSTOM_HTTP_TRANSPORT: "false"
         ASYNC_BUILDX_CACHE_EXPORT: "false"
         BUILDX_CACHE_MODE_MIN: "false"
-        DEVTRON_INSTALLATION_TYPE: enterprise
         CLONING_MODE: FULL
         SCOPED_VARIABLE_ENABLED: "true"
         SCOPED_VARIABLE_HANDLE_PRIMITIVES: "true"
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
         IS_AIR_GAP_ENVIRONMENT: "false"
-      podSecurityContext:
-        fsGroup: 1001
-        runAsGroup: 1001
-        runAsUser: 1001
-      containerSecurityContext:
-        allowPrivilegeEscalation: false
-        runAsNonRoot: true
-        runAsUser: 1001
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:14c9a83d-853-30984"
-    migrator:
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
+      image: "ci-runner:2168a861-882-31228"
     # Values for kubelink
     kubelink:
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
-      image: "kubelink:14c9a83d-322-31051"
+      image: "kubelink:fd7b49f0-314-31414"
       imagePullPolicy: IfNotPresent
-      podSecurityContext:
-        fsGroup: 1001
-        runAsGroup: 1001
-        runAsUser: 1001
-      containerSecurityContext:
-        allowPrivilegeEscalation: false
-        runAsNonRoot: true
-        runAsUser: 1001
     # Values for gitsensor
     gitsensor:
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
-      image: "git-sensor:14c9a83d-607-30988"
+      image: "git-sensor:fd7b49f0-950-31385"
       imagePullPolicy: IfNotPresent
-    migrator:
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
     chartSync:
-      image: chart-sync:530ece4b-850-28084
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
-      podSecurityContext:
-        fsGroup: 1001
-        runAsGroup: 1001
-        runAsUser: 1001
-      containerSecurityContext:
-        allowPrivilegeEscalation: false
-        runAsNonRoot: true
-        runAsUser: 1001
+      image: chart-sync:2168a861-341-31218
+    postgres:
+      armImage: "postgres:14.9"
   # values for security integration
   security:
-    registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
     imageScanner:
-      image: "image-scanner:e07baf78-103-30836"
+      image: "image-scanner:fd7b49f0-109-31386"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
   devtronEnterprise:
     enabled: true
     casbin:
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
-      image: "casbin:f6ff5f74-e3245aeb-463-31061"
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
+      image: "casbin:fd7b49f0-fced3ae3-464-31402"
       imagePullPolicy: IfNotPresent
-      podSecurityContext:
-        fsGroup: 1001
-        runAsGroup: 1001
-        runAsUser: 1001
-      containerSecurityContext:
-        allowPrivilegeEscalation: false
-        runAsNonRoot: true
-        runAsUser: 1001
     scoop:
       enabled: false
-      registry: "asia-south1-docker.pkg.dev/devtron-prod-447012/devtroninc"
       image: "scoop:2c6a094c-629-30827"
-      imagePullSecrets:
-        - name: devtron-image-pull-enterprise
       imagePullPolicy: IfNotPresent
