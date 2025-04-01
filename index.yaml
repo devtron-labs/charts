@@ -1436,6 +1436,40 @@ entries:
   devtron-operator:
   - apiVersion: v2
     appVersion: 1.4.0
+    created: "2025-04-01T16:07:39.384111915Z"
+    dependencies:
+    - condition: argo-cd.enabled
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 5.9.1
+    - condition: security.enabled
+      name: security
+      repository: https://helm.devtron.ai
+      version: 0.x.x
+    description: Chart to configure and install Devtron. Devtron is a Kubernetes Orchestration
+      system.
+    digest: 3aed4b94a73243525140f716003b90b0c94caaef900f87d922d587c3c0e40f99
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    - argocd
+    - Hyperion
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-operator
+    sources:
+    - https://github.com/devtron-labs/charts
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-operator-0.22.88/devtron-operator-0.22.88.tgz
+    version: 0.22.88
+  - apiVersion: v2
+    appVersion: 1.4.0
     created: "2025-03-24T12:26:25.331624545Z"
     dependencies:
     - condition: argo-cd.enabled
@@ -6231,4 +6265,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-03-24T12:26:25.33202777Z"
+generated: "2025-04-01T16:07:39.384683492Z"
