@@ -37,9 +37,6 @@ devtron:
     image: inception
     tag: 7beef376-948-31378
     source: "github" # Available options are github and gitee
-    modules: [] # Available options are cicd
-    openshift: false # Set this to true if you are installing on openshift
-    production_overrides: "" # Set true if you want to use this Devtron stack in Production (This will require more resources)
   components:
     # Values for dashboard
     dashboard:
