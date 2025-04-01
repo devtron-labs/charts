@@ -3,7 +3,7 @@ argo-cd:
   customSelectorLabels: {}
     # devtron.ai/custom-labels : argo-cd
   crds:
-    install: false  #if you are upgrading make it as false 
+    install: true  #if you are upgrading make it as false 
     keep: true
 
   applicationSet:
