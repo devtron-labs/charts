@@ -1,6 +1,6 @@
 apiVersion: v2
 name: devtron-enterprise
-appVersion: 32.1.0
+appVersion: 32.1.1
 description: Chart to configure and install Devtron Enterprise Stack. Devtron is a Kubernetes Orchestration system.
 keywords:
   - Devtron
