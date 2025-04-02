@@ -132,4 +132,4 @@ ingress:
     #  hosts:
       #  - chart-example.local
 
-namespace: opentelemetry
+namespace: ""
