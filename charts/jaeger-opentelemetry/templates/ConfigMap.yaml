@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-config
-  namespace: {{ .Values.namespace | default "opentelemetry" }}
+  namespace: {{ .Release.Namespace | default "opentelemetry" }}
   labels:
    {{- include "optl-label" . | nindent 3 }}
 data:

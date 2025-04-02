@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
  name: {{ .Release.Name }}-optl
- namespace: {{ .Values.namespace | default "opentelemetry" }}
+ namespace: {{ .Release.Namespace | default "opentelemetry" }}
  labels:
    app: opentelemetry
    component: otel-collector
@@ -23,7 +23,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: jaeger-headless
-  namespace: {{ .Values.namespace | default "opentelemetry" }}
+  namespace: {{ .Release.Namespace | default "opentelemetry" }}
   labels:
    app: opentelemetry
    component: optl-collector
@@ -43,7 +43,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ .Release.Name }}-jaeger-query
-  namespace: {{ .Values.namespace | default "opentelemetry" }}
+  namespace: {{ .Release.Namespace | default "opentelemetry" }}
   labels:
    app: opentelemetry
    component: optl-collector
