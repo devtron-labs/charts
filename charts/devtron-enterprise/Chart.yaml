@@ -10,7 +10,7 @@ keywords:
   - Deployment
   - argocd
   - Hyperion
-version: 32.1.0
+version: 32.1.1
 sources:
   - https://github.com/devtron-labs/charts/tree/main/charts/devtron-enterprise
 dependencies:
