@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
  name: {{ .Release.Name }}-jaeger-all-in-one
- namespace: opentelemetry
+ namespace: {{ .Values.namespace }}
  labels:
    {{- include "stateful label" . | nindent 3 }}
 spec: 

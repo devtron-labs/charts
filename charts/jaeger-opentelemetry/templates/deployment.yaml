@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
  name: {{ .Release.Name }}-optl-deployment
- namespace: opentelemetry
+ namespace: {{ .Values.namespace}}
  labels:
    {{- include "deployment-optl label" . | nindent 3 }}
 spec:
@@ -14,7 +14,7 @@ spec:
  template:
    metadata:
      name: {{ .Release.Name }}-optl
-     namespace: opentelemetry
+     namespace: {{ .Values.namespace }}
      labels:
        {{- include "deployment-optl label" . | nindent 7 }}
    spec:
