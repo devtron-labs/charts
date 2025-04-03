@@ -52,7 +52,7 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:040c5cf9-30dda7b5-931-31433"
+      image: "dashboard:5d3e2f7d-0281df1c-931-31487"
     # Values for devtron
     devtron:
       image: "hyperion:de8076d0-759-31416"
@@ -69,6 +69,7 @@ devtron:
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
         IS_AIR_GAP_ENVIRONMENT: "false"
+        DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:2168a861-882-31228"
