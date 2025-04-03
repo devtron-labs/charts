@@ -6185,6 +6185,17 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/svn-git-sync-0.1.0/svn-git-sync-0.1.0.tgz
     version: 0.1.0
+  terraform-eks-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-04-03T14:43:50.890020691Z"
+    description: Helm chart to create eks cluster with karpenter
+    digest: 95a78e5db3770e4a5e5079009480a8b6bd3637c6bbb719be5c6afdcd83ea20f7
+    name: terraform-eks-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-eks-cluster-0.0.1/terraform-eks-cluster-0.0.1.tgz
+    version: 0.0.1
   twistlock-defender:
   - apiVersion: v1
     created: "2023-04-12T08:50:29.151962489Z"
@@ -6355,4 +6366,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-03T14:20:26.313525883Z"
+generated: "2025-04-03T14:43:50.890433687Z"
