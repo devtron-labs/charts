@@ -1,0 +1,23 @@
+vars: 
+  - name: name
+    value: ""
+  - name: cluster_version
+    value: ""
+  - name: region
+    value: ""
+  - name: vpc_cidr
+    value: ""
+  - name: auth_mode
+    value: ""
+  - name: public_access
+    value: true
+  - name: private_access_cidrs
+    value: []
+  - name: enable_irsa
+    value: true
+  - name: availability_zones
+    value: []
+  - name: resource_tags
+    value: 
+      team: ""
+      environment: ""
