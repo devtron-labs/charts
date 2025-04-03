@@ -32,12 +32,13 @@ devtron:
   installer:
     arch: "multi-arch"
     repo: "devtron-labs/charts"
-    release: "32.1.1"
+    release: "32.1.2"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
     source: "github" # Available options are github and gitee
-    modules: [] # Available options are cicd
+    modules:
+      - cicd # Available options are cicd
     openshift: false # Set this to true if you are installing on openshift
     production_overrides: "" # Set true if you want to use this Devtron stack in Production (This will require more resources)
   components:
@@ -52,11 +53,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:040c5cf9-30dda7b5-931-31433"
+      image: "dashboard:837160d0-d0729419-931-31524"
     # Values for devtron
     devtron:
-      image: "hyperion:de8076d0-759-31416"
-      cicdImage: "devtron:de8076d0-930-31412"
+      image: "hyperion:180e7c57-759-31498"
+      cicdImage: "devtron:180e7c57-930-31499"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
@@ -69,6 +70,7 @@ devtron:
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
         IS_AIR_GAP_ENVIRONMENT: "false"
+        DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:2168a861-882-31228"
@@ -86,11 +88,19 @@ devtron:
       armImage: "postgres:14.9"
   # values for security integration
   security:
+    enabled: true
     imageScanner:
       image: "image-scanner:fd7b49f0-109-31386"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
+    trivy:
+      enabled: true
+  notifier:
+    enabled: true
+  monitoring:
+    grafana:
+      enabled: true
   devtronEnterprise:
     enabled: true
     casbin:
@@ -98,5 +108,5 @@ devtron:
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:2c6a094c-629-30827"
+      image: "scoop:30f26a6c-955-31521"
       imagePullPolicy: IfNotPresent

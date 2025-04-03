@@ -19,20 +19,11 @@ global:
   # imagePullSecrets:
   #     - name: your-image-pull-secret
 
-  # Set the storage class to be used for PVCs (would use default sc if not specified)
-  storageClass: ""
-  
-  # Add Proxy Configs to be propagated to all the Devtron Microservices.
-  configs: {}
-
-  nodeSelector: {}
-  tolerations: []
-  imagePullSecrets: []
 devtron:
   installer:
     arch: "multi-arch"
     repo: "devtron-labs/charts"
-    release: "32.1.1"
+    release: "32.1.2"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -49,11 +40,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:040c5cf9-30dda7b5-931-31433"
+      image: "dashboard:837160d0-d0729419-931-31524"
     # Values for devtron
     devtron:
-      image: "hyperion:de8076d0-759-31416"
-      cicdImage: "devtron:de8076d0-930-31412"
+      image: "hyperion:180e7c57-759-31498"
+      cicdImage: "devtron:180e7c57-930-31499"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
@@ -66,6 +57,7 @@ devtron:
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
         IS_AIR_GAP_ENVIRONMENT: "false"
+        DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:2168a861-882-31228"
@@ -95,5 +87,5 @@ devtron:
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:2c6a094c-629-30827"
+      image: "scoop:30f26a6c-955-31521"
       imagePullPolicy: IfNotPresent

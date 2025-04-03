@@ -13,9 +13,19 @@
 
 Please wait for ~1 minute before running any of the following commands.
 
-1. Run the following command to get the password for the default admin user:
 
-   kubectl -n devtroncd get secret devtron-secret -o jsonpath='{.data.ADMIN_PASSWORD}' | base64 -d
+{{- if $.Values.devtron.installer.modules }}
+
+1. To track installation progress, run:  
+
+   kubectl -n devtroncd get installers installer-devtron -o jsonpath='{.status.sync.status}'  
+
+   Status meanings:  
+   - Downloaded: Installation is in progress, but you can start exploring Devtron.  
+   - Applied: Installation completed successfully.  
+
+{{- end }}
+
 
 {{- if $.Values.devtron.components }}
 {{- if $.Values.devtron.components.devtron }}
@@ -56,17 +66,11 @@ Please wait for ~1 minute before running any of the following commands.
 {{- end }}
 {{- end }}
 
-{{- if $.Values.devtron.installer.modules }}
+3. Please go to https://license.devtron.ai/dashboard and sign in with your work email to generate your Enterprise trial license key or click on Get License on the Devtron Dashboard.
 
-3. To track installation progress, run:  
+4. Run the following command to get the password for the default admin user:
 
-   kubectl -n devtroncd get installers installer-devtron -o jsonpath='{.status.sync.status}'  
-
-   Status meanings:  
-   - Downloaded: Installation is in progress, but you can start exploring Devtron.  
-   - Applied: Installation completed successfully.  
-
-{{- end }}
+   kubectl -n devtroncd get secret devtron-secret -o jsonpath='{.data.ADMIN_PASSWORD}' | base64 -d
 
 ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
 💡 Facing issues? Join our community for quick help: https://discord.devtron.ai
