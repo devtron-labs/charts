@@ -1,6 +1,0 @@
-dependencies:
-- name: devtron-operator
-  repository: https://helm.devtron.ai/
-  version: 0.22.88
-digest: sha256:bb46bede7246ba452bf242b777423b3834dac965521d1c524b0a32091c02e057
-generated: "2025-04-03T19:05:08.039322+05:30"
