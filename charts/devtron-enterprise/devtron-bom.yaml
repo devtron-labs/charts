@@ -19,15 +19,6 @@ global:
   # imagePullSecrets:
   #     - name: your-image-pull-secret
 
-  # Set the storage class to be used for PVCs (would use default sc if not specified)
-  storageClass: ""
-  
-  # Add Proxy Configs to be propagated to all the Devtron Microservices.
-  configs: {}
-
-  nodeSelector: {}
-  tolerations: []
-  imagePullSecrets: []
 devtron:
   installer:
     arch: "multi-arch"
@@ -49,7 +40,7 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:5d3e2f7d-0281df1c-931-31487"
+      image: "dashboard:837160d0-d0729419-931-31524"
     # Values for devtron
     devtron:
       image: "hyperion:180e7c57-759-31498"
