@@ -66,6 +66,7 @@ devtron:
         DEVTRON_CHART_ARGO_CD_INSTALL_REQUEST_TIMEOUT: "1"
         IS_INTERNAL_USE: "true"
         IS_AIR_GAP_ENVIRONMENT: "false"
+        DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:2168a861-882-31228"
