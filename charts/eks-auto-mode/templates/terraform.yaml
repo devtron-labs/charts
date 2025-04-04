@@ -4,7 +4,7 @@ metadata:
   name: {{ $.Release.Name }}
   namespace: flux-system
 spec:
-  path: {{ default ".terraform/eks-auto-mode" .Values.path }}
+  path: {{ default "./terraform/eks-auto-mode" .Values.path }}
   approvePlan: {{ default "auto" .Values.approvePlan }}
   interval: 1m
   storeReadablePlan: human
