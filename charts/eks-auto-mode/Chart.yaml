@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.1
+description: Helm chart to create auto mode eks cluster
+name: terraform-eks-cluster
+type: application
+version: 0.0.1

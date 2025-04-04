@@ -1,0 +1,37 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default ".terraform/eks-auto-mode" .Values.path }}
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+{{- if .Values.vars }}
+  vars:
+{{ toYaml .Values.vars | indent 2 }}
+{{- end }}  
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity: 
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            name: tf-aws-creds
