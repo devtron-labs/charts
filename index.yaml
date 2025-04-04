@@ -6185,6 +6185,17 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/svn-git-sync-0.1.0/svn-git-sync-0.1.0.tgz
     version: 0.1.0
+  terraform-eks-auto-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-04-04T05:11:45.176251008Z"
+    description: Helm chart to create auto mode eks cluster
+    digest: 295c5c654ed15de8909eac226e9406a1a28cde7c6fc9329ea030008ce8a4af1e
+    name: terraform-eks-auto-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-eks-auto-cluster-0.0.1/terraform-eks-auto-cluster-0.0.1.tgz
+    version: 0.0.1
   terraform-eks-cluster:
   - apiVersion: v2
     appVersion: 0.0.1
@@ -6366,4 +6377,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-03T14:43:50.890433687Z"
+generated: "2025-04-04T05:11:45.17680445Z"
