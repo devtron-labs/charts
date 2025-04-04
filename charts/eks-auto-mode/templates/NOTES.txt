@@ -1,1 +1,1 @@
-Your Auto-mode EKS cluster will be created soon !!
+Your Auto Mode EKS cluster will be created soon !!
