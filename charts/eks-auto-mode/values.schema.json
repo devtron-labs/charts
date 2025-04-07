@@ -1,0 +1,116 @@
+{
+    "type": "object",
+    "required": [
+      "name",
+      "auth_mode",
+      "cluster_version",
+      "region",
+      "enable_irsa",
+      "public_access"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Name",
+        "maxLength": 50,
+        "description": "The name of the EKS cluster. Must be unique and up to 50 characters."
+      },
+      "region": {
+        "enum": [
+          "ap-south-1",
+          "ap-south-2",
+          "us-west-2",
+          "us-west-1"
+        ],
+        "type": "string",
+        "title": "Region",
+        "default": "ap-south-1",
+        "description": "AWS region where the EKS cluster will be provisioned."
+      },
+      "vpc_cidr": {
+        "type": "string",
+        "title": "VPC CIDR",
+        "description": "The CIDR block for the VPC that will be created for the cluster."
+      },
+      "auth_mode": {
+        "enum": [
+          "API_AND_CONFIG_MAP",
+          "API",
+          "CONFIG_MAP"
+        ],
+        "type": "string",
+        "title": "Authentication Mode",
+        "default": "API_AND_CONFIG_MAP",
+        "description": "Authentication method for the cluster. Options: API, CONFIG_MAP, or both."
+      },
+      "enable_irsa": {
+        "type": "boolean",
+        "title": "Enable IRSA",
+        "default": true,
+        "description": "Enable IAM Roles for Service Accounts (IRSA) to securely access AWS services."
+      },
+      "public_access": {
+        "type": "boolean",
+        "title": "Allow public access",
+        "default": true,
+        "description": "Determines whether the EKS control plane endpoint is publicly accessible."
+      },
+      "resource_tags": {
+        "type": "object",
+        "title": "Resource Tags",
+        "description": "Tags that will be applied to all Kubernetes resources created by the cluster.",
+        "properties": {
+          "team": {
+            "enum": [
+              "qa_team",
+              "Frontend_Team",
+              "Backend_Team",
+              "Devops_Team"
+            ],
+            "type": "string",
+            "title": "Team",
+            "description": "The owning team of the resources for visibility and management."
+          },
+          "environment": {
+            "enum": [
+              "production",
+              "non-production",
+              "qa"
+            ],
+            "type": "string",
+            "title": "Environment",
+            "description": "Deployment environment for the cluster resources (e.g., production, QA)."
+          }
+        }
+      },
+      "cluster_version": {
+        "enum": [
+          "1.30",
+          "1.29",
+          "1.32",
+          "1.31"
+        ],
+        "type": "string",
+        "title": "Cluster Version",
+        "default": "1.31",
+        "description": "Kubernetes version to use for the EKS cluster."
+      },
+      "availability_zones": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "title": "Availability Zones",
+        "description": "List of availability zones to distribute worker nodes across for high availability."
+      },
+      "private_access_cidrs": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "title": "Private access CIDRs",
+        "description": "CIDR blocks that can access the private Kubernetes API endpoint, if enabled."
+      }
+    }
+  }
+  
