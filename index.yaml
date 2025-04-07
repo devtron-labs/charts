@@ -6187,6 +6187,16 @@ entries:
     version: 0.1.0
   terraform-eks-auto-cluster:
   - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2025-04-07T11:18:54.241163473Z"
+    description: Helm chart to create auto mode eks cluster
+    digest: 8619830a93b898360076cd552689ae35dbe67ea4f4e77ef23d0de3248addbec7
+    name: terraform-eks-auto-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-eks-auto-cluster-0.0.3/terraform-eks-auto-cluster-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     appVersion: 0.0.2
     created: "2025-04-04T06:56:43.384291138Z"
     description: Helm chart to create auto mode eks cluster
@@ -6387,4 +6397,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-04T06:56:43.385003716Z"
+generated: "2025-04-07T11:18:54.241621939Z"
