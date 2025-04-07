@@ -11,6 +11,7 @@ global:
   # imagePullSecrets:
   #     - name: yoursecret
 imageScanner:
+  healthPort: 8080
   configs:
     CLAIR_ADDR: clair.devtroncd:6060
     CLIENT_ID: client-2
