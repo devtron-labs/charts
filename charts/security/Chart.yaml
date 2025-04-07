@@ -16,7 +16,7 @@ maintainers:
 sources:
   - https://github.com/devtron-labs/charts
 version: 0.2.0
-appVersion: "0.1.1"
+appVersion: "0.1.2"
 dependencies:
 - name: clair
   version: "0.x.x"
