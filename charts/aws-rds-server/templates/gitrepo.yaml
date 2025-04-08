@@ -2,7 +2,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: {{ $.Release.Name }}
-  namespace: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
 spec:
   interval: 30s
   ref:
