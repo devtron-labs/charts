@@ -219,6 +219,28 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/argocd-certificate-refresh-0.10.0/argocd-certificate-refresh-0.10.0.tgz
     version: 0.10.0
+  aws-rds:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-04-08T08:25:23.017752272Z"
+    description: Helm chart to create AWS RDS Database
+    digest: c484f0fe2997030576d5ce0ec2dff5c589b00a97f4b73bed738dfe91c0a61d13
+    name: aws-rds
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-rds-0.0.1/aws-rds-0.0.1.tgz
+    version: 0.0.1
+  aws-s3-bucket:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-04-08T08:25:23.212694745Z"
+    description: Helm chart to create AWS S3 buckets
+    digest: a7c1f11995fc7b65521798f673de67d0c3550fcde741368522c8b9517767680f
+    name: aws-s3-bucket
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-s3-bucket-0.0.1/aws-s3-bucket-0.0.1.tgz
+    version: 0.0.1
   aws-ssm-agent-installer:
   - apiVersion: v1
     appVersion: 0.1.0
@@ -6187,6 +6209,16 @@ entries:
     version: 0.1.0
   terraform-eks-auto-cluster:
   - apiVersion: v2
+    appVersion: 0.0.4
+    created: "2025-04-08T08:25:23.430002027Z"
+    description: Helm chart to create auto mode eks cluster
+    digest: f45c11b5155b78e471bed5e300cdd98e24fd7d75fc47547ec8759415176a8290
+    name: terraform-eks-auto-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-eks-auto-cluster-0.0.4/terraform-eks-auto-cluster-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
     appVersion: 0.0.3
     created: "2025-04-07T11:18:54.241163473Z"
     description: Helm chart to create auto mode eks cluster
@@ -6217,6 +6249,16 @@ entries:
     - https://github.com/devtron-labs/charts/releases/download/terraform-eks-auto-cluster-0.0.1/terraform-eks-auto-cluster-0.0.1.tgz
     version: 0.0.1
   terraform-eks-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2025-04-08T08:25:23.647825606Z"
+    description: Helm chart to create eks cluster with karpenter
+    digest: 12f26e30e30d447936f1b72f2308116ca7bcaca51c6c967fccd6d4cef438e734
+    name: terraform-eks-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-eks-cluster-0.0.2/terraform-eks-cluster-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2025-04-03T14:43:50.890020691Z"
@@ -6397,4 +6439,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-07T11:18:54.241621939Z"
+generated: "2025-04-08T08:25:23.648313472Z"
