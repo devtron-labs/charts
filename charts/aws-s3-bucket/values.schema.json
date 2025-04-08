@@ -1,0 +1,64 @@
+{
+  "type": "object",
+  "required": ["bucket_name", "region", "versioning_enabled", "tags", "awsCredentials"],
+  "properties": {
+    "bucket_name": {
+      "type": "string",
+      "title": "S3 Bucket Name",
+      "description": "The name of the S3 bucket to be created"
+    },
+    "region": {
+      "type": "string",
+      "title": "AWS Region",
+      "description": "AWS region where the bucket should be provisioned",
+      "enum": ["ap-south-1", "ap-south-2", "us-west-1", "us-west-2"],
+      "default": "ap-south-1"
+    },
+    "versioning_enabled": {
+      "type": "boolean",
+      "title": "Enable Versioning",
+      "description": "Enable or disable versioning for the S3 bucket",
+      "default": true
+    },
+    "tags": {
+      "type": "object",
+      "title": "Tags",
+      "description": "Key-value pairs to tag the S3 bucket",
+      "properties": {
+        "Environment": {
+          "type": "string",
+          "title": "Environment",
+          "description": "Environment name like dev, prod, etc."
+        },
+        "Owner": {
+          "type": "string",
+          "title": "Owner",
+          "description": "Owner or responsible team"
+        },
+        "Project": {
+          "type": "string",
+          "title": "Project",
+          "description": "Project the bucket belongs to"
+        }
+      },
+      "required": ["Environment", "Owner", "Project"]
+    },
+    "awsCredentials": {
+      "type": "object",
+      "title": "AWS Credentials",
+      "description": "Credentials used to authenticate Terraform with AWS",
+      "required": ["accessKeyId", "secretAccessKey"],
+      "properties": {
+        "accessKeyId": {
+          "type": "string",
+          "title": "Access Key ID"
+        },
+        "secretAccessKey": {
+          "type": "string",
+          "title": "Secret Access Key"
+        }
+      }
+    }
+    
+  }
+}

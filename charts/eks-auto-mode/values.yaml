@@ -1,6 +1,6 @@
 name: "example-cluster"              
 auth_mode: "API_AND_CONFIG_MAP"       
-cluster_version: "1.31"                
+cluster_version: "1.30"                
 region: "ap-south-1"                  
 enable_irsa: true
 public_access: true

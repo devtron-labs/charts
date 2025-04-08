@@ -1,23 +1,12 @@
-vars: 
-  - name: name
-    value: ""
-  - name: cluster_version
-    value: ""
-  - name: region
-    value: ""
-  - name: vpc_cidr
-    value: ""
-  - name: auth_mode
-    value: ""
-  - name: public_access
-    value: true
-  - name: private_access_cidrs
-    value: []
-  - name: enable_irsa
-    value: true
-  - name: availability_zones
-    value: []
-  - name: resource_tags
-    value: 
-      team: ""
-      environment: ""
+name: "example-cluster"              
+auth_mode: "API_AND_CONFIG_MAP"       
+cluster_version: "1.30"                
+region: "ap-south-1"                  
+enable_irsa: true
+public_access: true
+vpc_cidr: ""
+resource_tags:
+  team: "Devops_Team"                  
+  environment: "non-production"    
+availability_zones: []
+private_access_cidrs: []

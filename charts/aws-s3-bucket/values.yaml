@@ -1,0 +1,10 @@
+bucket_name: "my-dev-bucket-2025"
+region: "ap-south-1"
+versioning_enabled: false
+tags:
+  Environment: "dev"
+  Owner: "dev-name"
+  Project: "backend-application"
+awsCredentials:
+  accessKeyId: "YOUR_AWS_ACCESS_KEY_ID"
+  secretAccessKey: "YOUR_AWS_SECRET_ACCESS_KEY"

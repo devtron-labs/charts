@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.1
+description: Helm chart to create AWS S3 buckets
+name: aws-s3-bucket
+type: application
+version: 0.0.1

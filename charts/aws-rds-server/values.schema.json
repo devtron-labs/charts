@@ -1,0 +1,118 @@
+{
+  "type": "object",
+  "required": [
+    "db_identifier",
+    "engine",
+    "engine_version",
+    "instance_class",
+    "allocated_storage",
+    "db_name",
+    "username",
+    "password",
+    "multi_az",
+    "publicly_accessible",
+    "subnet_ids",
+    "vpc_id",
+    "tags",
+    "awsCredentials"
+  ],
+  "properties": {
+    "db_identifier": {
+      "type": "string",
+      "title": "Database Identifier",
+      "description": "The unique name for the RDS instance"
+    },
+    "engine": {
+      "type": "string",
+      "enum": ["postgres", "mysql", "mariadb", "oracle-se2", "sqlserver-se"],
+      "title": "Database Engine",
+      "description": "The database engine to use"
+    },
+    "engine_version": {
+      "type": "string",
+      "title": "Engine Version",
+      "description": "The version of the selected database engine"
+    },
+    "instance_class": {
+      "type": "string",
+      "title": "Instance Class",
+      "description": "RDS instance class (e.g., db.t3.micro)"
+    },
+    "allocated_storage": {
+      "type": "integer",
+      "title": "Allocated Storage (GB)",
+      "description": "The amount of allocated storage in gigabytes"
+    },
+    "db_name": {
+      "type": "string",
+      "title": "Database Name",
+      "description": "The name of the initial database created"
+    },
+    "username": {
+      "type": "string",
+      "title": "Master Username",
+      "description": "The master username for the database"
+    },
+    "password": {
+      "type": "string",
+      "title": "Master Password",
+      "description": "The master password for the database",
+      "minLength": 8
+    },
+    "multi_az": {
+      "type": "boolean",
+      "title": "Multi-AZ",
+      "description": "Enable Multi-AZ deployment for high availability"
+    },
+    "publicly_accessible": {
+      "type": "boolean",
+      "title": "Publicly Accessible",
+      "description": "Whether the DB instance is publicly accessible"
+    },
+    "subnet_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "title": "Subnet IDs",
+      "description": "List of subnet IDs for the DB subnet group"
+    },
+    "vpc_id": {
+      "type": "string",
+      "title": "VPC ID",
+      "description": "The VPC ID in which RDS will be launched"
+    },
+    "tags": {
+      "type": "object",
+      "title": "Tags",
+      "required": ["Project", "Env", "Team"],
+      "properties": {
+        "Project": {
+          "type": "string"
+        },
+        "Env": {
+          "type": "string"
+        },
+        "Team": {
+          "type": "string"
+        }
+      },
+      "description": "Key-value tags applied to the RDS resources"
+    },
+    "awsCredentials": {
+      "type": "object",
+      "title": "AWS Credentials",
+      "required": ["accessKeyId", "secretAccessKey"],
+      "properties": {
+        "accessKeyId": {
+          "type": "string",
+          "title": "AWS Access Key ID"
+        },
+        "secretAccessKey": {
+          "type": "string",
+          "title": "AWS Secret Access Key"
+        }
+      }
+    }
+  }
+}
