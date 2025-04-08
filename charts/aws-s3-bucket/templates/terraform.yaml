@@ -1,0 +1,45 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  path: {{ default "./terraform/aws-s3-bucket" .Values.path }}
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: {{ $.Release.Namespace }}
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: bucket_name
+      value: {{ .Values.bucket_name | quote }}
+    - name: region
+      value: {{ .Values.region | quote }}
+    - name: versioning_enabled
+      value: {{ .Values.versioning_enabled }}
+    - name: tags
+      value:
+        Environment: {{ .Values.tags.Environment | quote }}
+        Owner: {{ .Values.tags.Owner | quote }}
+        Project: {{ .Values.tags.Project | quote }}
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity: 
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            name: tf-aws-creds

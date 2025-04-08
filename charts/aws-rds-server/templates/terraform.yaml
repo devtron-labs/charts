@@ -1,0 +1,62 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: {{ $.Release.Namespace }}
+spec:
+  path: {{ default "./terraform/aws-rds" .Values.path }}
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: {{ $.Release.Namespace }}
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: db_identifier
+      value: {{ .Values.db_identifier | quote }}
+    - name: engine
+      value: {{ .Values.engine | quote }}
+    - name: engine_version
+      value: {{ .Values.engine_version | quote }}
+    - name: instance_class
+      value: {{ .Values.instance_class | quote }}
+    - name: allocated_storage
+      value: {{ .Values.allocated_storage }}
+    - name: db_name
+      value: {{ .Values.db_name | quote }}
+    - name: username
+      value: {{ .Values.username | quote }}
+    - name: password
+      value: {{ .Values.password | quote }}
+    - name: multi_az
+      value: {{ .Values.multi_az }}
+    - name: publicly_accessible
+      value: {{ .Values.publicly_accessible }}
+    - name: subnet_ids
+      value:
+  {{ toYaml .Values.subnet_ids | nindent 6 }}
+    - name: vpc_id
+      value: {{ .Values.vpc_id | quote }}
+    - name: tags
+      value:
+  {{ toYaml .Values.tags | nindent 8 }}
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity: 
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            name: tf-aws-creds

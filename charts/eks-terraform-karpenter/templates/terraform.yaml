@@ -19,9 +19,37 @@ spec:
   writeOutputsToSecret:
     name: {{ $.Release.Name }}-outputs
 {{- if .Values.vars }}
-  vars:
-{{ toYaml .Values.vars | indent 2 }}
-{{- end }}  
+  vars: 
+    - name: name
+      value: {{ .Values.name | quote }}
+    - name: cluster_version
+      value: {{ .Values.cluster_version | quote }}
+    - name: region
+      value: {{ .Values.region | quote }}
+    - name: vpc_cidr
+      value: {{ .Values.vpc_cidr | quote }}
+    - name: auth_mode
+      value: {{ .Values.auth_mode | quote }}
+    - name: public_access
+      value: {{ .Values.public_access }}
+    - name: enable_irsa
+      value: {{ .Values.enable_irsa }}
+
+    {{- if .Values.private_access_cidrs }}
+    - name: private_access_cidrs
+      value:
+{{- toYaml .Values.private_access_cidrs | nindent 8 }}
+    {{- end }}
+
+    {{- if .Values.availability_zones }}
+    - name: availability_zones
+      value:
+{{ toYaml .Values.availability_zones | nindent 8 }}
+    {{- end }}
+    - name: resource_tags
+      value:
+        environment: {{ .Values.resource_tags.environment | quote }}
+        team: {{ .Values.resource_tags.team | quote }}
   runnerPodTemplate:
     spec:
 {{- if $.Values.affinity }}
