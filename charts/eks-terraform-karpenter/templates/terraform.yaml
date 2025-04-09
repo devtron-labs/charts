@@ -4,7 +4,7 @@ metadata:
   name: {{ $.Release.Name }}
   namespace: flux-system
 spec:
-  path: {{ default "./terraform/karpenter-mng" .Values.path }}
+  path: {{ default "./terraform/karpenter-mng" .Values.path }}  
   approvePlan: {{ default "auto" .Values.approvePlan }}
   interval: 1m
   storeReadablePlan: human
@@ -18,7 +18,6 @@ spec:
     namespace: flux-system
   writeOutputsToSecret:
     name: {{ $.Release.Name }}-outputs
-{{- if .Values.vars }}
   vars: 
     - name: name
       value: {{ .Values.name | quote }}
@@ -50,6 +49,7 @@ spec:
       value:
         environment: {{ .Values.resource_tags.environment | quote }}
         team: {{ .Values.resource_tags.team | quote }}
+
   runnerPodTemplate:
     spec:
 {{- if $.Values.affinity }}
