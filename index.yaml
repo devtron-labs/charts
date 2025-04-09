@@ -221,6 +221,17 @@ entries:
     version: 0.10.0
   aws-rds:
   - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2025-04-09T11:13:29.103838159Z"
+    description: Helm chart to create AWS RDS Database
+    digest: b074b36d5c8484858cd036b0be63a1a1dcfd35563f49ce012f0bc430fc167cc6
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/Arch_Amazon-RDS_645x.png
+    name: aws-rds
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-rds-0.0.2/aws-rds-0.0.2.tgz
+    version: 0.0.2
+  - apiVersion: v2
     appVersion: 0.0.1
     created: "2025-04-08T08:25:23.017752272Z"
     description: Helm chart to create AWS RDS Database
@@ -231,6 +242,17 @@ entries:
     - https://github.com/devtron-labs/charts/releases/download/aws-rds-0.0.1/aws-rds-0.0.1.tgz
     version: 0.0.1
   aws-s3-bucket:
+  - apiVersion: v2
+    appVersion: 0.0.2
+    created: "2025-04-09T11:13:29.390985163Z"
+    description: Helm chart to create AWS S3 buckets
+    digest: b2f692eed5ec3d3ece7b6f42e17e47ee3cc347c6bfd55511c0f302a8600286c4
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/Arch_Amazon-Simple-Storage-Service_645x.png
+    name: aws-s3-bucket
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/aws-s3-bucket-0.0.2/aws-s3-bucket-0.0.2.tgz
+    version: 0.0.2
   - apiVersion: v2
     appVersion: 0.0.1
     created: "2025-04-08T08:25:23.212694745Z"
@@ -6513,4 +6535,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-09T08:33:28.621957724Z"
+generated: "2025-04-09T11:13:29.391508016Z"
