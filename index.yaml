@@ -6314,6 +6314,16 @@ entries:
     version: 0.0.1
   terraform-eks-cluster:
   - apiVersion: v2
+    appVersion: 0.0.3
+    created: "2025-04-09T08:33:28.620905278Z"
+    description: Helm chart to create eks cluster with karpenter
+    digest: 5a23eadbfcbdb7ed8fa1e80c9c3dedb5b147ac35d2c7d50f2339826991be6f96
+    name: terraform-eks-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-eks-cluster-0.0.3/terraform-eks-cluster-0.0.3.tgz
+    version: 0.0.3
+  - apiVersion: v2
     appVersion: 0.0.2
     created: "2025-04-08T08:25:23.647825606Z"
     description: Helm chart to create eks cluster with karpenter
@@ -6503,4 +6513,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-08T15:04:18.954848815Z"
+generated: "2025-04-09T08:33:28.621957724Z"
