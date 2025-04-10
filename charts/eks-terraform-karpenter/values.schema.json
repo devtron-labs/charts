@@ -31,7 +31,8 @@
       "vpc_cidr": {
         "type": "string",
         "title": "VPC CIDR",
-        "description": "The CIDR block for the VPC that will be created for the cluster."
+        "description": "The CIDR block for the VPC that will be created for the cluster.",
+        "default": "10.0.0.0/16"
       },
       "auth_mode": {
         "enum": [
@@ -53,7 +54,7 @@
       "public_access": {
         "type": "boolean",
         "title": "Allow public access",
-        "default": true,
+        "default": false,
         "description": "Determines whether the EKS control plane endpoint is publicly accessible."
       },
       "resource_tags": {
