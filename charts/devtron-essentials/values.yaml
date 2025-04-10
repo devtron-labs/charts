@@ -316,6 +316,8 @@ postgresql:
   settings:
     superuser: ""
     superuserPassword: change-password
+    authMethod: "md5"
+    initDbArgs: "--auth-local=md5"
   storage:
     className: ""
     persistentVolumeClaimName: ""
