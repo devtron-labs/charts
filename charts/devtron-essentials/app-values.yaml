@@ -3,7 +3,7 @@ argo-cd:
   customSelectorLabels: {}
     # devtron.ai/custom-labels : argo-cd
   crds:
-    install: false  #if you are upgrading make it as false 
+    install: true  #if you are upgrading make it as false 
     keep: true
 
   applicationSet:
@@ -314,8 +314,10 @@ postgresql:
   nodeSelector: {}
   resources: {}
   settings:
-    superuser: ""
+    superuser: "postgres"
     superuserPassword: change-password
+    authMethod: md5
+    initDbArgs: --auth-local=md5
   storage:
     className: ""
     persistentVolumeClaimName: ""
