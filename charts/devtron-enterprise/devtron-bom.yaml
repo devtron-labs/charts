@@ -21,7 +21,6 @@ global:
 
 devtron:
   installer:
-    arch: "multi-arch"
     repo: "devtron-labs/charts"
     release: "32.1.4"
     registry: ""
@@ -71,8 +70,6 @@ devtron:
       imagePullPolicy: IfNotPresent
     chartSync:
       image: chart-sync:2168a861-341-31218
-    postgres:
-      armImage: "postgres:14.9"
   # values for security integration
   security:
     imageScanner:
