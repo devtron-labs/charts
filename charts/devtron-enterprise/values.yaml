@@ -32,7 +32,7 @@ devtron:
   installer:
     arch: "multi-arch"
     repo: "devtron-labs/charts"
-    release: "32.1.2"
+    release: "32.1.4"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -56,8 +56,8 @@ devtron:
       image: "dashboard:837160d0-d0729419-931-31524"
     # Values for devtron
     devtron:
-      image: "hyperion:180e7c57-759-31498"
-      cicdImage: "devtron:180e7c57-930-31499"
+      image: "hyperion:8f168d4e-759-31827"
+      cicdImage: "devtron:8f168d4e-930-31828"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
