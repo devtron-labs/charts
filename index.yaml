@@ -1030,6 +1030,55 @@ entries:
   devtron-essentials:
   - apiVersion: v2
     appVersion: 0.0.2
+    created: "2025-04-11T11:29:00.062397055Z"
+    dependencies:
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgres
+      repository: https://groundhog2k.github.io/helm-charts
+      version: 0.3.17
+    - condition: argo-cd.enabled
+      name: argo-cd
+      repository: https://argoproj.github.io/argo-helm
+      version: 7.7.15
+    - condition: argo-rollouts.enabled
+      name: argo-rollouts
+      repository: https://argoproj.github.io/argo-helm
+      version: 2.39.0
+    - alias: devtron-rollout
+      condition: devtron-rollout.enabled
+      name: rollout
+      repository: https://helm.devtron.ai
+      version: 0.14.7
+    - alias: rawYaml
+      condition: rawYaml.enabled
+      name: devtron-generic-helm
+      repository: https://helm.devtron.ai
+      version: 0.10.1
+    - condition: argo-workflow.enabled
+      name: argo-workflow
+      repository: https://helm.devtron.ai
+      version: 0.1.6
+    description: Includes critical components like Rollout, Service Accounts, Image
+      Pull Secrets, Workflow Controller, and ArgoCD and postgres for streamlined CI/CD
+      operations.
+    digest: 172166a2564263ad5bcb28411b6f28716cad5da470b85b1de4a0149bf560fb23
+    maintainers:
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: devtron-essentials
+    sources:
+    - https://github.com/argoproj/argo-helm
+    - https://helm.devtron.ai
+    - https://github.com/groundhog2k/helm-charts/blob/postgres-0.3.17/charts/postgres/values.yaml
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-essentials-0.0.9/devtron-essentials-0.0.9.tgz
+    version: 0.0.9
+  - apiVersion: v2
+    appVersion: 0.0.2
     created: "2025-03-21T12:27:24.284702052Z"
     dependencies:
     - alias: postgresql
@@ -6555,4 +6604,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-10T06:36:34.771650467Z"
+generated: "2025-04-11T11:29:00.062695291Z"
