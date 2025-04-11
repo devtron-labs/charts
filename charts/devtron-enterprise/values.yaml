@@ -32,7 +32,7 @@ devtron:
   installer:
     arch: "multi-arch"
     repo: "devtron-labs/charts"
-    release: "32.1.2"
+    release: "32.1.4"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
