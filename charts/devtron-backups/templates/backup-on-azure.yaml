@@ -30,6 +30,9 @@ spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
+    {{- if $.Values.global.extraConfig }}
+{{ toYaml $.Values.global.extraConfig | indent 6 }}
+    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -131,6 +134,9 @@ spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
+    {{- if $.Values.global.extraConfig }}
+{{ toYaml $.Values.global.extraConfig | indent 6 }}
+    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
