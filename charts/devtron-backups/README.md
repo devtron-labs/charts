@@ -82,6 +82,7 @@ PVC backup can be enabled by setting `PERSISTENCE.enabled` to `true` in the YAML
 |`encryption.passphrase`| Passphrase for encryption/decryption | Yes (if encryption is enabled)|
 
 Additionally, remember to enable `postgress_backup` or `argocd_backup` according to your requirements in the YAML file.
+If `GitOps` is enabled, ensure that `argocd_backup` is enabled."
 
 ## Usage
 
