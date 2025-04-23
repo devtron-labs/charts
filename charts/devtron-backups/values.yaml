@@ -66,19 +66,21 @@ global:
 
   timezone: ""  #Set the timezone for scheduling the cronJob. # default UTC
 
+  extraConfig: {}
+  #Pass any additional custom fields under jobTemplate.spec in the Kubernetes CronJob spec.
 argocdversion: v2
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
   enabled: true
-  resources:
+  resources: 
     requests:
       cpu: 100m
       memory: 100Mi
-    limits:
-      cpu: 100m
-      memory: 100Mi
+    # limits:
+    #   cpu: 100m
+    #   memory: 100Mi
   labels: {}
     # key: "example-value"
   annotations: {}
@@ -90,13 +92,13 @@ postgres_backup:
 argocd_backup:
   serviceAccountName: "argocd-backup"
   enabled: false
-  resources:
+  resources: 
     requests:
       cpu: 100m
       memory: 100Mi
-    limits:
-      cpu: 100m
-      memory: 100Mi
+    # limits:
+    #   cpu: 100m
+    #   memory: 100Mi
   labels: {}
     # key: "example-value"
   annotations: {}
