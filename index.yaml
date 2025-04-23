@@ -678,6 +678,15 @@ entries:
   devtron-backups:
   - apiVersion: v2
     appVersion: "2.0"
+    created: "2025-04-23T13:28:43.582607682Z"
+    description: A Helm chart for Devtron Backups
+    digest: 39491a83faf93c3a03c3438741455289ad746c1bbc3a2d3dc8576016a9d07ee8
+    name: devtron-backups
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-backups-0.2.7/devtron-backups-0.2.7.tgz
+    version: 0.2.7
+  - apiVersion: v2
+    appVersion: "2.0"
     created: "2025-04-23T08:27:51.568520779Z"
     description: A Helm chart for Devtron Backups
     digest: 3a0f27adfef542936fdf4ea8899a68e0b0216a37cee0a5fa6c27a5cf91d437f1
@@ -6071,6 +6080,34 @@ entries:
     version: 0.1.0
   security:
   - apiVersion: v2
+    appVersion: 0.2.1
+    created: "2025-04-23T13:28:43.851843649Z"
+    dependencies:
+    - condition: clair.enabled
+      name: clair
+      repository: https://helm.devtron.ai
+      version: 0.x.x
+    description: A Helm chart for devtron to enable security integration
+    digest: ca44aabef402c363e8ac5c667f59d904e62662270cc7dfa82d38f46427e599de
+    keywords:
+    - kubernetes
+    - security
+    - k8s
+    - scanning
+    - container registry
+    - image scanning
+    - source code scanning
+    maintainers:
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: security
+    sources:
+    - https://github.com/devtron-labs/charts
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/security-0.2.1/security-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
     appVersion: 0.1.1
     created: "2025-02-21T17:00:28.52993839Z"
     dependencies:
@@ -6643,4 +6680,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-04-23T08:27:51.568904218Z"
+generated: "2025-04-23T13:28:43.852583302Z"
