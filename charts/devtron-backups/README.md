@@ -8,7 +8,7 @@ Devtron Backup chart provides backup configurations for PostgreSQL databases and
 
 ## Configuration
 
-The backup configurations are defined in the YAML file, which specifies settings such as schedule, storage options, and encryption. If you have the **Gitops Module enabled** in Devtron then it advised to set `argocd_backup.enabled=true` to ensure that Argocd Backup is also available. 
+The backup configurations are defined in the YAML file, which specifies settings such as schedule, storage options, and encryption. If you have the **Gitops Module enabled** in Devtron then it is advised to set `argocd_backup.enabled=true` to ensure that Argocd Backup is also available. 
 
 # Global Settings
 | Parameter | Description | Default |
