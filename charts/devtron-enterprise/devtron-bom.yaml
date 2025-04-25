@@ -18,12 +18,12 @@ global:
   #     effect: "NoSchedule"
   # imagePullSecrets:
   #     - name: your-image-pull-secret
-
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "32.1.4"
+    release: "33.0.0"
     registry: ""
+    arch: "multi-arch"
     image: inception
     tag: 7beef376-948-31378
     source: "github" # Available options are github and gitee
@@ -39,11 +39,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:837160d0-d0729419-931-31524"
+      image: "dashboard:4c18929c-e9c6d3c1-931-32331"
     # Values for devtron
     devtron:
-      image: "hyperion:8f168d4e-759-31827"
-      cicdImage: "devtron:8f168d4e-930-31828"
+      image: "hyperion:9291b79f-759-32326"
+      cicdImage: "devtron:9291b79f-930-32325"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
@@ -59,30 +59,34 @@ devtron:
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:2168a861-882-31228"
+      image: "ci-runner:a4ad159b-515-32260"
     # Values for kubelink
     kubelink:
-      image: "kubelink:fd7b49f0-314-31414"
+      image: "kubelink:a4ad159b-314-32327"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:fd7b49f0-950-31385"
+      image: "git-sensor:a4ad159b-950-32328"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:2168a861-341-31218
+      image: chart-sync:2380bb87-341-31847
+    postgres:
+      image: "postgres:14.9"
+      metrics:
+        image: "postgres_exporter:v0.10.1"
   # values for security integration
   security:
     imageScanner:
-      image: "image-scanner:fd7b49f0-109-31386"
+      image: "image-scanner:a4ad159b-109-32332"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
   devtronEnterprise:
     enabled: true
     casbin:
-      image: "casbin:fd7b49f0-fced3ae3-464-31402"
+      image: "casbin:a4ad159b-9291b79f-464-32330"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:30f26a6c-955-31521"
+      image: "scoop:a4ad159b-955-32329"
       imagePullPolicy: IfNotPresent
