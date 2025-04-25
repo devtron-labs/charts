@@ -21,8 +21,9 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "32.1.4"
+    release: "33.0.0"
     registry: ""
+    arch: "multi-arch"
     image: inception
     tag: 7beef376-948-31378
     source: "github" # Available options are github and gitee
@@ -58,7 +59,7 @@ devtron:
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:2168a861-882-31228"
+      image: "ci-runner:a4ad159b-515-32260"
     # Values for kubelink
     kubelink:
       image: "kubelink:a4ad159b-314-32327"
@@ -68,7 +69,9 @@ devtron:
       image: "git-sensor:a4ad159b-950-32328"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:2168a861-341-31218
+      image: chart-sync:2380bb87-341-31847
+    postgres:
+      armImage: "postgres:14.9"
   # values for security integration
   security:
     imageScanner:
