@@ -18,7 +18,6 @@ global:
   #     effect: "NoSchedule"
   # imagePullSecrets:
   #     - name: your-image-pull-secret
-
 devtron:
   installer:
     repo: "devtron-labs/charts"
@@ -43,7 +42,7 @@ devtron:
     # Values for devtron
     devtron:
       image: "hyperion:8f168d4e-759-31827"
-      cicdImage: "devtron:8f168d4e-930-31828"
+      cicdImage: "devtron:9291b79f-930-32282"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd

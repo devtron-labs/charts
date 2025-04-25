@@ -21,10 +21,8 @@ global:
 
   # Set the storage class to be used for PVCs (would use default sc if not specified)
   storageClass: ""
-  
   # Add Proxy Configs to be propagated to all the Devtron Microservices.
   configs: {}
-
   nodeSelector: {}
   tolerations: []
   imagePullSecrets: []
@@ -57,7 +55,7 @@ devtron:
     # Values for devtron
     devtron:
       image: "hyperion:8f168d4e-759-31827"
-      cicdImage: "devtron:8f168d4e-930-31828"
+      cicdImage: "devtron:9291b79f-930-32282"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
