@@ -71,7 +71,9 @@ devtron:
     chartSync:
       image: chart-sync:2380bb87-341-31847
     postgres:
-      armImage: "postgres:14.9"
+      image: "postgres:14.9"
+      metrics:
+        image: "postgres_exporter:v0.10.1"
   # values for security integration
   security:
     imageScanner:
