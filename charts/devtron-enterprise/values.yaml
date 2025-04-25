@@ -54,7 +54,7 @@ devtron:
       image: "dashboard:837160d0-d0729419-931-31524"
     # Values for devtron
     devtron:
-      image: "hyperion:8f168d4e-759-31827"
+      image: "hyperion:9291b79f-759-32288"
       cicdImage: "devtron:9291b79f-930-32282"
       imagePullPolicy: IfNotPresent
       customOverrides:
