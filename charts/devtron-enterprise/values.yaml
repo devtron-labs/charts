@@ -28,7 +28,6 @@ global:
   imagePullSecrets: []
 devtron:
   installer:
-    arch: "multi-arch"
     repo: "devtron-labs/charts"
     release: "33.0.0"
     registry: ""
@@ -83,7 +82,9 @@ devtron:
     chartSync:
       image: chart-sync:2380bb87-341-31847
     postgres:
-      armImage: "postgres:14.9"
+      image: "postgres:14.9"
+      metrics:
+        image: "postgres_exporter:v0.10.1"
   # values for security integration
   security:
     enabled: true
