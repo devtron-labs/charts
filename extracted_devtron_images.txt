@@ -1,0 +1,3 @@
+quay.io/devtron/kubewatch:c49b4aa5-419-32097
+quay.io/devtron/lens:c49b4aa5-333-32100
+quay.io/devtron/notifier:56798239-372-32072
