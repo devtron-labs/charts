@@ -73,7 +73,7 @@ devtron:
       image: "ci-runner:a4ad159b-515-32260"
     # Values for kubelink
     kubelink:
-      image: "kubelink:060fb31a-314-32669"
+      image: "kubelink:060fb31a-314-32670"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
