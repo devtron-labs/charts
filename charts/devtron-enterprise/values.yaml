@@ -103,7 +103,7 @@ devtron:
   devtronEnterprise:
     enabled: true
     casbin:
-      image: "casbin:a4ad159b-9291b79f-464-32330"
+      image: "casbin:c09ad62f-b2e663fa-464-32732"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
