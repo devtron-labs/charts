@@ -15,7 +15,7 @@ sources:
   - https://github.com/devtron-labs/charts/tree/main/charts/devtron-enterprise
 dependencies:
 - name: devtron-operator
-  version: 34.0.0
+  version: "0.x.x"
   repository: https://helm.devtron.ai/
   alias: devtron
 maintainers:
