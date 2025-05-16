@@ -3,7 +3,7 @@ name: devtron-utilities
 description: Provides essential infrastructure and security utilities such as Nginx/AWS Load Balancer, Devtron Backup, Minio (Blob Storage), Network Policy, Cluster Auto Scaler (Karpenter), and more.  
 
 type: application
-version: 0.0.2
+version: 0.0.3
 appVersion: "0.0.1"
 sources:
 - https://github.com/kubernetes/ingress-nginx
