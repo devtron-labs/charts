@@ -11,7 +11,7 @@ sources:
   - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
   - https://github.com/deliveryhero/helm-charts/tree/master/stable/k8s-event-logger
 
-version: 0.0.3
+version: 0.0.4
 appVersion: "0.0.1"
 dependencies:
 - name: fluent-bit
