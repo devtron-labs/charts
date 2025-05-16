@@ -297,7 +297,7 @@ vector:
       - name: http
         port: 9090
 victoriametrics:
-  enabled: false
+  enabled: true
   alertmanager:
     config:
       receivers:
@@ -436,12 +436,7 @@ victoriametrics:
               path: /var/lib/grafana/dashboards/default
             orgId: 1
             type: file
-    dashboards:
-      default:
-        nodeexporter:
-          datasource: VictoriaMetrics
-          gnetId: 1860
-          revision: 22
+    dashboards:  {}
     defaultDashboardsTimezone: ist
     enabled: true
     forceDeployDatasource: false
