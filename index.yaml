@@ -1584,6 +1584,64 @@ entries:
   devtron-monitoring:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2025-05-16T07:29:01.98580254Z"
+    dependencies:
+    - condition: fluent-bit.enabled
+      name: fluent-bit
+      repository: https://fluent.github.io/helm-charts
+      version: 0.48.5
+    - condition: vector.enabled
+      name: vector
+      repository: https://helm.vector.dev
+      version: 0.40.0
+    - condition: uptime-kuma.enabled
+      name: uptime-kuma
+      repository: https://helm.irsigler.cloud
+      version: 2.21.2
+    - condition: jaeger-all-in-one-opentelemetry.enabled
+      name: jaeger-all-in-one-opentelemetry
+      repository: https://helm.devtron.ai
+      version: 0.1.0
+    - condition: metrics-server.enabled
+      name: metrics-server
+      repository: https://kubernetes-sigs.github.io/metrics-server
+      version: 3.12.2
+    - condition: prometheus-blackbox-exporter.enabled
+      name: prometheus-blackbox-exporter
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 9.2.0
+    - condition: k8s-event-logger.enabled
+      name: k8s-event-logger
+      repository: oci://ghcr.io/deliveryhero/helm-charts
+      version: 1.1.9
+    - alias: victoriametrics
+      condition: victoriametrics.enabled
+      name: victoria-metrics-k8s-stack
+      repository: https://victoriametrics.github.io/helm-charts/
+      version: 0.36.2
+    description: Enables robust monitoring and logging using Fluent-Bit, Uptime Kuma,
+      Jaeger, Victoria Metrics, Black Box, and Event Logger for observability.
+    digest: 871366ada0efb8ef5d51f999ee9736f7cc7b6ad64e2cdf971d49145601e68ce2
+    maintainers:
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: devtron-monitoring
+    sources:
+    - https://github.com/fluent/helm-charts/tree/main/charts/fluent-bit
+    - https://github.com/vectordotdev/helm-charts/tree/develop/charts/vector
+    - https://github.com/dirsigler/uptime-kuma-helm/tree/main/charts/uptime-kuma
+    - https://github.com/devtron-labs/charts/tree/main/charts/jaeger-opentelemetry
+    - https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
+    - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
+    - https://github.com/deliveryhero/helm-charts/tree/master/stable/k8s-event-logger
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-monitoring-0.0.4/devtron-monitoring-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2025-03-11T13:03:41.539826715Z"
     dependencies:
     - condition: fluent-bit.enabled
@@ -6876,4 +6934,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-08T13:18:52.57400602Z"
+generated: "2025-05-16T07:29:01.986133139Z"
