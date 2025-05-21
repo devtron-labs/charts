@@ -4,7 +4,7 @@ quay.io/devtron/authenticator:e414faff-393-13273
 quay.io/devtron/bats:v1.4.1
 quay.io/devtron/busybox:1.31.1
 quay.io/devtron/casbin:c09ad62f-b2e663fa-464-32732
-quay.io/devtron/chart-sync:060fb31a-1021-32728
+quay.io/devtron/chart-sync:be9b1ce4-1021-33182
 quay.io/devtron/ci-runner:be9b1ce4-1020-33179
 quay.io/devtron/curl:7.73.0
 quay.io/devtron/dashboard:e11c3085-b049a68f-931-33176
