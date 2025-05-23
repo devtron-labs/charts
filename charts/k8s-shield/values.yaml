@@ -17,6 +17,8 @@ defaultPolicies:
     readinessAndLivenessPolicy: true
     podSecurityPolicy: true
     containerSecurityPolicy: true
+    denyCreationNamespace: true
+    denyCRDDeletion: true
 
 
 policyDefinitions:
@@ -160,5 +162,14 @@ policyDefinitions:
       - apps
       - batch
       - rollout.k8s.io
+
+  denyCreationNamespace:
+    validationActions:  
+      - Deny
+      
+  denyCRDDeletion:
+    validationActions:  
+      - Deny
+
 
 extraValidatingPolicy: [] 

@@ -1,0 +1,35 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.denyCreationNamespace }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-deny-creation-namespace
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+    resourceRules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - namespaces
+        scope: "*"
+  validations:
+    - expression: "false"
+      message: "Creation of namespaces is not allowed."
+      reason: Invalid
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-deny-creation-namespace-binding
+spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-deny-creation-namespace
+  validationActions:
+    - Deny
+{{- end }}

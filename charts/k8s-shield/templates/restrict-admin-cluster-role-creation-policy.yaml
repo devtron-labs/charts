@@ -36,7 +36,9 @@ spec:
         rule.resources.exists(r, r == '*') &&
         rule.verbs.exists(v, v == '*')) &&
       !(rule.nonResourceURLs.exists(u, u == '*') &&
-        rule.verbs.exists(v, v == '*'))"
+        rule.verbs.exists(v, v == '*'))
+    )"
+
     message: "Creation of ClusterRole with admin access is denied"
   {{- end }}
 
