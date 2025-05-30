@@ -17,6 +17,8 @@ defaultPolicies:
     readinessAndLivenessPolicy: true
     podSecurityPolicy: true
     containerSecurityPolicy: true
+    denyCreationNamespace: true
+    denyCRDDeletion: true
 
 
 policyDefinitions:
@@ -72,7 +74,8 @@ policyDefinitions:
         - ""
         - apps
         - argoproj.io
-      namespaces: [] # List of namespaces where the policy applies.
+      namespaces: 
+        - devtroncd  # List of namespaces where the policy applies.
       operations:     
         - CREATE
         - UPDATE
@@ -160,5 +163,18 @@ policyDefinitions:
       - apps
       - batch
       - rollout.k8s.io
+
+  # denyCreationNamespace prevents the creation of new namespaces.
+  # This can be used to enforce strict control over namespace provisioning.
+  denyCreationNamespace:
+    validationActions:  
+      - Deny
+      
+# denyCRDDeletion blocks deletion of CustomResourceDefinitions (CRDs).
+# This protects custom resource types from being removed, preserving application integrity and operator functionality.
+  denyCRDDeletion:
+    validationActions:  
+      - Deny
+
 
 extraValidatingPolicy: [] 
