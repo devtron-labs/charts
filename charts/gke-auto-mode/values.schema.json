@@ -1,0 +1,102 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GKE Auto Mode Cluster Values",
+  "description": "Values for configuring a GKE cluster provisioned via Terraform through Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "project_id",
+    "region",
+    "cluster_version"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the GKE cluster."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "GCP Project ID where the cluster will be created."
+    },
+    "region": {
+      "type": "string",
+      "description": "GCP region for the GKE cluster."
+    },
+    "cluster_version": {
+      "type": "string",
+      "description": "Desired GKE version (e.g., '1.28')."
+    },
+    "network": {
+      "type": "string",
+      "description": "Name of the VPC network for the GKE cluster.",
+      "default": "default"
+    },
+    "subnetwork": {
+      "type": "string",
+      "description": "Name of the VPC subnetwork for the GKE cluster.",
+      "default": "default"
+    },
+    "machine_type": {
+      "type": "string",
+      "description": "Machine type for the GKE cluster nodes.",
+      "default": "e2-medium"
+    },
+    "node_count": {
+      "type": "integer",
+      "description": "Number of nodes in the default node pool.",
+      "default": 1,
+      "minimum": 1
+    },
+    "node_locations": {
+      "type": "array",
+      "description": "List of zones for the GKE cluster nodes (e.g., ["us-central1-a"]).",
+      "items": {
+        "type": "string"
+      },
+      "default": ["us-central1-a"]
+    },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply to GCP resources.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "cost_center": { "type": "string", "default": "your-cost-center" }
+      }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the Terraform configuration within the Git repository.",
+      "default": "./terraform/gke-auto-mode"
+    },
+    "approvePlan": {
+      "type": "string",
+      "description": "Terraform plan approval mode.",
+      "default": "auto",
+      "enum": ["auto", "manual"]
+    },
+    "destroyResourcesOnDeletion": {
+      "type": "boolean",
+      "description": "Destroy Terraform resources when the Helm release is deleted.",
+      "default": false
+    },
+    "alwaysCleanupRunnerPod": {
+      "type": "boolean",
+      "description": "Always clean up the Terraform runner pod.",
+      "default": false
+    },
+    "force": {
+      "type": "boolean",
+      "description": "Force apply Terraform changes.",
+      "default": false
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules for the Terraform runner pod."
+    },
+    "tolerations": {
+      "type": "array",
+      "description": "Tolerations for the Terraform runner pod."
+    }
+  }
+}

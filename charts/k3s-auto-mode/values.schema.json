@@ -1,0 +1,48 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "K3s Auto Mode Cluster Values",
+  "description": "Values for configuring a K3s cluster provisioned via Terraform through Flux. Assumes Terraform handles VM creation.",
+  "type": "object",
+  "required": [
+    "name",
+    "k3s_version"
+  ],
+  "properties": {
+    "name": { "type": "string", "description": "Name of the Helm release." },
+    "k3s_version": { "type": "string", "description": "Desired K3s version (e.g., v1.27.7+k3s1)." },
+    "server_node_count": { "type": "integer", "default": 1, "minimum": 1, "description": "Number of K3s server nodes." },
+    "server_instance_type": { "type": "string", "description": "Instance type for server nodes (cloud provider specific, e.g., t3.medium for AWS)." },
+    "server_image_id": { "type": "string", "description": "Image ID for server nodes (cloud provider specific, e.g., an AMI ID for AWS)." },
+    "agent_node_count": { "type": "integer", "default": 0, "minimum": 0, "description": "Number of K3s agent nodes." },
+    "agent_instance_type": { "type": "string", "description": "Instance type for agent nodes (cloud provider specific)." },
+    "agent_image_id": { "type": "string", "description": "Image ID for agent nodes (cloud provider specific)." },
+    "ssh_user": { "type": "string", "description": "SSH username for connecting to the provisioned VMs." },
+    "ssh_private_key_pem": { "type": "string", "description": "SSH private key (PEM format) for VM access. Use with caution; consider secure alternatives." },
+    "vpc_id": { "type": "string", "description": "VPC ID for network configuration (cloud provider specific)." },
+    "subnet_ids": { "type": "array", "items": {"type": "string"}, "description": "Subnet IDs for network configuration (cloud provider specific)." },
+    "k3s_server_install_flags": { "type": "string", "description": "Additional flags for K3s server installation script (e.g., '--disable traefik')." },
+    "k3s_agent_install_flags": { "type": "string", "description": "Additional flags for K3s agent installation script." },
+    "k3s_token": { "type": "string", "description": "K3s join token. If not provided, the Terraform module might generate one." },
+    "datastore_endpoint": { "type": "string", "description": "External datastore endpoint for K3s (e.g., for HA setup)." },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply to underlying cloud resources.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "k3s-project" }
+      }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the Terraform configuration within the Git repository.",
+      "default": "./terraform/k3s-auto-mode"
+    },
+    "approvePlan": { "type": "string", "default": "auto", "enum": ["auto", "manual"] },
+    "destroyResourcesOnDeletion": { "type": "boolean", "default": false },
+    "alwaysCleanupRunnerPod": { "type": "boolean", "default": false },
+    "force": { "type": "boolean", "default": false },
+    "affinity": { "type": "object" },
+    "tolerations": { "type": "array" }
+  }
+}

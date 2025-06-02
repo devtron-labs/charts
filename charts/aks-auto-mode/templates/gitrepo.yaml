@@ -1,0 +1,11 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  interval: 30s
+  ref:
+    branch: main
+  timeout: 61s
+  url: https://github.com/devtron-labs/utilities.git

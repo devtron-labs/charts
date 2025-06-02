@@ -1,0 +1,87 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default "./terraform/tanzu-auto-mode" .Values.path }} # Updated path
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: tanzu_kubernetes_release
+      value: {{ .Values.tanzu_kubernetes_release | quote }}
+    - name: vsphere_server
+      value: {{ .Values.vsphere_server | quote }}
+    - name: vsphere_username
+      value: {{ .Values.vsphere_username | quote }}
+
+    {{- if .Values.vsphere_password }}
+    - name: vsphere_password
+      valueFrom:
+        secretKeyRef:
+          name: {{ printf "%s-vsphere-secret" $.Release.Name }} # Assumes K8s secret for vSphere pass
+          key: password
+    {{- end }}
+
+    - name: vsphere_datacenter
+      value: {{ .Values.vsphere_datacenter | quote }}
+    - name: vsphere_datastore
+      value: {{ .Values.vsphere_datastore | quote }}
+    - name: vsphere_network
+      value: {{ .Values.vsphere_network | quote }}
+    - name: vsphere_resource_pool
+      value: {{ .Values.vsphere_resource_pool | quote }}
+
+    {{- if .Values.vsphere_folder }}
+    - name: vsphere_folder
+      value: {{ .Values.vsphere_folder | quote }}
+    {{- end }}
+
+    - name: vsphere_ssh_authorized_key
+      value: {{ .Values.vsphere_ssh_authorized_key | quote }}
+    - name: cluster_name # Tanzu workload cluster name
+      value: {{ .Values.cluster_name | quote }}
+    - name: control_plane_vm_class
+      value: {{ .Values.control_plane_vm_class | quote }}
+    - name: worker_vm_class
+      value: {{ .Values.worker_vm_class | quote }}
+    - name: control_plane_replicas
+      value: {{ .Values.control_plane_replicas }}
+    - name: worker_replicas
+      value: {{ .Values.worker_replicas }}
+
+    {{- if .Values.cni }}
+    - name: cni
+      value: {{ .Values.cni | quote }}
+    {{- end }}
+
+    {{- if .Values.resource_tags }}
+    - name: resource_tags
+      value:
+{{ toYaml .Values.resource_tags | nindent 8 }}
+    {{- end }}
+
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            name: tf-vsphere-creds # For vSphere provider credentials

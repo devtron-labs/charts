@@ -1,0 +1,70 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default "./terraform/gke-auto-mode" .Values.path }} # Updated path for GKE
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: name
+      value: {{ .Values.name | quote }}
+    - name: project_id
+      value: {{ .Values.project_id | quote }}
+    - name: region
+      value: {{ .Values.region | quote }}
+    - name: cluster_version
+      value: {{ .Values.cluster_version | quote }}
+
+    {{- if .Values.network }}
+    - name: network
+      value: {{ .Values.network | quote }}
+    {{- end }}
+
+    {{- if .Values.subnetwork }}
+    - name: subnetwork
+      value: {{ .Values.subnetwork | quote }}
+    {{- end }}
+
+    - name: machine_type
+      value: {{ .Values.machine_type | quote }}
+    - name: node_count
+      value: {{ .Values.node_count }} # Typically a number
+
+    {{- if .Values.node_locations }}
+    - name: node_locations
+      value:
+{{- toYaml .Values.node_locations | nindent 8 }}
+    {{- end }}
+
+    {{- if .Values.resource_tags }}
+    - name: resource_tags
+      value:
+{{ toYaml .Values.resource_tags | nindent 8 }}
+    {{- end }}
+
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom: # Assuming a generic secret name for TF provider credentials
+        - secretRef:
+            name: tf-gcp-creds # Or could be a common name like tf-cloud-creds

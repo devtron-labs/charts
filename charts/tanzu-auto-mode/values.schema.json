@@ -1,0 +1,60 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tanzu Auto Mode Cluster Values (TKGm on vSphere)",
+  "description": "Values for configuring a Tanzu Kubernetes Grid (TKGm on vSphere) cluster via Terraform through Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "tanzu_kubernetes_release",
+    "vsphere_server",
+    "vsphere_username",
+    "vsphere_password",
+    "vsphere_datacenter",
+    "vsphere_datastore",
+    "vsphere_network",
+    "vsphere_resource_pool",
+    "vsphere_ssh_authorized_key",
+    "cluster_name",
+    "control_plane_vm_class",
+    "worker_vm_class"
+  ],
+  "properties": {
+    "name": { "type": "string", "description": "Name of the Helm release." },
+    "tanzu_kubernetes_release": { "type": "string", "description": "Tanzu Kubernetes Release (TKR) name (e.g., v1.27.5---vmware.2-tkg.1)." },
+    "vsphere_server": { "type": "string", "description": "vCenter server FQDN or IP address." },
+    "vsphere_username": { "type": "string", "description": "vCenter username." },
+    "vsphere_password": { "type": "string", "description": "vCenter password." },
+    "vsphere_datacenter": { "type": "string", "description": "vSphere Datacenter path (e.g., /MyDatacenter)." },
+    "vsphere_datastore": { "type": "string", "description": "vSphere Datastore path." },
+    "vsphere_network": { "type": "string", "description": "vSphere Network path for cluster VMs." },
+    "vsphere_resource_pool": { "type": "string", "description": "vSphere Resource Pool path." },
+    "vsphere_folder": { "type": "string", "description": "Optional vSphere VM folder path." },
+    "vsphere_ssh_authorized_key": { "type": "string", "description": "SSH public key for node access." },
+    "cluster_name": { "type": "string", "description": "Name of the Tanzu workload cluster." },
+    "control_plane_vm_class": { "type": "string", "description": "TKG VM class for control plane nodes." },
+    "worker_vm_class": { "type": "string", "description": "TKG VM class for worker nodes." },
+    "control_plane_replicas": { "type": "integer", "default": 1, "minimum": 1, "description": "Number of control plane nodes." },
+    "worker_replicas": { "type": "integer", "default": 1, "minimum": 0, "description": "Number of worker nodes." },
+    "cni": { "type": "string", "enum": ["antrea", "calico"], "default": "antrea", "description": "CNI plugin to use." },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply (e.g., vSphere tags).",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "tanzu-project" }
+      }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the Terraform configuration within the Git repository.",
+      "default": "./terraform/tanzu-auto-mode"
+    },
+    "approvePlan": { "type": "string", "default": "auto", "enum": ["auto", "manual"] },
+    "destroyResourcesOnDeletion": { "type": "boolean", "default": false },
+    "alwaysCleanupRunnerPod": { "type": "boolean", "default": false },
+    "force": { "type": "boolean", "default": false },
+    "affinity": { "type": "object" },
+    "tolerations": { "type": "array" }
+  }
+}

@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.5
+description: Helm chart to create auto mode RKE-Rancher cluster
+name: terraform-rke-rancher-auto-cluster
+type: application
+version: 0.0.5

@@ -1,0 +1,68 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default "./terraform/rke-rancher-auto-mode" .Values.path }} # Updated path
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: rancher_api_url
+      value: {{ .Values.rancher_api_url | quote }}
+
+    {{- if .Values.rancher_access_key }}
+    - name: rancher_access_key
+      value: {{ .Values.rancher_access_key | quote }}
+    {{- end }}
+
+    {{- if .Values.rancher_secret_key }}
+    # Assuming secret key is sensitive and might be in a K8s secret
+    - name: rancher_secret_key
+      valueFrom:
+        secretKeyRef:
+          name: {{ $.Release.Name }}-rancher-secret
+          key: secretKey
+    {{- end }}
+
+    - name: cluster_name_in_rancher
+      value: {{ .Values.cluster_name_in_rancher | quote }}
+    - name: rke_kubernetes_version
+      value: {{ .Values.rke_kubernetes_version | quote }}
+
+    {{- if .Values.node_pools }}
+    - name: node_pools
+      value:
+{{ toYaml .Values.node_pools | nindent 8 }}
+    {{- end }}
+
+    {{- if .Values.resource_tags }}
+    - name: resource_tags # Applicability depends on underlying node provider in Rancher
+      value:
+{{ toYaml .Values.resource_tags | nindent 8 }}
+    {{- end }}
+
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom: # Rancher provider might use env vars for creds like RANCHER_URL, RANCHER_TOKEN_KEY
+        - secretRef:
+            name: tf-rancher-creds # Assumed secret for Rancher provider credentials

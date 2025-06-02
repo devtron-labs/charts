@@ -1,0 +1,105 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default "./terraform/k3s-auto-mode" .Values.path }} # Updated path
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: k3s_version
+      value: {{ .Values.k3s_version | quote }}
+    - name: server_node_count
+      value: {{ .Values.server_node_count }}
+
+    {{- if .Values.server_instance_type }}
+    - name: server_instance_type
+      value: {{ .Values.server_instance_type | quote }}
+    {{- end }}
+    {{- if .Values.server_image_id }}
+    - name: server_image_id
+      value: {{ .Values.server_image_id | quote }}
+    {{- end }}
+
+    - name: agent_node_count
+      value: {{ .Values.agent_node_count }}
+
+    {{- if .Values.agent_instance_type }}
+    - name: agent_instance_type
+      value: {{ .Values.agent_instance_type | quote }}
+    {{- end }}
+    {{- if .Values.agent_image_id }}
+    - name: agent_image_id
+      value: {{ .Values.agent_image_id | quote }}
+    {{- end }}
+
+    {{- if .Values.ssh_user }}
+    - name: ssh_user
+      value: {{ .Values.ssh_user | quote }}
+    {{- end }}
+    {{- if .Values.ssh_private_key_pem }}
+    - name: ssh_private_key_pem # Sensitive, consider alternative ways to pass to TF if needed
+      valueFrom:
+        secretKeyRef:
+          name: {{ printf "%s-k3s-ssh-key" $.Release.Name }}
+          key: private_key
+    {{- end }}
+
+    {{- if .Values.vpc_id }}
+    - name: vpc_id
+      value: {{ .Values.vpc_id | quote }}
+    {{- end }}
+    {{- if .Values.subnet_ids }}
+    - name: subnet_ids
+      value:
+{{ toYaml .Values.subnet_ids | nindent 8 }}
+    {{- end }}
+
+    {{- if .Values.k3s_server_install_flags }}
+    - name: k3s_server_install_flags
+      value: {{ .Values.k3s_server_install_flags | quote }}
+    {{- end }}
+    {{- if .Values.k3s_agent_install_flags }}
+    - name: k3s_agent_install_flags
+      value: {{ .Values.k3s_agent_install_flags | quote }}
+    {{- end }}
+    {{- if .Values.k3s_token }}
+    - name: k3s_token
+      value: {{ .Values.k3s_token | quote }} # Could also be from a secret
+    {{- end }}
+    {{- if .Values.datastore_endpoint }}
+    - name: datastore_endpoint
+      value: {{ .Values.datastore_endpoint | quote }}
+    {{- end }}
+
+    {{- if .Values.resource_tags }}
+    - name: resource_tags # For underlying VMs/infra
+      value:
+{{ toYaml .Values.resource_tags | nindent 8 }}
+    {{- end }}
+
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            name: tf-cloud-creds # Generic name, depends on where VMs are provisioned

@@ -1,0 +1,28 @@
+name: "example-aks-cluster"
+resource_group_name: "rg-myaks-cluster" # TODO: Replace or ensure this RG exists or will be created by Terraform
+region: "East US" # Specify desired Azure region
+cluster_version: "1.28" # Specify desired AKS version
+dns_prefix: "myakscluster" # Unique DNS prefix for the AKS cluster
+agent_pool_name: "agentpool"
+agent_vm_size: "Standard_DS2_v2"
+agent_count: 1
+# kubernetes_version: "1.28.5" # Often same as cluster_version, or specifically for node pool
+service_principal_client_id: "" # TODO: Provide Azure SPN Client ID
+service_principal_client_secret: "" # TODO: Provide Azure SPN Client Secret
+
+# Example tags, adapt as needed
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"
+  cost_center: "your-cost-center"
+
+# Terraform controller specific values
+path: "./terraform/aks-auto-mode" # This path is an assumption
+approvePlan: "auto"
+destroyResourcesOnDeletion: false
+alwaysCleanupRunnerPod: false
+force: false
+
+# Runner pod specific (can remain common or be adapted)
+# affinity: {}
+# tolerations: []

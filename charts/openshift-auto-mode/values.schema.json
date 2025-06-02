@@ -1,0 +1,99 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenShift Auto Mode Cluster Values",
+  "description": "Values for configuring an OpenShift cluster provisioned via Terraform through Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "openshift_version",
+    "platform",
+    "base_domain",
+    "cluster_name",
+    "pull_secret",
+    "ssh_public_key"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the Helm release."
+    },
+    "openshift_version": {
+      "type": "string",
+      "description": "Desired OpenShift version (e.g., '4.14')."
+    },
+    "platform": {
+      "type": "string",
+      "description": "Target platform for OpenShift installation (e.g., vsphere, aws, azure, baremetal).",
+      "enum": ["vsphere", "aws", "azure", "gcp", "baremetal", "ovirt", "openstack"]
+    },
+    "base_domain": {
+      "type": "string",
+      "description": "Base domain for the OpenShift cluster (e.g., example.com)."
+    },
+    "cluster_name": {
+      "type": "string",
+      "description": "Name of the OpenShift cluster itself (e.g., myocp)."
+    },
+    "pull_secret": {
+      "type": "string", # In reality, this is JSON content. Could also be an object.
+      "description": "Pull secret from Red Hat OpenShift Cluster Manager (JSON string)."
+    },
+    "ssh_public_key": {
+      "type": "string",
+      "description": "SSH public key for accessing cluster nodes."
+    },
+    "control_plane_replicas": {
+      "type": "integer",
+      "description": "Number of control plane (master) nodes.",
+      "default": 3
+    },
+    "worker_replicas": {
+      "type": "integer",
+      "description": "Number of worker (compute) nodes.",
+      "default": 3
+    },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply (applicability depends on the underlying provider).",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "openshift-project" }
+      }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the Terraform configuration within the Git repository.",
+      "default": "./terraform/openshift-auto-mode"
+    },
+    "approvePlan": {
+      "type": "string",
+      "description": "Terraform plan approval mode.",
+      "default": "auto",
+      "enum": ["auto", "manual"]
+    },
+    "destroyResourcesOnDeletion": {
+      "type": "boolean",
+      "description": "Destroy Terraform resources when the Helm release is deleted.",
+      "default": false
+    },
+    "alwaysCleanupRunnerPod": {
+      "type": "boolean",
+      "description": "Always clean up the Terraform runner pod.",
+      "default": false
+    },
+    "force": {
+      "type": "boolean",
+      "description": "Force apply Terraform changes.",
+      "default": false
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules for the Terraform runner pod."
+    },
+    "tolerations": {
+      "type": "array",
+      "description": "Tolerations for the Terraform runner pod."
+    }
+  }
+}

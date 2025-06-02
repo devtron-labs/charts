@@ -1,0 +1,86 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default "./terraform/openshift-auto-mode" .Values.path }} # Updated path
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: openshift_version
+      value: {{ .Values.openshift_version | quote }}
+    - name: platform
+      value: {{ .Values.platform | quote }}
+    - name: base_domain
+      value: {{ .Values.base_domain | quote }}
+    - name: cluster_name # This is OpenShift cluster name, not Helm release name
+      value: {{ .Values.cluster_name | quote }}
+
+    {{- if .Values.pull_secret }}
+    # Pull secret is sensitive. Best sourced from a K8s secret by Terraform itself,
+    # or via a K8s secret mounted to the runner.
+    # If passing directly, ensure it's handled securely.
+    # This example assumes it's a string value in values.yaml.
+    - name: pull_secret
+      value: {{ .Values.pull_secret | quote }}
+      # Alternatively, if the pull secret is in a K8s secret:
+      # valueFrom:
+      #   secretKeyRef:
+      #     name: {{ printf "%s-openshift-pull-secret" $.Release.Name }}
+      #     key: .dockerconfigjson
+    {{- end }}
+
+    {{- if .Values.ssh_public_key }}
+    - name: ssh_public_key
+      value: {{ .Values.ssh_public_key | quote }}
+    {{- end }}
+
+    - name: control_plane_replicas
+      value: {{ .Values.control_plane_replicas }}
+    - name: worker_replicas
+      value: {{ .Values.worker_replicas }}
+
+    # Placeholder for platform-specific variables.
+    # The actual Terraform module for OpenShift would require many more variables
+    # depending on the chosen .Values.platform (aws, vsphere, azure, etc.)
+    # For example, if .Values.platform == "aws":
+    # {{- if eq .Values.platform "aws" }}
+    # - name: aws_region
+    #   value: {{ .Values.aws_region | quote }}
+    # - name: master_instance_type
+    #   value: {{ .Values.master_instance_type | quote }}
+    # ... etc.
+    # {{- end }}
+
+    {{- if .Values.resource_tags }}
+    - name: resource_tags # Applied to underlying infrastructure
+      value:
+{{ toYaml .Values.resource_tags | nindent 8 }}
+    {{- end }}
+
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            # Name depends on the platform, e.g., tf-aws-creds, tf-vsphere-creds
+            name: tf-platform-creds

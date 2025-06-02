@@ -1,0 +1,109 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RKE-Rancher Auto Mode Cluster Values",
+  "description": "Values for configuring an RKE cluster via Rancher, provisioned by Terraform through Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "rancher_api_url",
+    "rancher_access_key",
+    "cluster_name_in_rancher",
+    "rke_kubernetes_version",
+    "node_pools"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the Helm release."
+    },
+    "rancher_api_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the Rancher API (e.g., https://your-rancher-server.example.com/v3)."
+    },
+    "rancher_access_key": {
+      "type": "string",
+      "description": "Rancher Access Key (Bearer Token ID)."
+    },
+    "rancher_secret_key": {
+      "type": "string",
+      "description": "Rancher Secret Key (Bearer Token Secret). May not be required if access_key is a full token."
+    },
+    "cluster_name_in_rancher": {
+      "type": "string",
+      "description": "Name of the cluster as it will appear in Rancher."
+    },
+    "rke_kubernetes_version": {
+      "type": "string",
+      "description": "Desired RKE Kubernetes version (e.g., v1.27.7-rancher1-1)."
+    },
+    "node_pools": {
+      "type": "array",
+      "description": "Configuration for node pools in the RKE cluster.",
+      "items": {
+        "type": "object",
+        "required": ["name", "count", "roles"],
+        "properties": {
+          "name": { "type": "string", "description": "Name of the node pool." },
+          "count": { "type": "integer", "minimum": 0, "description": "Number of nodes in this pool." },
+          "machine_config": {
+            "type": "object",
+            "description": "Reference to or definition of machine configuration for this pool.",
+            "properties":{
+              "kind": {"type": "string", "description": "Kind of machine config (e.g. DockerMachine, vSphereMachineConfig)"},
+              "name": {"type": "string", "description": "Name of the machine config resource"}
+            }
+          },
+          "roles": {
+            "type": "array",
+            "description": "Roles for nodes in this pool (etcd, controlplane, worker).",
+            "items": { "type": "string", "enum": ["etcd", "controlplane", "worker"] }
+          }
+        }
+      }
+    },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply (applicability depends on node provider configured in Rancher).",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "rke-project" }
+      }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the Terraform configuration within the Git repository.",
+      "default": "./terraform/rke-rancher-auto-mode"
+    },
+    "approvePlan": {
+      "type": "string",
+      "description": "Terraform plan approval mode.",
+      "default": "auto",
+      "enum": ["auto", "manual"]
+    },
+    "destroyResourcesOnDeletion": {
+      "type": "boolean",
+      "description": "Destroy Terraform resources when the Helm release is deleted.",
+      "default": false
+    },
+    "alwaysCleanupRunnerPod": {
+      "type": "boolean",
+      "description": "Always clean up the Terraform runner pod.",
+      "default": false
+    },
+    "force": {
+      "type": "boolean",
+      "description": "Force apply Terraform changes.",
+      "default": false
+    },
+    "affinity": {
+      "type": "object",
+      "description": "Affinity rules for the Terraform runner pod."
+    },
+    "tolerations": {
+      "type": "array",
+      "description": "Tolerations for the Terraform runner pod."
+    }
+  }
+}
