@@ -296,7 +296,6 @@ vector:
       - name: http
         port: 9090
 victoriametrics:
-  enabled: false
   alertmanager:
     config:
       receivers:
