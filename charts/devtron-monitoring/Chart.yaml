@@ -10,8 +10,10 @@ sources:
   - https://github.com/kubernetes-sigs/metrics-server/tree/master/charts/metrics-server
   - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
   - https://github.com/deliveryhero/helm-charts/tree/master/stable/k8s-event-logger
+  - https://github.com/grafana/pyroscope
+  - https://github.com/VictoriaMetrics/helm-charts
 
-version: 0.0.3
+version: 0.0.6
 appVersion: "0.0.1"
 dependencies:
 - name: fluent-bit
@@ -47,6 +49,16 @@ dependencies:
   repository: https://victoriametrics.github.io/helm-charts/
   condition: victoriametrics.enabled
   alias: victoriametrics
+- name: pyroscope
+  repository: https://grafana.github.io/helm-charts
+  version: "1.13.2"
+  condition: pyroscope.enabled
+  alias: pyroscope
+- name: victoria-logs-single
+  version: "0.9.8"
+  repository: https://victoriametrics.github.io/helm-charts/
+  condition: vmlogs.enabled
+  alias: vmlogs
 maintainers:
 - email: badal@devtron.ai
   name: Badal Kumar
