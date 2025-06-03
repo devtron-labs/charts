@@ -1,5 +1,5 @@
 {
-  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "http://json-schema.org/draft-07/schema#",
   "title": "OpenShift Container Platform Configuration Values",
   "description": "Values for configuring an OpenShift Container Platform cluster provisioned via Terraform and Flux.",
   "type": "object",
@@ -41,17 +41,9 @@
       "properties": {
         "team": { "type": "string", "default": "Devops_Team" },
         "environment": { "type": "string", "default": "non-production" },
-        "project": { "type": "string", "default": "openshift-project" },
-        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+        "project": { "type": "string", "default": "openshift-project" }
       },
       "additionalProperties": { "type": "string" }
-    },
-    "path": { "type": "string", "default": "./terraform/openshift", "description": "Path to Terraform OpenShift configuration." },
-    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
-    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
-    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
-    "force": {"type": "boolean", "default": false},
-    "affinity": {"type": "object"},
-    "tolerations": {"type": "array"}
+    }
   }
 }

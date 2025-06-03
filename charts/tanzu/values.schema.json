@@ -1,5 +1,5 @@
 {
-  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "http://json-schema.org/draft-07/schema#",
   "title": "Tanzu Kubernetes Grid (TKGm on vSphere) Cluster Configuration Values",
   "description": "Values for configuring a TKGm on vSphere cluster provisioned via Terraform and Flux.",
   "type": "object",
@@ -8,7 +8,6 @@
     "tanzu_kubernetes_release",
     "vsphere_server",
     "vsphere_username",
-    // vsphere_password is required but sourced from K8s secret
     "vsphere_datacenter",
     "vsphere_datastore",
     "vsphere_network",
@@ -42,17 +41,9 @@
       "properties": {
         "team": { "type": "string", "default": "Devops_Team" },
         "environment": { "type": "string", "default": "non-production" },
-        "project": { "type": "string", "default": "tanzu-project" },
-        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+        "project": { "type": "string", "default": "tanzu-project" }
       },
       "additionalProperties": { "type": "string" }
-    },
-    "path": { "type": "string", "default": "./terraform/tanzu", "description": "Path to Terraform Tanzu (TKGm on vSphere) configuration." },
-    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
-    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
-    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
-    "force": {"type": "boolean", "default": false},
-    "affinity": {"type": "object"},
-    "tolerations": {"type": "array"}
+    }
   }
 }

@@ -1,5 +1,5 @@
 {
-  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "http://json-schema.org/draft-07/schema#",
   "title": "RKE Cluster (via Rancher) Configuration Values",
   "description": "Values for configuring an RKE cluster provisioned via Rancher, using Terraform and Flux.",
   "type": "object",
@@ -7,7 +7,6 @@
     "name",
     "rancher_api_url",
     "rancher_access_key",
-    // rancher_secret_key is required but sourced from K8s secret
     "cluster_name_in_rancher",
     "rke_kubernetes_version",
     "node_pools"
@@ -72,21 +71,9 @@
       "properties": {
         "team": { "type": "string", "default": "Devops_Team" },
         "environment": { "type": "string", "default": "non-production" },
-        "project": { "type": "string", "default": "rke-project" },
-        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+        "project": { "type": "string", "default": "rke-project" }
       },
       "additionalProperties": { "type": "string" }
-    },
-    "path": {
-      "type": "string",
-      "description": "Path to the Terraform RKE/Rancher configuration. Defaults to './terraform/rke-rancher'.",
-      "default": "./terraform/rke-rancher"
-    },
-    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
-    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
-    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
-    "force": {"type": "boolean", "default": false},
-    "affinity": {"type": "object"},
-    "tolerations": {"type": "array"}
+    }
   }
 }

@@ -1,5 +1,5 @@
 {
-  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "http://json-schema.org/draft-07/schema#",
   "title": "AKS Cluster Configuration Values",
   "description": "Values for configuring an Azure Kubernetes Service (AKS) cluster provisioned via Terraform and Flux.",
   "type": "object",
@@ -8,9 +8,7 @@
     "resource_group_name",
     "region",
     "cluster_version",
-    "dns_prefix",
-    "service_principal_client_id"
-    // service_principal_client_secret is also required, but handled by referencing a K8s secret in terraform.yaml
+    "dns_prefix"
   ],
   "properties": {
     "name": {
@@ -49,58 +47,14 @@
       "default": 1,
       "minimum": 1
     },
-    "service_principal_client_id": {
-      "type": "string",
-      "description": "Client ID for the Azure Service Principal used by AKS. TODO: This is a mandatory field."
-    },
-    "service_principal_client_secret": {
-      "type": "string",
-      "description": "Client Secret for the Azure Service Principal. IMPORTANT: For security, this should be sourced from a Kubernetes secret as configured in terraform.yaml, not set directly here. See values.yaml comments. The value here is a placeholder.",
-      "default": "placeholder-see-comment-above"
-    },
     "resource_tags": {
       "type": "object",
       "description": "Custom tags to apply to Azure resources. It's recommended to define a 'cost_center' tag.",
       "properties": {
         "team": { "type": "string", "default": "Devops_Team" },
-        "environment": { "type": "string", "default": "non-production" },
-        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update with your organization's cost center." }
+        "environment": { "type": "string", "default": "non-production" }
       },
       "additionalProperties": { "type": "string" }
-    },
-    "path": {
-      "type": "string",
-      "description": "Path to the Terraform AKS configuration within the Git repository. Defaults to './terraform/aks'.",
-      "default": "./terraform/aks"
-    },
-    "approvePlan": {
-      "type": "string",
-      "description": "Terraform plan approval mode.",
-      "default": "auto",
-      "enum": ["auto", "manual"]
-    },
-    "destroyResourcesOnDeletion": {
-      "type": "boolean",
-      "description": "If true, associated Terraform resources will be destroyed when the Helm release is deleted.",
-      "default": false
-    },
-    "alwaysCleanupRunnerPod": {
-      "type": "boolean",
-      "description": "If true, the Terraform runner pod will always be cleaned up.",
-      "default": false
-    },
-    "force": {
-      "type": "boolean",
-      "description": "If true, forces Terraform to apply changes.",
-      "default": false
-    },
-    "affinity": {
-      "type": "object",
-      "description": "Affinity rules for scheduling the Terraform runner pod."
-    },
-    "tolerations": {
-      "type": "array",
-      "description": "Tolerations for the Terraform runner pod."
     }
   }
 }

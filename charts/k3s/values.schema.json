@@ -1,5 +1,5 @@
 {
-  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "http://json-schema.org/draft-07/schema#",
   "title": "K3s Cluster Configuration Values",
   "description": "Values for configuring a K3s cluster, assuming Terraform provisions underlying VMs and installs K3s.",
   "type": "object",
@@ -30,17 +30,9 @@
       "properties": {
         "team": { "type": "string", "default": "Devops_Team" },
         "environment": { "type": "string", "default": "non-production" },
-        "project": { "type": "string", "default": "k3s-project" },
-        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+        "project": { "type": "string", "default": "k3s-project" }
       },
       "additionalProperties": { "type": "string" }
-    },
-    "path": { "type": "string", "default": "./terraform/k3s", "description": "Path to Terraform K3s configuration." },
-    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
-    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
-    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
-    "force": {"type": "boolean", "default": false},
-    "affinity": {"type": "object"},
-    "tolerations": {"type": "array"}
+    }
   }
 }

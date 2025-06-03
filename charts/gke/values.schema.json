@@ -1,5 +1,5 @@
 {
-  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "schema": "http://json-schema.org/draft-07/schema#",
   "title": "GKE Cluster Configuration Values",
   "description": "Values for configuring a Google Kubernetes Engine (GKE) cluster provisioned via Terraform and Flux.",
   "type": "object",
@@ -26,7 +26,7 @@
       "type": "string",
       "description": "Desired GKE version (e.g., '1.28'). Check Google Cloud documentation for available versions in your chosen region."
     },
-    "network": {
+    "vpc_network": {
       "type": "string",
       "description": "Name of the VPC network for the GKE cluster. If not specified, 'default' VPC network is assumed.",
       "default": "default"
@@ -49,55 +49,19 @@
     },
     "node_locations": {
       "type": "array",
-      "description": "List of zones for the GKE cluster's default node pool (e.g., ["us-central1-a", "us-central1-b"]).",
+      "description": "List of zones for the GKE cluster's default node pool.",
       "items": {
         "type": "string"
-      },
-      "default": ["us-central1-a"]
+      }
     },
     "resource_tags": {
       "type": "object",
       "description": "Custom tags to apply to GCP resources created for the cluster. It's recommended to define a 'cost_center' tag.",
       "properties": {
         "team": { "type": "string", "default": "Devops_Team" },
-        "environment": { "type": "string", "default": "non-production" },
-        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update with your organization's cost center." }
+        "environment": { "type": "string", "default": "non-production" }
       },
       "additionalProperties": { "type": "string" }
-    },
-    "path": {
-      "type": "string",
-      "description": "Path to the Terraform GKE configuration within the Git repository. Defaults to './terraform/gke'.",
-      "default": "./terraform/gke"
-    },
-    "approvePlan": {
-      "type": "string",
-      "description": "Terraform plan approval mode. 'auto' approves automatically. 'manual' requires out-of-band approval.",
-      "default": "auto",
-      "enum": ["auto", "manual"]
-    },
-    "destroyResourcesOnDeletion": {
-      "type": "boolean",
-      "description": "If true, associated Terraform resources will be destroyed when the Helm release is deleted.",
-      "default": false
-    },
-    "alwaysCleanupRunnerPod": {
-      "type": "boolean",
-      "description": "If true, the Terraform runner pod will always be cleaned up after a run, regardless of success or failure.",
-      "default": false
-    },
-    "force": {
-      "type": "boolean",
-      "description": "If true, forces Terraform to apply changes, potentially overriding safeguards. Use with caution.",
-      "default": false
-    },
-    "affinity": {
-      "type": "object",
-      "description": "Affinity rules for scheduling the Terraform runner pod. See Kubernetes documentation for details."
-    },
-    "tolerations": {
-      "type": "array",
-      "description": "Tolerations for the Terraform runner pod. See Kubernetes documentation for details."
     }
   }
 }

@@ -62,21 +62,4 @@ resource_tags:
   team: "Devops_Team"
   environment: "non-production"
   project: "k3s-project"
-  # TODO: Update with your organization's cost center and other relevant tags.
-  cost_center: "your-cost-center"
-
-# -- Path to the Terraform configuration within the Git repository.
-path: "./terraform/k3s"
-# -- Terraform plan approval mode.
-approvePlan: "auto"
-# -- If true, Terraform resources will be destroyed when the Helm release is deleted.
-destroyResourcesOnDeletion: false
-# -- If true, the Terraform runner pod will always be cleaned up.
-alwaysCleanupRunnerPod: false
-# -- If true, forces Terraform to apply changes.
-force: false
-
-# -- Affinity rules for scheduling the Terraform runner pod.
-# affinity: {}
-# -- Tolerations for the Terraform runner pod.
-# tolerations: []
+  

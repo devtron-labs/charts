@@ -25,22 +25,3 @@ node_locations:
 resource_tags:
   team: "Devops_Team"
   environment: "non-production"
-  # TODO: Consider adding a cost_center tag or other relevant tags for your organization.
-  cost_center: "your-cost-center"
-
-# -- Path to the Terraform configuration within the Git repository.
-# This path assumes the Terraform code for GKE is located at 'terraform/gke' in the repository.
-path: "./terraform/gke"
-# -- Terraform plan approval mode. 'auto' approves automatically. 'manual' requires manual intervention.
-approvePlan: "auto"
-# -- If true, Terraform resources will be destroyed when the Helm release is deleted.
-destroyResourcesOnDeletion: false
-# -- If true, the Terraform runner pod will always be cleaned up after a run, regardless of success or failure.
-alwaysCleanupRunnerPod: false
-# -- If true, forces Terraform to apply changes, potentially overriding safeguards. Use with caution.
-force: false
-
-# -- Affinity rules for scheduling the Terraform runner pod.
-# affinity: {}
-# -- Tolerations for the Terraform runner pod.
-# tolerations: []

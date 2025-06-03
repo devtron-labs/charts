@@ -1,6 +1,6 @@
 apiVersion: v2
-appVersion: 0.0.5
+appVersion: 0.0.1
 description: Helm chart to provision a K3s cluster using Terraform with Flux.
 name: terraform-k3s-cluster
 type: application
-version: 0.0.5
+version: 0.0.1
