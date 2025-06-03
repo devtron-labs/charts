@@ -1,0 +1,64 @@
+# values.yaml for RKE cluster provisioning via Rancher
+
+# -- Name of the Helm release. Can be the same as cluster_name_in_rancher or different.
+name: "example-rke-cluster"
+# -- URL of the Rancher API (e.g., https://your-rancher-server.example.com/v3).
+# TODO: Replace with your actual Rancher API URL. This is mandatory.
+rancher_api_url: "https://your-rancher-server.example.com/v3"
+# -- Rancher Access Key (often the Token ID part of a Bearer Token).
+# TODO: Provide your Rancher Access Key. This is mandatory.
+rancher_access_key: ""
+# -- Rancher Secret Key (often the Token Secret part of a Bearer Token).
+# TODO: Provide your Rancher Secret Key.
+# IMPORTANT: For security, the terraform.yaml template is configured to source this from a Kubernetes secret
+# named '{{ $.Release.Name }}-rancher-secret' with a key 'secretKey'.
+# Ensure this secret is created in the 'flux-system' namespace before deploying the chart.
+# Example: kubectl create secret generic {{ $.Release.Name }}-rancher-secret --from-literal=secretKey='YOUR_RANCHER_SECRET_KEY' -n flux-system
+# You can leave this value empty if the secret is pre-created.
+rancher_secret_key: "placeholder-see-comment-above"
+# -- Name of the cluster as it will appear in the Rancher UI.
+cluster_name_in_rancher: "my-rke-cluster"
+# -- Desired RKE Kubernetes version (e.g., v1.27.7-rancher1-1).
+# Check your Rancher documentation for supported RKE versions.
+rke_kubernetes_version: "v1.27.7-rancher1-1"
+
+# -- Configuration for node pools in the RKE cluster.
+# The structure here is a simplified example. The actual structure and available parameters
+# will depend heavily on the specific Terraform module used for RKE cluster creation via Rancher.
+# You may need to adapt this section significantly based on the chosen Terraform module's variables.
+node_pools:
+  - name: "pool1" # Name of the node pool
+    count: 1       # Number of nodes in this pool
+    # -- Machine configuration for this pool. This typically references a machine config template
+    # already defined in Rancher, or parameters to create one (e.g., for cloud provider nodes).
+    machine_config:
+      kind: DockerMachine # Example: DockerMachine, Amazonec2Config, VsphereConfig, AzureConfig etc.
+      # TODO: Specify the name of a pre-existing machine configuration in Rancher,
+      # or the parameters required by your Terraform module to create one.
+      name: "my-machine-driver-config"
+    roles: ["etcd", "controlplane", "worker"] # Assign roles (etcd, controlplane, worker)
+
+# -- Tags to apply. Applicability depends on the underlying node provider configured in Rancher
+# (e.g., if nodes are EC2 instances, these could be AWS tags).
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"
+  project: "rke-project"
+  # TODO: Add or modify tags as needed for your environment.
+  cost_center: "your-cost-center"
+
+# -- Path to the Terraform configuration within the Git repository.
+path: "./terraform/rke-rancher"
+# -- Terraform plan approval mode.
+approvePlan: "auto"
+# -- If true, Terraform resources will be destroyed when the Helm release is deleted.
+destroyResourcesOnDeletion: false
+# -- If true, the Terraform runner pod will always be cleaned up.
+alwaysCleanupRunnerPod: false
+# -- If true, forces Terraform to apply changes.
+force: false
+
+# -- Affinity rules for scheduling the Terraform runner pod.
+# affinity: {}
+# -- Tolerations for the Terraform runner pod.
+# tolerations: []

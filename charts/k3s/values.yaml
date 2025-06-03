@@ -1,0 +1,82 @@
+# values.yaml for K3s cluster provisioning
+# Assumes Terraform is used to provision underlying VMs (e.g., on a cloud provider or on-prem) and then install K3s.
+
+# -- Name of the Helm release
+name: "example-k3s-cluster"
+# -- Desired K3s version (e.g., v1.27.7+k3s1). Check K3s GitHub releases for available versions.
+k3s_version: "v1.27.7+k3s1"
+
+# Node configuration (examples, highly dependent on your Terraform module and chosen VM provider)
+# -- Number of K3s server nodes.
+server_node_count: 1
+# -- Instance type for server nodes (cloud provider specific, e.g., t3.medium for AWS).
+# TODO: Update if your Terraform module creates VMs and requires this.
+# server_instance_type: "t3.medium"
+# -- Image ID for server nodes (cloud provider specific, e.g., an AMI ID for AWS).
+# TODO: Update if your Terraform module creates VMs and requires this.
+# server_image_id: "ami-xxxxxxxxxxxxx"
+# -- Number of K3s agent nodes.
+agent_node_count: 0
+# -- Instance type for agent nodes (cloud provider specific).
+# TODO: Update if your Terraform module creates VMs and requires this.
+# agent_instance_type: "t3.medium"
+# -- Image ID for agent nodes (cloud provider specific).
+# TODO: Update if your Terraform module creates VMs and requires this.
+# agent_image_id: "ami-xxxxxxxxxxxxx"
+
+# Common infrastructure settings (examples, specific to your Terraform module and VM provider)
+# -- SSH username for connecting to the provisioned VMs.
+# TODO: Update based on your VM images and Terraform module.
+# ssh_user: "ubuntu"
+# -- SSH private key (PEM format) for VM access.
+# TODO: Provide your SSH private key.
+# IMPORTANT: This is sensitive. The terraform.yaml is configured to source this from a K8s secret
+# named '{{ $.Release.Name }}-k3s-ssh-key' with key 'private_key'. Ensure this secret is created.
+# Alternatively, your Terraform module might expect a path to the key on the runner.
+# ssh_private_key_pem: |
+#   -----BEGIN OPENSSH PRIVATE KEY-----
+#   TODO_YOUR_KEY_HERE
+#   -----END OPENSSH PRIVATE KEY-----
+# -- VPC ID for network configuration (cloud provider specific).
+# TODO: Update if your Terraform module sets up networking.
+# vpc_id: "vpc-xxxxxxxx"
+# -- Subnet IDs for network configuration (cloud provider specific).
+# TODO: Update if your Terraform module sets up networking.
+# subnet_ids: ["subnet-xxxxxxxx"]
+
+# K3s specific installation options
+# -- Additional flags for K3s server installation script (e.g., '--disable traefik --tls-san YOUR_IP_OR_DNS').
+k3s_server_install_flags: ""
+# -- Additional flags for K3s agent installation script (e.g., '--node-label role=agent').
+k3s_agent_install_flags: ""
+# -- K3s join token. If not provided, the Terraform module might auto-generate and manage it.
+# TODO: Set a custom token if needed, otherwise leave empty for auto-generation (if supported by TF module).
+# k3s_token: "YOUR_SECURE_K3S_TOKEN"
+# -- External datastore endpoint for K3s (e.g., for HA setup using etcd or a relational database).
+# Example: "etcd://etcd-node1:2379,etcd-node2:2379" or "mysql://user:password@tcp(hostname:3306)/database-name"
+# TODO: Configure if using an external datastore.
+# datastore_endpoint: ""
+
+# -- Tags to apply to underlying cloud resources (VMs, network interfaces, etc.).
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"
+  project: "k3s-project"
+  # TODO: Update with your organization's cost center and other relevant tags.
+  cost_center: "your-cost-center"
+
+# -- Path to the Terraform configuration within the Git repository.
+path: "./terraform/k3s"
+# -- Terraform plan approval mode.
+approvePlan: "auto"
+# -- If true, Terraform resources will be destroyed when the Helm release is deleted.
+destroyResourcesOnDeletion: false
+# -- If true, the Terraform runner pod will always be cleaned up.
+alwaysCleanupRunnerPod: false
+# -- If true, forces Terraform to apply changes.
+force: false
+
+# -- Affinity rules for scheduling the Terraform runner pod.
+# affinity: {}
+# -- Tolerations for the Terraform runner pod.
+# tolerations: []

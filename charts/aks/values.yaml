@@ -1,0 +1,59 @@
+# values.yaml for AKS cluster provisioning
+
+# -- Name of the AKS cluster
+name: "example-aks-cluster"
+# -- Azure Resource Group name for the AKS cluster.
+# TODO: Replace with your desired Resource Group name. Ensure it exists or will be created by Terraform if configured.
+resource_group_name: "rg-myaks-cluster"
+# -- Azure region for the AKS cluster (e.g., 'East US', 'West Europe').
+region: "East US"
+# -- Desired AKS version (e.g., '1.28'). Check Azure documentation for available versions.
+cluster_version: "1.28"
+# -- Unique DNS prefix for the AKS cluster. This will be part of the FQDN.
+# TODO: Replace with a globally unique DNS prefix.
+dns_prefix: "myuniqueakscluster"
+# -- Name for the default agent (node) pool.
+agent_pool_name: "agentpool"
+# -- VM size for the AKS agent nodes (e.g., 'Standard_DS2_v2').
+agent_vm_size: "Standard_DS2_v2"
+# -- Number of nodes in the default agent pool.
+agent_count: 1
+
+# -- Client ID for the Azure Service Principal used by AKS to interact with Azure APIs.
+# TODO: Provide your Azure Service Principal Client ID. This is mandatory.
+service_principal_client_id: ""
+# -- Client Secret for the Azure Service Principal.
+# TODO: Provide your Azure Service Principal Client Secret.
+# IMPORTANT: For security, the terraform.yaml template is configured to source this from a Kubernetes secret
+# named '{{ $.Release.Name }}-spn-secret' with a key 'client_secret'.
+# Ensure this secret is created in the 'flux-system' namespace before deploying the chart,
+# or adjust the terraform.yaml if you manage secrets differently.
+# Example secret creation:
+# kubectl create secret generic {{ $.Release.Name }}-spn-secret --from-literal=client_secret='YOUR_SPN_SECRET' -n flux-system
+# You can leave this value empty if the secret is pre-created as described.
+service_principal_client_secret: "placeholder-see-comment-above"
+
+
+# -- Tags to apply to Azure resources created for the cluster.
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"
+  # TODO: Consider adding a cost_center tag or other relevant tags for your organization.
+  cost_center: "your-cost-center"
+
+# -- Path to the Terraform configuration within the Git repository.
+# This path assumes the Terraform code for AKS is located at 'terraform/aks' in the repository.
+path: "./terraform/aks"
+# -- Terraform plan approval mode.
+approvePlan: "auto"
+# -- If true, Terraform resources will be destroyed when the Helm release is deleted.
+destroyResourcesOnDeletion: false
+# -- If true, the Terraform runner pod will always be cleaned up.
+alwaysCleanupRunnerPod: false
+# -- If true, forces Terraform to apply changes.
+force: false
+
+# -- Affinity rules for scheduling the Terraform runner pod.
+# affinity: {}
+# -- Tolerations for the Terraform runner pod.
+# tolerations: []

@@ -1,0 +1,58 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tanzu Kubernetes Grid (TKGm on vSphere) Cluster Configuration Values",
+  "description": "Values for configuring a TKGm on vSphere cluster provisioned via Terraform and Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "tanzu_kubernetes_release",
+    "vsphere_server",
+    "vsphere_username",
+    // vsphere_password is required but sourced from K8s secret
+    "vsphere_datacenter",
+    "vsphere_datastore",
+    "vsphere_network",
+    "vsphere_resource_pool",
+    "vsphere_ssh_authorized_key",
+    "cluster_name",
+    "control_plane_vm_class",
+    "worker_vm_class"
+  ],
+  "properties": {
+    "name": { "type": "string", "description": "Name of the Helm release." },
+    "tanzu_kubernetes_release": { "type": "string", "description": "Tanzu Kubernetes Release (TKR) name (e.g., v1.27.5---vmware.2-tkg.1). TODO: Mandatory. Verify available TKRs in your environment." },
+    "vsphere_server": { "type": "string", "description": "vCenter server FQDN or IP address. TODO: Mandatory." },
+    "vsphere_username": { "type": "string", "description": "vCenter username. TODO: Mandatory." },
+    "vsphere_password": { "type": "string", "description": "vCenter password. IMPORTANT: Sourced from a K8s secret (see values.yaml). Value here is a placeholder. TODO: Ensure secret is created.", "default": "placeholder-see-comment-above"},
+    "vsphere_datacenter": { "type": "string", "description": "vSphere Datacenter path (e.g., /MyDatacenter). TODO: Mandatory." },
+    "vsphere_datastore": { "type": "string", "description": "vSphere Datastore path. TODO: Mandatory." },
+    "vsphere_network": { "type": "string", "description": "vSphere Network path for cluster VMs. TODO: Mandatory." },
+    "vsphere_resource_pool": { "type": "string", "description": "vSphere Resource Pool path. TODO: Mandatory." },
+    "vsphere_folder": { "type": "string", "description": "Optional: vSphere VM folder path to deploy VMs into. TODO: Update if needed." },
+    "vsphere_ssh_authorized_key": { "type": "string", "description": "SSH public key for accessing cluster nodes. TODO: Mandatory." },
+    "cluster_name": { "type": "string", "description": "Name of the Tanzu workload cluster to be created. TODO: Mandatory." },
+    "control_plane_vm_class": { "type": "string", "description": "TKG VM class for control plane nodes (e.g., 'best-effort-small'). Must exist in TKG environment. TODO: Verify." },
+    "worker_vm_class": { "type": "string", "description": "TKG VM class for worker nodes. Must exist in TKG environment. TODO: Verify." },
+    "control_plane_replicas": { "type": "integer", "default": 1, "minimum": 1, "description": "Number of control plane nodes (1 for non-prod, 3 for prod/HA)." },
+    "worker_replicas": { "type": "integer", "default": 1, "minimum": 0, "description": "Number of worker nodes." },
+    "cni": { "type": "string", "enum": ["antrea", "calico"], "default": "antrea", "description": "CNI plugin for the workload cluster." },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply (e.g., vSphere tags if supported by TF module). TODO: Update cost_center.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "tanzu-project" },
+        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+      },
+      "additionalProperties": { "type": "string" }
+    },
+    "path": { "type": "string", "default": "./terraform/tanzu", "description": "Path to Terraform Tanzu (TKGm on vSphere) configuration." },
+    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
+    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
+    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
+    "force": {"type": "boolean", "default": false},
+    "affinity": {"type": "object"},
+    "tolerations": {"type": "array"}
+  }
+}

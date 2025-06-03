@@ -1,0 +1,46 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "K3s Cluster Configuration Values",
+  "description": "Values for configuring a K3s cluster, assuming Terraform provisions underlying VMs and installs K3s.",
+  "type": "object",
+  "required": [
+    "name",
+    "k3s_version"
+  ],
+  "properties": {
+    "name": { "type": "string", "description": "Name of the Helm release." },
+    "k3s_version": { "type": "string", "description": "Desired K3s version (e.g., v1.27.7+k3s1). Check K3s GitHub releases." },
+    "server_node_count": { "type": "integer", "default": 1, "minimum": 1, "description": "Number of K3s server nodes." },
+    "server_instance_type": { "type": "string", "description": "Instance type for server nodes (cloud provider specific, e.g., t3.medium for AWS). TODO: Update if TF module creates VMs." },
+    "server_image_id": { "type": "string", "description": "Image ID for server nodes (cloud provider specific, e.g., an AMI ID for AWS). TODO: Update if TF module creates VMs." },
+    "agent_node_count": { "type": "integer", "default": 0, "minimum": 0, "description": "Number of K3s agent nodes." },
+    "agent_instance_type": { "type": "string", "description": "Instance type for agent nodes (cloud provider specific). TODO: Update if TF module creates VMs." },
+    "agent_image_id": { "type": "string", "description": "Image ID for agent nodes (cloud provider specific). TODO: Update if TF module creates VMs." },
+    "ssh_user": { "type": "string", "description": "SSH username for connecting to provisioned VMs. TODO: Update if needed." },
+    "ssh_private_key_pem": { "type": "string", "description": "SSH private key (PEM format) for VM access. IMPORTANT: Sourced from K8s secret (see values.yaml). Value here is placeholder. TODO: Ensure secret exists or adapt TF module.", "default": "placeholder-see-comment-above" },
+    "vpc_id": { "type": "string", "description": "VPC ID for network configuration (cloud provider specific). TODO: Update if TF module manages networking." },
+    "subnet_ids": { "type": "array", "items": {"type": "string"}, "description": "Subnet IDs for network configuration (cloud provider specific). TODO: Update if TF module manages networking." },
+    "k3s_server_install_flags": { "type": "string", "description": "Additional flags for K3s server installation script (e.g., '--disable traefik --tls-san YOUR_IP_OR_DNS')." },
+    "k3s_agent_install_flags": { "type": "string", "description": "Additional flags for K3s agent installation script (e.g., '--node-label role=agent')." },
+    "k3s_token": { "type": "string", "description": "K3s join token. If not provided, TF module might auto-generate. TODO: Set if specific token needed." },
+    "datastore_endpoint": { "type": "string", "description": "External datastore endpoint for K3s HA (e.g., 'etcd://...' or 'mysql://...'). TODO: Configure if using external datastore." },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags for underlying cloud resources. TODO: Update cost_center.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "k3s-project" },
+        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+      },
+      "additionalProperties": { "type": "string" }
+    },
+    "path": { "type": "string", "default": "./terraform/k3s", "description": "Path to Terraform K3s configuration." },
+    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
+    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
+    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
+    "force": {"type": "boolean", "default": false},
+    "affinity": {"type": "object"},
+    "tolerations": {"type": "array"}
+  }
+}

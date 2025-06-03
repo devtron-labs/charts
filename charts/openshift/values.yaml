@@ -1,0 +1,75 @@
+# values.yaml for OpenShift Container Platform provisioning
+
+# -- Name of the Helm release
+name: "example-openshift-cluster"
+# -- Desired OpenShift version (e.g., '4.14'). Check Red Hat documentation for available versions.
+openshift_version: "4.14"
+# -- Target platform for OpenShift installation (e.g., aws, vsphere, azure, baremetal).
+# TODO: Choose your target platform. This choice dictates other necessary variables below.
+platform: "vsphere"
+# -- Base domain for the OpenShift cluster (e.g., example.com). All cluster routes will be subdomains of this.
+# TODO: Replace with your registered base domain. This is mandatory.
+base_domain: "example.com"
+# -- Name of the OpenShift cluster itself (e.g., myocp). This will be part of the cluster URL.
+# TODO: Replace with your desired cluster name. This is mandatory.
+cluster_name: "myocp"
+
+# -- Pull secret from Red Hat OpenShift Cluster Manager (JSON content).
+# TODO: Provide your pull secret. This is mandatory for installation.
+# IMPORTANT: This is sensitive data. Consider fetching it from a secure source within your Terraform module
+# (e.g., a pre-existing Kubernetes secret, HashiCorp Vault, or an environment variable set in the runner pod).
+# The example below is a string placeholder. A better approach for real use is to have Terraform
+# read this from a file path or a secret.
+pull_secret: '{ \"auths\": { \"cloud.openshift.com\": { \"auth\": \"TODO_YOUR_PULL_SECRET_AUTH_BASE64_ENCODED\", \"email\": \"you@example.com\" } } }'
+# -- SSH public key for accessing cluster nodes after installation.
+# TODO: Replace with your SSH public key. This is mandatory.
+ssh_public_key: "ssh-rsa AAAA..."
+
+# -- Number of control plane (master) nodes. Typically 3 for production.
+control_plane_replicas: 3
+# -- Number of worker (compute) nodes. Adjust based on workload.
+worker_replicas: 3
+
+# Platform-specific variables
+# TODO: Uncomment and configure the section relevant to your chosen 'platform' above.
+# The Terraform module for OpenShift will require specific variables based on the platform.
+# --- AWS Platform Example ---
+# aws_region: "us-east-1" # TODO: Specify AWS region if platform is 'aws'
+# aws_master_instance_type: "m5.xlarge" # TODO: Specify master instance type if platform is 'aws'
+# aws_worker_instance_type: "m5.xlarge" # TODO: Specify worker instance type if platform is 'aws'
+# aws_vpc_id: "" # TODO: Specify VPC ID if using an existing VPC on AWS
+# aws_private_subnets: [] # TODO: List of private subnet IDs for masters/workers on AWS
+# aws_public_subnets: [] # TODO: List of public subnet IDs for LBs on AWS
+
+# --- vSphere Platform Example ---
+# vsphere_server: "vcsa.example.com" # TODO: vCenter server FQDN or IP if platform is 'vsphere'
+# vsphere_username: "administrator@vsphere.local" # TODO: vCenter username if platform is 'vsphere'
+# vsphere_password: "" # TODO: vCenter password. Store securely (e.g., K8s secret referenced by TF).
+# vsphere_datacenter: "/SDDC-Datacenter" # TODO: vSphere Datacenter path
+# vsphere_datastore: "/SDDC-Datacenter/datastore/vsanDatastore" # TODO: vSphere Datastore path
+# vsphere_network: "/SDDC-Datacenter/network/segment-A" # TODO: vSphere Network path for VMs
+# vsphere_cluster: "/SDDC-Datacenter/host/Cluster-1" # TODO: vSphere Cluster path
+
+# -- Tags to apply to underlying infrastructure resources (e.g., AWS instances, vSphere VMs).
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"
+  project: "openshift-project"
+  # TODO: Update with your organization's cost center and other relevant tags.
+  cost_center: "your-cost-center"
+
+# -- Path to the Terraform configuration within the Git repository.
+path: "./terraform/openshift"
+# -- Terraform plan approval mode.
+approvePlan: "auto"
+# -- If true, Terraform resources will be destroyed when the Helm release is deleted.
+destroyResourcesOnDeletion: false
+# -- If true, the Terraform runner pod will always be cleaned up.
+alwaysCleanupRunnerPod: false
+# -- If true, forces Terraform to apply changes.
+force: false
+
+# -- Affinity rules for scheduling the Terraform runner pod.
+# affinity: {}
+# -- Tolerations for the Terraform runner pod.
+# tolerations: []

@@ -1,0 +1,92 @@
+{
+  "\$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RKE Cluster (via Rancher) Configuration Values",
+  "description": "Values for configuring an RKE cluster provisioned via Rancher, using Terraform and Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "rancher_api_url",
+    "rancher_access_key",
+    // rancher_secret_key is required but sourced from K8s secret
+    "cluster_name_in_rancher",
+    "rke_kubernetes_version",
+    "node_pools"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the Helm release."
+    },
+    "rancher_api_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL of the Rancher API (e.g., https://your-rancher-server.example.com/v3). TODO: This is mandatory."
+    },
+    "rancher_access_key": {
+      "type": "string",
+      "description": "Rancher Access Key (Bearer Token ID). TODO: This is mandatory."
+    },
+    "rancher_secret_key": {
+      "type": "string",
+      "description": "Rancher Secret Key (Bearer Token Secret). IMPORTANT: For security, this should be sourced from a Kubernetes secret. See values.yaml comments. Value here is a placeholder.",
+      "default": "placeholder-see-comment-above"
+    },
+    "cluster_name_in_rancher": {
+      "type": "string",
+      "description": "Name of the cluster as it will appear in the Rancher UI."
+    },
+    "rke_kubernetes_version": {
+      "type": "string",
+      "description": "Desired RKE Kubernetes version (e.g., v1.27.7-rancher1-1). Check Rancher docs for compatibility."
+    },
+    "node_pools": {
+      "type": "array",
+      "description": "Configuration for node pools. Structure is highly dependent on the Terraform module used. TODO: Adapt as needed.",
+      "items": {
+        "type": "object",
+        "required": ["name", "count", "roles"],
+        "properties": {
+          "name": { "type": "string", "description": "Name of the node pool." },
+          "count": { "type": "integer", "minimum": 0, "description": "Number of nodes in this pool (0 might be valid for some CaaS providers if using autoscaling)." },
+          "machine_config": {
+            "type": "object",
+            "description": "Reference to or definition of machine configuration for this pool. TODO: Specify details.",
+            "properties":{
+              "kind": {"type": "string", "description": "Kind of machine config (e.g. DockerMachine, Amazonec2Config, VsphereConfig, AzureConfig)"},
+              "name": {"type": "string", "description": "Name of the machine config resource or template in Rancher."}
+            },
+            "required": ["kind", "name"]
+          },
+          "roles": {
+            "type": "array",
+            "description": "Roles for nodes in this pool (etcd, controlplane, worker).",
+            "items": { "type": "string", "enum": ["etcd", "controlplane", "worker"] },
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags to apply (applicability depends on node provider configured in Rancher). TODO: Review and update as needed.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "rke-project" },
+        "cost_center": { "type": "string", "default": "your-cost-center", "description": "TODO: Update cost center."}
+      },
+      "additionalProperties": { "type": "string" }
+    },
+    "path": {
+      "type": "string",
+      "description": "Path to the Terraform RKE/Rancher configuration. Defaults to './terraform/rke-rancher'.",
+      "default": "./terraform/rke-rancher"
+    },
+    "approvePlan": {"type": "string", "default": "auto", "enum": ["auto", "manual"]},
+    "destroyResourcesOnDeletion": {"type": "boolean", "default": false},
+    "alwaysCleanupRunnerPod": {"type": "boolean", "default": false},
+    "force": {"type": "boolean", "default": false},
+    "affinity": {"type": "object"},
+    "tolerations": {"type": "array"}
+  }
+}
