@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.1
+description: Helm chart to provision a VMware Tanzu Kubernetes Grid (TKG) cluster using Terraform with Flux.
+name: terraform-tanzu-cluster
+type: application
+version: 0.0.1

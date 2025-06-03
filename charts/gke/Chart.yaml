@@ -1,0 +1,6 @@
+apiVersion: v2
+appVersion: 0.0.1
+description: Helm chart to provision a GKE cluster using Terraform with Flux.
+name: terraform-gke-cluster
+type: application
+version: 0.0.1

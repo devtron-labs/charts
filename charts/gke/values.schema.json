@@ -1,0 +1,67 @@
+{
+  "schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GKE Cluster Configuration Values",
+  "description": "Values for configuring a Google Kubernetes Engine (GKE) cluster provisioned via Terraform and Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "project_id",
+    "region",
+    "cluster_version"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the GKE cluster."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "GCP Project ID where the GKE cluster will be created. This is a mandatory field you must update."
+    },
+    "region": {
+      "type": "string",
+      "description": "GCP region for the GKE cluster (e.g., 'us-central1')."
+    },
+    "cluster_version": {
+      "type": "string",
+      "description": "Desired GKE version (e.g., '1.28'). Check Google Cloud documentation for available versions in your chosen region."
+    },
+    "vpc_network": {
+      "type": "string",
+      "description": "Name of the VPC network for the GKE cluster. If not specified, 'default' VPC network is assumed.",
+      "default": "default"
+    },
+    "subnetwork": {
+      "type": "string",
+      "description": "Name of the VPC subnetwork for the GKE cluster. If not specified, the default subnetwork in the chosen region for the specified network is assumed.",
+      "default": "default"
+    },
+    "machine_type": {
+      "type": "string",
+      "description": "Machine type for the GKE cluster nodes (e.g., 'e2-medium').",
+      "default": "e2-medium"
+    },
+    "node_count": {
+      "type": "integer",
+      "description": "Number of nodes in the default node pool.",
+      "default": 1,
+      "minimum": 1
+    },
+    "node_locations": {
+      "type": "array",
+      "description": "List of zones for the GKE cluster's default node pool.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "resource_tags": {
+      "type": "object",
+      "description": "Custom tags to apply to GCP resources created for the cluster. It's recommended to define a 'cost_center' tag.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" }
+      },
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}
