@@ -6736,6 +6736,17 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/svn-git-sync-0.1.0/svn-git-sync-0.1.0.tgz
     version: 0.1.0
+  terraform-aks-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-03T07:19:57.711430152Z"
+    description: Helm chart to provision an AKS cluster using Terraform with Flux.
+    digest: e22183775fd1d254f8f1820ee024b03729d31ec38e0db7307f20397e7d56f122
+    name: terraform-aks-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-aks-cluster-0.0.1/terraform-aks-cluster-0.0.1.tgz
+    version: 0.0.1
   terraform-eks-auto-cluster:
   - apiVersion: v2
     appVersion: 0.0.5
@@ -6827,6 +6838,64 @@ entries:
     type: application
     urls:
     - https://github.com/devtron-labs/charts/releases/download/terraform-eks-cluster-0.0.1/terraform-eks-cluster-0.0.1.tgz
+    version: 0.0.1
+  terraform-gke-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-03T07:19:57.887138461Z"
+    description: Helm chart to provision a GKE cluster using Terraform with Flux.
+    digest: e416674d5263d036d1d6f2efe879fffac0fba105eb7909d34c525c8cd86f24ce
+    name: terraform-gke-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-gke-cluster-0.0.1/terraform-gke-cluster-0.0.1.tgz
+    version: 0.0.1
+  terraform-k3s-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-03T07:19:58.093538062Z"
+    description: Helm chart to provision a K3s cluster using Terraform with Flux.
+    digest: 115a2402563743868a2826b9e48f7425484b82b834236cfa492f4c5dedddfad8
+    name: terraform-k3s-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-k3s-cluster-0.0.1/terraform-k3s-cluster-0.0.1.tgz
+    version: 0.0.1
+  terraform-openshift-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-03T07:19:58.291513505Z"
+    description: Helm chart to provision an OpenShift Container Platform cluster using
+      Terraform with Flux.
+    digest: e96165e9bc6c3bfff8795830b6b1de462b9775bf893190a1d7bc934c6cb6017b
+    name: terraform-openshift-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-openshift-cluster-0.0.1/terraform-openshift-cluster-0.0.1.tgz
+    version: 0.0.1
+  terraform-rke-rancher-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-03T07:19:58.613427961Z"
+    description: Helm chart to provision an RKE cluster via Rancher using Terraform
+      with Flux.
+    digest: 872ce6ef6e36bd62b8b362b2a76dd11b10c72b252ca6cca7f61507d990797882
+    name: terraform-rke-rancher-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-rke-rancher-cluster-0.0.1/terraform-rke-rancher-cluster-0.0.1.tgz
+    version: 0.0.1
+  terraform-tanzu-cluster:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-03T07:19:58.807285144Z"
+    description: Helm chart to provision a VMware Tanzu Kubernetes Grid (TKG) cluster
+      using Terraform with Flux.
+    digest: a727b87ac47618d4fa5aa8c8b3abe8d1e327d2bca670899207e97a3b63860fa4
+    name: terraform-tanzu-cluster
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/terraform-tanzu-cluster-0.0.1/terraform-tanzu-cluster-0.0.1.tgz
     version: 0.0.1
   twistlock-defender:
   - apiVersion: v1
@@ -6998,4 +7067,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-05-22T07:33:06.775818595Z"
+generated: "2025-06-03T07:19:58.807735691Z"
