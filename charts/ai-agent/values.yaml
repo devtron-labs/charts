@@ -1,0 +1,34 @@
+certificate: "" # base64 encoded
+logLevel: INFO
+
+additionalEnvVars: []
+imagePullSecrets: []
+
+allowedToolsets: "kubernetes/core,internet"
+
+image: ai-agent:0.0.1
+registry: quay.io/devtron
+
+enableAccountsCreate: true
+
+createServiceAccount: true
+customServiceAccountName: ""
+
+customClusterRoleRules: []
+
+postProcessingPrompt: "builtin://generic_post_processing.jinja2"
+
+tolerations: []
+
+serviceAccount:
+  imagePullSecrets: []
+  annotations: {}
+
+toolsets: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 1024Mi
+  limits:
+    memory: 1024Mi

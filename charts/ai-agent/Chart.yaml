@@ -1,0 +1,13 @@
+apiVersion: v2
+appVersion: 0.0.1
+description: Devtron AI Agent Helm chart for Kubernetes
+name: ai-agent
+keywords:
+  - Devtron
+  - kubernetes
+  - devops
+  - genai
+  - ai
+  - ai-gent
+type: application
+version: 0.0.1
