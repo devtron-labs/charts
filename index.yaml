@@ -13,6 +13,24 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/Posthog-0.10.0/Posthog-0.10.0.tgz
     version: 0.10.0
+  ai-agent:
+  - apiVersion: v2
+    appVersion: 0.0.1
+    created: "2025-06-04T12:51:09.308274529Z"
+    description: Devtron AI Agent Helm chart for Kubernetes
+    digest: e615b3a6dc29e20171346fbd29524d36abc31a92a592a54241169ca75e8e5593
+    keywords:
+    - Devtron
+    - kubernetes
+    - devops
+    - genai
+    - ai
+    - ai-gent
+    name: ai-agent
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/ai-agent-0.0.1/ai-agent-0.0.1.tgz
+    version: 0.0.1
   argo-workflow:
   - apiVersion: v1
     created: "2023-10-23T13:05:19.991720137Z"
@@ -7067,4 +7085,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-03T07:19:58.807735691Z"
+generated: "2025-06-04T12:51:09.308832194Z"
