@@ -21,7 +21,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "35.0.0"
+    release: "36.0.0"
     registry: ""
     arch: "multi-arch"
     image: inception
