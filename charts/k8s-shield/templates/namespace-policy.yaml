@@ -1,0 +1,59 @@
+{{- if and $.Values.defaultPolicies.create (or $.Values.defaultPolicies.policies.namespaceCreationPolicy $.Values.defaultPolicies.policies.namespaceDeletionPolicy) }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-namespace-policy
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+    resourceRules:
+      {{- if $.Values.defaultPolicies.policies.namespaceCreationPolicy }}
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - CREATE
+        resources:
+          - namespaces
+        scope: "*"
+      {{- end }}
+      {{- if $.Values.defaultPolicies.policies.namespaceDeletionPolicy }}
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - DELETE
+        resources:
+          - namespaces
+        {{- if $.Values.policyDefinitions.namespacePolicy.namespaces }}
+        resourceNames:
+          {{- range $.Values.policyDefinitions.namespacePolicy.namespaces }}
+          - {{ . | quote }}
+          {{- end }}
+        {{- end }}
+        scope: "*"
+      {{- end }}
+  validations:
+    - expression: "false"
+      message: "Namespace creation or deletion is not allowed."
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-namespace-policy
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-namespace-policy
+  validationActions:
+    {{- range .Values.policyDefinitions.namespacePolicy.validationActions }}
+    - {{ . }}
+    {{- end }}
+{{- end }}
