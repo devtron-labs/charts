@@ -29,7 +29,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "35.0.0"
+    release: "36.0.0"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -50,11 +50,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:e11c3085-b049a68f-931-33176"
+      image: "dashboard:50a0fe7b-e1e165f1-931-33600"
     # Values for devtron
     devtron:
-      image: "hyperion:80145a61-759-33178"
-      cicdImage: "devtron:80145a61-930-33177"
+      image: "hyperion:8cbc3dc7-759-33599"
+      cicdImage: "devtron:8cbc3dc7-930-33598"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
@@ -70,17 +70,17 @@ devtron:
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:be9b1ce4-1020-33179"
+      image: "ci-runner:0d197498-1020-33604"
     # Values for kubelink
     kubelink:
-      image: "kubelink:be9b1ce4-314-33180"
+      image: "kubelink:6c4c3f1d-314-33605"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:be9b1ce4-950-33181"
+      image: "git-sensor:6c4c3f1d-950-33608"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:be9b1ce4-1021-33182
+      image: chart-sync:6c4c3f1d-1021-33609
     postgres:
       image: "postgres:14.9"
       metrics:
@@ -89,7 +89,7 @@ devtron:
   security:
     enabled: true
     imageScanner:
-      image: "image-scanner:be9b1ce4-109-33183"
+      image: "image-scanner:6c4c3f1d-109-33610"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
@@ -103,9 +103,9 @@ devtron:
   devtronEnterprise:
     enabled: true
     casbin:
-      image: "casbin:be9b1ce4-80145a61-464-33184"
+      image: "casbin:8cbc3dc7-0d197498-464-33612"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:be9b1ce4-955-33185"
+      image: "scoop:6c4c3f1d-955-33613"
       imagePullPolicy: IfNotPresent
