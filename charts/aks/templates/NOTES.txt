@@ -1,0 +1,33 @@
+Your {{ .Chart.Name }} Helm chart for provisioning a {{ .Values.name | default .Release.Name }} AKS cluster has been deployed.
+
+The actual cluster provisioning is managed by the FluxCD Terraform controller using the configuration from the 'devtron-labs/utilities' Git repository.
+
+1. Check the status of the GitRepository source:
+   kubectl get gitrepositories -n flux-system {{ .Release.Name }} -o wide
+
+2. Check the status of the Terraform custom resource:
+   kubectl get terraforms -n flux-system {{ .Release.Name }} -o wide
+   kubectl describe terraforms -n flux-system {{ .Release.Name }}
+
+   (Look for conditions and events. Provisioning an AKS cluster can take several minutes.)
+
+3. Important Reminders from your values.yaml:
+   Please ensure you have correctly filled out all mandatory 'TODO' items in your values.yaml, such as:
+   - Azure 'resource_group_name', 'dns_prefix', and 'service_principal_client_id'.
+   - Ensure the 'service_principal_client_secret' is correctly provided via the '{{ .Release.Name }}-spn-secret' Kubernetes secret (or as configured).
+   - Appropriate 'resource_tags' (e.g., cost_center).
+   - Ensure Azure credentials are correctly configured in the 'tf-azure-creds' secret in the flux-system namespace.
+
+   If these are not correctly set, the Terraform provisioning will likely fail.
+
+4. Cluster Outputs:
+   Once the Terraform execution is complete and successful, any defined outputs will be written to a Kubernetes Secret:
+   Name:      {{ .Release.Name }}-outputs
+   Namespace: flux-system
+
+   You can inspect the secret using:
+   kubectl get secret -n flux-system {{ .Release.Name }}-outputs -o yaml
+
+   The specific content of the secret depends on the outputs defined in the Terraform module at {{ .Values.path }}.
+
+Thank you for using the {{ .Chart.Name }} chart!

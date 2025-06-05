@@ -1,0 +1,46 @@
+# values.yaml for VMware Tanzu Kubernetes Grid (TKGm on vSphere) cluster provisioning
+
+# -- Name of the Helm release
+name: "example-tanzu-cluster"
+# -- Tanzu Kubernetes Release (TKR) name.
+# TODO: Verify and replace with an available TKR name from your TKG environment (e.g., v1.27.5---vmware.2-tkg.1). This is mandatory.
+tanzu_kubernetes_release: "v1.27.5---vmware.2-tkg.1"
+
+# vSphere specific parameters for TKG
+# TODO: Update all vSphere connection and inventory details below. These are mandatory.
+vsphere_server: "vcsa.example.com" # vCenter server FQDN or IP
+vsphere_username: "administrator@vsphere.local" # vCenter username
+# -- vCenter password.
+# IMPORTANT: For security, the terraform.yaml template is configured to source this from a Kubernetes secret
+# named '{{ $.Release.Name }}-vsphere-secret' with a key 'password'.
+# Ensure this secret is created in the 'flux-system' namespace.
+# Example: kubectl create secret generic {{ $.Release.Name }}-vsphere-secret --from-literal=password='YOUR_VCENTER_PASSWORD' -n flux-system
+vsphere_password: "placeholder-see-comment-above"
+vsphere_datacenter: "/SDDC-Datacenter" # vSphere Datacenter path (e.g., /MyDatacenter)
+vsphere_datastore: "/SDDC-Datacenter/datastore/vsanDatastore" # vSphere Datastore path
+vsphere_network: "/SDDC-Datacenter/network/segment-A" # vSphere Network path for cluster VMs
+vsphere_resource_pool: "/SDDC-Datacenter/host/Cluster-1/Resources/my-rp" # vSphere Resource Pool path
+vsphere_folder: "/SDDC-Datacenter/vm/TKG" # Optional: vSphere VM folder path to deploy VMs into
+# -- SSH public key for accessing cluster nodes.
+# TODO: Replace with your SSH public key. This is mandatory.
+vsphere_ssh_authorized_key: "ssh-rsa AAAA..."
+
+# -- Name of the Tanzu workload cluster to be created.
+# TODO: Specify your desired workload cluster name. This is mandatory.
+cluster_name: "my-tanzu-workload-cluster"
+# -- TKG VM class for control plane nodes (e.g., best-effort-small). Must exist in your TKG environment.
+control_plane_vm_class: "best-effort-small"
+# -- TKG VM class for worker nodes (e.g., best-effort-small). Must exist in your TKG environment.
+worker_vm_class: "best-effort-small"
+# -- Number of control plane nodes. Use 1 for non-production, 3 for production/HA.
+control_plane_replicas: 1
+# -- Number of worker nodes.
+worker_replicas: 1
+# -- CNI plugin to use for the workload cluster. 'antrea' is common, 'calico' is another option.
+cni: "antrea"
+
+# -- Tags to apply (e.g., these could map to vSphere tags if your Terraform module supports it).
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"
+  project: "tanzu-project"

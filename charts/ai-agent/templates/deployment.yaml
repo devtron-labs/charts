@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-ai-agent
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: ai-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-agent
+  template:
+    metadata:
+      labels:
+        app: ai-agent
+    spec:
+      {{- if .Values.customServiceAccountName }}
+      serviceAccountName: {{ .Values.customServiceAccountName }}
+      {{ else }}
+      serviceAccountName: {{ .Release.Name }}-ai-agent-service-account
+      {{- end }}
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- toYaml .Values.imagePullSecrets | nindent 6 }}
+      {{- end }}
+      containers:
+      - name: ai-agent
+        image: "{{ .Values.registry }}/{{ .Values.image }}"
+        imagePullPolicy: Always
+        command: ["python3", "-u", "server.py"]
+        env:
+          - name: CUSTOM_TOOLSET_LOCATION
+            value: /etc/ai-agent/config/custom_toolset.yaml
+          - name: LOG_LEVEL
+            value: {{ .Values.logLevel }}
+          - name: ALLOWED_TOOLSETS
+            value: {{ .Values.allowedToolsets }}
+          {{ if .Values.certificate -}}
+          - name: CERTIFICATE
+            value: {{ .Values.certificate }}
+          {{- end }}
+          {{- if .Values.additionalEnvVars -}}
+          {{ toYaml .Values.additionalEnvVars | nindent 10 }}
+          {{- end }}
+        lifecycle:
+          preStop:
+            exec:
+              command: ["bash", "-c", "kill -SIGINT 1"]
+        volumeMounts:
+          - mountPath: /etc/ai-agent/config
+            name: custom-toolsets-configmap
+            subPath: custom_toolset.yaml
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+          limits:
+            memory: {{ .Values.resources.limits.memory }}
+            {{ if .Values.resources.limits.cpu }}cpu: {{ .Values.resources.limits.cpu | quote }}{{ end }}
+      {{- if .Values.tolerations }}
+      tolerations: {{ toYaml .Values.tolerations | nindent 8 }}
+      {{- end }}
+      volumes:
+        - configMap:
+            name: custom-toolsets-configmap
+            optional: true
+          name: custom-toolsets-configmap

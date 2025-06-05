@@ -1,0 +1,60 @@
+{
+  "schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AKS Cluster Configuration Values",
+  "description": "Values for configuring an Azure Kubernetes Service (AKS) cluster provisioned via Terraform and Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "resource_group_name",
+    "region",
+    "cluster_version",
+    "dns_prefix"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the AKS cluster."
+    },
+    "resource_group_name": {
+      "type": "string",
+      "description": "Azure Resource Group name for the AKS cluster. TODO: You must update this."
+    },
+    "region": {
+      "type": "string",
+      "description": "Azure region for the AKS cluster (e.g., 'East US')."
+    },
+    "cluster_version": {
+      "type": "string",
+      "description": "Desired AKS Kubernetes version (e.g., '1.28'). Check Azure documentation for available versions."
+    },
+    "dns_prefix": {
+      "type": "string",
+      "description": "Unique DNS prefix for the AKS cluster, part of its FQDN. TODO: You must provide a globally unique value."
+    },
+    "agent_pool_name": {
+      "type": "string",
+      "description": "Name for the default agent (node) pool.",
+      "default": "agentpool"
+    },
+    "agent_vm_size": {
+      "type": "string",
+      "description": "VM size for the AKS agent nodes (e.g., 'Standard_DS2_v2').",
+      "default": "Standard_DS2_v2"
+    },
+    "agent_count": {
+      "type": "integer",
+      "description": "Number of nodes in the default agent pool.",
+      "default": 1,
+      "minimum": 1
+    },
+    "resource_tags": {
+      "type": "object",
+      "description": "Custom tags to apply to Azure resources. It's recommended to define a 'cost_center' tag.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" }
+      },
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}

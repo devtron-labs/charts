@@ -1,0 +1,25 @@
+# values.yaml for AKS cluster provisioning
+
+# -- Name of the AKS cluster
+name: "example-aks-cluster"
+# -- Azure Resource Group name for the AKS cluster.
+# TODO: Replace with your desired Resource Group name. Ensure it exists or will be created by Terraform if configured.
+resource_group_name: "rg-myaks-cluster"
+# -- Azure region for the AKS cluster (e.g., 'East US', 'West Europe').
+region: "East US"
+# -- Desired AKS version (e.g., '1.28'). Check Azure documentation for available versions.
+cluster_version: "1.28"
+# -- Unique DNS prefix for the AKS cluster. This will be part of the FQDN.
+# TODO: Replace with a globally unique DNS prefix.
+dns_prefix: "myuniqueakscluster"
+# -- Name for the default agent (node) pool.
+agent_pool_name: "agentpool"
+# -- VM size for the AKS agent nodes (e.g., 'Standard_DS2_v2').
+agent_vm_size: "Standard_DS2_v2"
+# -- Number of nodes in the default agent pool.
+agent_count: 1
+
+# -- Tags to apply to Azure resources created for the cluster.
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"

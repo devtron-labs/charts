@@ -1,0 +1,27 @@
+# values.yaml for GKE cluster provisioning
+
+# -- Name of the GKE cluster
+name: "example-gke-cluster"
+# -- GCP Project ID where the cluster will be created.
+# TODO: Replace with your GCP project ID. This is a mandatory field.
+project_id: "your-gcp-project-id"
+# -- GCP region for the GKE cluster.
+region: "us-central1"
+# -- Desired GKE version (e.g., '1.28', check available versions in your region).
+cluster_version: "1.28"
+# -- Name of the VPC network for the GKE cluster. 'default' uses the default VPC.
+network: "default"
+# -- Name of the VPC subnetwork for the GKE cluster. 'default' uses the default subnetwork in the chosen region.
+subnetwork: "default"
+# -- Machine type for the GKE cluster nodes.
+machine_type: "e2-medium"
+# -- Number of nodes in the default node pool.
+node_count: 1
+# -- List of zones for the GKE cluster nodes (e.g., ["us-central1-a", "us-central1-b"]).
+node_locations:
+  - "us-central1-a"
+
+# -- Tags to apply to GCP resources created for the cluster.
+resource_tags:
+  team: "Devops_Team"
+  environment: "non-production"

@@ -1,0 +1,72 @@
+apiVersion: infra.contrib.fluxcd.io/v1alpha2
+kind: Terraform
+metadata:
+  name: {{ $.Release.Name }}
+  namespace: flux-system
+spec:
+  path: {{ default "./terraform/aks" .Values.path }} # Updated path for AKS
+  approvePlan: {{ default "auto" .Values.approvePlan }}
+  interval: 1m
+  storeReadablePlan: human
+  enableInventory: true
+  destroyResourcesOnDeletion: {{ default false .Values.destroyResourcesOnDeletion }}
+  alwaysCleanupRunnerPod: {{ default false .Values.alwaysCleanupRunnerPod }}
+  force: {{ default false .Values.force }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ $.Release.Name }}
+    namespace: flux-system
+  writeOutputsToSecret:
+    name: {{ $.Release.Name }}-outputs
+  vars:
+    - name: name
+      value: {{ .Values.name | quote }}
+    - name: resource_group_name
+      value: {{ .Values.resource_group_name | quote }}
+    - name: region
+      value: {{ .Values.region | quote }}
+    - name: cluster_version # Or kubernetes_version depending on TF module for AKS
+      value: {{ .Values.cluster_version | quote }}
+    - name: dns_prefix
+      value: {{ .Values.dns_prefix | quote }}
+    - name: agent_pool_name
+      value: {{ .Values.agent_pool_name | quote }}
+    - name: agent_vm_size
+      value: {{ .Values.agent_vm_size | quote }}
+    - name: agent_count
+      value: {{ .Values.agent_count }} # Typically a number
+
+    {{- if .Values.service_principal_client_id }}
+    - name: service_principal_client_id
+      value: {{ .Values.service_principal_client_id | quote }}
+    {{- end }}
+
+    {{- if .Values.service_principal_client_secret }}
+    - name: service_principal_client_secret
+      valueFrom: # Assuming this might be sensitive and stored in a K8s secret
+        secretKeyRef:
+          name: {{ $.Release.Name }}-spn-secret # Example, or directly use .Values if not sensitive
+          key: client_secret
+          # Alternatively, if provided directly in values.yaml and not sensitive:
+          # value: {{ .Values.service_principal_client_secret | quote }}
+    {{- end }}
+
+    {{- if .Values.resource_tags }}
+    - name: resource_tags
+      value:
+{{ toYaml .Values.resource_tags | nindent 8 }}
+    {{- end }}
+
+  runnerPodTemplate:
+    spec:
+{{- if $.Values.affinity }}
+      affinity:
+{{ toYaml .Values.affinity.values | indent 8 }}
+{{- end }}
+{{- if .Values.tolerations }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+{{- end }}
+      envFrom:
+        - secretRef:
+            name: tf-azure-creds # Updated for Azure credentials

@@ -1,0 +1,49 @@
+{
+  "schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OpenShift Container Platform Configuration Values",
+  "description": "Values for configuring an OpenShift Container Platform cluster provisioned via Terraform and Flux.",
+  "type": "object",
+  "required": [
+    "name",
+    "openshift_version",
+    "platform",
+    "base_domain",
+    "cluster_name",
+    "pull_secret",
+    "ssh_public_key"
+  ],
+  "properties": {
+    "name": { "type": "string", "description": "Name of the Helm release." },
+    "openshift_version": { "type": "string", "description": "Desired OpenShift version (e.g., '4.14')." },
+    "platform": {
+      "type": "string",
+      "description": "Target platform for OpenShift (e.g., aws, vsphere, azure, baremetal). TODO: Choose one. This choice affects other required variables not explicitly listed here but needed by the underlying Terraform module.",
+      "enum": ["aws", "vsphere", "azure", "gcp", "baremetal", "ovirt", "openstack"]
+    },
+    "base_domain": { "type": "string", "description": "Base domain for the OpenShift cluster (e.g., example.com). TODO: Mandatory." },
+    "cluster_name": { "type": "string", "description": "Name of the OpenShift cluster itself (e.g., myocp). TODO: Mandatory." },
+    "pull_secret": {
+      "type": "string",
+      "description": "Pull secret (JSON content) from Red Hat OpenShift Cluster Manager. TODO: Mandatory. IMPORTANT: This is sensitive; consider secure handling by Terraform (e.g., reading from a file or K8s secret)."
+    },
+    "ssh_public_key": { "type": "string", "description": "SSH public key for accessing cluster nodes. TODO: Mandatory." },
+    "control_plane_replicas": { "type": "integer", "default": 3, "description": "Number of control plane (master) nodes. Typically 3 for production." },
+    "worker_replicas": { "type": "integer", "default": 3, "description": "Number of worker (compute) nodes." },
+
+    "aws_region": { "type": "string", "description": "Example: AWS region, required if platform is 'aws'. TODO: Provide if using AWS." },
+    "aws_master_instance_type": { "type": "string", "description": "Example: Master instance type if platform is 'aws'. TODO: Provide if using AWS." },
+    "vsphere_server": { "type": "string", "description": "Example: vCenter server FQDN or IP if platform is 'vsphere'. TODO: Provide if using vSphere." },
+    "vsphere_username": { "type": "string", "description": "Example: vCenter username if platform is 'vsphere'. TODO: Provide if using vSphere." },
+
+    "resource_tags": {
+      "type": "object",
+      "description": "Tags for underlying infrastructure. TODO: Update cost_center.",
+      "properties": {
+        "team": { "type": "string", "default": "Devops_Team" },
+        "environment": { "type": "string", "default": "non-production" },
+        "project": { "type": "string", "default": "openshift-project" }
+      },
+      "additionalProperties": { "type": "string" }
+    }
+  }
+}
