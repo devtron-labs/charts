@@ -69,7 +69,7 @@ devtron:
       image: "git-sensor:6c4c3f1d-950-33608"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:be9b1ce4-1021-33182
+      image: chart-sync:6c4c3f1d-1021-33609
     postgres:
       image: "postgres:14.9"
       metrics:
