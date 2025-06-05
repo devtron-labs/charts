@@ -1,0 +1,41 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.denyCRDDeletion }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-deny-crd-deletion
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+    resourceRules:
+      - apiGroups:
+          - apiextensions.k8s.io
+        apiVersions:
+          - v1
+        operations:
+          - DELETE
+        resources:
+          - customresourcedefinitions
+        scope: "*"
+  validations:
+    - expression: "false"
+      message: "Deletion of CRDs is not allowed for any user."
+      reason: Invalid
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-deny-crd-deletion
+spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-deny-crd-deletion
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  validationActions:
+    {{- range $.Values.policyDefinitions.denyCRDDeletion.validationActions }}
+    - {{ . }}
+    {{- end }}
+{{- end }}
