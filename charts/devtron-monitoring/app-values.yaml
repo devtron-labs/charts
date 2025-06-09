@@ -296,7 +296,7 @@ vector:
       - name: http
         port: 9090
 victoriametrics:
-  enabled: true
+  enabled: false
   alertmanager:
     config:
       receivers:
@@ -461,7 +461,7 @@ victoriametrics:
         nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
         nginx.ingress.kubernetes.io/rewrite-target: /grafana/$2
         nginx.ingress.kubernetes.io/ssl-redirect: "false"
-      enabled: true
+      enabled: false
       hosts:
         - <testing>.domain.com
       ingressClassName: nginx-new
@@ -500,7 +500,7 @@ victoriametrics:
       disable_prometheus_converter: false
       prometheus_converter_add_argocd_ignore_annotations: true
   vmagent:
-    enabled: true
+    enabled: false
     ingress:
       enabled: true
       hosts:
@@ -516,7 +516,7 @@ victoriametrics:
         promscrape.suppressScrapeErrorsDelay: 30s
       scrapeInterval: 20s
   vmalert:
-    enabled: true
+    enabled: false
     ingress:
       enabled: true
       hosts:
@@ -526,7 +526,7 @@ victoriametrics:
       extraArgs:
         external.url: https://vmalert-<testing>.domain.com
   vmsingle:
-    enabled: true
+    enabled: false
     containers:
       - name: oauth2-proxy
         image: quay.io/oauth2-proxy/oauth2-proxy:v7.4.0
