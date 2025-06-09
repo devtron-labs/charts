@@ -536,7 +536,7 @@ victoriametrics:
           - --http-address=0.0.0.0:4180
           - --cookie-secure=true
           - --redirect-url=https://vmsingle-<testing>.domain.com/oauth2/callback
-          - --email-domain=devtron.ai
+          - --email-domain=
         env:
           - name: OAUTH2_PROXY_CLIENT_ID
             valueFrom:
@@ -589,7 +589,7 @@ victoriametrics:
       enabled: true
       annotations:
         nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-        nginx.ingress.kubernetes.io/upstream-vhost: vmsingle-stage.devtron.info
+        nginx.ingress.kubernetes.io/upstream-vhost: vmsingle-<testing>.domain.com
         # Route traffic to oauth2-proxy port instead of VMSingle directly
         nginx.ingress.kubernetes.io/service-upstream: "true"
       hosts:
