@@ -15,11 +15,10 @@ global:
     PG_ADDR: postgresql-postgresql.devtroncd
     PG_PORT: "5432"
     PG_USER: postgres
-    PG_DATABASE: orchestrator
 
 config:
   postgresPassword: ""
-  introspection_addr: :6061
+  introspection_addr: :6061c
   http_listen_addr: :6060
   log_level: debug
   indexer:
