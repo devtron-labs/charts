@@ -18,7 +18,7 @@ global:
 
 config:
   postgresPassword: ""
-  introspection_addr: :6061c
+  introspection_addr: :6061
   http_listen_addr: :6060
   log_level: debug
   indexer:
