@@ -10,17 +10,19 @@ global:
   #     effect: "NoSchedule"
   # imagePullSecrets:
   #     - name: yoursecret
+  dbConfig:
+    PG_ADDR: postgresql-postgresql.devtroncd
+    PG_PORT: "5432"
+    PG_USER: postgres
+    PG_DATABASE: orchestrator
+
 imageScanner:
   healthPort: 8080
   configs:
     CLAIR_ADDR: clair.devtroncd:6060
     CLIENT_ID: client-2
     NATS_SERVER_HOST: nats://devtron-nats.devtroncd:4222
-    PG_ADDR: postgresql-postgresql.devtroncd
-    PG_DATABASE: orchestrator
     PG_LOG_QUERY: "false"
-    PG_PORT: "5432"
-    PG_USER: postgres
   # secrets:
   #   PG_PASSWORD: "devtron"
 
@@ -36,6 +38,8 @@ imageScanner:
 clair:
   enabled: false
   fullnameOverride: clair
+  config:
+    PG_DATABASE: clairv4
   extraEnv:
   - name: CLAIR_CONF
     value: /etc/clair/config.yaml

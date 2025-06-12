@@ -15,8 +15,8 @@ maintainers:
     email: pawan.mehta@devtron.ai
 sources:
   - https://github.com/devtron-labs/charts
-version: 0.2.1
-appVersion: "0.2.1"
+version: 0.2.2
+appVersion: "0.2.2"
 dependencies:
 - name: clair
   version: "0.x.x"
