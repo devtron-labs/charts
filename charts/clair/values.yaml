@@ -11,11 +11,11 @@ global:
   # imagePullSecrets:
   #     - name: yoursecret
 
-  # dbConfig:
-  #   PG_ADDR: postgresql-postgresql.devtroncd
-  #   PG_PORT: "5432"
-  #   PG_USER: postgres
-  #   PG_DATABASE: orchestrator
+  dbConfig:
+    PG_ADDR: postgresql-postgresql.devtroncd
+    PG_PORT: "5432"
+    PG_USER: postgres
+    PG_DATABASE: orchestrator
 
 config:
   postgresPassword: ""
