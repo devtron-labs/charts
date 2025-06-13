@@ -17,6 +17,8 @@ defaultPolicies:
     readinessAndLivenessPolicy: true
     podSecurityPolicy: true
     containerSecurityPolicy: true
+    namespaceCreationPolicy: true
+    denyCRDDeletion: true
 
 
 policyDefinitions:
@@ -27,9 +29,8 @@ policyDefinitions:
     validationActions: 
       - Deny
 
-  # namespaceDeletionPolicy restricts the deletion of namespaces.
-  # When enabled, it prevents deletion of namespaces in specified namespaces.
-  namespaceDeletionPolicy:
+  # namespacePolicy prevents the creation and/or deletion of namespaces.
+  namespacePolicy:
     namespaces:     # List of namespaces that you want to protect from deletion
       - kube-system
     validationActions:  
@@ -72,7 +73,8 @@ policyDefinitions:
         - ""
         - apps
         - argoproj.io
-      namespaces: [] # List of namespaces where the policy applies.
+      namespaces: 
+        - devtroncd  # List of namespaces where the policy applies.
       operations:     
         - CREATE
         - UPDATE
@@ -160,5 +162,12 @@ policyDefinitions:
       - apps
       - batch
       - rollout.k8s.io
+      
+# denyCRDDeletion blocks deletion of CustomResourceDefinitions (CRDs).
+# This protects custom resource types from being removed, preserving application integrity and operator functionality.
+  denyCRDDeletion:
+    validationActions:  
+      - Deny
+
 
 extraValidatingPolicy: [] 

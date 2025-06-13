@@ -5,31 +5,29 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
 spec:
   failurePolicy: Fail
-  {{- if and .Values.policyDefinitions.appDeletionPolicy.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
+    {{- if .Values.policyDefinitions.appDeletionPolicy.namespaces }}
     namespaceSelector:
       matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range .Values.policyDefinitions.appDeletionPolicy.namespaces }}
-          - {{ . | quote }}
-          {{- end }}
-  {{- else }}
-  matchConstraints: {}
-  {{- end }}
+            {{- range .Values.policyDefinitions.appDeletionPolicy.namespaces }}
+            - {{ . | quote }}
+            {{- end }}
+    {{- end }}
+    resourceRules:
+      - apiGroups:
+          - argoproj.io
+        apiVersions:
+          - v1alpha1
+        operations:
+          - DELETE
+        resources:
+          - applications
+        scope: Namespaced
   objectSelector: {}
-  resourceRules:
-    - apiGroups:
-        - argoproj.io
-      apiVersions:
-        - v1alpha1
-      operations:
-        - DELETE
-      resources:
-        - applications
-      scope: Namespaced
   validations:
     - expression: "false"
       message: Deletion of application is not allowed.
@@ -39,13 +37,13 @@ kind: ValidatingAdmissionPolicyBinding
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
 spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "k8s-shield.fullname" . }}-prevent-app-deletion
   validationActions:
-  {{- range .Values.policyDefinitions.appDeletionPolicy.validationActions }}
-  - {{ . }}
-  {{- end }}
+    {{- range .Values.policyDefinitions.appDeletionPolicy.validationActions }}
+    - {{ . }}
+    {{- end }}
 {{- end }}

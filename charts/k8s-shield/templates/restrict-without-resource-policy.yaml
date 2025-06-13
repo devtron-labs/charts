@@ -5,56 +5,76 @@ metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
 spec:
   failurePolicy: Fail
-  {{- if and .Values.policyDefinitions.resourcePolicies.WithoutResource.namespaces }}
   matchConstraints:
     matchPolicy: Equivalent
+    {{- if .Values.policyDefinitions.resourcePolicies.WithoutResource.namespaces }}
     namespaceSelector:
       matchExpressions:
         - key: kubernetes.io/metadata.name
           operator: In
           values:
-          {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.namespaces }}
+            {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.namespaces }}
+            - {{ . | quote }}
+            {{- end }}
+    {{- end }}
+    resourceRules:
+      - apiGroups:
+          {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.apiGroups }}
           - {{ . | quote }}
           {{- end }}
-  {{- else }}
-  matchConstraints: {}
-  {{- end }}
-  resourceRules:
-    - apiGroups:
-      {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.apiGroups }}
-      - {{ . | quote }}
-      {{- end }}
-      apiVersions:
-      - v1
-      operations:
-      {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.operations }}
-      - {{ . | quote }}
-      {{- end }}
-      resources:
-      {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.resources }}
-      - {{ . | quote }}
-      {{- end }}
-      scope: Namespaced
+        apiVersions:
+          - v1
+        operations:
+          {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.operations }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.resources }}
+          - {{ . | quote }}
+          {{- end }}
+        scope: Namespaced
+  objectSelector: {}
   validations:
-  {{- if and .Values.excludeLabel.key .Values.excludeLabel.value }}
-    - expression: "(has(object.metadata.labels) && object.metadata.labels['{{ .Values.excludeLabel.key }}'] == '{{ .Values.excludeLabel.value }}') || object.spec.template.spec.containers.all(c, has(c.resources) && has(c.resources.requests) && has(c.resources.limits) && has(c.resources.requests.cpu) && has(c.resources.requests.memory) && has(c.resources.limits.cpu) && has(c.resources.limits.memory))"
-      message: "All Containers without CPU and memory's requests and limits are only allowed for '{{ .Values.excludeLabel.key }}: {{ .Values.excludeLabel.value }}'."
-  {{- else }}
-cd      message: "All Containers without CPU and memory's requests and limits are not allowed."
-  {{- end }}
+    {{- if and .Values.excludeLabel.key .Values.excludeLabel.value }}
+    - expression: >
+        (has(object.metadata.labels) &&
+        object.metadata.labels['{{ .Values.excludeLabel.key }}'] == '{{ .Values.excludeLabel.value }}') ||
+        object.spec.template.spec.containers.all(c,
+          has(c.resources) &&
+          has(c.resources.requests) &&
+          has(c.resources.limits) &&
+          has(c.resources.requests.cpu) &&
+          has(c.resources.requests.memory) &&
+          has(c.resources.limits.cpu) &&
+          has(c.resources.limits.memory)
+        )
+      message: "All containers without CPU and memory requests and limits are only allowed for '{{ .Values.excludeLabel.key }}: {{ .Values.excludeLabel.value }}'."
+    {{- else }}
+    - expression: >
+        object.spec.template.spec.containers.all(c,
+          has(c.resources) &&
+          has(c.resources.requests) &&
+          has(c.resources.limits) &&
+          has(c.resources.requests.cpu) &&
+          has(c.resources.requests.memory) &&
+          has(c.resources.limits.cpu) &&
+          has(c.resources.limits.memory)
+        )
+      message: "All containers must define CPU and memory requests and limits."
+    {{- end }}
 ---
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingAdmissionPolicyBinding
 metadata:
   name: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
 spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
   matchResources:
     matchPolicy: Equivalent
     namespaceSelector: {}
     objectSelector: {}
-  policyName: {{ include "k8s-shield.fullname" . }}-restrict-without-resources
   validationActions:
-  {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.validationActions }}
-  - {{ . }}
-  {{- end }}
+    {{- range $.Values.policyDefinitions.resourcePolicies.WithoutResource.validationActions }}
+    - {{ . }}
+    {{- end }}
 {{- end }}
