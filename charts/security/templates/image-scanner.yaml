@@ -30,6 +30,9 @@ metadata:
 {{ toYaml .labels | indent 4 }}    
 {{- end}} 
 data:
+{{- if $.Values.global.dbConfig }}
+{{ toYaml $.Values.global.dbConfig | indent 2 }}
+{{- end}}
 {{- if .configs}}
 {{ toYaml .configs | indent 2 }}
 ---
@@ -148,10 +151,10 @@ spec:
           envFrom:
           - configMapRef:
               name: image-scanner-cm
-          - configMapRef:
-              name: devtron-common-cm
           - secretRef:
               name: image-scanner-secret
+          - configMapRef:
+              name: devtron-common-cm
 {{- if .resources }}
           resources:
 {{ toYaml .resources | indent 12 }}
