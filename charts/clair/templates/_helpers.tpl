@@ -82,3 +82,44 @@ imagePullSecrets:
 {{ toYaml .global.imagePullSecrets | indent 2 }}
   {{- end }}
 {{- end }}
+
+{{/*
+Generate dbconnection String
+*/}}
+{{- define "clair.dbconnstring" -}}
+  {{- $globalDbConfig := dict -}}
+  {{- if .Values.global -}}
+    {{- $globalDbConfig = .Values.global.dbConfig | default dict -}}
+  {{- end -}}
+  {{- $pgAddr := .Values.config.PG_ADDR | default $globalDbConfig.PG_ADDR | default "postgresql-postgresql.devtroncd" -}}
+  {{- $pgPort := .Values.config.PG_PORT | default $globalDbConfig.PG_PORT | default "5432" -}}
+  {{- $pgDatabase := .Values.config.PG_DATABASE | default $globalDbConfig.PG_DATABASE | default "clairv4" -}}
+  {{- $pgUser := .Values.config.PG_USER | default $globalDbConfig.PG_USER | default "postgres" -}}
+  {{- if .Values.config.postgresPassword }}
+  connstring: "host={{ $pgAddr }} port={{ $pgPort }} dbname={{ $pgDatabase }} user={{ $pgUser }} password={{ .Values.config.postgresPassword }} sslmode=disable"
+  {{- else }}
+  connstring: "host={{ $pgAddr }} port={{ $pgPort }} dbname={{ $pgDatabase }} user={{ $pgUser }} sslmode=disable"
+  {{- end }}
+{{- end -}}
+
+{{/*
+Generate postgres host
+*/}}
+{{- define "clair.postgresHost" -}}
+  {{- $globalDbConfig := dict -}}
+  {{- if .Values.global -}}
+    {{- $globalDbConfig = .Values.global.dbConfig | default dict -}}
+  {{- end -}}
+  {{- .Values.config.PG_ADDR | default $globalDbConfig.PG_ADDR | default "postgresql-postgresql.devtroncd" -}}
+{{- end -}}
+
+{{/*
+Generate postgres port 
+*/}}
+{{- define "clair.postgresPort" -}}
+  {{- $globalDbConfig := dict -}}
+  {{- if .Values.global -}}
+    {{- $globalDbConfig = .Values.global.dbConfig | default dict -}}
+  {{- end -}}
+  {{- .Values.config.PG_PORT | default $globalDbConfig.PG_PORT | default "5432" -}}
+{{- end -}}
