@@ -6446,6 +6446,34 @@ entries:
     version: 0.1.0
   security:
   - apiVersion: v2
+    appVersion: 0.2.2
+    created: "2025-06-16T12:59:09.285136045Z"
+    dependencies:
+    - condition: clair.enabled
+      name: clair
+      repository: https://helm.devtron.ai
+      version: 0.x.x
+    description: A Helm chart for devtron to enable security integration
+    digest: 52e114e1df1de1094ef04191f330db89ea354735d7308458252b6acb0cf6a7ff
+    keywords:
+    - kubernetes
+    - security
+    - k8s
+    - scanning
+    - container registry
+    - image scanning
+    - source code scanning
+    maintainers:
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: security
+    sources:
+    - https://github.com/devtron-labs/charts
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/security-0.2.2/security-0.2.2.tgz
+    version: 0.2.2
+  - apiVersion: v2
     appVersion: 0.2.1
     created: "2025-04-23T13:28:43.851843649Z"
     dependencies:
@@ -7115,4 +7143,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-05T11:55:48.328302663Z"
+generated: "2025-06-16T12:59:09.2855239Z"
