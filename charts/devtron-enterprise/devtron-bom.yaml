@@ -23,7 +23,6 @@ global:
     PG_PORT: "5432"
     PG_USER: postgres
     PG_DATABASE: orchestrator
-
 devtron:
   installer:
     repo: "devtron-labs/charts"
@@ -49,7 +48,7 @@ devtron:
     # Values for devtron
     devtron:
       image: "hyperion:8cbc3dc7-759-33599"
-      cicdImage: "devtron:8cbc3dc7-930-33598"
+      cicdImage: "devtron:877e918b-930-34031"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
