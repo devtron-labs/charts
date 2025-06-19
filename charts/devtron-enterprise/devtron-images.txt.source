@@ -34,7 +34,7 @@ quay.io/devtron/notifier:99e2f3cd-372-32893
 quay.io/devtron/postgres:14.9
 quay.io/devtron/postgres_exporter:v0.10.1
 quay.io/devtron/prometheus-nats-exporter:0.9.0
-quay.io/devtron/scoop:6c4c3f1d-955-33613
+quay.io/devtron/scoop:48c3bdb7-955-34040
 quay.io/devtron/ubuntu-k8s-utils:latest
 quay.io/devtron/alpine-k8s-utils:latest
 quay.io/devtron/centos-k8s-utils:latest
