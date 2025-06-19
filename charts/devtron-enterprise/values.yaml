@@ -18,7 +18,17 @@ global:
   #     effect: "NoSchedule"
   # imagePullSecrets:
   #     - name: your-image-pull-secret
-
+  externalPostgres:
+    enabled: false
+    # Password for external database (ensure that username is postgres).
+    PG_PASSWORD: ""
+    # For external Database replace the PG_ADDR with the DNS endpoint of postgres.
+    PG_ADDR: ""
+  dbConfig:
+    PG_ADDR: postgresql-postgresql.devtroncd
+    PG_PORT: "5432"
+    PG_USER: postgres
+    PG_DATABASE: orchestrator
   # Set the storage class to be used for PVCs (would use default sc if not specified)
   storageClass: ""
   # Add Proxy Configs to be propagated to all the Devtron Microservices.
@@ -29,7 +39,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "36.0.0"
+    release: "37.0.0"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -50,14 +60,13 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:50a0fe7b-e1e165f1-931-33600"
+      image: "dashboard:a85f2624-4e4ef925-931-34032"
     # Values for devtron
     devtron:
-      image: "hyperion:8cbc3dc7-759-33599"
-      cicdImage: "devtron:8cbc3dc7-930-33598"
+      image: "hyperion:877e918b-759-34029"
+      cicdImage: "devtron:877e918b-930-34031"
       imagePullPolicy: IfNotPresent
       customOverrides:
-        PG_ADDR: postgresql-postgresql.devtroncd
         USE_CUSTOM_HTTP_TRANSPORT: "false"
         ASYNC_BUILDX_CACHE_EXPORT: "false"
         BUILDX_CACHE_MODE_MIN: "false"
@@ -70,17 +79,17 @@ devtron:
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:0d197498-1020-33604"
+      image: "ci-runner:48c3bdb7-1020-34034"
     # Values for kubelink
     kubelink:
-      image: "kubelink:6c4c3f1d-314-33605"
+      image: "kubelink:48c3bdb7-314-34035"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:6c4c3f1d-950-33608"
+      image: "git-sensor:48c3bdb7-950-34036"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:6c4c3f1d-1021-33609
+      image: chart-sync:48c3bdb7-1021-34037
     postgres:
       image: "postgres:14.9"
       metrics:
@@ -89,7 +98,7 @@ devtron:
   security:
     enabled: true
     imageScanner:
-      image: "image-scanner:6c4c3f1d-109-33610"
+      image: "image-scanner:48c3bdb7-109-34038"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
@@ -103,9 +112,9 @@ devtron:
   devtronEnterprise:
     enabled: true
     casbin:
-      image: "casbin:8cbc3dc7-0d197498-464-33612"
+      image: "casbin:48c3bdb7-8243120a-464-34039"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:6c4c3f1d-955-33613"
+      image: "scoop:48c3bdb7-955-34040"
       imagePullPolicy: IfNotPresent
