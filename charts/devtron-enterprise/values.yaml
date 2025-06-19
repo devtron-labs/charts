@@ -18,6 +18,17 @@ global:
   #     effect: "NoSchedule"
   # imagePullSecrets:
   #     - name: your-image-pull-secret
+  externalPostgres:
+    enabled: false
+    # Password for external database (ensure that username is postgres).
+    PG_PASSWORD: ""
+    # For external Database replace the PG_ADDR with the DNS endpoint of postgres.
+    PG_ADDR: ""
+  dbConfig:
+    PG_ADDR: postgresql-postgresql.devtroncd
+    PG_PORT: "5432"
+    PG_USER: postgres
+    PG_DATABASE: orchestrator
 
   # Set the storage class to be used for PVCs (would use default sc if not specified)
   storageClass: ""
@@ -57,7 +68,6 @@ devtron:
       cicdImage: "devtron:8cbc3dc7-930-33598"
       imagePullPolicy: IfNotPresent
       customOverrides:
-        PG_ADDR: postgresql-postgresql.devtroncd
         USE_CUSTOM_HTTP_TRANSPORT: "false"
         ASYNC_BUILDX_CACHE_EXPORT: "false"
         BUILDX_CACHE_MODE_MIN: "false"

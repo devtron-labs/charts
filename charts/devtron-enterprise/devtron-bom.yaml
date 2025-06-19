@@ -18,6 +18,18 @@ global:
   #     effect: "NoSchedule"
   # imagePullSecrets:
   #     - name: your-image-pull-secret
+  externalPostgres:
+    enabled: false
+    # Password for external database (ensure that username is postgres).
+    PG_PASSWORD: ""
+    # For external Database replace the PG_ADDR with the DNS endpoint of postgres.
+    PG_ADDR: ""
+  dbConfig:
+    PG_ADDR: postgresql-postgresql.devtroncd
+    PG_PORT: "5432"
+    PG_USER: postgres
+    PG_DATABASE: orchestrator
+
 devtron:
   installer:
     repo: "devtron-labs/charts"
