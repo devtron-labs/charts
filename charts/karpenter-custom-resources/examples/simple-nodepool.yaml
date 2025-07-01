@@ -1,0 +1,48 @@
+# Simple NodePool example for general workloads
+# Copy these values into your values.yaml file
+
+ec2NodeClasses:
+  - name: "general-compute"
+    amiFamily: "AL2"
+    role: "KarpenterNodeRole"
+    subnetSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "my-cluster"
+    securityGroupSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "my-cluster"
+    kubelet:
+      maxPods: 110
+      clusterDNS: ["10.100.0.10"]
+    blockDeviceMappings:
+      - deviceName: "/dev/xvda"
+        ebs:
+          volumeSize: "20Gi"
+          volumeType: "gp3"
+          encrypted: true
+          deleteOnTermination: true
+
+nodePools:
+  - name: "general-purpose"
+    ec2NodeClassName: "general-compute"
+    template:
+      spec:
+        requirements:
+          - key: "karpenter.sh/capacity-type"
+            operator: In
+            values: ["spot", "on-demand"]
+          - key: "karpenter.k8s.aws/instance-category"
+            operator: In
+            values: ["m", "c", "r"]
+          - key: "kubernetes.io/arch"
+            operator: In
+            values: ["amd64"]
+          - key: "kubernetes.io/os"
+            operator: In
+            values: ["linux"]
+    disruption:
+      consolidationPolicy: "WhenEmptyOrUnderutilized"
+      consolidateAfter: "30s"
+    limits:
+      cpu: "1000"
+      memory: "4000Gi"

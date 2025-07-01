@@ -1,283 +1,129 @@
 # Default values for karpenter-custom-resources.
 # This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
 
-#ec2NodeClasses: []
-  # - name: "default"
-  #   # If true, Karpenter will automatically determine the AMIFamily based on the AMIID
-  #   # amiFamily: "" # e.g., AL2, Bottlerocket, Ubuntu, Windows2019, Windows2022, Custom.
-  #   # If not using amiFamily, amiSelectorTerms is usually required.
-  #   amiSelectorTerms:
-  #     - tags:
-  #         karpenter.sh/discovery: "{{ .Values.global.clusterName }}"
-  #     # - id: "ami-0abcdef1234567890" # Example specific AMI ID
-  #     # - name: "my-custom-ami-*"   # Example AMI name pattern
-  #     # - owner: "self" # or "amazon", or account ID
-  #     # - alias: "al2@latest" # New way to select EKS optimized AMIs
-  #     # - ssmParameter: "/aws/service/eks/optimized-ami/1.27/amazon-linux-2/recommended/image_id" # Example SSM parameter
-  #   subnetSelectorTerms:
-  #     - tags:
-  #         karpenter.sh/discovery: "{{ .Values.global.clusterName }}"
-  #     # - id: "subnet-0123456789abcdef0"
-  #   securityGroupSelectorTerms:
-  #     - tags:
-  #         karpenter.sh/discovery: "{{ .Values.global.clusterName }}"
-  #     # - id: "sg-0123456789abcdef0"
-  #     # - name: "my-security-group"
-  #   # role: "KarpenterNodeRole-{{ .Values.global.clusterName }}" # IAM role for the nodes
-  #   # instanceProfile: "KarpenterNodeInstanceProfile-{{ .Values.global.clusterName }}" # Alternative to role
-  #   tags:
-  #     ExampleTag: "HelloWorld"
-  #     AnotherTag: "AnotherValue"
-  #   kubelet:
-  #     # podsPerCore: 2
-  #     maxPods: 110
-  #     # systemReserved:
-  #     #   cpu: "200m"
-  #     #   memory: "250Mi"
-  #     #   ephemeral-storage: "1Gi" # Added based on docs
-  #     # kubeReserved:
-  #     #   cpu: "200m"
-  #     #   memory: "250Mi"
-  #     #   ephemeral-storage: "1Gi" # Added based on docs
-  #     # evictionHard:
-  #     #   memory.available: "5%"
-  #     #   nodefs.available: "10%"
-  #     # evictionSoft:
-  #     #   memory.available: "10%"
-  #     #   nodefs.available: "15%"
-  #     # evictionSoftGracePeriod:
-  #     #   memory.available: "1m30s"
-  #     # cpuCFSQuota: true # boolean
-  #     # clusterDNS: ["10.96.0.10"] # list of strings
-  #     # imageGCHighThresholdPercent: 85 # integer
-  #     # imageGCLowThresholdPercent: 80 # integer
-  #     # evictionMaxPodGracePeriod: 60 # integer
-  #   # metadataOptions:
-  #   #   httpEndpoint: "enabled"
-  #   #   httpProtocolIPv6: "disabled"
-  #   #   httpPutResponseHopLimit: 2
-  #   #   httpTokens: "required"
-  #   # blockDeviceMappings:
-  #   #   - deviceName: "/dev/xvda" # Use /dev/sda1 for Windows
-  #   #     ebs:
-  #   #       volumeSize: "20Gi"
-  #   #       volumeType: "gp3"
-  #   #       encrypted: true
-  #         # kmsKeyID: "arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"
-  #         # deleteOnTermination: true
-  #         # iops: 3000
-  #         # throughput: 125 # MiB/s
-  #         # snapshotID: "snap-0123456789abcdef0"
-  #   # detailedMonitoring: true
-  #   # associatePublicIPAddress: true # boolean, defaults based on subnet
-  #   # userData: |
-  #   #   #!/bin/bash
-  #   #   echo "Hello from UserData"
-  #   # instanceStorePolicy: "RAID0" # Only applicable for instance types with instance stores
-  #   # capacityReservationSelectorTerms: # Alpha feature
-  #   #   - id: "cr-0123456789abcdef0"
-  #   #   - tags:
-  #   #       MyReservationTag: "Targeted"
-
-#nodePools: []
-  # - name: "default"
-  #   ec2NodeClassName: "default" # Must match one of the ec2NodeClasses.name defined above
-  #   # weight: 0 # Optional: higher weight is higher priority
-  #   template:
-  #     metadata:
-  #       labels:
-  #         # billing-team: "my-team"
-  #         # environment: "production"
-  #       annotations:
-  #         # example.com/owner: "my-team"
-  #     spec:
-  #       # taints:
-  #       #   - key: "example.com/special-taint"
-  #       #     effect: "NoSchedule"
-  #       # startupTaints:
-  #       #   - key: "example.com/bootstrap-taint"
-  #       #     effect: "NoSchedule"
-  #       # expireAfter: "720h" # Or "Never"
-  #       # terminationGracePeriod: "72h" # Duration string
-  #       requirements:
-  #         # - key: "karpenter.k8s.aws/instance-category"
-  #         #   operator: In
-  #         #   values: ["c", "m", "r"]
-  #         #   # minValues: 2 # Alpha field
-  #         # - key: "karpenter.k8s.aws/instance-cpu"
-  #         #   operator: In
-  #         #   values: ["4", "8", "16"]
-  #         # - key: "karpenter.sh/capacity-type"
-  #         #   operator: In
-  #         #   values: ["spot", "on-demand"]
-  #         # - key: "topology.kubernetes.io/zone"
-  #         #   operator: In
-  #         #   values: ["us-west-2a", "us-west-2b"]
-  #         # - key: "kubernetes.io/arch"
-  #         #   operator: In
-  #         #   values: ["amd64", "arm64"]
-  #         # - key: "kubernetes.io/os" # Ensure this aligns with amiFamily/amiSelector
-  #         #   operator: In
-  #         #   values: ["linux"] # or "windows"
-  #         # - key: "karpenter.k8s.aws/instance-hypervisor"
-  #         #   operator: In
-  #         #   values: ["nitro"]
-  #         # - key: "karpenter.k8s.aws/instance-generation"
-  #         #   operator: Gt
-  #         #   values: ["2"]
-  #   # disruption:
-  #     # consolidationPolicy: "WhenEmptyOrUnderutilized" # or "WhenEmpty"
-  #     # consolidateAfter: "30s" # Or "Never"
-  #     # budgets: # New budget structure
-  #     #   - nodes: "10%" # Can be percentage string or integer
-  #       # - schedule: "0 0 * * *" # cron schedule
-  #       #   duration: "1h" # duration string
-  #       #   nodes: "0"
-  #   # limits:
-  #     # cpu: "1000" # String for CPU (e.g. "1000" for 1000 cores)
-  #     # memory: "1000Gi" # String for memory (e.g., "1000Gi")
-  #     # "nvidia.com/gpu": "10" # Example for extended resources
-  #     # pods: "1000" # Example for pods limit if supported by provider/version
-# ---
-# Example EC2NodeClass (uncomment and modify to use)
-# ---
+# EC2NodeClass definitions - Configure the compute resources for your nodes
 ec2NodeClasses:
   - name: "default-linux"
-    amiFamily: "AL2" # For Amazon Linux 2
-    role: "KarpenterNodeRole" # Make sure this role exists
-    detailedMonitoring: true
-    metadataOptions:
-      httpEndpoint: enabled
-      httpProtocolIPv6: disabled
-      httpPutResponseHopLimit: 1 # This is changed to disable IMDS access from containers not on the host network
-      httpTokens: required
-    userData: |
-      echo "Hello world"
+    # AMI family - determines the base operating system
+    amiFamily: "AL2"  # Options: AL2, AL2023, Bottlerocket, Windows2019, Windows2022, Custom
+    
+    # IAM role for the nodes (ensure this role exists in your AWS account)
+    role: "KarpenterNodeRole"
+    
+    # Subnet discovery - Karpenter will use subnets with these tags
     subnetSelectorTerms:
       - tags:
-          karpenter.sh/discovery: "eks"
+          karpenter.sh/discovery: "your-cluster-name"  # Replace with your actual cluster name
+    
+    # Security group discovery - Karpenter will use security groups with these tags
     securityGroupSelectorTerms:
       - tags:
-          karpenter.sh/discovery: "eks"
+          karpenter.sh/discovery: "your-cluster-name"  # Replace with your actual cluster name
+    
+    # Optional: Custom tags to apply to EC2 instances
     tags:
-      intent: "general-linux-workloads"
-      provisioner: "karpenter"
+      Environment: "production"
+      Team: "platform"
+    
+    # Kubelet configuration
     kubelet:
       maxPods: 110
-      podsPerCore: 0 # Set to 0 to use maxPods, or >0 to calculate based on vCPU
-      clusterDNS: ["10.100.0.10"] # Replace with your cluster's DNS IP
+      clusterDNS: ["10.100.0.10"]  # Replace with your cluster's DNS service IP
+    
+    # Storage configuration
     blockDeviceMappings:
-      - deviceName: /dev/xvda
+      - deviceName: "/dev/xvda"
         ebs:
-          volumeSize: 20Gi
-          volumeType: gp3
+          volumeSize: "20Gi"
+          volumeType: "gp3"
           encrypted: true
           deleteOnTermination: true
+    
+    # Security: Enhanced metadata service configuration
+    metadataOptions:
+      httpEndpoint: "enabled"
+      httpProtocolIPv6: "disabled"
+      httpPutResponseHopLimit: 1  # Prevents containers from accessing instance metadata
+      httpTokens: "required"     # Requires IMDSv2
+    
+    # Optional: Enable detailed CloudWatch monitoring
+    detailedMonitoring: true
 
-# ---
-# Example NodePool (uncomment and modify to use, ensure ec2NodeClassName matches an above definition)
-# ---
+# NodePool definitions - Define how your workloads should be scheduled
 nodePools:
   - name: "general-purpose"
-    ec2NodeClassName: "default-linux" # Links to the EC2NodeClass above
+    # Reference to the EC2NodeClass above
+    ec2NodeClassName: "default-linux"
+    
+    # Node template configuration
     template:
       metadata:
         labels:
-          team: "backend"
-          environment: "dev"
+          workload-type: "general"
+          team: "platform"
       spec:
+        # Instance requirements - Karpenter will select instances that match these criteria
         requirements:
+          # Capacity type: spot instances for cost savings, on-demand for reliability
           - key: "karpenter.sh/capacity-type"
             operator: In
             values: ["spot", "on-demand"]
+          
+          # Instance families: general purpose compute optimized instances
           - key: "karpenter.k8s.aws/instance-category"
             operator: In
-            values: ["m", "c", "r", "t"]
+            values: ["m", "c", "r"]
+          
+          # Instance generation: use newer generation instances for better performance
           - key: "karpenter.k8s.aws/instance-generation"
             operator: Gt
-            values: ["2"] # Use instances newer than 2nd gen
-          - key: kubernetes.io/arch
+            values: ["3"]
+          
+          # Architecture: x86_64 architecture
+          - key: "kubernetes.io/arch"
             operator: In
             values: ["amd64"]
-          - key: kubernetes.io/os
+          
+          # Operating system: Linux
+          - key: "kubernetes.io/os"
             operator: In
             values: ["linux"]
-        # expireAfter: "168h" # Nodes expire after 7 days
-        # terminationGracePeriod: "30s" # Short termination grace period
+    
+    # Disruption settings - how aggressively to consolidate nodes
     disruption:
-      consolidationPolicy: WhenEmptyOrUnderutilized
+      consolidationPolicy: "WhenEmptyOrUnderutilized"
       consolidateAfter: "30s"
-      # No budget means disruption is always allowed unless specific budget denies it
-      # budgets:
-      #   - nodes: "10" # Allow disrupting up to 10 nodes globally for this pool
+    
+    # Resource limits for this node pool
     limits:
-      cpu: "500"
-      memory: "2000Gi"
+      cpu: "1000"      # Maximum CPU cores across all nodes in this pool
+      memory: "4000Gi" # Maximum memory across all nodes in this pool
 
-# ---
-# Example GPU EC2NodeClass & NodePool (uncomment and modify)
-# ---
-# ec2NodeClasses:
-#   - name: "gpu-nodeclass"
-#     amiFamily: "AL2" # Or Bottlerocket, ensure AMI supports GPUs
-#     # For GPU instances, you might need specific AMIs.
-#     # amiSelectorTerms:
-#     #   - alias: "al2@latest" # Or a specific GPU AMI alias/ID
-#     #     # For custom/specific GPU AMIs:
-#     #     # name: "my-eks-gpu-ami-*"
-#     #     # owner: "self" # or your account ID if it's a custom AMI
-#     role: "KarpenterNodeRole-{{ .Values.global.clusterName }}"
-#     subnetSelectorTerms:
-#       - tags:
-#           karpenter.sh/discovery: "{{ .Values.global.clusterName }}"
-#     securityGroupSelectorTerms:
-#       - tags:
-#           karpenter.sh/discovery: "{{ .Values.global.clusterName }}"
-#     tags:
-#       NodeType: "GPU"
-#       Project: "AI-Research"
-#     kubelet:
-#       maxPods: 110 # Adjust based on instance size and GPU needs
-#     # blockDeviceMappings might need larger root volume for GPU drivers/images
-#     blockDeviceMappings:
-#       - deviceName: /dev/xvda
-#         ebs:
-#           volumeSize: 100Gi
-#           volumeType: gp3
-#           encrypted: true
-
-# nodePools:
-#   - name: "gpu-nodepool"
-#     ec2NodeClassName: "gpu-nodeclass"
-#     template:
-#       metadata:
-#         labels:
-#           workload: "gpu-training"
-#       spec:
-#         taints:
-#           - key: "nvidia.com/gpu"
-#             effect: "NoSchedule"
-#         requirements:
-#           - key: "karpenter.sh/capacity-type"
-#             operator: In
-#             values: ["on-demand"] # GPUs are often on-demand due to cost/availability of spot
-#           - key: "karpenter.k8s.aws/instance-category"
-#             operator: In
-#             values: ["g", "p"] # Standard GPU instance categories
-#           - key: "kubernetes.io/arch"
-#             operator: In
-#             values: ["amd64"]
-#           - key: "kubernetes.io/os"
-#             operator: In
-#             values: ["linux"]
-#           - key: "nvidia.com/gpu" # Ensures pods requesting GPUs land here
-#             operator: Exists
-#     disruption:
-#       consolidationPolicy: "WhenEmpty" # GPU nodes are expensive, consolidate when empty
-#       # consolidateAfter: "5m" # Wait a bit longer before consolidating GPU nodes
-#     limits:
-#       cpu: "200"
-#       memory: "1000Gi"
-#       "nvidia.com/gpu": "8" # Limit total GPUs in this pool
-#     weight: 10 # Higher weight if GPU pods should prefer this pool
+# Example: Additional NodePool for GPU workloads (commented out)
+# - name: "gpu-workloads"
+#   ec2NodeClassName: "default-linux"
+#   template:
+#     metadata:
+#       labels:
+#         workload-type: "gpu"
+#     spec:
+#       # Taint GPU nodes so only GPU workloads can be scheduled on them
+#       taints:
+#         - key: "nvidia.com/gpu"
+#           effect: "NoSchedule"
+#       requirements:
+#         - key: "karpenter.sh/capacity-type"
+#           operator: In
+#           values: ["on-demand"]  # GPU instances are typically on-demand
+#         - key: "karpenter.k8s.aws/instance-category"
+#           operator: In
+#           values: ["g", "p"]  # GPU instance families
+#         - key: "kubernetes.io/arch"
+#           operator: In
+#           values: ["amd64"]
+#   disruption:
+#     consolidationPolicy: "WhenEmpty"  # GPU nodes are expensive, only consolidate when empty
+#   limits:
+#     cpu: "200"
+#     memory: "1000Gi"
+#     "nvidia.com/gpu": "8"
