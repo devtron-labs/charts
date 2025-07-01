@@ -1,0 +1,110 @@
+{{- if .Values.ec2NodeClasses }}
+{{- range .Values.ec2NodeClasses }}
+---
+apiVersion: {{ include "karpenter-custom-resources.ec2NodeClassApiVersion" $ }}
+kind: EC2NodeClass
+metadata:
+  name: {{ .name | quote }}
+  labels:
+    {{- include "karpenter-custom-resources.labels" $ | nindent 4 }}
+  {{- with .annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .amiFamily }}
+  amiFamily: {{ .amiFamily | quote }}
+  {{- end }}
+  {{- with .amiSelectorTerms }}
+  amiSelectorTerms:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .subnetSelectorTerms }}
+  subnetSelectorTerms:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .securityGroupSelectorTerms }}
+  securityGroupSelectorTerms:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .role }}
+  role: {{ .role | quote }}
+  {{- else if .instanceProfile }}
+  instanceProfile: {{ .instanceProfile | quote }}
+  {{- end }}
+  {{- with .tags }}
+  tags:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .kubelet }}
+  kubelet:
+    {{- if .podsPerCore }}
+    podsPerCore: {{ .podsPerCore }}
+    {{- end }}
+    {{- if .maxPods }}
+    maxPods: {{ .maxPods }}
+    {{- end }}
+    {{- with .systemReserved }}
+    systemReserved:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .kubeReserved }}
+    kubeReserved:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .evictionHard }}
+    evictionHard:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .evictionSoft }}
+    evictionSoft:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .evictionSoftGracePeriod }}
+    evictionSoftGracePeriod:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- if .evictionMaxPodGracePeriod }}
+    evictionMaxPodGracePeriod: {{ .evictionMaxPodGracePeriod }}
+    {{- end }}
+    {{- if .imageGCHighThresholdPercent }}
+    imageGCHighThresholdPercent: {{ .imageGCHighThresholdPercent }}
+    {{- end }}
+    {{- if .imageGCLowThresholdPercent }}
+    imageGCLowThresholdPercent: {{ .imageGCLowThresholdPercent }}
+    {{- end }}
+    {{- if .cpuCFSQuota }}
+    cpuCFSQuota: {{ .cpuCFSQuota }}
+    {{- end }}
+    {{- with .clusterDNS }}
+    clusterDNS:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- with .metadataOptions }}
+  metadataOptions:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .blockDeviceMappings }}
+  blockDeviceMappings:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- if .detailedMonitoring }}
+  detailedMonitoring: {{ .detailedMonitoring }}
+  {{- end }}
+  {{- if .associatePublicIPAddress }}
+  associatePublicIPAddress: {{ .associatePublicIPAddress }}
+  {{- end }}
+  {{- if .userData }}
+  userData: |
+    {{- .userData | nindent 4 }}
+  {{- end }}
+  {{- if .instanceStorePolicy }}
+  instanceStorePolicy: {{ .instanceStorePolicy | quote }}
+  {{- end }}
+  {{- with .capacityReservationSelectorTerms }}
+  capacityReservationSelectorTerms:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end }}

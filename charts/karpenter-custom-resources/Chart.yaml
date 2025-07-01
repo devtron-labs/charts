@@ -1,0 +1,26 @@
+apiVersion: v2
+name: karpenter-resources
+description: A Helm chart to deploy Karpenter EC2NodeClasses and NodePools for AWS.
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates.
+version: 1.0.0
+
+# This is the version number of the application being deployed. This version number should be
+# incremented each time you make changes to the application.
+# It's good practice to align this with the version of Karpenter the chart is primarily designed for.
+# For example, if these CRDs are based on Karpenter v1.5.x features.
+appVersion: "v1.5" # Adjust as per the Karpenter version compatibility
+
+keywords:
+  - karpenter
+  - aws
+  - nodepool
+  - ec2nodeclass
+  - cluster-autoscaling
+
+home: https://karpenter.sh/
+sources:
+  - https://github.com/aws/karpenter
+  - https://github.com/kubernetes-sigs/karpenter

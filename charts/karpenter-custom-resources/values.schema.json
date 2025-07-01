@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Karpenter Custom Resources Values",
+  "description": "Schema for values.yaml of the Karpenter Custom Resources Helm chart",
+  "type": "object",
+  "properties": {
+    "ec2NodeClasses": {
+      "type": "array",
+      "description": "List of EC2NodeClass definitions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the EC2NodeClass resource."
+          }
+        },
+        "required": ["name"],
+        "additionalProperties": true
+      }
+    },
+    "nodePools": {
+      "type": "array",
+      "description": "List of NodePool definitions.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the NodePool resource."
+          },
+          "ec2NodeClassName": {
+            "type": "string",
+            "description": "Name of the EC2NodeClass to reference."
+          }
+        },
+        "required": ["name", "ec2NodeClassName"],
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
