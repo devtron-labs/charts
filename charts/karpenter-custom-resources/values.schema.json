@@ -6,36 +6,378 @@
   "properties": {
     "ec2NodeClasses": {
       "type": "array",
-      "description": "List of EC2NodeClass definitions.",
+      "description": "List of EC2NodeClass definitions for Karpenter",
       "items": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "Name of the EC2NodeClass resource."
+            "description": "Name of the EC2NodeClass resource"
+          },
+          "annotations": {
+            "type": "object",
+            "description": "Annotations to add to the EC2NodeClass",
+            "additionalProperties": { "type": "string" }
+          },
+          "amiFamily": {
+            "type": "string",
+            "description": "AMI family type",
+            "enum": ["AL2", "AL2023", "Bottlerocket", "Windows2019", "Windows2022", "Custom"]
+          },
+          "amiSelectorTerms": {
+            "type": "array",
+            "description": "AMI selector terms for discovering AMIs",
+            "items": {
+              "type": "object",
+              "properties": {
+                "tags": {
+                  "type": "object",
+                  "description": "Tags to match AMIs",
+                  "additionalProperties": { "type": "string" }
+                },
+                "name": { "type": "string", "description": "AMI name pattern" },
+                "id": { "type": "string", "description": "Specific AMI ID" },
+                "owner": { "type": "string", "description": "AMI owner (account ID, 'self', 'amazon')" },
+                "alias": { "type": "string", "description": "AMI alias (e.g., 'al2@latest')" },
+                "ssmParameter": { "type": "string", "description": "SSM parameter containing AMI ID" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "subnetSelectorTerms": {
+            "type": "array",
+            "description": "Subnet selector terms (required)",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "tags": {
+                  "type": "object",
+                  "description": "Tags to match subnets",
+                  "additionalProperties": { "type": "string" }
+                },
+                "id": { "type": "string", "description": "Specific subnet ID" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "securityGroupSelectorTerms": {
+            "type": "array",
+            "description": "Security group selector terms (required)",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "tags": {
+                  "type": "object",
+                  "description": "Tags to match security groups",
+                  "additionalProperties": { "type": "string" }
+                },
+                "id": { "type": "string", "description": "Specific security group ID" },
+                "name": { "type": "string", "description": "Security group name" }
+              },
+              "additionalProperties": false
+            }
+          },
+          "role": {
+            "type": "string",
+            "description": "IAM role name for the nodes"
+          },
+          "instanceProfile": {
+            "type": "string",
+            "description": "IAM instance profile (alternative to role)"
+          },
+          "tags": {
+            "type": "object",
+            "description": "Tags to apply to EC2 instances",
+            "additionalProperties": { "type": "string" }
+          },
+          "kubelet": {
+            "type": "object",
+            "description": "Kubelet configuration",
+            "properties": {
+              "podsPerCore": { "type": "integer", "description": "Pods per CPU core" },
+              "maxPods": { "type": "integer", "description": "Maximum pods per node" },
+              "systemReserved": {
+                "type": "object",
+                "description": "Resources reserved for system",
+                "properties": {
+                  "cpu": { "type": "string" },
+                  "memory": { "type": "string" },
+                  "ephemeral-storage": { "type": "string" }
+                },
+                "additionalProperties": false
+              },
+              "kubeReserved": {
+                "type": "object",
+                "description": "Resources reserved for Kubernetes",
+                "properties": {
+                  "cpu": { "type": "string" },
+                  "memory": { "type": "string" },
+                  "ephemeral-storage": { "type": "string" }
+                },
+                "additionalProperties": false
+              },
+              "evictionHard": {
+                "type": "object",
+                "description": "Hard eviction thresholds",
+                "additionalProperties": { "type": "string" }
+              },
+              "evictionSoft": {
+                "type": "object",
+                "description": "Soft eviction thresholds",
+                "additionalProperties": { "type": "string" }
+              },
+              "evictionSoftGracePeriod": {
+                "type": "object",
+                "description": "Grace periods for soft eviction",
+                "additionalProperties": { "type": "string" }
+              },
+              "evictionMaxPodGracePeriod": { "type": "integer", "description": "Max grace period for pod eviction" },
+              "imageGCHighThresholdPercent": { "type": "integer", "description": "High threshold for image GC" },
+              "imageGCLowThresholdPercent": { "type": "integer", "description": "Low threshold for image GC" },
+              "cpuCFSQuota": { "type": "boolean", "description": "Enable CPU CFS quota" },
+              "clusterDNS": {
+                "type": "array",
+                "description": "Cluster DNS server IPs",
+                "items": { "type": "string" }
+              }
+            },
+            "additionalProperties": false
+          },
+          "metadataOptions": {
+            "type": "object",
+            "description": "EC2 instance metadata options",
+            "properties": {
+              "httpEndpoint": { "type": "string", "enum": ["enabled", "disabled"] },
+              "httpProtocolIPv6": { "type": "string", "enum": ["enabled", "disabled"] },
+              "httpPutResponseHopLimit": { "type": "integer", "minimum": 1, "maximum": 64 },
+              "httpTokens": { "type": "string", "enum": ["required", "optional"] }
+            },
+            "additionalProperties": false
+          },
+          "blockDeviceMappings": {
+            "type": "array",
+            "description": "Block device mappings for instances",
+            "items": {
+              "type": "object",
+              "properties": {
+                "deviceName": { "type": "string", "description": "Device name (e.g., /dev/xvda)" },
+                "ebs": {
+                  "type": "object",
+                  "properties": {
+                    "volumeSize": { "type": "string", "description": "Volume size (e.g., '20Gi')" },
+                    "volumeType": { "type": "string", "enum": ["gp2", "gp3", "io1", "io2", "sc1", "st1"] },
+                    "encrypted": { "type": "boolean" },
+                    "deleteOnTermination": { "type": "boolean" },
+                    "kmsKeyID": { "type": "string" },
+                    "iops": { "type": "integer" },
+                    "throughput": { "type": "integer" },
+                    "snapshotID": { "type": "string" }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "detailedMonitoring": {
+            "type": "boolean",
+            "description": "Enable detailed monitoring"
+          },
+          "associatePublicIPAddress": {
+            "type": "boolean",
+            "description": "Associate public IP address"
+          },
+          "userData": {
+            "type": "string",
+            "description": "User data script for instances"
+          },
+          "instanceStorePolicy": {
+            "type": "string",
+            "description": "Instance store policy",
+            "enum": ["RAID0"]
+          },
+          "capacityReservationSelectorTerms": {
+            "type": "array",
+            "description": "Capacity reservation selector terms",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "tags": {
+                  "type": "object",
+                  "additionalProperties": { "type": "string" }
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
-        "required": ["name"],
-        "additionalProperties": true
+        "required": ["name", "subnetSelectorTerms", "securityGroupSelectorTerms"],
+        "additionalProperties": false
       }
     },
     "nodePools": {
       "type": "array",
-      "description": "List of NodePool definitions.",
+      "description": "List of NodePool definitions for Karpenter",
       "items": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "description": "Name of the NodePool resource."
+            "description": "Name of the NodePool resource"
+          },
+          "annotations": {
+            "type": "object",
+            "description": "Annotations to add to the NodePool",
+            "additionalProperties": { "type": "string" }
           },
           "ec2NodeClassName": {
             "type": "string",
-            "description": "Name of the EC2NodeClass to reference."
+            "description": "Name of the EC2NodeClass to reference"
+          },
+          "weight": {
+            "type": "integer",
+            "description": "Priority weight (higher = higher priority)"
+          },
+          "template": {
+            "type": "object",
+            "description": "Template for NodeClaim resources",
+            "properties": {
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "labels": {
+                    "type": "object",
+                    "description": "Labels to apply to nodes",
+                    "additionalProperties": { "type": "string" }
+                  },
+                  "annotations": {
+                    "type": "object",
+                    "description": "Annotations to apply to nodes",
+                    "additionalProperties": { "type": "string" }
+                  }
+                },
+                "additionalProperties": false
+              },
+              "spec": {
+                "type": "object",
+                "properties": {
+                  "taints": {
+                    "type": "array",
+                    "description": "Taints to apply to nodes",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": { "type": "string" },
+                        "value": { "type": "string" },
+                        "effect": { "type": "string", "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"] }
+                      },
+                      "required": ["key", "effect"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "startupTaints": {
+                    "type": "array",
+                    "description": "Taints applied during node startup",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": { "type": "string" },
+                        "value": { "type": "string" },
+                        "effect": { "type": "string", "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"] }
+                      },
+                      "required": ["key", "effect"],
+                      "additionalProperties": false
+                    }
+                  },
+                  "expireAfter": {
+                    "type": "string",
+                    "description": "Node expiration time (e.g., '720h' or 'Never')"
+                  },
+                  "terminationGracePeriod": {
+                    "type": "string",
+                    "description": "Grace period for node termination"
+                  },
+                  "requirements": {
+                    "type": "array",
+                    "description": "Node requirements/constraints",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "key": { "type": "string" },
+                        "operator": { "type": "string", "enum": ["In", "NotIn", "Exists", "DoesNotExist", "Gt", "Lt"] },
+                        "values": {
+                          "type": "array",
+                          "items": { "type": "string" }
+                        },
+                        "minValues": { "type": "integer" }
+                      },
+                      "required": ["key", "operator"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            },
+            "additionalProperties": false
+          },
+          "disruption": {
+            "type": "object",
+            "description": "Disruption settings",
+            "properties": {
+              "consolidationPolicy": {
+                "type": "string",
+                "enum": ["WhenEmpty", "WhenEmptyOrUnderutilized"],
+                "description": "When to consolidate nodes"
+              },
+              "consolidateAfter": {
+                "type": "string",
+                "description": "Wait time before consolidation (e.g., '30s' or 'Never')"
+              },
+              "budgets": {
+                "type": "array",
+                "description": "Disruption budgets",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "nodes": {
+                      "oneOf": [
+                        { "type": "string", "pattern": "^\\d+%$" },
+                        { "type": "integer", "minimum": 0 }
+                      ],
+                      "description": "Number or percentage of nodes that can be disrupted"
+                    },
+                    "schedule": {
+                      "type": "string",
+                      "description": "Cron schedule for this budget"
+                    },
+                    "duration": {
+                      "type": "string",
+                      "description": "Duration for scheduled budget"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "additionalProperties": false
+          },
+          "limits": {
+            "type": "object",
+            "description": "Resource limits for this NodePool",
+            "properties": {
+              "cpu": { "type": "string", "description": "CPU limit (e.g., '1000')" },
+              "memory": { "type": "string", "description": "Memory limit (e.g., '1000Gi')" },
+              "pods": { "type": "string", "description": "Pod limit (e.g., '1000')" }
+            },
+            "additionalProperties": { "type": "string" }
           }
         },
         "required": ["name", "ec2NodeClassName"],
-        "additionalProperties": true
+        "additionalProperties": false
       }
     }
   },

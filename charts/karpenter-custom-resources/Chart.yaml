@@ -1,11 +1,11 @@
 apiVersion: v2
-name: karpenter-resources
+name: karpenter-custom-resources
 description: A Helm chart to deploy Karpenter EC2NodeClasses and NodePools for AWS.
 type: application
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates.
-version: 1.0.0
+version: 1.1.0
 
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application.
