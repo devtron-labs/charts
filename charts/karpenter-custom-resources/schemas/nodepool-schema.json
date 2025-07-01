@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Karpenter NodePool",
+  "description": "Schema for NodePool objects in values.yaml",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the NodePool resource."
+    },
+    "ec2NodeClassName": {
+      "type": "string",
+      "description": "Name of the EC2NodeClass to reference. Must match a defined ec2NodeClass.name."
+    },
+    "weight": {
+      "type": "integer",
+      "description": "Priority of the NodePool. Higher weight means higher priority."
+    },
+    "template": {
+      "type": "object",
+      "description": "Template for NodeClaim resources.",
+      "properties": {
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "labels": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            },
+            "annotations": {
+              "type": "object",
+              "additionalProperties": { "type": "string" }
+            }
+          },
+          "additionalProperties": false
+        },
+        "spec": {
+          "type": "object",
+          "properties": {
+            "taints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "value": { "type": "string" },
+                  "effect": { "type": "string", "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"] }
+                },
+                "required": ["key", "effect"],
+                "additionalProperties": false
+              }
+            },
+            "startupTaints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "value": { "type": "string" },
+                  "effect": { "type": "string", "enum": ["NoSchedule", "PreferNoSchedule", "NoExecute"] }
+                },
+                "required": ["key", "effect"],
+                "additionalProperties": false
+              }
+            },
+            "expireAfter": {
+              "type": "string",
+              "description": "Node expiry duration (e.g., '720h') or 'Never'."
+            },
+            "terminationGracePeriod": {
+                "type": "string",
+                "description": "Node termination grace period duration (e.g., '30s', '2h')."
+            },
+            "requirements": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "key": { "type": "string" },
+                  "operator": { "type": "string", "enum": ["In", "NotIn", "Exists", "DoesNotExist", "Gt", "Lt"] },
+                  "values": {
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "minValues": { "type": "integer", "minimum": 1 }
+                },
+                "required": ["key", "operator"],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": ["requirements"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["spec"],
+      "additionalProperties": false
+    },
+    "disruption": {
+      "type": "object",
+      "description": "Settings for node disruption and consolidation.",
+      "properties": {
+        "consolidationPolicy": {
+          "type": "string",
+          "enum": ["WhenEmptyOrUnderutilized", "WhenEmpty", ""],
+          "description": "Policy for when to consolidate nodes."
+        },
+        "consolidateAfter": {
+          "type": "string",
+          "description": "Duration to wait after events before consolidating (e.g., '30s') or 'Never'."
+        },
+        "budgets": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "nodes": {
+                        "anyOf": [
+                           { "type": "string", "pattern": "^[0-9]+%$" },
+                           { "type": "integer", "minimum": 0 },
+                           { "type": "string", "pattern": "^[0-9]+$" }
+                        ]
+                    },
+                    "schedule": {"type": "string"},
+                    "duration": {"type": "string"}
+                },
+                "required": ["nodes"],
+                "additionalProperties": false,
+                "if": {
+                    "oneOf": [
+                        {"required": ["schedule"]},
+                        {"required": ["duration"]}
+                    ]
+                },
+                "then": {
+                    "required": ["schedule", "duration"]
+                }
+            }
+        }
+      },
+      "additionalProperties": false
+    },
+    "limits": {
+      "type": "object",
+      "description": "Resource limits for the NodePool.",
+      "properties": {
+        "cpu": { "type": "string" },
+        "memory": { "type": "string", "pattern": "^[0-9]+(Ki|Mi|Gi|Ti|Pi|Ei)$" },
+        "pods": { "type": "string" }
+      },
+      "additionalProperties": { "type": "string" }
+    }
+  },
+  "required": [
+    "name",
+    "ec2NodeClassName",
+    "template"
+  ],
+  "additionalProperties": false
+}
