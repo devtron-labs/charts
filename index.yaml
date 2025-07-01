@@ -6158,6 +6158,27 @@ entries:
   karpenter-resources:
   - apiVersion: v2
     appVersion: v1.5
+    created: "2025-07-01T09:17:23.779911051Z"
+    description: A Helm chart to deploy Karpenter EC2NodeClasses and NodePools for
+      AWS.
+    digest: 3269f9833a493d307c9458943d16bd9e3e29de3e3f58d6e048d458a561d0967c
+    home: https://karpenter.sh/
+    keywords:
+    - karpenter
+    - aws
+    - nodepool
+    - ec2nodeclass
+    - cluster-autoscaling
+    name: karpenter-resources
+    sources:
+    - https://github.com/aws/karpenter
+    - https://github.com/kubernetes-sigs/karpenter
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/karpenter-resources-1.1.0/karpenter-resources-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
+    appVersion: v1.5
     created: "2025-07-01T07:32:20.085207768Z"
     description: A Helm chart to deploy Karpenter EC2NodeClasses and NodePools for
       AWS.
@@ -7229,4 +7250,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-01T07:32:20.085860432Z"
+generated: "2025-07-01T09:17:23.78034255Z"
