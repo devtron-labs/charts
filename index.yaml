@@ -6155,6 +6155,28 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/k8s-shield-0.1.0/k8s-shield-0.1.0.tgz
     version: 0.1.0
+  karpenter-resources:
+  - apiVersion: v2
+    appVersion: v1.5
+    created: "2025-07-01T07:32:20.085207768Z"
+    description: A Helm chart to deploy Karpenter EC2NodeClasses and NodePools for
+      AWS.
+    digest: 54c5e7b2b92645a81567cb3a510c5194052107f45bd92ae03efdf2407b4ba8f0
+    home: https://karpenter.sh/
+    keywords:
+    - karpenter
+    - aws
+    - nodepool
+    - ec2nodeclass
+    - cluster-autoscaling
+    name: karpenter-resources
+    sources:
+    - https://github.com/aws/karpenter
+    - https://github.com/kubernetes-sigs/karpenter
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/karpenter-resources-1.0.0/karpenter-resources-1.0.0.tgz
+    version: 1.0.0
   knative-installer:
   - apiVersion: v2
     created: "2021-06-14T05:45:35.085899302Z"
@@ -7207,4 +7229,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-06-19T11:17:57.071157615Z"
+generated: "2025-07-01T07:32:20.085860432Z"
