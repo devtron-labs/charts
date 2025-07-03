@@ -62,6 +62,7 @@ devtron:
         IS_INTERNAL_USE: "true"
         IS_AIR_GAP_ENVIRONMENT: "false"
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
+        GRPC_ENFORCE_ALPN_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:8299423e-1020-34352"
