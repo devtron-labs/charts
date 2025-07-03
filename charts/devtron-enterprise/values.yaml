@@ -79,7 +79,7 @@ devtron:
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:48c3bdb7-1020-34034"
+      image: "ci-runner:8299423e-1020-34352"
     # Values for kubelink
     kubelink:
       image: "kubelink:cbfb2eb9-314-34351"
