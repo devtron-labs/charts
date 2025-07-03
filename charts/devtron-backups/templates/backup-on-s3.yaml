@@ -8,7 +8,7 @@ metadata:
 type: Opaque
 data:
   S3_BUCKET_NAME: {{ .Values.global.S3.S3_BUCKET_NAME | b64enc }}
-  {{- if eq .Values.global.S3.NODE_ROLE "false" }}
+  {{- if .Values.global.S3.S3_ACCESS_KEY }}
   AWS_ACCESS_KEY: {{ .Values.global.S3.S3_ACCESS_KEY | b64enc }}
   AWS_SECRET_KEY: {{ .Values.global.S3.S3_SECRET_KEY | b64enc }}
   {{- end }}
@@ -33,6 +33,7 @@ spec:
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
+      backoffLimit: 0  
     {{- if $.Values.global.extraConfig }}
 {{ toYaml $.Values.global.extraConfig | indent 6 }}
     {{- end }}
@@ -123,7 +124,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: OnFailure
+          restartPolicy: Never
 {{- end }}
 ---
 {{- if .Values.argocd_backup.enabled }}
@@ -141,6 +142,7 @@ spec:
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
+      backoffLimit: 0  
     {{- if $.Values.global.extraConfig }}
 {{ toYaml $.Values.global.extraConfig | indent 6 }}
     {{- end }}
@@ -225,7 +227,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: OnFailure
+          restartPolicy: Never
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
 {{- end }}

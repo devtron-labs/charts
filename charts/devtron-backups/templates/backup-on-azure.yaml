@@ -30,6 +30,7 @@ spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
+      backoffLimit: 0  
     {{- if $.Values.global.extraConfig }}
 {{ toYaml $.Values.global.extraConfig | indent 6 }}
     {{- end }}
@@ -116,7 +117,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: OnFailure
+          restartPolicy: Never
 {{- end }}          
 ---
 {{- if .Values.argocd_backup.enabled }}
@@ -134,6 +135,7 @@ spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
+      backoffLimit: 0  
     {{- if $.Values.global.extraConfig }}
 {{ toYaml $.Values.global.extraConfig | indent 6 }}
     {{- end }}
@@ -213,7 +215,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: OnFailure
+          restartPolicy: Never
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
 {{- end }}
