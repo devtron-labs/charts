@@ -86,7 +86,7 @@ devtron:
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:48c3bdb7-950-34036"
+      image: "git-sensor:cbfb2eb9-950-34353"
       imagePullPolicy: IfNotPresent
     chartSync:
       image: chart-sync:48c3bdb7-1021-34037
