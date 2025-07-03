@@ -69,7 +69,7 @@ spec:
             tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
             {{- end }}
-            restartPolicy: OnFailure
+            restartPolicy: Never
 {{- end }}
 {{- if and (.Values.global.PERSISTENCE.enabled) (not .Values.global.PERSISTENCE.existingClaim) }}
 ---
@@ -104,6 +104,7 @@ spec:
     schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
+        backoffLimit: 0  
       {{- if $.Values.global.extraConfig }}
 {{ toYaml $.Values.global.extraConfig | indent 6 }}
       {{- end }}
@@ -154,7 +155,7 @@ spec:
             tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
             {{- end }}
-            restartPolicy: OnFailure
+            restartPolicy: Never
             serviceAccountName: argocd-backup
 {{- end }}
 {{- end }}
