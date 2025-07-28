@@ -96,6 +96,13 @@ jaeger_query_ports:
 jaeger:
       replicas: "1"
       image: jaegertracing/all-in-one:latest
+      resource:
+              limit:
+                cpu: "1"
+                memory: 1Gi
+              request:
+                cpu: 200m
+                memory: 400Mi
       storage: "10Gi"
       ports:
            containerPort1: "16686"
