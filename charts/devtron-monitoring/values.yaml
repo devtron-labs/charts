@@ -160,6 +160,13 @@ jaeger-all-in-one-opentelemetry:
       - name: BADGER_SPAN_STORE_TTL
         value: 168h
     image: jaegertracing/all-in-one:1.48
+    resource:
+            limit:
+              cpu: "1"
+              memory: 1Gi
+            request:
+              cpu: 200m
+              memory: 400Mi
     replicas: 1
     storage: 10Gi
   optl_collector_config: |
