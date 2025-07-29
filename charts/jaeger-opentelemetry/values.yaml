@@ -1,4 +1,4 @@
-#if not specified, default namespace is opentelemetry
+#if  namespace is not specified, it defaults to opentelemetry
 Namespace: ""
 
 #config_map
