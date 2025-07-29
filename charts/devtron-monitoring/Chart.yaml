@@ -11,7 +11,7 @@ sources:
   - https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-blackbox-exporter
   - https://github.com/deliveryhero/helm-charts/tree/master/stable/k8s-event-logger
 
-version: 0.0.4
+version: 0.0.5
 appVersion: "0.0.1"
 dependencies:
 - name: fluent-bit
@@ -27,7 +27,7 @@ dependencies:
   repository: https://helm.irsigler.cloud
   condition: uptime-kuma.enabled
 - name: jaeger-all-in-one-opentelemetry
-  version: "0.1.0"
+  version: "0.1.1"
   repository: https://helm.devtron.ai
   condition: jaeger-all-in-one-opentelemetry.enabled
 - name: metrics-server
