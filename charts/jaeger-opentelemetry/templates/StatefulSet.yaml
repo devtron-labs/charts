@@ -19,6 +19,13 @@ spec:
      containers:
        - image: {{ .Values.jaeger.image  }}
          name: jaeger
+         resources:
+           limits:
+             cpu: {{ .Values.jaeger.resource.limit.cpu }}
+             memory: {{ .Values.jaeger.resource.limit.memory  }}
+           requests:
+             cpu: {{ .Values.jaeger.resource.request.cpu  }}
+             memory: {{ .Values.jaeger.resource.request.memory }}
          ports:
          {{- range $port := .Values.jaeger.ports }}
           - containerPort: {{ $port }}

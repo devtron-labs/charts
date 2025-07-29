@@ -95,7 +95,14 @@ jaeger_query_ports:
 #StatefulSet-jaeger all in one
 jaeger:
       replicas: "1"
-      image: jaegertracing/all-in-one:latest
+      image: 
+      resource:
+              limit:
+                cpu: "1"
+                memory: 1Gi
+              request:
+                cpu: 200m
+                memory: 400Mi
       storage: "10Gi"
       ports:
            containerPort1: "16686"
