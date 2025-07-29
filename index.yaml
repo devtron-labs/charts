@@ -6145,6 +6145,16 @@ entries:
     version: 0.1.0
   jaeger-all-in-one-opentelemetry:
   - apiVersion: v2
+    appVersion: 1.16.1
+    created: "2025-07-29T06:37:40.048474848Z"
+    description: A Helm chart for Kubernetes
+    digest: c0f53863f84a2706dba287fcc7a83c60c8208ce0c1fd234e8e30f7d5a3dbeec9
+    name: jaeger-all-in-one-opentelemetry
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/jaeger-all-in-one-opentelemetry-0.1.1/jaeger-all-in-one-opentelemetry-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
     appVersion: 1.16.0
     created: "2023-08-10T11:31:27.976790473Z"
     description: A Helm chart for Kubernetes
@@ -7289,4 +7299,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2025-07-07T06:49:18.207431071Z"
+generated: "2025-07-29T06:37:40.048981435Z"
