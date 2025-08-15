@@ -1,0 +1,15 @@
+dependencies:
+- name: cluster-autoscaler
+  repository: https://kubernetes.github.io/autoscaler
+  version: 9.10.8
+- name: aws-node-termination-handler
+  repository: https://aws.github.io/eks-charts
+  version: 0.16.0
+- name: cluster-overprovisioner
+  repository: https://charts.deliveryhero.io
+  version: 0.4.3
+- name: cluster-proportional-autoscaler
+  repository: https://kubernetes-sigs.github.io/cluster-proportional-autoscaler
+  version: 1.0.0
+digest: sha256:c04e8cb15e4622444ebc6e8bc275feb27f56536d365a165d9490d4427b6b155c
+generated: "2021-11-02T11:50:15.206445+05:30"
