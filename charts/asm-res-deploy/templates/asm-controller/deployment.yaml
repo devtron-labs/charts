@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asm-ingressgateway
+  namespace: {{.Values.commonConfig.namespace}}
+spec:
+  selector:
+    matchLabels:
+      asm: ingressgateway
+  template:
+    metadata:
+      annotations:
+        # This is required to tell Anthos Service Mesh to inject the gateway with the
+        # required configuration.
+        inject.istio.io/templates: gateway
+      labels:
+        asm: ingressgateway
+    spec:
+      containers:
+      - name: istio-proxy
+        image: auto # The image will automatically update each time the pod starts.
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 1024Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi
+      serviceAccountName: asm-ingressgateway
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: asm-ingressgateway
+  namespace: {{.Values.commonConfig.namespace}}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: asm-ingressgateway
+  minReplicas: {{.Values.hpa.minReplicas}}
+  maxReplicas: {{.Values.hpa.maxReplicas}}
+  targetCPUUtilizationPercentage: {{.Values.hpa.targetAverageCPUUtilization}}
