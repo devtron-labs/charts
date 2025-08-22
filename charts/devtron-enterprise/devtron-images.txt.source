@@ -5,7 +5,7 @@ quay.io/devtron/bats:v1.4.1
 quay.io/devtron/busybox:1.31.1
 quay.io/devtron/casbin:36c5edc6-75a2edd0-464-35582
 quay.io/devtron/chart-sync:d829c010-1021-35583
-quay.io/devtron/ci-runner:d829c010-1020-35378
+quay.io/devtron/ci-runner:65e37985-1020-35586
 quay.io/devtron/curl:7.73.0
 quay.io/devtron/dashboard:6ae4cee5-f4daa444-931-35579
 quay.io/devtron/devtron-utils:dup-chart-repo-v1.1.0
