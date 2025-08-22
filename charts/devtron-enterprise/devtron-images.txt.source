@@ -40,3 +40,4 @@ quay.io/devtron/alpine-k8s-utils:latest
 quay.io/devtron/centos-k8s-utils:latest
 quay.io/devtron/alpine-netshoot:latest
 quay.io/devtron/k9s-k8s-utils:latest
+quay.io/devtron/krr:d829c010-1113-35596
