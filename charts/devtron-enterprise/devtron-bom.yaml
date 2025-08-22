@@ -68,6 +68,7 @@ devtron:
         KRR_DOCKER_IMAGE: "quay.io/devtron/krr:d829c010-1113-35596"
         KRR_MATRIX_TIME_RANGE: 720h
         KRR_ACTIVE_DEADLINE_SECONDS: "30000"
+        HIDE_API_TOKENS: "true"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:65e37985-1020-35597"
