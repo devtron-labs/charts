@@ -64,7 +64,7 @@ devtron:
     # Values for devtron
     devtron:
       image: "hyperion:aa27f1da-759-34360"
-      cicdImage: "devtron:aa27f1da-930-34361"
+      cicdImage: "devtron:75a2edd0-930-35578"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "false"
