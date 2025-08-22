@@ -80,7 +80,7 @@ devtron:
         GRPC_ENFORCE_ALPN_ENABLED: "false"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:65e37985-1020-35586"
+      image: "ci-runner:65e37985-1020-35597"
     # Values for kubelink
     kubelink:
       image: "kubelink:cbfb2eb9-314-34351"
