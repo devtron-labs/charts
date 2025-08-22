@@ -44,7 +44,7 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:eeb574a6-4a5dcfc1-931-34348"
+      image: "dashboard:6ae4cee5-f4daa444-931-35579"
     # Values for devtron
     devtron:
       image: "hyperion:aa27f1da-759-34360"
