@@ -63,6 +63,11 @@ devtron:
         IS_AIR_GAP_ENVIRONMENT: "false"
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
         GRPC_ENFORCE_ALPN_ENABLED: "false"
+        KRR_SCAN_LISTING_PARALLELISM_LIMIT: "2"
+        KRR_SYNC_SERVICE_ACCOUNT: devtron
+        KRR_DOCKER_IMAGE: "quay.io/devtron/krr:d829c010-1113-35596"
+        KRR_MATRIX_TIME_RANGE: 720h
+        KRR_ACTIVE_DEADLINE_SECONDS: "30000"
     # Values for ciRunner
     ciRunner:
       image: "ci-runner:65e37985-1020-35597"
