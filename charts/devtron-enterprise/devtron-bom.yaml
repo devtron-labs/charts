@@ -26,7 +26,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "38.0.0"
+    release: "41.0.0"
     registry: ""
     arch: "multi-arch"
     image: inception
@@ -44,11 +44,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:eeb574a6-4a5dcfc1-931-34348"
+      image: "dashboard:6ae4cee5-f4daa444-931-35579"
     # Values for devtron
     devtron:
-      image: "hyperion:aa27f1da-759-34360"
-      cicdImage: "devtron:aa27f1da-930-34361"
+      image: "hyperion:75a2edd0-759-35584"
+      cicdImage: "devtron:75a2edd0-930-35578"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
@@ -63,19 +63,25 @@ devtron:
         IS_AIR_GAP_ENVIRONMENT: "false"
         DEVTRON_MANAGED_LICENSING_ENABLED: "false"
         GRPC_ENFORCE_ALPN_ENABLED: "false"
+        KRR_SCAN_LISTING_PARALLELISM_LIMIT: "2"
+        KRR_SYNC_SERVICE_ACCOUNT: devtron
+        KRR_DOCKER_IMAGE: "quay.io/devtron/krr:d829c010-1113-35596"
+        KRR_MATRIX_TIME_RANGE: 720h
+        KRR_ACTIVE_DEADLINE_SECONDS: "30000"
+        HIDE_API_TOKENS: "true"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:8299423e-1020-34352"
+      image: "ci-runner:65e37985-1020-35597"
     # Values for kubelink
     kubelink:
       image: "kubelink:cbfb2eb9-314-34351"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:cbfb2eb9-950-34353"
+      image: "git-sensor:d829c010-950-35581"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:8299423e-1021-34355
+      image: chart-sync:d829c010-1021-35583
     postgres:
       image: "postgres:14.9"
       metrics:
@@ -83,16 +89,16 @@ devtron:
   # values for security integration
   security:
     imageScanner:
-      image: "image-scanner:8299423e-109-34356"
+      image: "image-scanner:d829c010-109-35580"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
   devtronEnterprise:
     enabled: true
     casbin:
-      image: "casbin:cbfb2eb9-d0517a76-464-34357"
+      image: "casbin:36c5edc6-75a2edd0-464-35582"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:8299423e-955-34358"
+      image: "scoop:d829c010-955-35585"
       imagePullPolicy: IfNotPresent
