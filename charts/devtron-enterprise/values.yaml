@@ -105,7 +105,7 @@ devtron:
   security:
     enabled: true
     imageScanner:
-      image: "image-scanner:d829c010-109-35580"
+      image: "image-scanner:f1033317-109-36112"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
