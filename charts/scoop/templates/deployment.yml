@@ -39,7 +39,7 @@ spec:
       {{- end }}      
       containers:
         - name: scoop
-          image: {{ $.Values.scoop.image | default "devtroninc.azurecr.io/scoop:v0.23.0" }}
+          image: {{ $.Values.scoop.image | default "devtroninc.azurecr.io/scoop:v0.24.0" }}
           imagePullPolicy: IfNotPresent
           ports:
             - name: app
