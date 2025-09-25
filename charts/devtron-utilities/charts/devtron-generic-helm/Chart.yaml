@@ -1,8 +1,0 @@
-apiVersion: v1
-appVersion: 0.1.0
-description: Chart to deploy any YAML file
-maintainers:
-- email: prashant@devtron.ai
-  name: Prashant
-name: devtron-generic-helm
-version: 0.10.1
