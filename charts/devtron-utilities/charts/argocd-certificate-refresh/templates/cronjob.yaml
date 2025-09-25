@@ -37,3 +37,4 @@ spec:
 {{ toYaml $.Values.containerSecurityContext | indent 14 }}         
             {{- end}}
           restartPolicy: OnFailure
+          
