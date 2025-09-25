@@ -2,29 +2,29 @@
   {{- if .Values.global.S3.CA_BUNDLE }}
     {{- if .Values.global.S3.S3_ENDPOINT }}
       {{- if .Values.global.S3.encryption.enabled }} 
-        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }} --ca-bundle $AWS_CA_BUNDLE;   
+        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }} --ca-bundle $AWS_CA_BUNDLE; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- else }}
-        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }} --ca-bundle $AWS_CA_BUNDLE;
+        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }} --ca-bundle $AWS_CA_BUNDLE; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- end }}
     {{- else}}
       {{- if .Values.global.S3.encryption.enabled }} 
-        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ ;
+        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ ; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- else}}
-        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/;
+        set -ex; date1=$(date +%Y%m%d-%H%M); path=$(pwd);  echo "$CA_BUNDLE" > /cabundle.pem; export AWS_CA_BUNDLE=/cabundle.pem; mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- end }}
     {{- end }}
   {{- else }}
     {{- if .Values.global.S3.S3_ENDPOINT }}
       {{- if .Values.global.S3.encryption.enabled }}
-        set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};        
+        set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }}; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- else}}
-        set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }};
+        set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/ --endpoint-url {{ .Values.global.S3.S3_ENDPOINT }}; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- end }}
     {{- else}}
       {{- if .Values.global.S3.encryption.enabled }}    
-        set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/;
+        set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.S3.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; aws s3 cp /postgres/backup-$date1.tar.gpg s3://$S3_BUCKET/postgres/; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- else}}
-        set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/;
+        set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; aws s3 cp /postgres/backup-$date1.tar s3://$S3_BUCKET/postgres/; rm -rvf /postgres/backup-$date1.tar.gpg;
       {{- end }}
     {{- end }}
   {{- end }}
