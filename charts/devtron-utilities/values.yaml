@@ -1,12 +1,13 @@
 # Default values for aws-load-balancer-controller.
 aws-load-balancer-controller: 
-  enabled: false
+  enabled: true
   resources: {}
   clusterName: ""
   region: ""
   vpcId: ""
   ingressClass: alb
   defaultTargetType: instance
+  customSelectorLabels: {}
 
 # Default values for nginx configuration
 ingress-nginx:

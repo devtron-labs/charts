@@ -1,0 +1,154 @@
+{{- if .Values.global.PERSISTENCE.enabled }}
+{{- if .Values.postgres_backup.enabled }}
+{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: batch/v1
+{{- else }}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+    name: postgres-app-backup-cronjob
+    namespace: devtroncd
+spec:
+    timeZone: {{ .Values.global.timezone | default "UTC" }}
+    schedule: {{ .Values.global.schedule }}
+    jobTemplate:
+      spec:
+        template:
+          {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
+          metadata:
+            {{- if $.Values.postgres_backup.labels }}
+            labels:
+            {{ toYaml .Values.postgres_backup.labels | indent 4 }}
+            {{- end }}
+            {{- if $.Values.postgres_backup.annotations }}
+            annotations:
+            {{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+            {{- end }}
+          {{- end }}
+          spec:
+            containers:
+            - name: postgres-app-backup-cronjob
+              image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
+              volumeMounts:
+              - mountPath: /postgres
+                name: psql-volume
+              env:
+              - name: PGPASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    key: PG_PASSWORD
+                    name: {{ .Values.postgres_backup.secretName }}
+              imagePullPolicy: Always
+              args:
+              - /bin/bash
+              - -c  
+              {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
+              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENCE.encryption.passphrase }} /postgres/backup-$date1.tar ; rm -rvf /postgres/backup-$date1.tar; 
+              {{- else }}
+              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
+              {{- end }}
+              resources:
+{{ toYaml .Values.postgres_backup.resources | indent 12 }}
+            volumes:
+            - name: psql-volume
+              persistentVolumeClaim:
+                {{- if and .Values.global.PERSISTENCE.enabled .Values.global.PERSISTENCE.existingClaim }}
+                  claimName: {{ .Values.global.PERSISTENCE.existingClaim }}
+                {{- else }}
+                  claimName: devtron-backup-pvc
+                {{- end }}
+            {{- if $.Values.global.nodeSelector }}
+            nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+            {{- end }}
+            {{- if $.Values.global.tolerations }}
+            tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+            {{- end }}
+            restartPolicy: OnFailure
+{{- end }}
+{{- if and (.Values.global.PERSISTENCE.enabled) (not .Values.global.PERSISTENCE.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtron-backup-pvc
+  namespace: devtroncd
+spec:
+  {{- if .Values.global.PERSISTENCE.storageClass  }}
+  storageClassName: {{ .Values.global.PERSISTENCE.storageClass }}
+  {{- end }}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+       storage: {{ .Values.global.PERSISTENCE.size }}
+{{- end }}
+{{- if .Values.argocd_backup.enabled }}
+---
+{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
+apiVersion: batch/v1
+{{- else }}
+apiVersion: batch/v1beta1
+{{- end }}
+kind: CronJob
+metadata:
+    name: argocd-app-backup-job
+    namespace: devtroncd
+spec:
+    timeZone: {{ .Values.global.timezone | default "UTC" }}
+    schedule: {{ .Values.global.schedule }}
+    jobTemplate:
+      spec:
+        template:
+          {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
+          metadata:
+            {{- if $.Values.postgres_backup.labels }}
+            labels:
+            {{ toYaml .Values.postgres_backup.labels | indent 4 }}
+            {{- end }}
+            {{- if $.Values.postgres_backup.annotations }}
+            annotations:
+            {{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+            {{- end }}
+          {{- end }}
+          spec:
+            containers:
+            - name: argocd-app-backup-job
+              image: {{ .Values.argocd_backup.argocdImage | default "quay.io/argoproj/argocd:v2.4.0" }}
+              volumeMounts:
+              - mountPath: /argo-cd
+                name: argocd-volume
+              env:
+              imagePullPolicy: Always
+              args:
+              - /bin/bash
+              - -c
+              {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
+              - set -ex; mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M);  {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ; gpg -c --batch --passphrase  {{ .Values.global.PERSISTENCE.encryption.passphrase }} /argo-cd/backup-$date1.tar; rm -rvf /argo-cd/backup-$date1.tar;
+              {{- else }}
+              - set -ex; mkdir -p /argo-cd/ ; date1=$(date +%Y%m%d-%H%M); {{ .Values.argocd_backup.args | default "argocd admin export -n devtroncd" }} >  /argo-cd/backup-$date1.tar ;
+              {{- end }}
+              resources:
+{{ toYaml .Values.argocd_backup.resources | indent 12 }}
+            volumes:
+            - name: argocd-volume
+              persistentVolumeClaim:
+                {{- if and .Values.global.PERSISTENCE.enabled .Values.global.PERSISTENCE.existingClaim }}
+                  claimName: {{ .Values.global.PERSISTENCE.existingClaim }}
+                {{- else }}
+                  claimName: devtron-backup-pvc
+                {{- end }}
+            {{- if $.Values.global.nodeSelector }}
+            nodeselector: 
+{{ toYaml .Values.global.nodeSelector | indent 12 }}
+            {{- end }}
+            {{- if $.Values.global.tolerations }}
+            tolerations:
+{{ toYaml .Values.global.tolerations | indent 12 }}
+            {{- end }}
+            restartPolicy: OnFailure
+            serviceAccountName: argocd-backup
+{{- end }}
+{{- end }}
