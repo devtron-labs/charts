@@ -1,6 +1,6 @@
 # Default values for aws-load-balancer-controller.
 aws-load-balancer-controller: 
-  enabled: true
+  enabled: false
   resources: {}
   clusterName: ""
   region: ""
