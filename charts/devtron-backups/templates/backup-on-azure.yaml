@@ -30,10 +30,6 @@ spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
-      backoffLimit: 0  
-    {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -102,13 +98,18 @@ spec:
             - /bin/bash
             - -c
             {{- if $.Values.global.AZURE.encryption.enabled }}
-            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /postgres/backup-$date1.tar.gpg --account-key $AZURE_ACCOUNT_KEY; 
+            - set -ex; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.AZURE.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /postgres/backup-$date1.tar.gpg --account-key $AZURE_ACCOUNT_KEY;  rm -rvf /postgres/backup-$date1.tar; 
             {{- else }} 
-            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /postgres/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; 
+            - set -ex; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; az storage blob upload --account-name $AZURE_BLOB_ACCOUNT_NAME --container-name $AZURE_BLOB_CONTAINER_FOR_POSTGRES --file /postgres/backup-$date1.tar --account-key $AZURE_ACCOUNT_KEY; rm -rvf /postgres/backup-$date1.tar;
             {{- end }}
           volumes:
-          - name: psql-volume
-            emptyDir: {}
+            - name: psql-volume
+              persistentVolumeClaim:
+                {{- if and .Values.global.AZURE.PERSISTENCE.enabled .Values.global.AZURE.PERSISTENCE.existingClaim }}
+                  claimName: {{ .Values.global.AZURE.PERSISTENCE.existingClaim }}
+                {{- else }}
+                  claimName: devtron-backup-pvc
+                {{- end }}
           {{- if $.Values.global.nodeSelector }}
           nodeselector: 
 {{ toYaml .Values.global.nodeSelector | indent 12 }}
@@ -117,7 +118,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: Never
+          restartPolicy: OnFailure
 {{- end }}          
 ---
 {{- if .Values.argocd_backup.enabled }}
@@ -135,10 +136,6 @@ spec:
   schedule: {{ .Values.global.schedule }}
   jobTemplate:
     spec:
-      backoffLimit: 0  
-    {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -215,7 +212,26 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: Never
+          restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
+{{- end }}
+
+
+{{- if and (.Values.global.AZURE.enabled) (.Values.global.AZURE.PERSISTENCE.enabled) (not .Values.global.AZURE.PERSISTENCE.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtron-backup-pvc
+  namespace: devtroncd
+spec:
+  {{- if .Values.global.AZURE.PERSISTENCE.storageClass  }}
+  storageClassName: {{ .Values.global.AZURE.PERSISTENCE.storageClass }}
+  {{- end }}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+       storage: {{ .Values.global.AZURE.PERSISTENCE.size }}
 {{- end }}
