@@ -39,7 +39,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "41.0.0"
+    release: "41.0.1"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
