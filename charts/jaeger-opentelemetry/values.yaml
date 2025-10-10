@@ -1,3 +1,6 @@
+#if  namespace is not specified, it defaults to opentelemetry
+namespace: ""
+
 #config_map
 optl_collector_config: |
     receivers:
@@ -73,9 +76,9 @@ optl_service:
   #    port: 13133
   #    protocol: TCP
   #    targetPort: 13133
-     selector:
-       app: opentelemetry
-       name: optl
+    # selector:
+     #  app: opentelemetry
+     #  name: optl
 
 # service for jaeger-headless
 jaeger_servie_ports:
@@ -95,7 +98,14 @@ jaeger_query_ports:
 #StatefulSet-jaeger all in one
 jaeger:
       replicas: "1"
-      image: jaegertracing/all-in-one:latest
+      image: 
+      resource:
+              limit:
+                cpu: "1"
+                memory: 1Gi
+              request:
+                cpu: 200m
+                memory: 400Mi
       storage: "10Gi"
       ports:
            containerPort1: "16686"

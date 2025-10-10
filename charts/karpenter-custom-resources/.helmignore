@@ -1,0 +1,384 @@
+# Default .helmignore file
+# Exclude common files and directories that should not be packaged in a Helm chart.
+
+# VCS directories
+.git/
+.gitignore
+.gitattributes
+.github/
+.svn/
+.hg/
+
+# Editor and OS specific files
+.DS_Store
+*~
+*.swp
+*.bak
+*.tmp
+*.orig
+Thumbs.db
+
+# Chart sources and build artifacts (if any, not typical for simple charts)
+src/
+target/
+*.tar.gz
+
+# CI/CD files
+.circleci/
+.travis.yml
+Jenkinsfile
+
+# Node.js dependencies (if any JavaScript tooling is used locally for chart development)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python virtual environments and cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Schemas directory - typically not packaged with the chart itself if only used for linting locally
+# However, some tools might leverage it if present. For now, let's exclude it as it's primarily a dev tool.
+schemas/
+# If users need the schemas alongside the chart, this line can be removed.
+
+# README.md files in subdirectories, if any (the top-level README is usually kept)
+*/README.md
+*/README.txt
+
+# Test files or directories not part of Helm's own testing framework
+tests/
+test/
+
+# Any other local configuration or temporary files
+local-values.yaml
+debug.yaml
+output.yaml
+notes.txt # Helm notes are typically in templates/NOTES.txt
+LICENSE # The chart's license is usually at the top level, not for sub-components to be ignored.
+# If this chart had subcharts in a 'charts/' directory, their own .helmignore would apply to them.
+# This .helmignore applies to the current chart's packaging.
+karpenter-custom-resources-*.tgz # Ignore previously packaged chart files
+NOTES.txt
+README.md # The main README.md should be included
+# Keep the main Chart.yaml, values.yaml, and templates/
+# Keep LICENSE if it's at the root
+# Keep crds/ if used (not used in this chart structure)
+# Exclude specific files if they are not part of the chart
+values.schema.json # Often used for linting, can be excluded from package
+# values.dev.yaml
+# values.prod.yaml
+# Pipfile
+# Pipfile.lock
+# requirements.txt # If used for Python tooling, not for Helm chart deps themselves
+# Gemfile
+# Gemfile.lock
+# .idea/
+# *.code-workspace
+# *.sublime-project
+# *.sublime-workspace
+.vscode/
+# If there are specific large files or assets not meant for deployment
+# large-asset.zip
+# datafiles/
+# docs/ # If documentation is extensive and not meant to be in the chart package
+# examples/ # If example configurations are for reference and not part of deployment
+# scripts/ # Utility scripts for development, not for chart runtime
+# Makefile
+# Dockerfile # If used for testing environment, not for chart
+# .editorconfig
+# .yamllint
+# .pre-commit-config.yaml
+# OWNERS
+# CODE_OF_CONDUCT.md
+# CONTRIBUTING.md
+# SECURITY_CONTACTS
+# Renovate configuration files
+.renovaterc.json
+renovate.json
+.github/renovate.json
+.github/renovate.json5
+renovate.json5
+.gitlab/renovate.json
+.gitlab/renovate.json5
+# Terraform files
+*.tf
+*.tfvars
+.terraform/
+.terraform.lock.hcl
+# Serverless framework files
+.serverless/
+serverless.yml
+serverless.yaml
+serverless.json
+# Pulumi files
+Pulumi.yaml
+Pulumi.*.yaml
+__main__.py
+# Ansible files
+ansible.cfg
+ansible_*.yaml
+inventory/
+roles/
+playbooks/
+# Backup files
+*.bak
+*.old
+*.orig
+# Log files
+*.log
+# Archives
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+# Sensitive files (though these should ideally not be in the repo at all)
+*.pem
+*.key
+*.cer
+*.crt
+*private*.key
+*secret*.yaml
+# Chart test values files
+ci/*-values.yaml
+# Temp files from Helm tests
+/tmp/*
+# Build files
+dist/
+build/
+# Coverage reports
+coverage/
+.coverage
+# Linting cache files
+.cache/
+.mypy_cache/
+.ruff_cache/
+# Specific to this project if any other non-chart files exist
+# For example, if I had python scripts for generating parts of the chart:
+# scripts/
+# generated/
+# test_outputs/
+# Any other file or directory that is not part of the Helm chart itself.
+# The schemas are useful for validation but not strictly needed in the packaged chart.
+# Keeping values.schema.json in the chart allows `helm lint --with-subcharts .` to work
+# and `helm install --dry-run --validate .` to work without needing external schema files.
+# So, let's NOT ignore values.schema.json and the schemas/ directory for now.
+# Let's re-evaluate if they cause issues or are not desired in the package.
+# For now, I will keep schemas/ and values.schema.json in the chart.
+# So, I will remove them from the ignore list above.
+
+# Final cleanup:
+# Keep:
+# - Chart.yaml
+# - values.yaml
+# - templates/
+# - README.md
+# - LICENSE
+# - values.schema.json
+# - schemas/  (due to values.schema.json referencing it)
+
+# Therefore, the .helmignore should primarily focus on VCS, OS, editor, and language-specific temp/build files.
+# And also ignore any packaged chart tgz files.
+
+# VCS
+.git/
+.gitignore
+.gitattributes
+.github/ # Assuming workflows are not part of the chart package itself
+.svn/
+.hg/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/ # Exclude if it contains user-specific settings not for sharing
+*.sublime-project
+*.sublime-workspace
+*~
+*.swp
+*.swo
+*.bak
+*.tmp
+*.orig
+
+# Packaged chart file
+*.tgz
+
+# Common build/dependency directories
+node_modules/
+vendor/
+bower_components/
+
+# Python stuff
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+build/
+dist/
+eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg
+
+# Log files
+*.log
+
+# Temporary or Test files not following Helm's test structure
+test-output/
+coverage/
+htmlcov/
+.tox/
+# If you have other specific project files that aren't part of the chart:
+# e.g. Makefiles, Dockerfiles for testing, etc.
+# Makefile
+# Dockerfile
+# Jenkinsfile
+# .travis.yml
+# .gitlab-ci.yml
+# circle.yml
+# Pipfile
+# Pipfile.lock
+# Gemfile
+# Gemfile.lock
+# composer.json
+# composer.lock
+# yarn.lock
+# package-lock.json
+# go.sum
+# go.mod (if it's for tooling around the chart, not the chart itself)
+# *.tf # Terraform files
+# *.tfstate # Terraform state files
+
+# READMEs in subfolders, but keep the main one
+templates/README.md
+schemas/README.md
+# charts/README.md # If this chart had subcharts
+
+# NOTES.txt in subfolders, but keep the main one in templates/
+schemas/NOTES.txt
+# charts/NOTES.txt
+
+# Own chart's packaged file
+karpenter-custom-resources-*.tgz
+チャート.tgz # Japanese
+차트.tgz # Korean
+图表.tgz # Chinese
+карта.tgz # Russian
+แผนภูมิ.tgz # Thai
+แผนผัง.tgz # Thai
+ biểu đồ.tgz # Vietnamese
+ biểu đồ.tgz # Vietnamese
+
+# Files that should be part of the chart:
+# Chart.yaml
+# values.yaml
+# templates/**
+# README.md (root)
+# LICENSE (root)
+# values.schema.json (root)
+# schemas/** (referenced by values.schema.json)
+# crds/** (if any)
+# charts/** (subcharts)
+# templates/NOTES.txt
+# requirements.yaml (deprecated, but if used for chart dependencies)
+# Chart.lock (generated from dependencies)
+# .helmignore (this file itself)
+# OWNERS (if used for chart ownership)
+# assets/** (if chart includes images or other assets)
+# static/** (similar to assets)
+# app-readme.md (if exists)
+# questions.yaml (if exists for Rancher UI)
+# values.schema.yaml (alternative to json)
+# values.dev.yaml etc. should be ignored if they are local overrides
+values-*.yaml
+local-values.yaml
+my-values.yaml
+debug-values.yaml
+ci/
+# The schemas directory is needed for `helm lint` and `helm install --validate` to work correctly
+# if values.schema.json references them. So, don't ignore `schemas/`.
+# `values.schema.json` is also needed for the same reason.
+# So, the files to explicitly NOT ignore are:
+# Chart.yaml, values.yaml, templates/, README.md, LICENSE, values.schema.json, schemas/
+# This .helmignore will exclude most other common non-chart files.
+# Remove .github/ as it might contain issue templates or PR templates relevant to the chart project.
+# Keeping .github/ for now, as it's not part of the helm package content.
+
+# Final minimal set for this project:
+# VCS
+.git/
+.svn/
+.hg/
+
+# OS generated files
+.DS_Store
+._*
+Thumbs.db
+
+# Editor temp files
+*~
+*.swp
+
+# Packaged chart file
+*.tgz
+
+# Python cache/build
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node dev dependencies
+node_modules/
+# Local override values files
+values-local.yaml
+local-values.yaml
+my-values.yaml
+secrets.yaml
+secrets.*.yaml
+private.yaml
+private.*.yaml
+
+# CI specific value files if they are not meant to be packaged
+ci-values.yaml
+test-values.yaml
+karpenter-custom-resources/values.schema.json
+karpenter-custom-resources/schemas/ec2nodeclass-schema.json
+karpenter-custom-resources/schemas/nodepool-schema.json
+karpenter-custom-resources/Chart.yaml
+karpenter-custom-resources/values.yaml
+karpenter-custom-resources/templates/_helpers.tpl
+karpenter-custom-resources/templates/ec2nodeclass.yaml
+karpenter-custom-resources/templates/nodepool.yaml
+karpenter-custom-resources/.helmignore

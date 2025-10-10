@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Karpenter EC2NodeClass",
+  "description": "Schema for EC2NodeClass objects in values.yaml",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the EC2NodeClass resource."
+    },
+    "amiFamily": {
+      "type": "string",
+      "enum": ["AL2", "AL2023", "Bottlerocket", "Windows2019", "Windows2022", "Custom", ""],
+      "description": "Dictates UserData generation and default block device mappings. May be omitted when using an 'alias' amiSelectorTerm."
+    },
+    "amiSelectorTerms": {
+      "type": "array",
+      "description": "AMI selector terms for discovering AMIs. Each term is ORed, conditions within a term are ANDed.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "name": { "type": "string" },
+          "id": { "type": "string" },
+          "owner": { "type": "string" },
+          "alias": { "type": "string" },
+          "ssmParameter": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "subnetSelectorTerms": {
+      "type": "array",
+      "description": "Subnet selector terms. Required. Each term is ORed, conditions within a term are ANDed.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "id": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "securityGroupSelectorTerms": {
+      "type": "array",
+      "description": "Security group selector terms. Required. Each term is ORed, conditions within a term are ANDed.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "id": { "type": "string" },
+          "name": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "role": {
+      "type": "string",
+      "description": "IAM role for the node identity. Must specify 'role' or 'instanceProfile'."
+    },
+    "instanceProfile": {
+      "type": "string",
+      "description": "IAM instance profile for the node identity. Must specify 'role' or 'instanceProfile'."
+    },
+    "tags": {
+      "type": "object",
+      "description": "Additional tags to propagate to underlying EC2 resources.",
+      "additionalProperties": { "type": "string" }
+    },
+    "kubelet": {
+      "type": "object",
+      "description": "Kubelet configuration.",
+      "properties": {
+        "podsPerCore": { "type": "integer", "minimum": 0 },
+        "maxPods": { "type": "integer", "minimum": 0 },
+        "systemReserved": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": "string" },
+            "memory": { "type": "string" },
+            "ephemeral-storage": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "kubeReserved": {
+          "type": "object",
+          "properties": {
+            "cpu": { "type": "string" },
+            "memory": { "type": "string" },
+            "ephemeral-storage": { "type": "string" }
+          },
+          "additionalProperties": false
+        },
+        "evictionHard": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "evictionSoft": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "evictionSoftGracePeriod": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "evictionMaxPodGracePeriod": { "type": "integer" },
+        "imageGCHighThresholdPercent": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "imageGCLowThresholdPercent": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "cpuCFSQuota": { "type": "boolean" },
+        "clusterDNS": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "metadataOptions": {
+      "type": "object",
+      "description": "IMDS configuration.",
+      "properties": {
+        "httpEndpoint": { "type": "string", "enum": ["enabled", "disabled"] },
+        "httpProtocolIPv6": { "type": "string", "enum": ["enabled", "disabled"] },
+        "httpPutResponseHopLimit": { "type": "integer", "minimum": 1 },
+        "httpTokens": { "type": "string", "enum": ["optional", "required"] }
+      },
+      "additionalProperties": false
+    },
+    "blockDeviceMappings": {
+      "type": "array",
+      "description": "EBS volume configuration.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "deviceName": { "type": "string" },
+          "ebs": {
+            "type": "object",
+            "properties": {
+              "volumeSize": { "type": "string", "pattern": "^[0-9]+(Gi|Mi|Ti)$" },
+              "volumeType": { "type": "string", "enum": ["gp2", "gp3", "io1", "io2", "sc1", "st1", "standard"] },
+              "iops": { "type": "integer", "minimum": 100 },
+              "encrypted": { "type": "boolean" },
+              "kmsKeyID": { "type": "string" },
+              "deleteOnTermination": { "type": "boolean" },
+              "throughput": { "type": "integer", "minimum": 125 },
+              "snapshotID": { "type": "string" },
+              "volumeInitializationRate": {"type": "integer"}
+            },
+            "required": ["volumeSize", "volumeType", "encrypted"],
+            "additionalProperties": false
+          }
+        },
+        "required": ["deviceName", "ebs"],
+        "additionalProperties": false
+      }
+    },
+    "detailedMonitoring": {
+      "type": "boolean",
+      "description": "Enables EC2 detailed monitoring."
+    },
+    "associatePublicIPAddress": {
+      "type": "boolean",
+      "description": "Associate a public IP address with instances. Overrides subnet settings."
+    },
+    "userData": {
+      "type": "string",
+      "description": "Custom UserData script."
+    },
+    "instanceStorePolicy": {
+        "type": "string",
+        "enum": ["RAID0", ""],
+        "description": "Policy for handling instance store volumes. RAID0 configures them for ephemeral-storage."
+    },
+    "capacityReservationSelectorTerms": {
+        "type": "array",
+        "description": "Capacity Reservation selector terms (Alpha feature).",
+        "items": {
+            "type": "object",
+            "properties": {
+                "id": { "type": "string"},
+                "tags": {
+                    "type": "object",
+                    "additionalProperties": {"type": "string"}
+                },
+                "ownerID": {"type": "string"}
+            },
+            "additionalProperties": false
+        }
+    }
+  },
+  "required": [
+    "name",
+    "subnetSelectorTerms",
+    "securityGroupSelectorTerms"
+  ],
+  "additionalProperties": false,
+  "anyOf": [
+    { "required": ["role"] },
+    { "required": ["instanceProfile"] }
+  ],
+  "if": {
+    "properties": { "amiSelectorTerms": { "not": { "type": "array", "minItems": 1 } } }
+  },
+  "then": {
+    "properties": { "amiFamily": { "not" : {"const": ""}} }, "required": ["amiFamily"]
+  }
+}

@@ -1,0 +1,129 @@
+# Default values for karpenter-custom-resources.
+# This is a YAML-formatted file.
+
+# EC2NodeClass definitions - Configure the compute resources for your nodes
+ec2NodeClasses:
+  - name: "default-linux"
+    # AMI family - determines the base operating system
+    amiFamily: "AL2"  # Options: AL2, AL2023, Bottlerocket, Windows2019, Windows2022, Custom
+    
+    # IAM role for the nodes (ensure this role exists in your AWS account)
+    role: "KarpenterNodeRole"
+    
+    # Subnet discovery - Karpenter will use subnets with these tags
+    subnetSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "your-cluster-name"  # Replace with your actual cluster name
+    
+    # Security group discovery - Karpenter will use security groups with these tags
+    securityGroupSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "your-cluster-name"  # Replace with your actual cluster name
+    
+    # Optional: Custom tags to apply to EC2 instances
+    tags:
+      Environment: "production"
+      Team: "platform"
+    
+    # Kubelet configuration
+    kubelet:
+      maxPods: 110
+      clusterDNS: ["10.100.0.10"]  # Replace with your cluster's DNS service IP
+    
+    # Storage configuration
+    blockDeviceMappings:
+      - deviceName: "/dev/xvda"
+        ebs:
+          volumeSize: "20Gi"
+          volumeType: "gp3"
+          encrypted: true
+          deleteOnTermination: true
+    
+    # Security: Enhanced metadata service configuration
+    metadataOptions:
+      httpEndpoint: "enabled"
+      httpProtocolIPv6: "disabled"
+      httpPutResponseHopLimit: 1  # Prevents containers from accessing instance metadata
+      httpTokens: "required"     # Requires IMDSv2
+    
+    # Optional: Enable detailed CloudWatch monitoring
+    detailedMonitoring: true
+
+# NodePool definitions - Define how your workloads should be scheduled
+nodePools:
+  - name: "general-purpose"
+    # Reference to the EC2NodeClass above
+    ec2NodeClassName: "default-linux"
+    
+    # Node template configuration
+    template:
+      metadata:
+        labels:
+          workload-type: "general"
+          team: "platform"
+      spec:
+        # Instance requirements - Karpenter will select instances that match these criteria
+        requirements:
+          # Capacity type: spot instances for cost savings, on-demand for reliability
+          - key: "karpenter.sh/capacity-type"
+            operator: In
+            values: ["spot", "on-demand"]
+          
+          # Instance families: general purpose compute optimized instances
+          - key: "karpenter.k8s.aws/instance-category"
+            operator: In
+            values: ["m", "c", "r"]
+          
+          # Instance generation: use newer generation instances for better performance
+          - key: "karpenter.k8s.aws/instance-generation"
+            operator: Gt
+            values: ["3"]
+          
+          # Architecture: x86_64 architecture
+          - key: "kubernetes.io/arch"
+            operator: In
+            values: ["amd64"]
+          
+          # Operating system: Linux
+          - key: "kubernetes.io/os"
+            operator: In
+            values: ["linux"]
+    
+    # Disruption settings - how aggressively to consolidate nodes
+    disruption:
+      consolidationPolicy: "WhenEmptyOrUnderutilized"
+      consolidateAfter: "30s"
+    
+    # Resource limits for this node pool
+    limits:
+      cpu: "1000"      # Maximum CPU cores across all nodes in this pool
+      memory: "4000Gi" # Maximum memory across all nodes in this pool
+
+# Example: Additional NodePool for GPU workloads (commented out)
+# - name: "gpu-workloads"
+#   ec2NodeClassName: "default-linux"
+#   template:
+#     metadata:
+#       labels:
+#         workload-type: "gpu"
+#     spec:
+#       # Taint GPU nodes so only GPU workloads can be scheduled on them
+#       taints:
+#         - key: "nvidia.com/gpu"
+#           effect: "NoSchedule"
+#       requirements:
+#         - key: "karpenter.sh/capacity-type"
+#           operator: In
+#           values: ["on-demand"]  # GPU instances are typically on-demand
+#         - key: "karpenter.k8s.aws/instance-category"
+#           operator: In
+#           values: ["g", "p"]  # GPU instance families
+#         - key: "kubernetes.io/arch"
+#           operator: In
+#           values: ["amd64"]
+#   disruption:
+#     consolidationPolicy: "WhenEmpty"  # GPU nodes are expensive, only consolidate when empty
+#   limits:
+#     cpu: "200"
+#     memory: "1000Gi"
+#     "nvidia.com/gpu": "8"

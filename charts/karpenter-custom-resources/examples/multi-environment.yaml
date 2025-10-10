@@ -1,0 +1,121 @@
+# Multi-environment NodePool example
+# Shows how to create separate node pools for different environments
+
+ec2NodeClasses:
+  - name: "production-nodes"
+    amiFamily: "AL2"
+    role: "KarpenterNodeRole"
+    subnetSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "prod-cluster"
+          Environment: "production"
+    securityGroupSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "prod-cluster"
+          Environment: "production"
+    tags:
+      Environment: "production"
+      CostCenter: "engineering"
+    kubelet:
+      maxPods: 110
+      clusterDNS: ["10.100.0.10"]
+      # Resource reservations for production stability
+      systemReserved:
+        cpu: "200m"
+        memory: "500Mi"
+        ephemeral-storage: "1Gi"
+      kubeReserved:
+        cpu: "200m"
+        memory: "500Mi"
+    blockDeviceMappings:
+      - deviceName: "/dev/xvda"
+        ebs:
+          volumeSize: "50Gi"  # Larger storage for production
+          volumeType: "gp3"
+          encrypted: true
+          deleteOnTermination: true
+    metadataOptions:
+      httpEndpoint: "enabled"
+      httpTokens: "required"
+    detailedMonitoring: true
+
+  - name: "development-nodes"
+    amiFamily: "AL2"
+    role: "KarpenterNodeRole"
+    subnetSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "dev-cluster"
+          Environment: "development"
+    securityGroupSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "dev-cluster"
+          Environment: "development"
+    tags:
+      Environment: "development"
+      CostCenter: "engineering"
+    kubelet:
+      maxPods: 110
+      clusterDNS: ["10.100.0.10"]
+    blockDeviceMappings:
+      - deviceName: "/dev/xvda"
+        ebs:
+          volumeSize: "20Gi"
+          volumeType: "gp3"
+          encrypted: true
+          deleteOnTermination: true
+
+nodePools:
+  - name: "production-workloads"
+    ec2NodeClassName: "production-nodes"
+    template:
+      metadata:
+        labels:
+          environment: "production"
+          team: "platform"
+      spec:
+        requirements:
+          - key: "karpenter.sh/capacity-type"
+            operator: In
+            values: ["on-demand"]  # Production prefers reliability
+          - key: "karpenter.k8s.aws/instance-category"
+            operator: In
+            values: ["m", "c", "r"]
+          - key: "karpenter.k8s.aws/instance-generation"
+            operator: Gt
+            values: ["4"]  # Latest generation for production
+          - key: "kubernetes.io/arch"
+            operator: In
+            values: ["amd64"]
+    disruption:
+      consolidationPolicy: "WhenEmpty"  # Conservative for production
+      consolidateAfter: "10m"
+    limits:
+      cpu: "2000"
+      memory: "8000Gi"
+
+  - name: "development-workloads"
+    ec2NodeClassName: "development-nodes"
+    template:
+      metadata:
+        labels:
+          environment: "development"
+          team: "platform"
+      spec:
+        requirements:
+          - key: "karpenter.sh/capacity-type"
+            operator: In
+            values: ["spot"]  # Development can use cheaper spot instances
+          - key: "karpenter.k8s.aws/instance-category"
+            operator: In
+            values: ["m", "c", "r", "t"]
+          - key: "kubernetes.io/arch"
+            operator: In
+            values: ["amd64"]
+        # Dev environments can expire nodes to save costs
+        expireAfter: "24h"
+    disruption:
+      consolidationPolicy: "WhenEmptyOrUnderutilized"
+      consolidateAfter: "30s"
+    limits:
+      cpu: "500"
+      memory: "2000Gi"

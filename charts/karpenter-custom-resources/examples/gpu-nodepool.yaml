@@ -1,0 +1,62 @@
+# GPU NodePool example for ML/AI workloads
+# Copy these values into your values.yaml file
+
+ec2NodeClasses:
+  - name: "gpu-compute"
+    amiFamily: "AL2"
+    role: "KarpenterNodeRole"
+    subnetSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "my-cluster"
+    securityGroupSelectorTerms:
+      - tags:
+          karpenter.sh/discovery: "my-cluster"
+    tags:
+      WorkloadType: "GPU"
+      Purpose: "ML-Training"
+    kubelet:
+      maxPods: 110
+      clusterDNS: ["10.100.0.10"]
+    blockDeviceMappings:
+      - deviceName: "/dev/xvda"
+        ebs:
+          volumeSize: "100Gi"  # Larger storage for ML frameworks
+          volumeType: "gp3"
+          encrypted: true
+          deleteOnTermination: true
+    metadataOptions:
+      httpEndpoint: "enabled"
+      httpTokens: "required"
+
+nodePools:
+  - name: "gpu-workloads"
+    ec2NodeClassName: "gpu-compute"
+    template:
+      metadata:
+        labels:
+          workload-type: "gpu"
+      spec:
+        # Taint GPU nodes so only GPU workloads schedule here
+        taints:
+          - key: "nvidia.com/gpu"
+            effect: "NoSchedule"
+        requirements:
+          - key: "karpenter.sh/capacity-type"
+            operator: In
+            values: ["on-demand"]  # GPU instances are typically on-demand
+          - key: "karpenter.k8s.aws/instance-category"
+            operator: In
+            values: ["g", "p"]  # GPU instance families
+          - key: "kubernetes.io/arch"
+            operator: In
+            values: ["amd64"]
+          - key: "kubernetes.io/os"
+            operator: In
+            values: ["linux"]
+    disruption:
+      consolidationPolicy: "WhenEmpty"  # Conservative for expensive GPU nodes
+      consolidateAfter: "5m"
+    limits:
+      cpu: "500"
+      memory: "2000Gi"
+      "nvidia.com/gpu": "16"  # Limit total GPUs

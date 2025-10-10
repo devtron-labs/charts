@@ -1,0 +1,85 @@
+{{- if .Values.nodePools }}
+{{- range .Values.nodePools }}
+---
+apiVersion: {{ include "karpenter-custom-resources.nodePoolApiVersion" $ }}
+kind: NodePool
+metadata:
+  name: {{ .name | quote }}
+  labels:
+    {{- include "karpenter-custom-resources.labels" $ | nindent 4 }}
+  {{- with .annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .weight }}
+  weight: {{ .weight }}
+  {{- end }}
+  template:
+    {{- with .template.metadata }}
+    metadata:
+      {{- with .labels }}
+      labels:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .annotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- end }}
+    spec:
+      nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
+        name: {{ .ec2NodeClassName | quote }}
+      {{- with .template.spec.taints }}
+      taints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .template.spec.startupTaints }}
+      startupTaints:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .template.spec.expireAfter }}
+      expireAfter: {{ .template.spec.expireAfter | quote }}
+      {{- end }}
+      {{- if .template.spec.terminationGracePeriod }}
+      terminationGracePeriod: {{ .template.spec.terminationGracePeriod | quote }}
+      {{- end }}
+      {{- with .template.spec.requirements }}
+      requirements:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  {{- with .disruption }}
+  disruption:
+    {{- if .consolidationPolicy }}
+    consolidationPolicy: {{ .consolidationPolicy | quote }}
+    {{- end }}
+    {{- if .consolidateAfter }}
+    consolidateAfter: {{ .consolidateAfter | quote }}
+    {{- end }}
+    {{- with .budgets }}
+    budgets:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- with .limits }}
+  limits:
+    {{- if .cpu }}
+    cpu: {{ .cpu | quote }}
+    {{- end }}
+    {{- if .memory }}
+    memory: {{ .memory | quote }}
+    {{- end }}
+    {{- if .pods }}
+    pods: {{ .pods | quote }}
+    {{- end }}
+    {{- $standardLimits := list "cpu" "memory" "pods" -}}
+    {{- range $key, $val := . }}
+    {{- if not (has $key $standardLimits) }}
+    {{ $key | quote }}: {{ $val | quote }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

@@ -19,7 +19,9 @@ The following sections describe the policies that are defined in the values.yaml
 9. Readiness and Liveness Policy
 10. Pod Security Policy
 11. Container Security Policy
-12. Extra Validating Policy
+12. Deny Namespace Creation
+13. Deny CRDs Deletion
+14. Extra Validating Policy
 
 ## Exclude Label
 
@@ -66,6 +68,13 @@ The ```limitResourcePolicy``` enforces a maximum CPU and memory limit for the sp
 ## Container Security Policy
    
    The ```containerSecurityPolicy``` defines additional security policies that apply to containers within pods. It ensures that containers adhere to security best practices, including non-root execution and restrictions on filesystem access and privilege escalation.
+
+## Deny Namespace Creation
+
+   The ```Deny Namespace Creation```policy completely denies the creation of new namespaces. This is useful in highly controlled environments where namespace provisioning is managed externally.
+
+## Deny CRDs Deletion
+   The ```Deny CRDs Deletion``` policy blocks deletion of CustomResourceDefinitions (CRDs), which can be critical to the operation of custom applications and controllers.
 
 ## Extra Validating Policy
    
