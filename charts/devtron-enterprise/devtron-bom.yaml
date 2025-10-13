@@ -112,7 +112,10 @@ devtron:
         policy.default: role:admin
     applicationSet:
       replicas: 0
-        
+  monitoring:
+    grafana:
+      enabled: true
+      image: "grafana:7.3.1"        
   devtronEnterprise:
     enabled: true
     casbin:
