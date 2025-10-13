@@ -39,7 +39,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "42.0.0"
+    release: "42.0.1"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -116,6 +116,7 @@ devtron:
   monitoring:
     grafana:
       enabled: true
+      image: "grafana:7.3.1"
   devtronEnterprise:
     enabled: true
     casbin:

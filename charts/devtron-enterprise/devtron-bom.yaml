@@ -26,7 +26,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "42.0.0"
+    release: "42.0.1"
     registry: ""
     arch: "multi-arch"
     image: inception
@@ -93,6 +93,29 @@ devtron:
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
+# values for argocd integration
+  argo-cd:
+    global:
+      image:
+        # -- If defined, a repository applied to all Argo CD deployments
+        repository: quay.io/argoproj/argocd
+        # -- Overrides the global Argo CD image tag whose default is the chart appVersion
+        tag: "v2.13.3"
+        # -- If defined, a imagePullPolicy applied to all Argo CD deployments
+        imagePullPolicy: IfNotPresent
+    configs:
+      cm:
+        create: false
+      # argocd-rbac-cm
+      rbac:
+        create: true
+        policy.default: role:admin
+    applicationSet:
+      replicas: 0
+  monitoring:
+    grafana:
+      enabled: true
+      image: "grafana:7.3.1"        
   devtronEnterprise:
     enabled: true
     casbin:
