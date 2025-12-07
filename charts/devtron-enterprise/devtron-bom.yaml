@@ -78,7 +78,7 @@ devtron:
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:9d87bcc9-950-36700"
+      image: "git-sensor:90c6d05c-950-37796"
       imagePullPolicy: IfNotPresent
     chartSync:
       image: chart-sync:f1033317-1021-36111
@@ -93,7 +93,7 @@ devtron:
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
-# values for argocd integration
+        # values for argocd integration
   argo-cd:
     global:
       image:
@@ -115,7 +115,7 @@ devtron:
   monitoring:
     grafana:
       enabled: true
-      image: "grafana:7.3.1"        
+      image: "grafana:7.3.1"
   devtronEnterprise:
     enabled: true
     casbin:
