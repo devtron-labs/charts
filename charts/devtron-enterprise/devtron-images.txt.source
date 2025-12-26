@@ -12,7 +12,7 @@ quay.io/devtron/devtron-utils:dup-chart-repo-v1.1.0
 quay.io/devtron/devtron-utils:geni-v1.1.4
 quay.io/devtron/devtron:326ed2d1-930-38177
 quay.io/devtron/dex:v2.30.2
-quay.io/devtron/git-sensor:90c6d05c-950-37796
+quay.io/devtron/git-sensor:2c31a453-950-38181
 quay.io/devtron/grafana:7.3.1
 quay.io/devtron/hyperion:326ed2d1-759-38175
 quay.io/devtron/image-scanner:2c31a453-109-38139
