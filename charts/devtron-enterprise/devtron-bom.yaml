@@ -118,6 +118,14 @@ devtron:
       image: "grafana:7.3.1"
   devtronEnterprise:
     enabled: true
+    finops:
+      enabled: true
+      costSync:
+        image: "cost-sync:46ed7c67-1159-38183"
+        schedule: "0 * * * *"
+        timeZone: UTC
+      timescale:
+        volumeSize: 5Gi    
     casbin:
       image: "casbin:46ed7c67-c62c2b36-464-38140"
       imagePullPolicy: IfNotPresent
