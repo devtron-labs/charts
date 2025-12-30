@@ -93,7 +93,7 @@ devtron:
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
-        # values for argocd integration
+# values for argocd integration
   argo-cd:
     global:
       image:
