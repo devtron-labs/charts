@@ -124,6 +124,7 @@ devtron:
         schedule: "0 * * * *"
         timeZone: UTC
       timescale:
+        image: "timescaledb-ha:pg18"
         volumeSize: 5Gi
     casbin:
       image: "casbin:46ed7c67-c62c2b36-464-38140"
