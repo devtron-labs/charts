@@ -48,7 +48,7 @@ devtron:
     # Values for devtron
     devtron:
       image: "hyperion:326ed2d1-759-38175"
-      cicdImage: "devtron:326ed2d1-930-38177"
+      cicdImage: "devtron:c0bdac7b-930-38226"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
@@ -93,7 +93,7 @@ devtron:
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
-# values for argocd integration
+        # values for argocd integration
   argo-cd:
     global:
       image:
@@ -124,7 +124,7 @@ devtron:
         schedule: "0 * * * *"
         timeZone: UTC
       timescale:
-        volumeSize: 5Gi    
+        volumeSize: 5Gi
     casbin:
       image: "casbin:46ed7c67-c62c2b36-464-38140"
       imagePullPolicy: IfNotPresent
