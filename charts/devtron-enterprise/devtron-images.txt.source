@@ -21,8 +21,8 @@ quay.io/devtron/k8s-sidecar:1.1.0
 quay.io/devtron/k8s-utils:tutum-curl
 quay.io/devtron/kubectl:latest
 quay.io/devtron/kubelink:2c31a453-314-38136
-quay.io/devtron/kubewatch:880420ac-419-36026
-quay.io/devtron/lens:880420ac-333-36029
+quay.io/devtron/kubewatch:6b408df4-419-38172
+quay.io/devtron/lens:6b408df4-333-38167
 quay.io/devtron/migrator:v4.16.2
 quay.io/devtron/minideb:latest
 quay.io/devtron/minio-mc:RELEASE.2021-02-14T04-28-06Z
@@ -30,7 +30,7 @@ quay.io/devtron/minio:RELEASE.2021-02-14T04-01-33Z
 quay.io/devtron/nats-box
 quay.io/devtron/nats-server-config-reloader:0.6.2
 quay.io/devtron/nats:2.9.3-alpine
-quay.io/devtron/notifier:00f17215-372-36041
+quay.io/devtron/notifier:5c4b5b3a-372-38153
 quay.io/devtron/postgres:14.9
 quay.io/devtron/postgres_exporter:v0.10.1
 quay.io/devtron/prometheus-nats-exporter:0.9.0
