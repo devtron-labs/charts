@@ -8,7 +8,7 @@ metadata:
 type: Opaque
 data:
   S3_BUCKET_NAME: {{ .Values.global.S3.S3_BUCKET_NAME | b64enc }}
-  {{- if .Values.global.S3.S3_ACCESS_KEY }}
+  {{- if eq .Values.global.S3.NODE_ROLE "false" }}
   AWS_ACCESS_KEY: {{ .Values.global.S3.S3_ACCESS_KEY | b64enc }}
   AWS_SECRET_KEY: {{ .Values.global.S3.S3_SECRET_KEY | b64enc }}
   {{- end }}
@@ -33,10 +33,6 @@ spec:
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
-      backoffLimit: 0  
-    {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -115,7 +111,12 @@ spec:
 {{ include "devtron.postgresBackup" . | indent 6 }}
           volumes:
           - name: psql-volume
-            emptyDir: {}
+            persistentVolumeClaim:
+              {{- if and .Values.global.S3.PERSISTENCE.enabled .Values.global.S3.PERSISTENCE.existingClaim }}
+                claimName: {{ .Values.global.S3.PERSISTENCE.existingClaim }}
+              {{- else }}
+                claimName: devtron-backup-pvc
+              {{- end }}
           {{- if $.Values.global.nodeSelector }}
           nodeselector: 
 {{ toYaml .Values.global.nodeSelector | indent 12 }}
@@ -124,7 +125,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: Never
+          restartPolicy: OnFailure
 {{- end }}
 ---
 {{- if .Values.argocd_backup.enabled }}
@@ -142,10 +143,6 @@ spec:
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
-      backoffLimit: 0  
-    {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -227,7 +224,25 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: Never
+          restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
+{{- end }}
+
+{{- if and (.Values.global.S3.enabled) (.Values.global.S3.PERSISTENCE.enabled) (not .Values.global.S3.PERSISTENCE.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtron-backup-pvc
+  namespace: devtroncd
+spec:
+  {{- if .Values.global.S3.PERSISTENCE.storageClass }}
+  storageClassName: {{ .Values.global.S3.PERSISTENCE.storageClass }}
+  {{- end }}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+       storage: {{ .Values.global.S3.PERSISTENCE.size }}
 {{- end }}
