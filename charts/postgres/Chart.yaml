@@ -1,0 +1,12 @@
+apiVersion: v2
+name: postgres
+description: A Helm chart for PostgreSQL on Kubernetes
+
+type: application
+
+maintainers:
+  - name: Devtron
+
+version: 0.4.1
+
+appVersion: "15.1"
