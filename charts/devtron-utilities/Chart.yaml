@@ -1,69 +1,68 @@
 apiVersion: v2
-name: devtron-utilities
-description: Provides essential infrastructure and security utilities such as Nginx/AWS Load Balancer, Devtron Backup, Minio (Blob Storage), Network Policy, Cluster Auto Scaler (Karpenter), and more.  
-
-type: application
-version: 0.0.2
-appVersion: "0.0.1"
-sources:
-- https://github.com/kubernetes/ingress-nginx
-- https://aws.github.io/eks-charts
-- https://charts.min.io/
+appVersion: 0.0.1
 dependencies:
-- name: ingress-nginx
-  version: "4.12.0"
+- condition: ingress-nginx.enabled
+  name: ingress-nginx
   repository: https://kubernetes.github.io/ingress-nginx
-  condition: ingress-nginx.enabled
-- name: cluster-autoscaler
-  version: "9.46.0"
+  version: 4.12.0
+- condition: cluster-autoscaler.enabled
+  name: cluster-autoscaler
   repository: https://kubernetes.github.io/autoscaler
-  condition: cluster-autoscaler.enabled
-- name: karpenter
-  version:  "1.2.1"
+  version: 9.46.0
+- condition: karpenter.enabled
+  name: karpenter
   repository: oci://public.ecr.aws/karpenter
-  condition: karpenter.enabled
-- name: aws-load-balancer-controller
-  version: "1.11.0"
+  version: 1.4.0
+- condition: aws-load-balancer-controller.enabled
+  name: aws-load-balancer-controller
   repository: https://aws.github.io/eks-charts
-  condition: aws-load-balancer-controller.enabled
-- name: aws-node-termination-handler
-  version: "0.21.0"
+  version: 1.11.0
+- condition: aws-node-termination-handler.enabled
+  name: aws-node-termination-handler
   repository: https://aws.github.io/eks-charts
-  condition: aws-node-termination-handler.enabled
-- name: minio
-  version: "5.4.0"
+  version: 0.21.0
+- condition: minio.enabled
+  name: minio
   repository: https://charts.min.io/
-  condition: minio.enabled
-- name: kcert
-  version: "1.0.7"
+  version: 5.4.0
+- condition: kcert.enabled
+  name: kcert
   repository: https://nabsul.github.io/helm
-  condition: kcert.enabled
-- name: argocd-certificate-refresh
-  version: "0.10.8"
+  version: 1.0.7
+- condition: argocd-certificate-refresh.enabled
+  name: argocd-certificate-refresh
   repository: https://helm.devtron.ai/
-  condition: argocd-certificate-refresh.enabled
-- name: k8s-shield
-  version: "0.1.0"
+  version: 0.10.8
+- condition: k8s-shield.enabled
+  name: k8s-shield
   repository: https://helm.devtron.ai/
-  condition: k8s-shield.enabled
-- name: devtron-backups
-  version: "0.2.5"
+  version: 0.1.0
+- condition: devtron-backups.enabled
+  name: devtron-backups
   repository: https://helm.devtron.ai/
-  condition: devtron-backups.enabled
-- name: devtron-generic-helm
-  version: "0.10.1"
-  repository: https://helm.devtron.ai/
+  version: 0.2.5
+- alias: nodepool
   condition: nodepool.enabled
-  alias: nodepool
-- name: holmes
-  version: "0.8.1"
-  repository: https://robusta-charts.storage.googleapis.com
+  name: devtron-generic-helm
+  repository: https://helm.devtron.ai/
+  version: 0.10.1
+- alias: holmes-ai
   condition: holmes-ai.enabled
-  alias: holmes-ai
-
-
+  name: holmes
+  repository: https://robusta-charts.storage.googleapis.com
+  version: 0.8.1
+description: Provides essential infrastructure and security utilities such as Nginx/AWS
+  Load Balancer, Devtron Backup, Minio (Blob Storage), Network Policy, Cluster Auto
+  Scaler (Karpenter), and more.
 maintainers:
 - email: badal@devtron.ai
   name: Badal Kumar
 - email: pawan.mehta@devtron.ai
   name: Pawan Kumar
+name: devtron-utilities
+sources:
+- https://github.com/kubernetes/ingress-nginx
+- https://aws.github.io/eks-charts
+- https://charts.min.io/
+type: application
+version: 0.0.4
