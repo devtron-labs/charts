@@ -14,9 +14,6 @@ spec:
     schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
-      {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-      {{- end }}  
         template:
           {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
           metadata:
@@ -49,7 +46,7 @@ spec:
               {{- if $.Values.global.PERSISTENCE.encryption.enabled }}   
               - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h postgresql-postgresql.devtroncd -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ; gpg -c --batch --passphrase {{ .Values.global.PERSISTENCE.encryption.passphrase }} /postgres/backup-$date1.tar ; rm -rvf /postgres/backup-$date1.tar; 
               {{- else }}
-              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ;
+              - set -ex; mkdir -p /postgres/ ; date1=$(date +%Y%m%d-%H%M); pg_dumpall -h {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" }} --exclude-database=clairv4 -p 5432 -U postgres --no-privileges >  /postgres/backup-$date1.tar ; rm -rvf /postgres/backup-$date1.tar;
               {{- end }}
               resources:
 {{ toYaml .Values.postgres_backup.resources | indent 12 }}
@@ -69,7 +66,7 @@ spec:
             tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
             {{- end }}
-            restartPolicy: Never
+            restartPolicy: OnFailure
 {{- end }}
 {{- if and (.Values.global.PERSISTENCE.enabled) (not .Values.global.PERSISTENCE.existingClaim) }}
 ---
@@ -104,10 +101,6 @@ spec:
     schedule: {{ .Values.global.schedule }}
     jobTemplate:
       spec:
-        backoffLimit: 0  
-      {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-      {{- end }}
         template:
           {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
           metadata:
@@ -155,7 +148,7 @@ spec:
             tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
             {{- end }}
-            restartPolicy: Never
+            restartPolicy: OnFailure
             serviceAccountName: argocd-backup
 {{- end }}
 {{- end }}
