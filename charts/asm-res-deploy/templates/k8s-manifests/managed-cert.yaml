@@ -1,0 +1,10 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: asm-gke-ingress-cert
+  namespace: {{.Values.commonConfig.namespace}}
+spec:
+  domains:
+    {{- range $key, $value := .Values.ManagedCertificate }}
+    - {{ $value.domain }}
+    {{- end }}
