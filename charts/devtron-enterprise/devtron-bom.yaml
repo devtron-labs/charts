@@ -71,7 +71,7 @@ devtron:
         HIDE_API_TOKENS: "true"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:f1033317-1020-36109"
+      image: "ci-runner:2093861a-1020-38954"
     # Values for kubelink
     kubelink:
       image: "kubelink:2c31a453-314-38136"
