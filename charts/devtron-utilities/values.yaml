@@ -7,6 +7,7 @@ aws-load-balancer-controller:
   vpcId: ""
   ingressClass: alb
   defaultTargetType: instance
+  customSelectorLabels: {}
 
 # Default values for nginx configuration
 ingress-nginx:
@@ -222,14 +223,20 @@ devtron-backups:
     S3:
       enabled: false
       S3_BUCKET_NAME: ""
-      AWS_REGION: "ap-south-1"
+      AWS_REGION: ""
       NODE_ROLE: "true"
+      PERSISTENCE:
+        enabled: true
+        existingClaim: "" # Required if existingClaim is not used
+        size: 30Gi   # Required if existingClaim is not used
+        storageClass: "" # Required if existingClaim is not used
       encryption:
         enabled: false
         passphrase: ""
+      
   postgres_backup:
     secretName: "postgres-creds-3"
-    enabled: false
+    enabled: true
   argocd_backup:
     enabled: false
 
