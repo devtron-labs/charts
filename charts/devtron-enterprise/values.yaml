@@ -39,7 +39,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "41.0.0"
+    release: "44.0.1"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -60,11 +60,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:6ae4cee5-f4daa444-931-35579"
+      image: "dashboard:62e65ef2-4b2d6d68-931-38143"
     # Values for devtron
     devtron:
-      image: "hyperion:75a2edd0-759-35584"
-      cicdImage: "devtron:75a2edd0-930-35578"
+      image: "hyperion:c0bdac7b-759-38227"
+      cicdImage: "devtron:c0bdac7b-930-38226"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "false"
@@ -86,17 +86,17 @@ devtron:
         HIDE_API_TOKENS: "true"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:65e37985-1020-35597"
+      image: "ci-runner:f1033317-1020-36109"
     # Values for kubelink
     kubelink:
-      image: "kubelink:cbfb2eb9-314-34351"
+      image: "kubelink:2c31a453-314-38136"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:d829c010-950-35581"
+      image: "git-sensor:2c31a453-950-38181"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:d829c010-1021-35583
+      image: chart-sync:2c31a453-1021-38138
     postgres:
       image: "postgres:14.9"
       metrics:
@@ -105,7 +105,7 @@ devtron:
   security:
     enabled: true
     imageScanner:
-      image: "image-scanner:d829c010-109-35580"
+      image: "image-scanner:2c31a453-109-38139"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
@@ -116,10 +116,20 @@ devtron:
   monitoring:
     grafana:
       enabled: true
+      image: "grafana:7.3.1"
   devtronEnterprise:
     enabled: true
+    finops:
+      enabled: true
+      costSync:
+        image: "cost-sync:46ed7c67-1159-38183"
+        schedule: "0 * * * *"
+        timeZone: UTC
+      timescale:
+        image: "timescaledb-ha:pg18"
+        volumeSize: 5Gi
     casbin:
-      image: "casbin:36c5edc6-75a2edd0-464-35582"
+      image: "casbin:46ed7c67-c62c2b36-464-38140"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
