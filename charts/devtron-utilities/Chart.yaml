@@ -47,7 +47,7 @@ dependencies:
   repository: https://helm.devtron.ai/
   condition: k8s-shield.enabled
 - name: devtron-backups
-  version: "0.2.5"
+  version: "0.2.9"
   repository: https://helm.devtron.ai/
   condition: devtron-backups.enabled
 - name: devtron-generic-helm
