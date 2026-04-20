@@ -241,7 +241,6 @@ vector:
         inputs:
           - my_remap_id_audit
         key_prefix: '{{ print "audit-log/devtroncd/{{ container_name }}/%Y-%m-%d/" }}'
-        region: <region_name>
         type: aws_s3
       my_sink_id_audit:
         batch:
@@ -255,7 +254,6 @@ vector:
         inputs:
           - my_remap_id
         key_prefix: '{{ print "vector-log-2/devtroncd/{{ container_name }}/%Y-%m-%d/" }}'
-        region: <region_name>
         type: aws_s3
     sources:
       kube_log:
