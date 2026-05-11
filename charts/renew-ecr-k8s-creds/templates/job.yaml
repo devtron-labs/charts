@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: renew-ecr-k8s-creds
+  namespace: {{ .Release.Namespace }}
+spec:
+  schedule: "{{ .Values.cronjob.schedule }}"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: {{ .Values.serviceAccount.name }}
+          containers:
+            - name: renew-ecr-k8s-creds
+              image: amazon/aws-cli:2.13.15
+              command: ["/bin/bash", "/scripts/update-secret.sh"]
+              volumeMounts:
+                - name: script
+                  mountPath: /scripts   
+          restartPolicy: Never
+          volumes:
+            - name: script
+              configMap:
+                name: renew-ecr-k8s-creds-script
