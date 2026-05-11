@@ -19,6 +19,32 @@ env:
     value: https://test.com
 
 resources: {}
+
+tolerations: [] 
+# - key: "key1"
+#   operator: "Equal"
+#   value: "value1"
+#   effect: "NoSchedule"
+# - key: "key2"
+#   operator: "Equal"
+#   value: "value1"
+#   effect: "NoSchedule"
+
+affinity: {}
+  # nodeAffinity:
+  #    requiredDuringSchedulingIgnoredDuringExecution :
+  #         nodeSelectorTerms:
+  #         - matchExpressions:
+  #           - key: topology.kubernetes.io/zone
+  #             operator: In
+  #             values:
+  #             - us-east-2a
+  #           - key: topology.kubernetes.io/region
+  #             operator: In
+  #             values:
+  #             - us-east-2
+
+
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
