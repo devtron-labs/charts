@@ -5,8 +5,6 @@ global:
   S3:
     # give the endpoint in case of non AWS storages with s3 protocol 
     enabled: false
-    
-   # If S3_ACCESS_KEY and S3_SECRET_KEY are set, they'll be used; otherwise, the node's IAM role will be used by default.
     S3_BUCKET_NAME: ""
     S3_ACCESS_KEY: ""
     S3_SECRET_KEY: ""
@@ -15,10 +13,17 @@ global:
     CA_BUNDLE: ""
     # CA_BUNDLE: "-----BEGIN CERTIFICATE-----\nMIIDcDfghjklcvbnm,tryupE+mz30g=\n-----END CERTIFICATE-----"
     # set true if node has access of buckets
+    #defaults to true, set false and specify S3_ACCESS_KEY & S3_SECRET_KEY if node does not have bucket access
+    NODE_ROLE: "true"
+    PERSISTENCE:
+      enabled: true
+      existingClaim: "" # Required if existingClaim is not used
+      size: ""   # Required if existingClaim is not used
+      storageClass: ""
     # passphrase used to encrypt/decrypt the file (encryption is done by gpg)
     encryption:
-      enabled: false
-      passphrase: ""
+      enabled: true
+      passphrase: "devtron-backup"
     # image: quay.io/devtron/k8s-utils:ubuntu-aws-cli #default amd  
     # image: quay.io/devtron/k8s-utils:0b9f5ba5-395-11405 #arm
   AZURE:
@@ -27,6 +32,11 @@ global:
     AZURE_ACCOUNT_KEY: ""
     AZURE_BLOB_CONTAINER_FOR_POSTGRES: ""
     AZURE_BLOB_CONTAINER_FOR_ARGOCD: ""
+    PERSISTENCE:
+      enabled: false
+      existingClaim: ""
+      # size: 30Gi   # Required if existingClaim is not used
+      storageClass: "" # Required if existingClaim is not used
     encryption:
       enabled: false # Recommended
       passphrase: ""  # Required if encryption is enabled
@@ -66,21 +76,19 @@ global:
 
   timezone: ""  #Set the timezone for scheduling the cronJob. # default UTC
 
-  extraConfig: {}
-  #Pass any additional custom fields under jobTemplate.spec in the Kubernetes CronJob spec.
 argocdversion: v2
 
 postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
   enabled: true
-  resources: 
+  resources:
     requests:
       cpu: 100m
       memory: 100Mi
-    # limits:
-    #   cpu: 100m
-    #   memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
   labels: {}
     # key: "example-value"
   annotations: {}
@@ -92,13 +100,13 @@ postgres_backup:
 argocd_backup:
   serviceAccountName: "argocd-backup"
   enabled: false
-  resources: 
+  resources:
     requests:
       cpu: 100m
       memory: 100Mi
-    # limits:
-    #   cpu: 100m
-    #   memory: 100Mi
+    limits:
+      cpu: 100m
+      memory: 100Mi
   labels: {}
     # key: "example-value"
   annotations: {}
@@ -109,4 +117,5 @@ argocd_backup:
 
   # argocdImage: argoproj/argocd:v1.8.1  #(image for argo-V1)
   # args: argocd-util export --namespace devtroncd > /argocd/backup.yaml; #(argo-V1)
+
 

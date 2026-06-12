@@ -28,10 +28,6 @@ spec:
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
-      backoffLimit: 0  
-    {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -90,14 +86,19 @@ spec:
             - /bin/bash
             - -c
           {{- if $.Values.global.GCP.encryption.enabled }}          
-            - set -ex; echo $gcp_credentials > /postgres/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/postgres/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; gsutil cp /postgres/backup-$date1.tar.gpg gs://$GCS_BUCKET/postgres/;
+            - set -ex; echo $gcp_credentials > /postgres/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/postgres/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); gpg -c --batch --passphrase {{ .Values.global.GCP.encryption.passphrase }} /postgres/backup.tar; rm -rvf /postgres/backup.tar; mv /postgres/backup.tar.gpg /postgres/backup-$date1.tar.gpg; gsutil cp /postgres/backup-$date1.tar.gpg gs://$GCS_BUCKET/postgres/; rm -rvf /postgres/backup-$date1.tar.gpg;
           {{- else}}
-            - set -ex; echo $gcp_credentials > /postgres/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/postgres/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; gsutil cp /postgres/backup-$date1.tar gs://$GCS_BUCKET/postgres/;
+            - set -ex; echo $gcp_credentials > /postgres/gcp_credentials.json ; gcloud auth activate-service-account --key-file=/postgres/gcp_credentials.json ; date1=$(date +%Y%m%d-%H%M); mv /postgres/backup.tar /postgres/backup-$date1.tar; gsutil cp /postgres/backup-$date1.tar gs://$GCS_BUCKET/postgres/; rm -rvf /postgres/backup-$date1.tar.gpg;
           {{- end }}
           volumes:
-          - name: psql-volume
-            emptyDir: {}
-          {{- if $.Values.global.nodeSelector }}
+            - name: psql-volume
+              persistentVolumeClaim:
+                {{- if and .Values.global.GCP.PERSISTENCE.enabled .Values.global.GCP.PERSISTENCE.existingClaim }}
+                  claimName: {{ .Values.global.GCP.PERSISTENCE.existingClaim }}
+                {{- else }}
+                  claimName: devtron-backup-pvc
+                {{- end }}
+            {{- if $.Values.global.nodeSelector }}
           nodeselector: 
 {{ toYaml .Values.global.nodeSelector | indent 12 }}
           {{- end }}
@@ -105,7 +106,7 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: Never
+          restartPolicy: OnFailure
           serviceAccountName: {{ .Values.postgres_backup.serviceAccountName | default "default" }}
 {{- end }}
 ---
@@ -124,10 +125,6 @@ spec:
   schedule: "{{ .Values.global.schedule }}"
   jobTemplate:
     spec:
-      backoffLimit: 0  
-    {{- if $.Values.global.extraConfig }}
-{{ toYaml $.Values.global.extraConfig | indent 6 }}
-    {{- end }}
       template:
         {{- if or $.Values.postgres_backup.labels $.Values.postgres_backup.annotations }}
         metadata:
@@ -196,7 +193,25 @@ spec:
           tolerations:
 {{ toYaml .Values.global.tolerations | indent 12 }}
           {{- end }}
-          restartPolicy: Never
+          restartPolicy: OnFailure
           serviceAccountName: {{ .Values.argocd_backup.serviceAccountName }}
 {{- end }}
+{{- end }}
+
+{{- if and (.Values.global.GCP.enabled) (.Values.global.GCP.PERSISTENCE.enabled) (not .Values.global.GCP.PERSISTENCE.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: devtron-backup-pvc
+  namespace: devtroncd
+spec:
+  {{- if .Values.global.GCP.PERSISTENCE.storageClass  }}
+  storageClassName: {{ .Values.global.GCP.PERSISTENCE.storageClass }}
+  {{- end }}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+       storage: {{ .Values.global.GCP.PERSISTENCE.size }}
 {{- end }}
