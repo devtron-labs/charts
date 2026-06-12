@@ -3,8 +3,8 @@ name: devtron-utilities
 description: Provides essential infrastructure and security utilities such as Nginx/AWS Load Balancer, Devtron Backup, Minio (Blob Storage), Network Policy, Cluster Auto Scaler (Karpenter), and more.  
 
 type: application
-version: 0.0.2
-appVersion: "0.0.1"
+version: 0.0.3
+appVersion: "0.0.2"
 sources:
 - https://github.com/kubernetes/ingress-nginx
 - https://aws.github.io/eks-charts
@@ -47,7 +47,7 @@ dependencies:
   repository: https://helm.devtron.ai/
   condition: k8s-shield.enabled
 - name: devtron-backups
-  version: "0.2.9"
+  version: "0.2.8"
   repository: https://helm.devtron.ai/
   condition: devtron-backups.enabled
 - name: devtron-generic-helm
