@@ -1,0 +1,9 @@
+{{- if .Values.PeerAuthentication.enabled -}}
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: {{ .Values.PeerAuthentication.name }} 
+spec:
+  mtls:
+    mode: {{ .Values.PeerAuthentication.tlsmode }}
+{{- end }}

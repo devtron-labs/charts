@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: asm-gke-ingress
+  namespace: {{.Values.commonConfig.namespace}}
+  annotations:
+    kubernetes.io/ingress.allow-http: "false"
+    kubernetes.io/ingress.global-static-ip-name: "{{.Values.ingress.staticIpName}}"
+    networking.gke.io/managed-certificates: "asm-gke-ingress-cert"
+    kubernetes.io/ingress.class: "gce"
+spec:
+  defaultBackend:
+    service:
+      name: asm-ingressgateway
+      port:
+        number: 443
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: asm-ingressgateway
+            port:
+              number: 443
