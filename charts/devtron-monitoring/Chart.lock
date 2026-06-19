@@ -1,0 +1,33 @@
+dependencies:
+- name: fluent-bit
+  repository: https://fluent.github.io/helm-charts
+  version: 0.48.5
+- name: vector
+  repository: https://helm.vector.dev
+  version: 0.40.0
+- name: uptime-kuma
+  repository: https://helm.irsigler.cloud
+  version: 2.21.2
+- name: jaeger-all-in-one-opentelemetry
+  repository: https://helm.devtron.ai
+  version: 0.1.0
+- name: metrics-server
+  repository: https://kubernetes-sigs.github.io/metrics-server
+  version: 3.12.2
+- name: prometheus-blackbox-exporter
+  repository: https://prometheus-community.github.io/helm-charts
+  version: 9.2.0
+- name: k8s-event-logger
+  repository: oci://ghcr.io/deliveryhero/helm-charts
+  version: 1.1.9
+- name: victoria-metrics-k8s-stack
+  repository: https://victoriametrics.github.io/helm-charts/
+  version: 0.36.2
+- name: pyroscope
+  repository: https://grafana.github.io/helm-charts
+  version: 1.13.2
+- name: victoria-logs-single
+  repository: https://victoriametrics.github.io/helm-charts/
+  version: 0.9.8
+digest: sha256:fc8b2f09fa1cb41b6b334390684fd8ccbb0bab27dc41947cbbaec6fc4c2bbfb1
+generated: "2025-06-09T15:44:24.354197+05:30"
