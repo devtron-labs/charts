@@ -131,5 +131,5 @@ devtron:
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
-      image: "scoop:d829c010-955-35585"
+      image: "scoop:94237c18-955-39423"
       imagePullPolicy: IfNotPresent
