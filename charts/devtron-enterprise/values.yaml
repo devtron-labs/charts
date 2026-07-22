@@ -122,7 +122,7 @@ devtron:
     finops:
       enabled: true
       costSync:
-        image: "cost-sync:46ed7c67-1159-38183"
+        image: "cost-sync:172ef62b-1159-39429"
         schedule: "0 * * * *"
         timeZone: UTC
       timescale:
@@ -131,6 +131,37 @@ devtron:
     casbin:
       image: "casbin:172ef62b-9450794d-464-39422"
       imagePullPolicy: IfNotPresent
+    silverSurfer:
+      image: "silver-surfer:e3b9a2f6-1191-38789"
+      imagePullPolicy: IfNotPresent
+      resources: {}
+      podSecurityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
+    athenaApi:
+      enabled: false
+      registry: ""
+      image: "athena-api:37434600-1218-39427"
+      imagePullPolicy: IfNotPresent
+      healthPort: 8000
+      configs:
+        LLM_MODEL_ID: ""
+        LLM_TEMPERATURE: "0.01"
+        REDIS_URL: redis://redis.devtroncd
+        PG_DATABASE: athena
+      secrets: {}
+    athenaMcp:
+      registry: ""
+      image: "athena-mcp:37434600-1219-39428"
+      imagePullPolicy: IfNotPresent
+      healthPort: 8000
+      configs: {}
+      secrets: {}
     scoop:
       enabled: false
       image: "scoop:94237c18-955-39423"
