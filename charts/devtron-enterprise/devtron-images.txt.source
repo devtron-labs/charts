@@ -15,7 +15,7 @@ quay.io/devtron/dex:v2.30.2
 quay.io/devtron/git-sensor:94237c18-950-39418
 quay.io/devtron/grafana:7.3.1
 quay.io/devtron/hyperion:d1b5b794-759-39394
-quay.io/devtron/image-scanner:168d5141-109-39225
+quay.io/devtron/image-scanner:94237c18-109-39420
 quay.io/devtron/inception:7beef376-948-31378
 quay.io/devtron/k8s-sidecar:1.1.0
 quay.io/devtron/k8s-utils:tutum-curl
