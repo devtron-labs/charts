@@ -20,7 +20,7 @@ quay.io/devtron/inception:7beef376-948-31378
 quay.io/devtron/k8s-sidecar:1.1.0
 quay.io/devtron/k8s-utils:tutum-curl
 quay.io/devtron/kubectl:latest
-quay.io/devtron/kubelink:168d5141-314-39221
+quay.io/devtron/kubelink:94237c18-314-39417
 quay.io/devtron/kubewatch:fbde4d5e-419-38744
 quay.io/devtron/lens:fbde4d5e-333-38752
 quay.io/devtron/migrator:v4.16.2
