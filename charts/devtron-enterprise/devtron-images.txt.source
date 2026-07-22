@@ -3,7 +3,7 @@ quay.io/argoproj/argocd:v2.5.2
 quay.io/devtron/authenticator:e414faff-393-13273
 quay.io/devtron/bats:v1.4.1
 quay.io/devtron/busybox:1.31.1
-quay.io/devtron/casbin:46ed7c67-c62c2b36-464-38140
+quay.io/devtron/casbin:172ef62b-9450794d-464-39422
 quay.io/devtron/chart-sync:94237c18-1021-39419
 quay.io/devtron/ci-runner:94237c18-1020-39395
 quay.io/devtron/curl:7.73.0

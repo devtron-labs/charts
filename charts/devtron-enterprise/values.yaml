@@ -129,7 +129,7 @@ devtron:
         image: "timescaledb-ha:pg18"
         volumeSize: 5Gi
     casbin:
-      image: "casbin:46ed7c67-c62c2b36-464-38140"
+      image: "casbin:172ef62b-9450794d-464-39422"
       imagePullPolicy: IfNotPresent
     scoop:
       enabled: false
