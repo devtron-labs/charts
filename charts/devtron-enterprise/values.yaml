@@ -39,7 +39,7 @@ global:
 devtron:
   installer:
     repo: "devtron-labs/charts"
-    release: "47.0.0"
+    release: "48.0.0"
     registry: ""
     image: inception
     tag: 7beef376-948-31378
@@ -60,11 +60,11 @@ devtron:
           FEATURE_IMAGE_PROMOTION_ENABLE: "true"
           FEATURE_CLUSTER_MAP_ENABLE: "true"
           FEATURE_CONFIG_DRIFT_ENABLE: "true"
-      image: "dashboard:8f57208b-30aa538e-931-39223"
+      image: "dashboard:0d8f6cf4-60e17132-931-39393"
     # Values for devtron
     devtron:
-      image: "hyperion:c0bdac7b-759-38227"
-      cicdImage: "devtron:e0e64552-930-39222"
+      image: "hyperion:9450794d-759-39426"
+      cicdImage: "devtron:9450794d-930-39415"
       imagePullPolicy: IfNotPresent
       customOverrides:
         USE_CUSTOM_HTTP_TRANSPORT: "false"
@@ -86,17 +86,17 @@ devtron:
         HIDE_API_TOKENS: "true"
     # Values for ciRunner
     ciRunner:
-      image: "ci-runner:168d5141-1020-39224"
+      image: "ci-runner:94237c18-1020-39395"
     # Values for kubelink
     kubelink:
-      image: "kubelink:168d5141-314-39221"
+      image: "kubelink:94237c18-314-39417"
       imagePullPolicy: IfNotPresent
     # Values for gitsensor
     gitsensor:
-      image: "git-sensor:2c31a453-950-38181"
+      image: "git-sensor:94237c18-950-39418"
       imagePullPolicy: IfNotPresent
     chartSync:
-      image: chart-sync:168d5141-1021-39226
+      image: chart-sync:94237c18-1021-39419
     postgres:
       image: "postgres:14.9"
       metrics:
@@ -105,7 +105,7 @@ devtron:
   security:
     enabled: true
     imageScanner:
-      image: "image-scanner:168d5141-109-39225"
+      image: "image-scanner:94237c18-109-39420"
       configs:
         TRIVY_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-db
         TRIVY_JAVA_DB_REPOSITORY: mirror.gcr.io/aquasec/trivy-java-db
@@ -122,16 +122,47 @@ devtron:
     finops:
       enabled: true
       costSync:
-        image: "cost-sync:46ed7c67-1159-38183"
+        image: "cost-sync:172ef62b-1159-39429"
         schedule: "0 * * * *"
         timeZone: UTC
       timescale:
         image: "timescaledb-ha:pg18"
         volumeSize: 5Gi
     casbin:
-      image: "casbin:46ed7c67-c62c2b36-464-38140"
+      image: "casbin:172ef62b-9450794d-464-39422"
       imagePullPolicy: IfNotPresent
+    silverSurfer:
+      image: "silver-surfer:e3b9a2f6-1191-38789"
+      imagePullPolicy: IfNotPresent
+      resources: {}
+      podSecurityContext:
+        fsGroup: 1001
+        runAsGroup: 1001
+        runAsUser: 1001
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        runAsNonRoot: true
+        runAsUser: 1001
+    athenaApi:
+      enabled: false
+      registry: ""
+      image: "athena-api:37434600-1218-39427"
+      imagePullPolicy: IfNotPresent
+      healthPort: 8000
+      configs:
+        LLM_MODEL_ID: ""
+        LLM_TEMPERATURE: "0.01"
+        REDIS_URL: redis://redis.devtroncd
+        PG_DATABASE: athena
+      secrets: {}
+    athenaMcp:
+      registry: ""
+      image: "athena-mcp:37434600-1219-39428"
+      imagePullPolicy: IfNotPresent
+      healthPort: 8000
+      configs: {}
+      secrets: {}
     scoop:
       enabled: false
-      image: "scoop:d829c010-955-35585"
+      image: "scoop:94237c18-955-39423"
       imagePullPolicy: IfNotPresent
