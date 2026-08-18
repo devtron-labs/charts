@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: {{ .Values.destinationrule.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  host: {{ .Values.destinationrule.host }}
+  subsets:
+  {{- range $key, $value := .Values.destinationrule.destination }}  
+  - name: {{ $value.subset }}
+    labels:
+      app: {{ $value.subset }} 
+  {{- end }}    
+  trafficPolicy: 
+    tls: 
+      mode: {{ .Values.trafficPolicytlsmode.value }}

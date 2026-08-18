@@ -1,0 +1,22 @@
+{{- if .Values.weightVirtualsvc.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.weightVirtualsvc.name }}
+  namespace: {{ .Values.namespace }} 
+spec:
+  hosts:
+  - {{ .Values.weightVirtualsvc.hosts }} 
+  gateways:
+  - {{ .Values.weightVirtualsvc.gateways }} 
+  http:
+  - route:
+    {{- range $key, $value := .Values.weightVirtualsvc.destination }}
+    - destination:
+        host: {{ $value.host }}
+        port:
+          number: {{ $value.port }} 
+        subset: {{ $value.subset }} 
+      weight: {{ $value.weight }}       
+    {{- end }}
+{{- end }}
