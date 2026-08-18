@@ -1,0 +1,5 @@
+apiVersion: v2
+name: renew-ecr-k8s-creds
+description: A Helm chart for updating AWS ECR secrets in Kubernetes
+version: 0.1.0
+
