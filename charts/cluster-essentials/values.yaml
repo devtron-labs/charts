@@ -172,3 +172,32 @@ kube-prometheus-stack:
       #      resources:
       #        requests:
       #          storage: 50Gi
+#https://github.com/kubecost/cost-analyzer-helm-chart/tree/develop/cost-analyzer
+cost-analyzer:
+  enabled: false
+  # Basic Kubecost ingress, more examples available at https://github.com/kubecost/docs/blob/master/ingress-examples.md
+  ingress:
+    enabled: false
+    # className: nginx
+    annotations:
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    paths: ["/"] # There's no need to route specifically to the pods-- we have an nginx deployed that handles routing
+    pathType: ImplementationSpecific
+    hosts:
+      - cost-analyzer.local
+    tls: []
+  global:
+  # zone: cluster.local (use only if your DNS server doesn't live in the same zone as kubecost)
+    prometheus:
+      enabled: true # If false, Prometheus will not be installed -- only actively supported on paid Kubecost plans
+      fqdn: http://cost-analyzer-prometheus-server.default.svc #example address of a prometheus to connect to. Include protocol (http:// or https://) Ignored if enabled: true
+      # insecureSkipVerify : false # If true, kubecost will not check the TLS cert of prometheus
+      # queryServiceBasicAuthSecretName: dbsecret # kubectl create secret generic dbsecret -n kubecost --from-file=USERNAME --from-file=PASSWORD
+      # queryServiceBearerTokenSecretName: mcdbsecret  # kubectl create secret generic mcdbsecret -n kubecost --from-file=TOKEN
+    grafana:
+      enabled: true # If false, Grafana will not be installed
+      domainName: cost-analyzer-grafana.default.svc #example grafana domain Ignored if enabled: true
+      scheme: "http" # http or https, for the domain name above.
+      proxy: true # If true, the kubecost frontend will route to your grafana through its service endpoint
+
