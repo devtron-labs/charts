@@ -48,7 +48,7 @@ devtron:
     # Values for devtron
     devtron:
       image: "hyperion:9450794d-759-39426"
-      cicdImage: "devtron:146de25f-930-39664"
+      cicdImage: "devtron:c3e52eae-930-39667"
       imagePullPolicy: IfNotPresent
       customOverrides:
         PG_ADDR: postgresql-postgresql.devtroncd
