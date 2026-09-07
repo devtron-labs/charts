@@ -7,7 +7,7 @@ quay.io/devtron/casbin:172ef62b-9450794d-464-39422
 quay.io/devtron/chart-sync:94237c18-1021-39419
 quay.io/devtron/ci-runner:3a89bdf3-1020-39543
 quay.io/devtron/curl:7.73.0
-quay.io/devtron/dashboard:21d28772-36f1f8c7-931-39663
+quay.io/devtron/dashboard:9562c59e-36f1f8c7-931-39671
 quay.io/devtron/devtron-utils:dup-chart-repo-v1.1.0
 quay.io/devtron/devtron-utils:geni-v1.1.4
 quay.io/devtron/devtron:c3e52eae-930-39667
