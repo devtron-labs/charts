@@ -6184,6 +6184,78 @@ entries:
   devtron-utilities:
   - apiVersion: v2
     appVersion: 0.0.2
+    created: "2026-09-16T10:51:18.413029542Z"
+    dependencies:
+    - condition: ingress-nginx.enabled
+      name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
+      version: 4.12.0
+    - condition: cluster-autoscaler.enabled
+      name: cluster-autoscaler
+      repository: https://kubernetes.github.io/autoscaler
+      version: 9.46.0
+    - condition: karpenter.enabled
+      name: karpenter
+      repository: oci://public.ecr.aws/karpenter
+      version: 1.2.1
+    - condition: aws-load-balancer-controller.enabled
+      name: aws-load-balancer-controller
+      repository: https://aws.github.io/eks-charts
+      version: 1.11.0
+    - condition: aws-node-termination-handler.enabled
+      name: aws-node-termination-handler
+      repository: https://aws.github.io/eks-charts
+      version: 0.21.0
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.min.io/
+      version: 5.4.0
+    - condition: kcert.enabled
+      name: kcert
+      repository: https://nabsul.github.io/helm
+      version: 1.0.7
+    - condition: argocd-certificate-refresh.enabled
+      name: argocd-certificate-refresh
+      repository: https://helm.devtron.ai/
+      version: 0.10.8
+    - condition: k8s-shield.enabled
+      name: k8s-shield
+      repository: https://helm.devtron.ai/
+      version: 0.1.0
+    - condition: devtron-backups.enabled
+      name: devtron-backups
+      repository: https://helm.devtron.ai/
+      version: 0.3.0
+    - alias: nodepool
+      condition: nodepool.enabled
+      name: devtron-generic-helm
+      repository: https://helm.devtron.ai/
+      version: 0.10.1
+    - alias: holmes-ai
+      condition: holmes-ai.enabled
+      name: holmes
+      repository: https://robusta-charts.storage.googleapis.com
+      version: 0.8.1
+    description: Provides essential infrastructure and security utilities such as
+      Nginx/AWS Load Balancer, Devtron Backup, Minio (Blob Storage), Network Policy,
+      Cluster Auto Scaler (Karpenter), and more.
+    digest: 0f4a42f922ff3ddbd260ce4b47fe279c00f4ea00601d43ad6da02dae268eb87f
+    maintainers:
+    - email: badal@devtron.ai
+      name: Badal Kumar
+    - email: pawan.mehta@devtron.ai
+      name: Pawan Kumar
+    name: devtron-utilities
+    sources:
+    - https://github.com/kubernetes/ingress-nginx
+    - https://aws.github.io/eks-charts
+    - https://charts.min.io/
+    type: application
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-utilities-0.0.4/devtron-utilities-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 0.0.2
     created: "2026-06-12T13:20:05.67116155Z"
     dependencies:
     - condition: ingress-nginx.enabled
@@ -7876,4 +7948,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2026-07-23T08:23:45.15783208Z"
+generated: "2026-09-16T10:51:18.413574304Z"
