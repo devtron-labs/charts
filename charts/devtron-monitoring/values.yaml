@@ -92,7 +92,6 @@ fluent-bit:
           endpoint https://<add if any custom endpoint>
           bucket <bucket_name>
           s3_key_format /$TAG[1]/$TAG[3]/%Y-%m-%d/%H_%M_%S_$TAG[2].log
-          # s3_key_format /$TAG[1]/$TAG[3]/%Y-%m-%d/%H_%M_%S.log
           s3_key_format_tag_delimiters .
           static_file_path On
           use_put_object Off
@@ -413,7 +412,7 @@ victoriametrics:
           - continue: true
             match: null
             receiver: discord
-    enabled: true
+    enabled: false
   crds:
     enabled: true
   defaultDashboards:
@@ -436,7 +435,7 @@ victoriametrics:
               path: /var/lib/grafana/dashboards/default
             orgId: 1
             type: file
-    dashboards:  {}
+    dashboards: {}
     defaultDashboardsTimezone: ist
     enabled: true
     forceDeployDatasource: false
@@ -453,10 +452,7 @@ victoriametrics:
         serve_from_sub_path: true
       tag: 9.4.17
     ingress:
-      annotations:
-        nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
-        nginx.ingress.kubernetes.io/rewrite-target: /grafana/$2
-        nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      annotations: {}
       enabled: true
       hosts:
         - <testing>.domain.com
@@ -496,7 +492,7 @@ victoriametrics:
       disable_prometheus_converter: false
       prometheus_converter_add_argocd_ignore_annotations: true
   vmagent:
-    enabled: true
+    enabled: false
     ingress:
       enabled: true
       hosts:
@@ -512,7 +508,7 @@ victoriametrics:
         promscrape.suppressScrapeErrorsDelay: 30s
       scrapeInterval: 20s
   vmalert:
-    enabled: true
+    enabled: false
     ingress:
       enabled: true
       hosts:
@@ -522,11 +518,19 @@ victoriametrics:
       extraArgs:
         external.url: https://vmalert-<testing>.domain.com
   vmsingle:
-    enabled: true
+    enabled: false
+    containers: []
+    # Update service to expose oauth2-proxy port
+    ports: []
     ingress:
-      enabled: true
+      enabled: false
+      annotations: {}
       hosts:
         - vmsingle-<testing>.domain.com
-      ingressClassName: nginx
+      extraPaths: []
     spec:
       retentionPeriod: 5d
+pyroscope:
+  enabled: false
+vmlogs:
+  enabled: false
