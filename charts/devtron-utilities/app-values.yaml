@@ -241,3 +241,6 @@ holmes-ai:
 
 k8s-shield:
   enabled: false
+
+cloudnative-pg:
+  enabled: false  

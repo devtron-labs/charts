@@ -1,0 +1,56 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.loadBalancerCreationPolicy }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
+spec:
+  failurePolicy: Fail
+  {{- if and .Values.policyDefinitions.loadBalancerCreationPolicy.namespaces }}
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector:
+      matchExpressions:
+        - key: kubernetes.io/metadata.name
+          operator: In
+          values:
+            {{- range .Values.policyDefinitions.loadBalancerCreationPolicy.namespaces }}
+            - {{ . | quote }}
+            {{- end }}
+  {{- else }}
+  matchConstraints: {}
+  {{- end }}
+  objectSelector: {}
+  resourceRules:
+    - apiGroups:
+        - ""
+      apiVersions:
+        - v1
+      operations:
+        - CREATE
+      resources:
+        - services
+      scope: Namespaced
+  validations:
+    {{- if and .Values.excludeLabel.key .Values.excludeLabel.value }}
+    - expression: "object.spec.type == 'LoadBalancer' && has(object.metadata.labels) && object.metadata.labels['{{ .Values.excludeLabel.key }}'] == '{{ .Values.excludeLabel.value }}'"
+      message: "Creation of Services with type LoadBalancer is not allowed, set label {{ .Values.excludeLabel.key }}: {{ .Values.excludeLabel.value }} to allow."
+    {{- else }}
+    - expression: "object.spec.type == 'LoadBalancer'"
+      message: "Creation of Services with type LoadBalancer is not allowed."
+    {{- end }}
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-loadbalancer-creation
+  validationActions:
+    {{- range .Values.policyDefinitions.loadBalancerCreationPolicy.validationActions }}
+    - {{ . }}
+    {{- end }}
+{{- end }}
