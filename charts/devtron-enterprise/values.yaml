@@ -164,5 +164,5 @@ devtron:
       secrets: {}
     scoop:
       enabled: false
-      image: "scoop:94237c18-955-39423"
+      image: "scoop:7a0f1131-955-39914"
       imagePullPolicy: IfNotPresent
