@@ -129,7 +129,7 @@ devtron:
         image: "timescaledb-ha:pg18"
         volumeSize: 5Gi
     casbin:
-      image: "casbin:172ef62b-9450794d-464-39422"
+      image: "casbin:4cabc285-9e01a912-464-39905"
       imagePullPolicy: IfNotPresent
     silverSurfer:
       image: "silver-surfer:e3b9a2f6-1191-38789"
