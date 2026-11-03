@@ -38,6 +38,7 @@ quay.io/devtron/scoop:7a0f1131-955-39914
 quay.io/devtron/ubuntu-k8s-utils:latest
 quay.io/devtron/alpine-k8s-utils:latest
 quay.io/devtron/centos-k8s-utils:latest
+quay.io/devtron/audit:4cabc285-1245-39891
 quay.io/devtron/alpine-netshoot:latest
 quay.io/devtron/k9s-k8s-utils:latest
 quay.io/devtron/krr:d829c010-1113-35596

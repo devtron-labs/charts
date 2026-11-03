@@ -152,6 +152,19 @@ devtron:
       image: "athena-mcp:37434600-1219-39428"
       imagePullPolicy: IfNotPresent
       healthPort: 8000
+    auditService:
+      enabled: false
+      registry: ""
+      image: "audit:4cabc285-1245-39891"
+      imagePullPolicy: IfNotPresent
+      configs:
+        PG_DATABASE: audit
+        APP: audit-logs
+        SERVER_HTTP_PORT: "8080"
+        SERVER_SHUTDOWN_TIMEOUT: 30s
+        NATS_SERVER_HOST: nats://devtron-nats.devtroncd:4222
+        AUDIT_ENRICHMENT_GRPC_ENABLED: "true"
+        ORCHESTRATOR_CLIENT_URL: devtron-service.devtroncd:9006
     scoop:
       enabled: false
       image: "scoop:7a0f1131-955-39914"
