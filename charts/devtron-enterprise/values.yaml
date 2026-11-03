@@ -165,7 +165,7 @@ devtron:
     auditService:
       enabled: false
       registry: ""
-      image: "audit:4cabc285-1245-39891"
+      image: "audit:4cabc285-1245-39917"
       imagePullPolicy: IfNotPresent
       port: 8080
       healthPort: 8080
