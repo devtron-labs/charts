@@ -894,6 +894,36 @@ entries:
     version: 0.1.0
   devtron-enterprise:
   - apiVersion: v2
+    appVersion: 48.1.0
+    created: "2026-11-04T13:26:33.202018063Z"
+    dependencies:
+    - alias: devtron
+      name: devtron-operator
+      repository: https://helm.devtron.ai/
+      version: 0.x.x
+    description: Chart to configure and install Devtron Enterprise Stack. Devtron
+      is a Kubernetes Orchestration system.
+    digest: 5b76ded6c413d0ff37fd04ed8282f5e54ef9e10dfa1b617d908474655fe36c8c
+    home: https://devtron.ai
+    icon: https://s3-ap-southeast-1.amazonaws.com/devtron.ai/images/devtron-sqr-logo.png
+    keywords:
+    - Devtron
+    - Kubernetes
+    - Orchestration
+    - K8s
+    - Deployment
+    - argocd
+    - Hyperion
+    maintainers:
+    - email: prakarsh@devtron.ai
+      name: Prakarsh
+    name: devtron-enterprise
+    sources:
+    - https://github.com/devtron-labs/charts/tree/main/charts/devtron-enterprise
+    urls:
+    - https://github.com/devtron-labs/charts/releases/download/devtron-enterprise-48.1.0/devtron-enterprise-48.1.0.tgz
+    version: 48.1.0
+  - apiVersion: v2
     appVersion: 48.0.0
     created: "2026-07-23T08:23:45.157420039Z"
     dependencies:
@@ -8035,4 +8065,4 @@ entries:
     urls:
     - https://github.com/devtron-labs/charts/releases/download/zinc-0.1.0/zinc-0.1.0.tgz
     version: 0.1.0
-generated: "2026-11-04T12:54:36.612575668Z"
+generated: "2026-11-04T13:26:33.202397375Z"
