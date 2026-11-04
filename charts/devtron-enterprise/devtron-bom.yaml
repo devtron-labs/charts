@@ -153,7 +153,6 @@ devtron:
       imagePullPolicy: IfNotPresent
       healthPort: 8000
     auditService:
-      enabled: false
       registry: ""
       image: "audit:4cabc285-1245-39917"
       imagePullPolicy: IfNotPresent
