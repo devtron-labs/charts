@@ -163,7 +163,7 @@ devtron:
       configs: {}
       secrets: {}
     auditService:
-      enabled: false
+      enabled: true
       registry: ""
       image: "audit:4cabc285-1245-39917"
       imagePullPolicy: IfNotPresent
