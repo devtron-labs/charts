@@ -1,0 +1,68 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.containerSecurityPolicy }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "{{ include "k8s-shield.fullname" . }}-container-security"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups:
+      {{- range $.Values.policyDefinitions.containerSecurityPolicy.apiGroups }}
+      - {{ . | quote }}
+      {{- end }}
+      apiVersions:
+        - v1
+      operations:
+      {{- range $.Values.policyDefinitions.containerSecurityPolicy.operations }}
+      - {{ . | quote }}
+      {{- end }}
+      resources:
+      {{- range $.Values.policyDefinitions.containerSecurityPolicy.resources }}
+      - {{ . | quote }}
+      {{- end }}
+      scope: '*'
+  validations:
+    - expression: "object.kind != 'Pod' || has(object.metadata.labels) && object.metadata.labels['business-unit'] == 'finance'"
+      message: "Pods must have a 'business-unit: finance' label"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.policyDefinitions.containerSecurityPolicy.allowrunAsNonRoot }})"
+      message: "All containers must set runAsNonRoot to {{ .Values.policyDefinitions.containerSecurityPolicy.allowrunAsNonRoot }}"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.policyDefinitions.containerSecurityPolicy.allowreadOnlyRootFilesystem }})"
+      message: "All containers must set readOnlyRootFilesystem to {{ .Values.policyDefinitions.containerSecurityPolicy.allowreadOnlyRootFilesystem }}"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.allowPrivilegeEscalation) || c.securityContext.allowPrivilegeEscalation == {{ .Values.policyDefinitions.containerSecurityPolicy.allowPrivilegeEscalation }})"
+      message: "All containers must set allowPrivilegeEscalation to {{ .Values.policyDefinitions.containerSecurityPolicy.allowPrivilegeEscalation }}"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.policyDefinitions.containerSecurityPolicy.allowprivileged }})"
+      message: "All containers must set privileged to {{ .Values.policyDefinitions.containerSecurityPolicy.allowprivileged }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || has(object.metadata.labels) && object.metadata.labels['business-unit'] == 'finance'"
+      message: "Workload resources must have a 'business-unit: finance' label"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.policyDefinitions.containerSecurityPolicy.allowrunAsNonRoot }})"
+      message: "All workload containers must set runAsNonRoot to {{ .Values.policyDefinitions.containerSecurityPolicy.allowrunAsNonRoot }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.policyDefinitions.containerSecurityPolicy.allowreadOnlyRootFilesystem }})"
+      message: "All workload containers must set readOnlyRootFilesystem to {{ .Values.policyDefinitions.containerSecurityPolicy.allowreadOnlyRootFilesystem }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.allowPrivilegeEscalation) || c.securityContext.allowPrivilegeEscalation == {{ .Values.policyDefinitions.containerSecurityPolicy.allowPrivilegeEscalation }})"
+      message: "All workload containers must set allowPrivilegeEscalation to {{ .Values.policyDefinitions.containerSecurityPolicy.allowPrivilegeEscalation }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.policyDefinitions.containerSecurityPolicy.allowprivileged }})"
+      message: "All workload containers must set privileged to {{ .Values.policyDefinitions.containerSecurityPolicy.allowprivileged }}"
+    - expression: "object.kind != 'CronJob' || has(object.metadata.labels) && object.metadata.labels['business-unit'] == 'finance'"
+      message: "CronJobs must have a 'business-unit: finance' label"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.policyDefinitions.containerSecurityPolicy.allowrunAsNonRoot }})"
+      message: "All CronJob containers must set runAsNonRoot to {{ .Values.policyDefinitions.containerSecurityPolicy.allowrunAsNonRoot }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.policyDefinitions.containerSecurityPolicy.allowreadOnlyRootFilesystem }})"
+      message: "All CronJob containers must set readOnlyRootFilesystem to {{ .Values.policyDefinitions.containerSecurityPolicy.allowreadOnlyRootFilesystem }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.allowPrivilegeEscalation) || c.securityContext.allowPrivilegeEscalation == {{ .Values.policyDefinitions.containerSecurityPolicy.allowPrivilegeEscalation }})"
+      message: "All CronJob containers must set allowPrivilegeEscalation to {{ .Values.policyDefinitions.containerSecurityPolicy.allowPrivilegeEscalation }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.policyDefinitions.containerSecurityPolicy.allowprivileged }})"
+      message: "All CronJob containers must set privileged to {{ .Values.policyDefinitions.containerSecurityPolicy.allowprivileged }}"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-container-security
+spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-container-security
+  validationActions:
+  {{- range .Values.policyDefinitions.containerSecurityPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
+

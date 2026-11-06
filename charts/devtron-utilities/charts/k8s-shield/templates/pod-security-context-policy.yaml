@@ -1,0 +1,61 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.podSecurityPolicy }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: "{{ include "k8s-shield.fullname" . }}-pod-security"
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups:
+      {{- range $.Values.policyDefinitions.podSecurityPolicy.apiGroups }}
+      - {{ . | quote }}
+      {{- end }}
+      apiVersions:
+        - v1
+      operations:
+      {{- range $.Values.policyDefinitions.podSecurityPolicy.operations }}
+      - {{ . | quote }}
+      {{- end }}
+      resources:
+      {{- range $.Values.policyDefinitions.podSecurityPolicy.resources }}
+      - {{ . | quote }}
+      {{- end }}
+      scope: '*'
+  validations:
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.policyDefinitions.podSecurityPolicy.allowrunAsNonRoot }})"
+      message: "All containers must set runAsNonRoot to {{ .Values.policyDefinitions.podSecurityPolicy.allowrunAsNonRoot }}"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.policyDefinitions.podSecurityPolicy.allowreadOnlyRootFilesystem }})"
+      message: "All containers must set readOnlyRootFilesystem to {{ .Values.policyDefinitions.podSecurityPolicy.allowreadOnlyRootFilesystem }}"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.allowPrivilegeEscalation) || c.securityContext.allowPrivilegeEscalation == {{ .Values.policyDefinitions.podSecurityPolicy.allowPrivilegeEscalation }})"
+      message: "All containers must set allowPrivilegeEscalation to {{ .Values.policyDefinitions.podSecurityPolicy.allowPrivilegeEscalation }}"
+    - expression: "object.kind != 'Pod' || object.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.policyDefinitions.podSecurityPolicy.allowprivileged }})"
+      message: "All containers must set privileged to {{ .Values.policyDefinitions.podSecurityPolicy.allowprivileged }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.policyDefinitions.podSecurityPolicy.allowrunAsNonRoot }})"
+      message: "All workload containers must set runAsNonRoot to {{ .Values.policyDefinitions.podSecurityPolicy.allowrunAsNonRoot }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.policyDefinitions.podSecurityPolicy.allowreadOnlyRootFilesystem }})"
+      message: "All workload containers must set readOnlyRootFilesystem to {{ .Values.policyDefinitions.podSecurityPolicy.allowreadOnlyRootFilesystem }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.allowPrivilegeEscalation) || c.securityContext.allowPrivilegeEscalation == {{ .Values.policyDefinitions.podSecurityPolicy.allowPrivilegeEscalation }})"
+      message: "All workload containers must set allowPrivilegeEscalation to {{ .Values.policyDefinitions.podSecurityPolicy.allowPrivilegeEscalation }}"
+    - expression: "['Deployment', 'ReplicaSet', 'DaemonSet', 'StatefulSet', 'Job'].all(kind, object.kind != kind) || object.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.policyDefinitions.podSecurityPolicy.allowprivileged }})"
+      message: "All workload containers must set privileged to {{ .Values.policyDefinitions.podSecurityPolicy.allowprivileged }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.runAsNonRoot) && c.securityContext.runAsNonRoot == {{ .Values.policyDefinitions.podSecurityPolicy.allowrunAsNonRoot }})"
+      message: "All CronJob containers must set runAsNonRoot to {{ .Values.policyDefinitions.podSecurityPolicy.allowrunAsNonRoot }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, has(c.securityContext) && has(c.securityContext.readOnlyRootFilesystem) && c.securityContext.readOnlyRootFilesystem == {{ .Values.policyDefinitions.podSecurityPolicy.allowreadOnlyRootFilesystem }})"
+      message: "All CronJob containers must set readOnlyRootFilesystem to {{ .Values.policyDefinitions.podSecurityPolicy.allowreadOnlyRootFilesystem }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.allowPrivilegeEscalation) || c.securityContext.allowPrivilegeEscalation == {{ .Values.policyDefinitions.podSecurityPolicy.allowPrivilegeEscalation }})"
+      message: "All CronJob containers must set allowPrivilegeEscalation to {{ .Values.policyDefinitions.podSecurityPolicy.allowPrivilegeEscalation }}"
+    - expression: "object.kind != 'CronJob' || object.spec.jobTemplate.spec.template.spec.containers.all(c, !has(c.securityContext) || !has(c.securityContext.privileged) || c.securityContext.privileged == {{ .Values.policyDefinitions.podSecurityPolicy.allowprivileged }})"
+      message: "All CronJob containers must set privileged to {{ .Values.policyDefinitions.podSecurityPolicy.allowprivileged }}"
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-pod-security
+spec:
+  policyName: {{ include "k8s-shield.fullname" . }}-pod-security
+  validationActions:
+  {{- range .Values.policyDefinitions.podSecurityPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
