@@ -139,26 +139,48 @@ example of DEX_CONFIG is
 Ensure that the cluster has access to the DEFAULT_CACHE_BUCKET, DEFAULT_BUILD_LOGS_BUCKET, CHARTMUSEUM_STORAGE_AMAZON_BUCKET and AWS secrets backends (SSM & secrets manager)
 
 
-## Externally managed server RBAC
+## Externally managed core RBAC
 
-`components.devtron.rbac.create` defaults to `true`, retaining the existing
-server ClusterRole and ClusterRoleBinding. Set it to `false` when the platform
-manages permissions for the server ServiceAccount separately:
+The following settings default to `true`, retaining the existing component
+permissions. Set an option to `false` when the platform manages that component's
+permissions separately:
+
+| Setting | Resources controlled |
+| --- | --- |
+| `components.devtron.rbac.create` | Server ClusterRole and ClusterRoleBinding |
+| `installer.rbac.create` | Installer ClusterRoles and ClusterRoleBindings |
+| `components.kubewatch.rbac.create` | Watcher ClusterRole and ClusterRoleBinding |
+| `workflowController.rbac.create` | Workflow runner and controller Roles, ClusterRoles and Bindings, including aggregate-to-admin/edit/view ClusterRoles |
+
+For example, to manage these permissions separately:
 
 ```yaml
 components:
   devtron:
     rbac:
       create: false
+  kubewatch:
+    rbac:
+      create: false
+installer:
+  rbac:
+    create: false
+workflowController:
+  rbac:
+    create: false
 ```
 
-The chart still creates the `devtron` ServiceAccount and the server still uses
-that identity. This setting affects only the server Role and Binding in
-`templates/rbac.yaml`; installer, workflow, watcher, Dex and subchart permissions
-are unchanged. Provision and validate the required server permissions separately
-before using this setting. It does not provide a predefined least-privilege policy.
+The chart still creates the existing ServiceAccounts and retains workload
+identities, Deployments, CRDs and ConfigMaps. The options do not disable a
+controller or select a workflow executor. Provision and validate the required
+permissions separately before using them; they do not provide predefined
+least-privilege policies. Dex, optional integrations and subchart permissions
+are unchanged.
 
-Existing server RBAC resources carry `helm.sh/resource-policy: keep`. Disabling
-creation does not revoke those resources or any other existing grants. Review
-existing bindings and plan any permission migration explicitly; do not treat
-this option alone as revocation or namespace isolation.
+Existing server RBAC resources carry `helm.sh/resource-policy: keep` and are not
+revoked by disabling creation. Other resources that are no longer rendered may
+be removed by Helm upgrades or GitOps pruning, depending on the deployment tool
+and policy. Install and verify replacement permissions before that transition.
+Review all existing bindings and verify effective access after any migration;
+these options alone do not prove revocation or namespace isolation. Use boolean
+values; string values such as `"false"` are rejected.

@@ -1,3 +1,7 @@
+{{- $createWatcherRbac := dig "rbac" "create" true .Values.components.kubewatch }}
+{{- if not (kindIs "bool" $createWatcherRbac) }}
+{{- fail "components.kubewatch.rbac.create must be a boolean" }}
+{{- end }}
 {{- if $.Values.installer.modules }}
 {{- if has "cicd" $.Values.installer.modules }}
 {{- with .Values.components.kubewatch }}
@@ -8,6 +12,7 @@ metadata:
     app: kubewatch
     release: devtron
   name: kubewatch
+{{- if $createWatcherRbac }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -96,6 +101,7 @@ subjects:
   - kind: ServiceAccount
     name: kubewatch
     namespace: devtroncd
+{{- end }}
 ---
 apiVersion: v1
 kind: Secret

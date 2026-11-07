@@ -41,6 +41,9 @@ nfs:
   enabled: false
 extraManifests: []
 installer:
+  rbac:
+    # Manage this component permissions separately when disabled. Does not revoke existing grants.
+    create: true
   repo: "devtron-labs/devtron"
   release: "v2.2.1"
   registry: ""
@@ -176,6 +179,9 @@ components:
       secretName: postgresql-postgresql
       keyName: postgresql-password
   kubewatch:
+    rbac:
+      # Manage this component permissions separately when disabled. Does not revoke existing grants.
+      create: true
     registry: ""
     image: "kubewatch:5c4c89ba-419-39872"
     imagePullPolicy: IfNotPresent
@@ -457,6 +463,9 @@ minio:
     storage: "50Gi"
 # Change below values for workflow controller
 workflowController:
+  rbac:
+    # Manage this component permissions separately when disabled. Does not revoke existing grants.
+    create: true
   registry: "quay.io/argoproj"
   # Set this to true if you have IMDSv2 enforced or IMDSv1 and v2 on your AWS EKS cluster and false if you are using IMDSv1 with token hop limit set to 1
   IMDSv2Enforced: true
