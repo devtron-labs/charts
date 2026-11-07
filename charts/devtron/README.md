@@ -138,3 +138,27 @@ example of DEX_CONFIG is
 **Please Note:**
 Ensure that the cluster has access to the DEFAULT_CACHE_BUCKET, DEFAULT_BUILD_LOGS_BUCKET, CHARTMUSEUM_STORAGE_AMAZON_BUCKET and AWS secrets backends (SSM & secrets manager)
 
+
+## Externally managed server RBAC
+
+`components.devtron.rbac.create` defaults to `true`, retaining the existing
+server ClusterRole and ClusterRoleBinding. Set it to `false` when the platform
+manages permissions for the server ServiceAccount separately:
+
+```yaml
+components:
+  devtron:
+    rbac:
+      create: false
+```
+
+The chart still creates the `devtron` ServiceAccount and the server still uses
+that identity. This setting affects only the server Role and Binding in
+`templates/rbac.yaml`; installer, workflow, watcher, Dex and subchart permissions
+are unchanged. Provision and validate the required server permissions separately
+before using this setting. It does not provide a predefined least-privilege policy.
+
+Existing server RBAC resources carry `helm.sh/resource-policy: keep`. Disabling
+creation does not revoke those resources or any other existing grants. Review
+existing bindings and plan any permission migration explicitly; do not treat
+this option alone as revocation or namespace isolation.

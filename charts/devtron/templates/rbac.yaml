@@ -10,6 +10,11 @@ metadata:
     {{- if $.Values.components.devtron.annotations }}
 {{ toYaml $.Values.components.devtron.annotations | indent 4 }}
     {{- end }}
+{{- $createServerRbac := dig "rbac" "create" true .Values.components.devtron }}
+{{- if not (kindIs "bool" $createServerRbac) }}
+{{- fail "components.devtron.rbac.create must be a boolean" }}
+{{- end }}
+{{- if $createServerRbac }}
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
@@ -45,3 +50,4 @@ subjects:
   - kind: ServiceAccount
     name: devtron
     namespace: devtroncd
+{{- end }}
