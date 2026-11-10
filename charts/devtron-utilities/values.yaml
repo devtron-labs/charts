@@ -223,20 +223,14 @@ devtron-backups:
     S3:
       enabled: false
       S3_BUCKET_NAME: ""
-      AWS_REGION: ""
+      AWS_REGION: "ap-south-1"
       NODE_ROLE: "true"
-      PERSISTENCE:
-        enabled: true
-        existingClaim: "" # Required if existingClaim is not used
-        size: 30Gi   # Required if existingClaim is not used
-        storageClass: "" # Required if existingClaim is not used
       encryption:
         enabled: false
         passphrase: ""
-      
   postgres_backup:
     secretName: "postgres-creds-3"
-    enabled: true
+    enabled: false
   argocd_backup:
     enabled: false
 
@@ -248,3 +242,5 @@ holmes-ai:
 
 k8s-shield:
   enabled: false
+cloudnative-pg:
+  enabled: false  

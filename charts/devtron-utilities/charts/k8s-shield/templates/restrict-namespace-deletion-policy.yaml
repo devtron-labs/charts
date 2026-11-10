@@ -1,0 +1,44 @@
+{{- if and $.Values.defaultPolicies.create $.Values.defaultPolicies.policies.namespaceDeletionPolicy }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-namespace-deletion
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+    resourceRules:
+      - apiGroups:
+          - ""
+        apiVersions:
+          - v1
+        operations:
+          - DELETE
+        resourceNames:
+          {{- range $.Values.policyDefinitions.namespaceDeletionPolicy.namespaces }}
+          - {{ . }}
+          {{- end }}
+        resources:
+          - namespaces
+        scope: "*"
+  validations:
+    - expression: "false"
+      message: Deletion of namespace is not allowed.
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicyBinding
+metadata:
+  name: {{ include "k8s-shield.fullname" . }}-restrict-namespace-deletion
+spec:
+  matchResources:
+    matchPolicy: Equivalent
+    namespaceSelector: {}
+    objectSelector: {}
+  policyName: {{ include "k8s-shield.fullname" . }}-restrict-namespace-deletion
+  validationActions:
+  {{- range .Values.policyDefinitions.namespaceDeletionPolicy.validationActions }}
+  - {{ . }}
+  {{- end }}
+{{- end }}
