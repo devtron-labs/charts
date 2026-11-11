@@ -7,6 +7,62 @@
 
 ---
 
+# Changelog: devtron-utilities 0.0.10 → 0.0.11
+
+## Summary
+
+Adds an opt-in **streaming mode** for PostgreSQL backups to S3 in the bundled
+**devtron-backups** sub-chart (`0.2.5` → `0.2.6`). With streaming on, the dump is piped
+straight to the bucket (`pg_dumpall | gpg | aws s3 cp -`) instead of being written to the
+node's disk first. Streaming is off by default, so existing installs are unchanged.
+No other sub-chart was touched.
+
+---
+
+## Chart metadata
+
+| Item | 0.0.10 | 0.0.11 |
+|------|--------|--------|
+| Umbrella chart version | `0.0.10` | `0.0.11` |
+| devtron-backups (`Chart.yaml`, `Chart.lock`, sub-chart version) | `0.2.5` | `0.2.6` |
+
+---
+
+## devtron-backups 0.2.5 → 0.2.6
+
+### New configurable settings (`charts/devtron-backups/values.yaml`)
+
+| Setting | Default | Purpose |
+|---------|---------|---------|
+| `postgres_backup.streaming.enabled` | `false` | Streams the PostgreSQL backup directly to S3. |
+| `postgres_backup.streaming.image` | `""` | Optional override. Defaults to `quay.io/devtron/k8s-utils:ubuntu-aws-cli-postgres14-multi-arch-1`; an override must include PostgreSQL clients, GPG and AWS CLI. |
+| `postgres_backup.streaming.expectedStreamBytes` | `""` | Required when streaming is on. Expected backup size in bytes, as a quoted string (e.g. `"1073741824"`). |
+
+### Template changes
+
+- **`backup-on-s3.yaml`**
+  - With streaming on, the PostgreSQL CronJob runs a single container: no init container, no `emptyDir`.
+  - With streaming and encryption on, the passphrase is stored in `devtron-s3-backup-secret` as `BACKUP_PASSPHRASE` and read from there, not written into the CronJob.
+  - Rendering fails with a clear message if `expectedStreamBytes` or the passphrase is missing or invalid.
+  - Fixed, in the PostgreSQL and Argo CD backup CronJobs: 2 or more pod labels or annotations broke rendering (indentation), and the lowercase `nodeselector` meant `global.nodeSelector` was ignored.
+- **`_helpers.tpl`**: new `devtron.postgresStreamingBackup` script. If the dump fails, the upload is never completed, so no partial backup appears in S3.
+- **`README.md`**: one line on streaming.
+
+With streaming off, the CronJobs render exactly as in 0.0.10, apart from the two fixes.
+
+---
+
+## ⚠️ Upgrade notes
+
+No breaking changes to defaults. Review the following:
+
+1. **`global.nodeSelector` now takes effect** on the S3 PostgreSQL and Argo CD backup CronJobs. It was
+   silently ignored before; after the upgrade these pods schedule only on matching nodes.
+2. **Not changed:** the Azure, GCP and PVC templates still have the label-indentation and lowercase
+   `nodeselector` bugs.
+
+---
+
 # Changelog: devtron-utilities 0.0.9 → 0.0.10
 
 ## Summary
