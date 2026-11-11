@@ -22,6 +22,8 @@ GCP backup can be enabled by setting `GCP.enabled` to `true` in the YAML file. C
 
 S3 backup can be enabled by setting `S3.enabled` to `true` in the YAML file. Configure the S3 bucket details and encryption settings as required.
 
+S3 backups can also be streamed directly to the bucket, by setting `postgres_backup.streaming.enabled` to `true` in the YAML file. Set `postgres_backup.streaming.expectedStreamBytes` to the expected backup size in bytes.
+
 ### PVC Backup
 
 PVC backup can be enabled by setting `PERSISTENCE.enabled` to `true` in the YAML file. Specify PVC settings, including storage class and size.

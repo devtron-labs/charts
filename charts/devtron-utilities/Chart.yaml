@@ -44,7 +44,7 @@ dependencies:
 - condition: devtron-backups.enabled
   name: devtron-backups
   repository: https://helm.devtron.ai/
-  version: 0.2.5
+  version: 0.2.6
 - alias: nodepool
   condition: nodepool.enabled
   name: devtron-generic-helm
@@ -69,4 +69,4 @@ sources:
 - https://aws.github.io/eks-charts
 - https://charts.min.io/
 type: application
-version: 0.0.10
+version: 0.0.11
