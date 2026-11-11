@@ -72,6 +72,14 @@ postgres_backup:
   # Reference to secret which as postgresql password in PG_PASSWORD key
   secretName: "devtron-secret"
   enabled: true
+  # Stream PostgreSQL backups directly to S3.
+  streaming:
+    enabled: false
+    # Optional override; defaults to quay.io/devtron/k8s-utils:ubuntu-aws-cli-postgres14-multi-arch-1.
+    # An override must include PostgreSQL clients, GPG, and AWS CLI.
+    image: ""
+    # Required when streaming is enabled; expected upload stream size in bytes.
+    expectedStreamBytes: ""
   resources:
     requests:
       cpu: 100m
