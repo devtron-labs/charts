@@ -31,7 +31,7 @@ dependencies:
   version: 0.1.0
 - name: devtron-backups
   repository: https://helm.devtron.ai/
-  version: 0.2.5
+  version: 0.2.6
 - name: devtron-generic-helm
   repository: https://helm.devtron.ai/
   version: 0.10.1

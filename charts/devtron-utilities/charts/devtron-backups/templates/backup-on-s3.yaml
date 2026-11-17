@@ -1,4 +1,15 @@
 {{- if .Values.global.S3.enabled }}
+{{- $streaming := .Values.postgres_backup.streaming | default dict }}
+{{- $streamingEnabled := and .Values.postgres_backup.enabled ($streaming.enabled | default false) }}
+{{- if $streamingEnabled }}
+{{- $expectedSize := required "postgres_backup.streaming.expectedStreamBytes is required when streaming is enabled" $streaming.expectedStreamBytes | toString }}
+{{- if not (regexMatch "^[1-9][0-9]*$" $expectedSize) }}
+{{- fail "postgres_backup.streaming.expectedStreamBytes must be a positive integer" }}
+{{- end }}
+{{- if .Values.global.S3.encryption.enabled }}
+{{- $_ := required "global.S3.encryption.passphrase is required when streaming encryption is enabled" .Values.global.S3.encryption.passphrase }}
+{{- end }}
+{{- end }}
 {{- if or .Values.postgres_backup.enabled .Values.argocd_backup.enabled }}
 apiVersion: v1
 kind: Secret
@@ -16,6 +27,9 @@ data:
   AWS_CA_BUNDLE: {{ .Values.global.S3.CA_BUNDLE | b64enc }}
   {{- end }}
   AWS_REGION: {{ .Values.global.S3.AWS_REGION | default "us-east-1" | b64enc }}
+  {{- if and $streamingEnabled .Values.global.S3.encryption.enabled }}
+  BACKUP_PASSPHRASE: {{ .Values.global.S3.encryption.passphrase | b64enc | quote }}
+  {{- end }}
 {{- end }}
 ---
 {{- if .Values.postgres_backup.enabled }}
@@ -38,14 +52,80 @@ spec:
         metadata:
           {{- if $.Values.postgres_backup.labels }}
           labels:
-          {{ toYaml .Values.postgres_backup.labels | indent 4 }}
+{{ toYaml .Values.postgres_backup.labels | indent 12 }}
           {{- end }}
           {{- if $.Values.postgres_backup.annotations }}
           annotations:
-          {{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+{{ toYaml .Values.postgres_backup.annotations | indent 12 }}
           {{- end }}
         {{- end }}
         spec:
+          {{- if $streamingEnabled }}
+          containers:
+          - name: aws-cli-for-s3-download-streaming
+            image: {{ $streaming.image | default "quay.io/devtron/k8s-utils:ubuntu-aws-cli-postgres14-multi-arch-1" | quote }}
+            imagePullPolicy: Always
+            command: ["/bin/bash", "-c"]
+            args:
+            - |
+{{ include "devtron.postgresStreamingBackup" . | indent 16 }}
+            env:
+            - name: PGHOST
+              value: {{ .Values.postgres_backup.host | default "postgresql-postgresql.devtroncd" | quote }}
+            - name: PGPORT
+              value: "5432"
+            - name: PGUSER
+              value: "postgres"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.postgres_backup.secretName | quote }}
+                  key: PG_PASSWORD
+            - name: EXPECTED_STREAM_BYTES
+              value: {{ $streaming.expectedStreamBytes | toString | quote }}
+            {{- if eq .Values.global.S3.NODE_ROLE "false" }}
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: AWS_ACCESS_KEY
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: AWS_SECRET_KEY
+            {{- end }}
+            - name: S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: S3_BUCKET_NAME
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: AWS_REGION
+            {{- if .Values.global.S3.S3_ENDPOINT }}
+            - name: S3_ENDPOINT
+              value: {{ .Values.global.S3.S3_ENDPOINT | quote }}
+            {{- end }}
+            {{- if .Values.global.S3.CA_BUNDLE }}
+            - name: CA_BUNDLE
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: AWS_CA_BUNDLE
+            {{- end }}
+            {{- if .Values.global.S3.encryption.enabled }}
+            - name: BACKUP_PASSPHRASE
+              valueFrom:
+                secretKeyRef:
+                  name: devtron-s3-backup-secret
+                  key: BACKUP_PASSPHRASE
+            {{- end }}
+            resources:
+{{ toYaml .Values.postgres_backup.resources | indent 14 }}
+          {{- else }}
           initContainers:
           - name: postgres-app-backup-cronjob
             image: {{ .Values.postgres_backup.postgresImage | default "postgres:12" }}
@@ -112,8 +192,9 @@ spec:
           volumes:
           - name: psql-volume
             emptyDir: {}
+          {{- end }}
           {{- if $.Values.global.nodeSelector }}
-          nodeselector: 
+          nodeSelector: 
 {{ toYaml .Values.global.nodeSelector | indent 12 }}
           {{- end }}
           {{- if $.Values.global.tolerations }}
@@ -143,11 +224,11 @@ spec:
         metadata:
           {{- if $.Values.postgres_backup.labels }}
           labels:
-          {{ toYaml .Values.postgres_backup.labels | indent 4 }}
+{{ toYaml .Values.postgres_backup.labels | indent 12 }}
           {{- end }}
           {{- if $.Values.postgres_backup.annotations }}
           annotations:
-          {{ toYaml .Values.postgres_backup.annotations | indent 4 }}
+{{ toYaml .Values.postgres_backup.annotations | indent 12 }}
           {{- end }}
         {{- end }}
         spec:
@@ -212,7 +293,7 @@ spec:
           - name: argocd-volume
             emptyDir: {}
           {{- if $.Values.global.nodeSelector }}
-          nodeselector: 
+          nodeSelector:
 {{ toYaml .Values.global.nodeSelector | indent 12 }}
           {{- end }}
           {{- if $.Values.global.tolerations }}
