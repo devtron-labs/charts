@@ -42,7 +42,7 @@ The Charts with its functionality is listed below:
 These charts are currently not available on the official helm repository therefore you need to download it to install.
 
 ```bash
-helm repo add devtron http://helm.devtron.ai
+helm repo add devtron https://helm.devtron.ai
 helm install Chart-Release-Name devtron/chartName
 ```
 
