@@ -8,6 +8,8 @@
 - Kube-Prom-Stack / Victoria Metrics  
 - Black Box  
 - Event Logger  
+- VMlogs
+- Pyroscope
 
 
 
