@@ -1,0 +1,39 @@
+# Default values for asm-resource-deployment.
+# This is a YAML-formatted file.
+
+# Pre-requistes to be completed before ASM Deployment
+# ---------------------------------------------------
+# 1. If you want to setup on existing GKE cluster then follow the given ref link. Link - https://cloud.google.com/architecture/exposing-service-mesh-apps-through-gke-ingress#install-service-mesh 
+# 2. Make sure namespace is labelled with "istio-injection=enabled"
+# 3. Create kubernetes secret with tls certificate used by GKE Ingress.
+# 4. Create Static IP Address in Google cloud for GKE Ingress
+# 5. Configure Firewall Rule for LB backend communication with Istio Gateway.
+# i.e. gcloud compute firewall-rules update <rule_name> --description "GCE L7 firewall rule" 
+# --allow tcp:15021,tcp:30000-32767,tcp:443 --source-ranges 130.211.0.0/22,35.191.0.0/16 
+# --target-tags <node_name> --project <project_name>
+# ---------------------------------------------------
+# Post Deployment Steps
+# 6. Map GKE Ingress IP address to given DNS. 
+
+commonConfig:
+  namespace: asm-ingress
+
+# Istio Configurations
+gateway:
+  name: asm-gateway  
+  credentialName: edge2mesh-credential
+
+hpa: 
+  minReplicas: 3
+  maxReplicas: 5
+  targetAverageCPUUtilization: 80
+
+# GKE Ingress Configurations
+ingress:
+  staticIpName: dev-asm-static-ip
+
+ManagedCertificate:
+  d1:
+    domain: example1.com
+  d2:
+    domain: example1.com

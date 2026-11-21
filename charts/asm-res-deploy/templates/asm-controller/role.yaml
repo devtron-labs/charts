@@ -1,0 +1,23 @@
+# Role and RoleBinding allow the gateway to access certificates
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: asm-ingressgateway
+  namespace: {{.Values.commonConfig.namespace}}
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: asm-ingressgateway
+  namespace: {{.Values.commonConfig.namespace}}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: asm-ingressgateway
+subjects:
+  - kind: ServiceAccount
+    name: asm-ingressgateway

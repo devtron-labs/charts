@@ -1,0 +1,25 @@
+{{- if .Values.headerVirtualsvc.enabled -}}
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: {{ .Values.headerVirtualsvc.name }}
+  namespace: {{ .Values.namespace }} 
+spec:
+  hosts:
+  - {{ .Values.headerVirtualsvc.hosts }} 
+  gateways:
+  - {{ .Values.headerVirtualsvc.gateways }} 
+  http:
+  - match:
+    - headers:
+        {{ .Values.headerVirtualsvc.headerValue }}:
+          {{ if .Values.headerVirtualsvc.regex.enabled }}
+          regex: {{ .Values.headerVirtualsvc.regex.value }}
+          {{ else if .Values.headerVirtualsvc.exact.enabled }}
+          exact: {{ .Values.headerVirtualsvc.exact.value }}
+          {{ end }}
+    route:
+    - destination:
+        host: {{ .Values.headerVirtualsvc.destination.host }}
+        subset: {{ .Values.headerVirtualsvc.destination.subset }}
+{{- end }}
