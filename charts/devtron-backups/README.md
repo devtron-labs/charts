@@ -53,6 +53,8 @@ Parameter | Description | Required
 
 S3 backup can be enabled by setting `S3.enabled` to `true` in the YAML file. Configure the S3 bucket details and encryption settings as required. 
 
+S3 backups can also be streamed directly to the bucket, by setting `postgres_backup.streaming.enabled` to `true` in the YAML file. Set `postgres_backup.streaming.expectedStreamBytes` to the expected backup size in bytes.
+
 ## S3 Storage Configuration
 
 | Parameter | Description | Required |
